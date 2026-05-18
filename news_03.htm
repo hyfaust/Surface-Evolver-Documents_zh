@@ -1,0 +1,263 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 通讯 3</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-3"></a>
+<h1>Surface Evolver 通讯第3期</h1>
+<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
+<hr><pre>
+
+
+		      Surface Evolver 通讯第3期
+			      1993年4月3日
+
+                    编辑: Ken Brakke, brakke@geom.umn.edu
+
+目录:
+  一个问题
+  DOS 32位版本
+  版本1.90
+  使用新语言特性的一些示例
+
+一个问题:
+
+还有人在使用Minneview吗？那是geomview的前身。
+如果我从Evolver中删除Minneview支持，有人反对吗？
+
+DOS 32位版本:
+
+我使用32位编译器和DOS扩展器制作了Surface Evolver的DOS版本，
+即来自自由软件基金会的DJGPP包。它至少需要带有数学协处理器的386，
+并将使用找到的任何扩展内存。还有VGA图形。它可以通过匿名ftp从
+geom.umn.edu获取，位于pub/evolver.zip。这包含二进制文件、
+扩展器和一个简短的文档文件。DOS的1.90版本可能在本通讯发出后
+一两天内不会发布到ftp，所以获取时请检查日期。
+
+这是我第一次涉足DOS扩展器，我只在自己的机器上测试过，
+所以可能有一些小问题。然而，它远远优于任何16位版本。
+我不打算再支持16位版本了。
+
+版本1.90:
+
+现在可以通过ftp获取。
+
+版本1.90新功能:
+
+命名量和方法。
+这些是为了提供一种更系统的方式来添加新能量和约束。
+"方法"是从某种特定类型的元素（顶点、边、面、主体）
+计算标量值的方式。"量"是应用于各种元素的各种方法的总和，
+尽管通常只涉及一种方法。任何量都可以被声明为三种类型之一：
+1) 能量量被添加到表面的总能量中；
+2) 固定量被约束为固定的目标值（通过每次迭代的单个牛顿步）；
+3) 信息量的值仅向用户报告。
+每个量都有一个"模量"，它只是整个量的标量乘数。
+模量为0将关闭能量量。
+添加新方法涉及编写C例程来计算值和梯度作为顶点坐标的函数，
+并在quantity.c的方法名称数组中添加一个结构。
+当前实现的方法包括edge_length、facet_area、
+mean_curvature_integral（一次幂，不是平方）、
+gauss_curvature_integral（一次幂）、hooke_energy
+（用于将边作为具有平衡长度的弹簧）和各种纽结能量。
+有关如何设置这些的详细信息，请参见数据文件章节。
+示例数据文件knotty.fe包含一些示例。
+量值可以通过Q或A命令查看，A命令可用于更改
+固定量的目标值、量的模量或与各种方法关联的某些参数。
+注意：命名量和方法仍在开发中，随着我获得更多经验，
+语法和使用可能会改变。但它们是我打算向Evolver添加
+所有新能量和量约束的方式。特别是，`AREA_FIXED' 功能
+应被视为过时，您应该在数据文件顶部使用类似
+`quantity surface_area fixed = 6 modulus 1 global_method facet_area'
+的内容。这可能看起来有点冗长，但这是通用性的代价。
+
+共轭梯度ON/OFF状态保存在转储文件中。
+注意共轭梯度历史向量未保存。
+
+刻痕和"dihedral"属性适用于字符串模型中的顶点。
+
+向命令语言添加了FOREACH迭代器以遍历元素。
+参见下面的示例。
+
+添加了LOAD命令。语法：LOAD ``filename''。
+对于启动新表面很有用，特别是在脚本中。
+
+添加了PRINTF命令用于格式化打印。语法：
+      PRINTF "format string",expr,expr,...
+expr是浮点数，因此请使用%f或%g格式。所有内容都传递给
+C printf函数，因此您可以在%f和%g上使用其所有精度和格式选项。
+参见下面的示例。
+
+添加了字符串变量。可以在需要引号字符串的地方使用。
+可以赋值。SPRINTF是提供字符串输出的PRINTF版本。
+注意：管道和`system'命令仅适用于带引号的字符串或字符串变量。
+
+数据文件中的view_transformation矩阵前面可以加上"color n"
+来给该变换一种颜色（覆盖任何面颜色）。
+
+在查询中，添加了元素属性``oid''，它返回id的有符号版本。
+如果您想使用命令语言制作数据文件的特殊版本，这很有用。
+参见下面的示例。
+
+添加了许多纽结能量。还有一种"hooke energy"，
+使边保持均匀长度。这些是由于三月份在几何中心举行的
+纽结研讨会。现在流行在纽结上放置"电荷"，
+让它自我排斥形成漂亮平滑的曲线。
+有些人甚至演化四维空间中的纽结2-球面！
+
+PostScript输出现在可选地包含颜色。从P菜单制作PostScript文件时，
+将询问您是否要包含颜色。包含颜色会使文件更长，
+但文件仍应在单色postscript设备上打印。
+
+在NeXT版本中，命令行参数中添加了-t选项（即启动evolver时），
+以提供终端界面而不是菜单和对话框。
+
+
+使用新语言特性的一些示例
+
+Evolver命令语言通过累积持续增长，看起来它正在朝着完整的
+编程语言发展。它有变量、表达式、子程序、条件和迭代结构。
+但没有子程序参数、局部变量、结构或数组。
+变量是浮点数、字符串或子程序名称。
+没有整数变量，因此您只能在printf中使用浮点格式。
+但%g格式会将整数浮点数打印为整数。
+记住至少使用两个字母的变量名，因为单个字母往往被解释为命令。
+
+与普通C不同的一个特性是存在几何元素上的迭代器。
+这些出现在元素类型（顶点、边、面、主体，单数或复数）
+出现在命令中的任何地方。迭代元素的属性可以在命令的后面使用。
+迭代元素可以被命名（在嵌套迭代中很有用），
+在这种情况下，引用属性时必须使用该名称。
+用作属性的元素类型将只生成与父元素关联的元素，
+因此如果ff是一个面，那么ff.vertex将生成它的三个顶点。
+此外，每个迭代器可以接受一个"where"子句来限制包含的元素。
+
+这里有一些示例。由于语言期望每行一个命令，
+长命令需要行拼接。因此我倾向于将长命令分解为几个小的命名命令。
+使用这些较长命令的最佳方法是将它们的定义放在数据文件末尾的
+"read"部分，或者将它们放在单独的文件中，您可以使用"read"命令读取。
+
+
+1. 一个演化并定期将转储保存在不同文件中的脚本：
+
+nn := 1
+while nn &lt; 100 do { g 100; ff := sprintf "stage%g.dmp",nn; dump ff; nn:=nn+2}
+
+
+2. 您自己的迭代命令来打印您想要的内容，例如每步的能量变化：
+
+olde := total_energy;
+gg := { g; printf "Change: %10.5g\n",total_energy-olde; olde:=total_energy}
+
+
+3. 一个打印顶点和边文件列表的命令（恰好是geomview的OFF格式）：
+
+aa:=foreach vertex vv do { printf "%f %f %f \n",x,y,z }
+bb:=foreach facet ff do { printf "3 ";\
+       foreach ff.vertex do printf "%g ",id-1; printf "\n"}
+do_off:= {printf "OFF\n%g %g %g\n",vertex_count,facet_count,edge_count;aa;bb}
+
+这将打印到stdout，因此您需要使用重定向：
+
+Enter command: do_off | "cat &gt; test.off"
+
+
+4. 一个跨镜像对称平面复制对称表面基本区域的命令。
+
+// Producing datafile surface duplicated across a mirror.
+// This is set up to do constraint 1 only.
+// Mirrored constraints given x numbers.
+// Resulting datafile needs mirrored constraints added by hand.
+// Usage: mm | "cat &gt; filename.fe"
+
+// Mirror plane aa*x + bb*y + cc*z = dd
+aa := 1; bb := 0; cc := 0; dd := 0
+// You have to set these to the proper coefficients for constraint 1
+// before doing mm.
+
+ma := foreach vertex do { printf "%g  %g %g %g ",id,x,y,z;  \
+           if fixed then printf "fixed "; \
+	   if on_constraint 1 then printf "constraint 1 " ;\
+	   if on_constraint 2 then printf "constraint 2 " ;\
+	   if on_constraint 3 then printf "constraint 3 " ;\
+	   if on_constraint 4 then printf "constraint 4 " ;\
+	   if on_constraint 5 then printf "constraint 5 " ;\
+	   printf "\n";\
+	   }
+mb := { voff := vertex_count }
+mc := foreach vertex do if not on_constraint 1 then { \
+  	   lam := 2*(dd-aa*x-bb*y-cc*z)/(aa*aa+bb*bb+cc*cc);\
+           printf "%g  %g %g %g ",id+voff,x+lam*aa,y+lam*bb,z+lam*cc;  \
+           if fixed then printf "fixed "; \
+	   if on_constraint 1 then printf "constraint 1x " ;\
+	   if on_constraint 2 then printf "constraint 2x " ;\
+	   if on_constraint 3 then printf "constraint 3x " ;\
+	   if on_constraint 4 then printf "constraint 4x " ;\
+	   if on_constraint 5 then printf "constraint 5x " ;\
+	   printf "\n";\
+	   }
+md := foreach edge ee do {\
+	   printf "%g   ",id; \
+	   foreach ee.vertex do printf "%g ",oid; \
+           if ee.fixed then printf "fixed "; \
+	   if ee.on_constraint 1 then printf "constraint 1 " ;\
+	   if ee.on_constraint 2 then printf "constraint 2 " ;\
+	   if ee.on_constraint 3 then printf "constraint 3 " ;\
+	   if ee.on_constraint 4 then printf "constraint 4 " ;\
+	   if ee.on_constraint 5 then printf "constraint 5 " ;\
+	   printf "\n";\
+	   }
+me := { eoff := edge_count }
+mf := foreach edge ee do if not on_constraint 1 then {\
+	   printf "%g   ",id+eoff; \
+	   foreach ee.vertex do { \
+	   if on_constraint 1 then { printf "%g ",oid;} \
+	   else { printf "%g ", id+voff;} };   \
+           if ee.fixed then printf "fixed "; \
+	   if ee.on_constraint 1 then printf "constraint 1x " ;\
+	   if ee.on_constraint 2 then printf "constraint 2x " ;\
+	   if ee.on_constraint 3 then printf "constraint 3x " ;\
+	   if ee.on_constraint 4 then printf "constraint 4x " ;\
+	   if ee.on_constraint 5 then printf "constraint 5x " ;\
+	   printf "\n";\
+	   }
+mg := foreach facet ff do {\
+	   printf "%g   ",id; \
+	   foreach ff.edge do printf "%g ",oid;\
+           if ff.fixed then printf "fixed "; \
+	   if ff.on_constraint 1 then printf "constraint 1 " ;\
+	   if ff.on_constraint 2 then printf "constraint 2 " ;\
+	   if ff.on_constraint 3 then printf "constraint 3 " ;\
+	   if ff.on_constraint 4 then printf "constraint 4 " ;\
+	   if ff.on_constraint 5 then printf "constraint 5 " ;\
+	   printf "\n";\
+	   }
+mh := {foff := facet_count}
+mi := foreach facet ff do if not on_constraint 1 then  {\
+	   printf "%g   ",id+foff; \
+	   foreach ff.edge do \
+	     { if on_constraint 1 then { printf "%g ",id;} \
+	       else printf "%g ",(oid&lt;0?-(id+eoff):id+eoff); }; \
+           if ff.fixed then printf "fixed "; \
+	   if ff.on_constraint 1 then printf "constraint 1x " ;\
+	   if ff.on_constraint 2 then printf "constraint 2x " ;\
+	   if ff.on_constraint 3 then printf "constraint 3x " ;\
+	   if ff.on_constraint 4 then printf "constraint 4x " ;\
+	   if ff.on_constraint 5 then printf "constraint 5x " ;\
+	   printf "\n";\
+	   }
+mm := { list topinfo; \
+	printf "\nVertices\n"; ma;mb;mc;\
+	printf "\nEdges\n"; md;me;mf;\
+	printf "\nFaces\n"; mg;mh;mi;\
+	}
+
+
+Surface Evolver 通讯3结束。
+
+</pre><hr>
+<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
+</body>
+</html>

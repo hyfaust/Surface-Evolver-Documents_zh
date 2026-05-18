@@ -1,0 +1,1410 @@
+<!DOCTYPE HTML>
+<html><head><TITLE>Surface Evolver 文档 - 数据文件格式</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<!--NewPage-->
+<h1 class="center">
+<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+<h1> Evolver 数据文件格式 </h1>
+
+             曲面的初始构型从一个 ASCII 数据文件中读取。
+         参见 <a href="cube.htm">cube</a>
+         或 <a href="mound.htm">mound</a> 示例获取样例。
+         数据文件分为六个部分：
+<ul>
+         <li> <a href="#datafile-header">定义和选项</a>
+         <li> <a href="#vertices-section">顶点</a>
+         <li> <a href="#edges-section">边</a>
+         <li> <a href="#faces-section">面</a>
+         <li> <a href="#bodies-section">体</a>
+         <li> <a href="#read-section">初始命令</a>
+</ul>
+通用数据文件主题：
+<ul>
+<li><a href="syntax.htm">通用语法</a>（适用于数据文件和命令）
+<li><a href="#include-files">包含文件</a>
+<li><a href="#macros">宏</a>
+</ul>
+         在下面的语法描述中，关键字将使用大写。
+         <i>constexpr</i> 表示常量表达式，
+         <i>expr</i> 表示任意表达式。<i>n</i> 或 <i>k</i> 表示整数，
+         如果用作有向元素标签，则可以带符号。
+         方括号表示可选项。'|' 表示"或"。
+
+
+<p>
+<b>注意：</b>通常公式可以出现在数字合法的任何位置（元素编号、约束编号等除外）。某些公式以公式形式存储，在每次使用时重新求值；例如约束、边界和量的公式。其他公式，如顶点坐标，在读取数据文件时求值，只存储数值。因此，如果用户将顶点坐标定义为 <code>3*width</code>，那么在运行时改变变量 <code>width</code> 的值不会影响该顶点。如果你不清楚某个位置适用哪种解释，请 <a href="commands.htm#dump">dump</a> 数据文件并查看该位置是转储了公式还是数字。
+<hr>
+<a   id="include-files"></a><h2>包含文件</h2>
+	可以使用标准 C 语言方法包含其他文件。
+	文件名必须用双引号括起来。如果文件不在当前目录中，
+将搜索 <a href="install.htm#EVOLVERPATH">EVOLVERPATH</a>。
+	包含可以嵌套到 10 层。
+	示例：<pre>
+	#include  "common.stuff"
+</pre>
+<hr>
+<a   id="macros"></a><h2>宏</h2>
+宏是在解析之前将标识符替换为字符串的文本替换。宏仅在数据文件中定义，在命令提示符下不起作用。
+         简单宏（无参数）可以像 C 语言中那样定义：
+<pre>         #DEFINE  <em>identifier  string</em>
+</pre>
+       <em>identifier</em> 必须是对解析器没有其他特殊含义的标识符。
+         <em>string</em> 是逻辑行的其余部分，不包括注释。
+         当 <em>identifier</em> 后续作为标记出现时，它将被替换为 <em>string</em>。
+         替换会重新扫描。不进行递归检查。
+         宏定义有最大长度限制（当前为 500 个字符）。注意：宏
+         标识符是独立的标记，因此如果 "-M" 翻译为 "-2"，这将被读作两个标记，而不是一个带符号的数字。
+<a   id="keep_macros"></a>
+        数据文件中的关键字 <code>keep_macros</code> 将使宏定义在运行时保持有效，
+         直到加载下一个数据文件。
+
+
+<hr>
+<hr>
+
+<a   id="datafile-header"></a> <h2>数据文件顶部区域</h2>
+
+数据文件以可选的定义和规范开始。
+这些是需要在定义几何元素之前做出的定义，或者是命令语法缺少或不方便的定义。
+其他初始化可以在数据文件末尾的 <a href="#read-section">read</a> 部分
+使用命令语言完成。
+         每行以关键字开头。顺序无关紧要，
+         但遵循通常的规则，即项目必须在使用前定义。
+         如果你愿意接受各种默认值，则这些都不是必需的。
+         这里按使用频率大致排序列出；第一列中的你应该知道，
+         第二列中的你可能一辈子都不会用到。
+<table>
+<tr ><td style="vertical-align:text-top">
+<ul>
+<li><a href="#datafile-variables">变量</a>
+<li><a href="#constraint-decl">水平集约束</a>
+<li><a href="#boundary-decl">参数化边界</a>
+<li><a href="#named-quantity-decl">命名量</a>
+<li><a href="#method-instance-decl">命名方法实例</a>
+<li><a href="#surface-dimension-decl">曲面维度</a>
+<li><a href="#space-dimension-decl">空间维度</a>
+<li><a href="#extra-decl">额外属性</a>
+<li><a href="#quadratic-decl">二次模型</a>
+<li><a href="#gravity_constant-decl">重力常数</a>
+<li><a href="#torus-declaration">环面模型</a>
+<li><a href="#torus_filled-decl">Torus_filled</a>
+<li><a href="#torus-periods">环面周期</a>
+<li><a href="#viewing-matrix">视图矩阵</a>
+<li><a href="#view-transforms">视图变换</a>
+<li><a href="#view-generators">视图变换生成器</a>
+<li><a href="#scale_limit">Scale_limit</a>
+<li><a href="#functions">函数和过程</a>
+<li><a href="#optimizing_parameter">优化参数</a>
+<li><a href="#gap-constant-decl">间隙常数</a>
+<li><a href="#symmetric_content">对称内容</a>
+<li><a href="#keep_originals">保留原始 ID</a>
+
+</ul></td> <td><ul>
+<li><a href="#squared_curvature">平方平均曲率</a>
+<li><a href="#constraint_tolerance-decl">约束容差</a>
+<li><a href="#version">版本</a>
+<li><a href="#metric-decl">度量</a>
+<li><a href="#simplex-decl">单纯形模型</a>
+<li><a href="#symmetry-decl">对称群</a>
+<li><a href="#length_method_name">长度方法</a>
+<li><a href="#area_method_name">面积方法</a>
+<li><a href="#volume_method_name">体积方法</a>
+<li><a href="#hessian_special_normal_vector">Hessian 特殊法向量</a>
+<li><a href="#wulff-decl">结晶被积函数</a>
+<li><a href="#diffusion-decl">扩散</a>
+<li><a href="#phase-decl">相文件</a>
+<li><a href="#ideal-gas-decl">理想气体模型</a>
+<li><a href="#interp_bdry-decl">边界参数插值</a>
+<li><a href="#mobility-decl">迁移率</a>
+<li><a href="#merit_factor">品质因数</a>
+<li><a href="#sqgauss">平方高斯曲率</a>
+<li><a href="#zoom_vertex">Zoom_vertex</a>
+<li><a href="#zoom_radius">Zoom_radius</a>
+<li><a href="#load_library">动态加载库</a>
+<li><a href="#suppress_warning">抑制警告</a>
+<li><a href="#vertices_predicted">vertices_predicted</a>
+<li><a href="#edges_predicted">edges_predicted</a>
+<li><a href="#facets_predicted">facets_predicted</a>
+<li><a href="#facetedges_predicted">facetedges_predicted</a>
+<li><a href="#bodies_predicted">bodies_predicted</a>
+<li><a href="#quantities_predicted">quantities_predicted</a>
+<li><a href="#method_instances_predicted">method_instances_predicted</a>
+</ul></td> </tr></table>
+
+<hr>
+
+<a   id="datafile-variables"></a><h2>变量定义</h2>
+<a   id="on_assign_call"> </a>
+可以在数据文件顶部区域使用以下语法定义变量：
+<pre>
+      PARAMETER <em>identifier</em> = <em>constexpr</em>
+</pre>
+             这将声明 <em>identifier</em> 为具有给定初始值的变量。
+              该值可以在运行时使用
+<a href="single.htm#A">A</a> 命令或通过
+<a href="commands.htm#assignment">赋值</a>来更改。变量
+              可以在任何后续表达式或常量表达式中使用。
+	     更改此处定义的变量会在
+<a href="toggle.htm#autorecalc">autorecalc</a> 开启时
+	     导致曲面自动重新计算。
+	     因此，只有在其他顶部区域声明中需要的变量才应在此处定义。
+
+<p>
+可以指定一个过程，在变量值每次更改时调用。数据文件顶部的语法为
+<pre>
+      PARAMETER <em>identifier</em> = <em>constexpr</em> ON_ASSIGN_CALL <em>procedure_name</em>
+</pre>
+此功能的目的是允许改变变量值时产生副作用。该值是一个无参数的过程，只能在数据文件的顶部区域赋值。但是，过程本身可以随时重新定义。示例（在数据文件顶部区域）：
+<pre>
+  procedure tester();
+  parameter aaa = 4
+  parameter bbb = 5 on_assign_call tester
+  procedure tester() { aaa := bbb; }
+</pre>
+注意，首先声明了 "tester"，这样 Evolver 在声明 "bbb" 时能将 "tester" 识别为过程名。但 "tester" 的完整声明可以位于数据文件的顶部区域或数据文件的 "read" 部分。
+
+<hr>
+<a   id="nonpositive"></a>
+<a   id="nonnegative"></a>
+<a   id="nonwall"></a>
+<a   id="constraint-decl"></a><h2>水平集约束声明</h2>
+在数据文件顶部区域声明
+<a href="constrnt.htm#level-set-constraints">水平集约束</a>的格式为
+<pre>
+CONSTRAINT <em>n</em> [GLOBAL] [CONVEX] [NONNEGATIVE] [NONPOSITIVE] [NONWALL] [CONTENT_RANK <em>n</em>]
+FORMULA FUNCTION  <em>expr</em>
+[ENERGY:
+ E1: <em>expr</em>
+ E2: <em>expr</em>
+ E3: <em>expr</em>]
+[CONTENT:
+ C1: <em>expr</em>
+ C2: <em>expr</em>
+ C3: <em>expr</em>]
+</pre>
+可以使用 <code>EQUATION</code> 或 <code>FUNCTION</code> 作为 <code>FORMULA</code> 的同义词。
+   这定义了约束编号 <em>n</em>，其中 <em>n</em> 是正整数。
+   可选关键字 <code>GLOBAL</code> 表示约束自动应用于所有顶点（但不自动应用于边或面）。
+   <code>GLOBAL</code> 约束计入数量限制。如果指定 <code>CONVEX</code>，
+   则会在约束上的边附加一个额外的 <a href="energies.htm#gap-energy">间隙能量</a>，
+   以防止它们试图短路凸边界。
+   <code>NONWALL</code> 表示此约束在顶点和边弹出时将被忽略，
+   各种 "star" 平方平均曲率方法不会将此约束视为镜像平面。
+  如果指定 <code>NONNEGATIVE</code> 或 <code>NONPOSITIVE</code>，则这是一个
+   <a href="constrnt.htm#one-sided-constraints">单侧约束</a>，
+   所有顶点将在每次迭代中被强制适当地满足约束。
+   <code>FORMULA</code> 表达式定义了实际约束的零水平集。
+   它可以写成方程形式，因为 '=' 被解析为低优先级的减号。
+              公式可以包含任何 Evolver 已知值的表达式，
+              给定特定顶点。最常用的只是顶点的坐标 (x,y,z)，
+              但可以使用变量、量值或顶点额外属性。
+              使用顶点额外属性是将一个公式自定义到各个顶点的好方法。
+              例如，如果有一个名为 zfix 的顶点额外属性，
+              可以使用一个约束 z = zfix 将顶点强制到各个 z 值，
+              当然要先为每个顶点分配正确的 zfix 值
+             （在细化或以其他方式创建顶点后确保修复 zfix）。
+    不要使用 '&gt;' 或 '&lt;' 表示不等式；使用
+   <code>NONNEGATIVE</code> 或 <code>NONPOSITIVE</code>。
+   C 语言中的条件表达式对于定义由多个曲面平滑连接的约束非常有用，
+   例如带有半球形端盖的圆柱体。可以在表达式开头对变量赋值，
+   主要目的是在被积函数中仅对公共子表达式求值一次。
+   此类复合表达式的语法为
+<pre>
+    variable :=  expr, expr
+</pre>
+   表达式的值是第二个表达式的值。
+
+<p>
+   可选的 <code>ENERGY</code> 部分表示约束上的顶点或边被认为具有能量。
+                在 <a href="model.htm#soapfilm-model">soapfilm 模型</a>中，
+                后续行给出将沿约束上的每条边积分的向量场的分量。
+                在 <a href="model.htm#string-model">string 模型</a>中，
+                只需要一个分量，在约束上的每个顶点处求值。
+                这样做的主要目的是允许完全在约束上的面被省略。
+                它们本应具有的任何能量应在此处包含。
+                一种用途是在约束处获得规定的接触角。
+                此能量还应包括因省略的面而产生的
+     <a href="energies.htm#gravity-energy">重力势能</a>。
+		积分现在也在 <code>fixed</code> 边上求值，
+这与 Evolver 早期版本不同。
+<p>
+可选的 <code>CONTENT</code> 部分表示约束上的顶点
+（<a href="model.htm#string-model">string 模型</a>）或
+      边（<a href="model.htm#soapfilm-model">soapfilm 模型</a>）对体的面积或体积有贡献。
+                如果体边界在约束上的部分没有由面定义，
+                那么体体积必须从内容积分中获得贡献。
+	  理解内容如何添加到体中以获得正确的符号是很重要的。
+	  积分沿边的正方向求值。如果边在一个面上正向定向，
+	  且该面在一个体上正向定向，则积分被添加到该体中。
+	  这可能最终给出与你认为的自然方向相反的积分符号。
+	  始终在加载新数据文件时检查以确保积分结果正确。
+
+约束属性 content_rank 与内容积分配合使用。
+如果一个顶点（string 模型）或一条边（soapfilm 模型）位于多个具有内容积分的约束上
+（例如墙壁相交处），如果存在内容等级，
+则等级最低的内容积分将贡献给负侧体的内容，
+等级最高的内容积分将贡献给正侧体的内容。
+
+<p>
+<hr>
+<a   id="boundary-decl"></a><h2>参数化边界声明</h2>
+可以在数据文件的顶部区域使用以下语法声明参数化边界：
+<pre>
+BOUNDARY <em>n</em> PARAMETERS <em>k</em> [CONVEX]
+X1: <em>expr</em>
+X2: <em>expr</em>
+X3: <em>expr</em>
+</pre>
+
+   这定义了边界编号 <em>n</em>，其中 <em>n</em> 是正整数，
+   <em>k</em> 是参数数量。如果指定 <code>CONVEX</code>，
+                则会在边界上的边附加一个额外的
+<a href="energies.htm#gap-energy">间隙能量</a>，
+                以防止它们试图短路凸边界。
+后续行包含用参数 <code>P1</code> 以及可能的 <code>P2</code>、<code>P3</code>、... 表示的坐标函数。
+参见 <a href="catenoid.htm">悬链线示例</a>。
+  边界的能量和内容积分已实现，
+		语法与 <a href="#constraint-decl">
+		水平集约束</a>相同。
+
+
+<hr><h2><a   id="named-quantity-decl">命名量</a></h2>
+<a   id="lagrange_multiplier"></a>
+在数据文件中定义 <a   id="info_only"></a>
+<a href="quants.htm#named-quantities">命名量</a>的语法为：
+<p><pre> QUANTITY <i>name</i>   ENERGY|FIXED=<i>value</i>|CONSERVED|INFO_ONLY [LAGRANGE_MULTIPLIER <i>constexpr</i>]
+[TOLERANCE <i>constexpr</i>]  [MODULUS <i>constexpr</i>] <i>methodlist</i> | FUNCTION <i>methodexpr</i>
+</pre>
+<p>
+这里 <i>name</i> 是用户分配的标识符，用于引用该量。
+任何量必须声明为三种类型之一：
+<ul>
+<li><code>ENERGY</code> 量被添加到曲面的总能量中；
+<li><code>FIXED</code> 量被约束到固定的目标<i>值</i>；
+<li><code>CONSERVED</code> 量类似于 FIXED，运动被投影以保持该量守恒，但实际值不会被投影到给定值。
+<li><code>INFO_ONLY</code> 量的值仅报告给用户。
+</ul>
+对于固定量，可选的拉格朗日乘数值提供拉格朗日乘数的初始值（量的 "pressure" 属性）。
+这是为转储文件设计的，因此在重新加载时无需进行迭代即可拥有有效的拉格朗日乘数。
+<p>
+对于固定量，容差属性用于判断收敛性。
+当所有量偏差与容差的比率之和小于 1 时，曲面被视为已收敛。
+此求和还包括固定体积的体。如果容差未设置或为负，
+则使用变量 target_tolerance 的值，其默认值为 0.0001。
+<p>
+每个量都有一个模量，它只是整个量的标量乘数。
+模量为 0 将关闭能量量。默认模量为 1。
+
+<a   id="global_method"></a>
+量定义的 <i>methodlist</i> 版本可以包含一个或多个 <a href="quants.htm#method-instances">方法实例</a>。
+要包含先前明确定义的实例，请包含
+<code>METHOD</code> <i>instancename</i>。
+可以使用 <code>GLOBAL_METHOD</code> 代替 <code>METHOD</code>，
+表示该方法适用于适当类型的所有元素；它等同于在方法定义中使用 <code>GLOBAL</code>。
+要在量定义中实例化方法，你基本上是包含
+<a href="#method-instance-decl">实例定义</a>，但没有实例名称。
+一个量包含一个预定义方法实例和一个隐式定义实例的示例：
+<pre>   method_instance qwerty method facet_scalar_integral
+     scalar_integrand: x^2
+   quantity foobar energy method qwerty method edge_scalar_integral
+     scalar_integrand: y^3
+</pre>
+<p>
+通常第二种隐式定义更方便。
+可以在一个 <i>methodlist</i> 中包含多个方法实例
+（当前上限为 50），它们的值相加后乘以量的模量得到量的值。
+<code>FUNCTION</code> <i>methodexpr</i> 变体将量定义为先前定义的方法实例的函数。示例：
+<pre>   method_instance qwerty method facet_scalar_integral
+     scalar_integrand: x^2
+   quantity foobar energy function qwerty^3
+</pre>
+<p>
+非全局量可以通过在定义元素的数据文件行中添加量名称来逐个应用于元素。
+它们也可以在运行时使用
+<a href="commands.htm#set">set</a> 和
+<a href="commands.htm#unset">unset</a> 命令应用或取消应用。
+可定向方法可以通过在数据文件中方法名称后加破折号来以负方向应用。
+"set" 命令中的方向遵循元素生成时的方向。
+
+<p>
+应用于不同元素类型的方法可以在一个量中组合。
+如果将这样的量应用于一个元素，那么该量的所有适当类型的方法实例都将应用于该元素。
+量的原始附加关系会被记住，
+因此如果将边方法应用于面，那么从该面细化创建的边将继承该边方法。
+
+<hr>
+<a   id="scalar_integrand"></a>
+<a   id="vector_integrand"></a>
+<a   id="form_integrand"></a>
+<a   id="k_form_order"></a>
+<a   id="parameter_1"></a>
+<a   id="global"></a>
+<h2>
+<a   id="method_instance"></a>
+<a   id="method-instance-decl">命名方法实例声明</a></h2>
+<a href="quants.htm#method-instances">方法实例</a>
+通常作为 <a href="quants.htm#named-quantities">命名量</a>的
+<a href="#named-quantity-decl">定义</a>的一部分来定义，
+但在某些情况下，量由多个方法实例组成，需要单独引用这些方法实例；
+也许用户想知道各个实例的值。
+在数据文件中定义命名方法实例的通用语法为：
+<pre>  METHOD_INSTANCE <i>name</i> METHOD <i>methodname</i> [MODULUS <i>constexpr</i>]
+   [ELEMENT_MODULUS <i>attrname</i>]  [GLOBAL] [<i>parameters</i>]
+</pre>
+这里，<i>name</i> 是用户分配的名称，用于引用此特定实例。
+<i>methodname</i> 是 Evolver 中的
+<a href="quants.htm#methods">预定义方法</a>之一。
+模量值乘以方法值得到实例值。默认模量为 1。
+可以通过为元素类型指定一个 <a href="elements.htm#extra-attributes">额外属性</a>
+<i>attrname</i> 来给各个元素赋予乘数；该属性必须先前已定义。
+ <code>GLOBAL</code> 使该方法适用于适当类型的所有元素。
+非全局实例可以通过在定义元素的数据文件行中添加实例名称来逐个应用于元素。
+它们也可以在运行时使用
+<a href="commands.htm#set">set</a> 和
+<a href="commands.htm#unset">unset</a> 命令应用或取消应用。
+可定向方法可以通过在名称后加破折号在数据文件中以负方向应用。
+各个元素的方向可以在运行时使用 "set" 命令设置，例如
+<pre> set facet[123] orientation -1 </pre>
+
+<p>
+ 每个方法可以有各种参数来针对实例进行特化。
+ 当前指定的唯一参数是：
+<dl><dt> <code>SCALAR_INTEGRAND: <i>expr</i> </code></dt>
+<dd> 其中 <i>expr</i> 是坐标的标量函数
+（在 <a href="quants.htm#edge_general_integral">edge_general_integral</a>
+或 <a href="quants.htm#facet_general_integral">facet_general_integral</a> 中也可以是切向量或法向量分量的函数）。
+适当类型元素的元素属性也可以使用。<p></dd>
+<dt><code>
+VECTOR_INTEGRAND:  <br>
+Q1: <i>expr</i> <br>
+Q2: <i>expr</i> <br>
+Q3: <i>expr</i> <br> </code></dt>
+<dd> 其中表达式是坐标的函数。
+适当类型元素的元素属性也可以使用。<p></dd>
+<dt><code>
+FORM_INTEGRAND: <br>
+Q1: <i>expr</i> <br>
+Q2: <i>expr</i> <br>
+Q3: <i>expr</i> <br>
+...<br></code></dt>
+<dd> 其中表达式是坐标的函数。
+适当类型元素的元素属性也可以使用。当在
+<a href="quants.htm#facet_2form_integral">facet_2form_integral</a> 方法中使用时，
+形式分量按字典序排列，
+即在 4D 中六个分量 12,13,14,23,24,34 将被列为 <code>Q1</code> 到 <code>Q6</code>。<p></dd>
+<dt><code>PARAMETER_1 <i>constexpr</i></code></dt>
+<dd> 用于向某些方法指定杂项数值参数。<p></dd>
+<dt><code>K_FORM_ORDER <i>constexpr</i></code></dt>
+<dd>对于使用微分 k-形式的方法，这指定 k 的值。
+当需要时，应出现在 <code>FORM_INTEGRAND</code> 之前。</dd>
+</dl>
+<hr>
+
+<a   id="string"></a>
+<a   id="soapfilm"></a>
+<a   id="surface-dimension-decl"></a><h2>曲面维度</h2>
+曲面的默认维度为 2。如果不是，必须在数据文件的顶部区域声明。
+对于一维曲面（<a href="model.htm#string-model">string 模型</a>），只需包含一行
+<pre> STRING
+</pre>
+默认维度 2 的 <a href="model.htm#soapfilm-model">soapfilm 模型</a>
+等同于使用
+<pre> SOAPFILM
+</pre>
+一般地，行
+<pre> SURFACE_DIMENSION <i>n</i>
+</pre>
+定义曲面具有维度 <i>n</i>。
+超过 2 的维度仅在 <a href="model.htm#simplex-model">simplex 模型</a>中有效。
+曲面维度可以在运行时通过只读变量
+<a href="syntax.htm#surface_dimension">surface_dimension</a> 访问。
+
+<hr>
+<a   id="space-dimension-decl"></a><h2>空间维度</h2>
+空间的默认维度为 3。否则必须在数据文件的顶部区域声明，语法为
+<pre>SPACE_DIMENSION <em>n</em>
+</pre>
+维度必须不超过 model.h 中 MAXCOORD 的值，
+分发版本中为 4。
+空间维度可以在运行时通过只读变量
+<a href="syntax.htm#space_dimension">space_dimension</a> 访问。
+
+<hr>
+<a   id="extra-decl"></a><h2>额外属性声明</h2>
+<a   id="integer"></a>
+<a   id="real"></a>
+<a   id="ulong"></a>
+<a   id="self"></a>
+用户可以为元素定义
+<a href="elements.htm#extra-attributes">额外属性</a>，
+可以是单个值或最多八维数组。
+  如果这些属性要包含在数据文件中，
+则数据文件的顶部区域必须包含适当的定义。
+定义语法与 <a href="commands.htm#define">define</a> 运行时命令使用的相同：
+<pre> DEFINE <em>elementtype</em> ATTRIBUTE <em>name</em> <em>type</em> [<em>dim</em>]...
+</pre>
+其中 <em>elementtype</em> 是 <code>vertex</code>、<code>edge</code>、<code>facet</code>
+或 <code>body</code>，<em>name</em>
+是你选择的标识符，<em>type</em> 是 <code>REAL</code> 或
+<code>INTEGER</code>（内部还有一个 <code>ULONG</code> 无符号长整型），
+<em>dim</em> 是向量维度的可选表达式。
+目前实数和整数类型之间没有实际区别，因为内部一切都存储为实数。
+但将来可能会添加更多数据类型。
+额外属性通过细分生成的同类型元素继承。
+<em>type</em> 后面可以跟 <code>FUNCTION</code>，
+再跟一个括号中的过程，在读取属性值时求值；在公式中，
+可以使用 <code>self</code> 来引用相关元素以使用其属性，
+特别是在某个点为属性赋值。
+<a href="commands.htm#print">print</a> 命令可用于以括号形式打印属性数组或数组切片。
+ 示例：
+<pre>  define edge attribute charlie real
+  define vertex attribute newx real[3]
+  define facet attribute knots real[5][5][5]
+  define edge attribute bbb real function { self.bbb := self.x+self.y }
+</pre>
+警告：如果你打算在数据文件的顶部区域定义独立函数并将其放在属性声明之后，存在语法歧义。
+你应该在属性之前定义独立函数，或者用其他类型的声明将它们分开。
+
+<hr>
+<a   id="quadratic-decl"></a><h2>二次模型声明</h2>
+要声明数据文件以 <a href="model.htm#quadratic-model">二次模型</a>列出曲面，
+数据文件的顶部区域应包含行
+<pre>
+QUADRATIC
+</pre>
+对数据文件语法的唯一影响是
+<a href="#edges-section">边部分</a>可以列出边中点顶点。
+
+<hr>
+<a   id="gravity_constant-decl"></a><h2>重力常数声明</h2>
+<a href="energies.htm#gravity-energy">重力常数</a>
+的初始值可以在数据文件中使用以下语法设置
+<pre>  GRAVITY_CONSTANT <i>value</i> </pre>
+默认值为 1。
+
+<hr>
+<a   id="torus-declaration"></a><h2>环面模型声明</h2>
+<a   id="torus_filled-decl"></a>
+要声明周期性边界条件（即将域设为平坦的
+<a href="model.htm#torus-model">环面</a>），
+在数据文件的顶部区域包含行
+<pre>
+TORUS
+</pre>
+所有空间维度将是周期性的，周期向量在
+<a href="#torus-periods">周期</a>声明中给出。
+如果域被具有规定体积的体完全填充，则应使用行
+<pre>
+TORUS_FILLED
+</pre>
+以防止退化的体积约束。
+<hr>
+<a   id="periods"></a>
+<a   id="torus-periods"></a><h2>环面周期</h2>
+如果使用周期性边界条件
+（<a href="model.htm#torus-model">环面模型</a>），
+基本单元平行六面体的周期向量可以在数据文件的顶部区域定义。
+默认是单位立方体。语法是关键字 <code>PERIODS</code> 后跟每个周期向量的分量表达式：
+<pre>PERIODS
+<em>expr expr expr</em>
+<em>expr expr expr</em>
+<em>expr expr expr</em>
+</pre>
+此矩阵的大小取决于空间维度。
+		 表达式中可以使用变量，
+                 因此可以通过给变量赋新值来交互式地改变基本域。
+		 每次更改此类变量时，请确保给出
+<a href="commands.htm#recalc">recalc</a> 命令，
+		 以便重新计算周期矩阵。
+<hr>
+
+
+<a   id="view_matrix"></a>
+<a   id="viewing-matrix"></a><h2>视图矩阵</h2>
+数据文件的顶部区域可以包含初始的
+<a href="graphics.htm#view-matrix">视图矩阵</a>：
+<pre>
+VIEW_MATRIX
+<em>  constexpr constexpr constexpr constexpr</em>
+<em>  constexpr constexpr constexpr constexpr</em>
+<em>  constexpr constexpr constexpr constexpr</em>
+<em>  constexpr constexpr constexpr constexpr</em>
+</pre>
+矩阵采用齐次坐标，平移分量在最后一列。
+矩阵的大小比空间维度大一。
+此矩阵将包含在所有转储文件中，因此视图可以在会话之间保存。
+此矩阵由原生屏幕图形（'s' 命令）使用和设置，
+仅适用于内部图形（Postscript、Xwindows 等），
+不适用于外部图形（geomview）。
+元素可以在运行时通过 <code>view_matrix[i][j]</code> 读取或设置，
+其中索引从 1 开始。
+特别地，可以编写命令脚本来保存和重新加载特定的视图矩阵；
+参见分发包中的 <code>saveview.cmd</code>。
+<hr>
+
+<a   id="swap_colors"></a>
+<a   id="view_transforms"></a>
+<a   id="view-transforms"></a> <h2>视图变换</h2>
+  为了同时显示曲面的多个变换，
+   可以在数据文件的顶部区域给出若干视图变换矩阵：
+<pre>
+VIEW_TRANSFORMS <em>n</em>
+COLOR <em>color</em>
+SWAP_COLORS
+<em>  constexpr constexpr constexpr constexpr</em>
+<em>  constexpr constexpr constexpr constexpr</em>
+<em>  constexpr constexpr constexpr constexpr</em>
+<em>  constexpr constexpr constexpr constexpr</em>
+    ...
+</pre>
+     变换适用于所有图形（内部和外部），
+   对于内部图形，变换优先于
+<a href="graphics.htm#view-matrix">视图矩阵</a>。
+   恒等变换始终执行，因此不需要指定。
+ 矩阵的数量跟在关键字 <code>VIEW_TRANSFORMS</code> 后面。
+   每个矩阵采用齐次坐标，平移分量在最后一列。
+   每个矩阵的大小比空间维度大一。
+   各个矩阵不需要特殊的分隔；Evolver 会持续读取表达式直到获取所需的所有数字。
+   每个矩阵前面可以有一个可选的 <a href="syntax.htm#colors">颜色</a>，
+   适用于由该矩阵变换的面。颜色仅适用于一个变换；
+   它不会延续到下一个颜色规范。
+  如果存在 SWAP_COLORS，则在此矩阵应用时交换面的正面颜色和背面颜色。
+   变换可以通过
+<a href="toggle.htm#transforms">transforms</a> 切换交互式地激活或停用。
+    内部变量 <code>transform_count</code> 记录变换的数量，
+   变换矩阵可以在运行时作为三维矩阵 view_transforms[][][] 访问。
+   <a href="#view-generators">视图变换生成器</a>是控制视图变换的更高级方式。
+<hr>
+<a   id="view_transform_generators"></a>
+<a   id="view-generators"></a><h2>视图变换生成器</h2>
+  列出所有 <a href="#view-transforms">视图变换</a>既繁琐又不灵活。
+  另一种方法是只列出几个可以生成变换的矩阵。参见
+<a href="commands.htm#transform_expr">transform_expr</a> 命令了解
+  输入生成实际变换的表达式的说明。
+  特别注意：在 <a href="model.htm#torus-model">环面模型</a>中，
+周期平移会自动添加到列表末尾。
+  因此在环面模型中，即使数据文件中没有 view_transform_generators，
+  这些也总是可用的。数据文件顶部的语法：
+<pre>
+VIEW_TRANSFORM_GENERATORS <em>n</em>
+SWAP_COLORS
+<em>  constexpr constexpr constexpr constexpr</em>
+<em>  constexpr constexpr constexpr constexpr</em>
+<em>  constexpr constexpr constexpr constexpr</em>
+<em>  constexpr constexpr constexpr constexpr</em>
+    ...
+</pre>
+ 矩阵的数量跟在关键字 <code>VIEW_TRANSFORM_GENERATORS</code> 后面。
+   每个矩阵采用齐次坐标，平移分量在最后一列。
+   每个矩阵的大小比空间维度大一。
+   各个矩阵不需要特殊的分隔；Evolver 会持续读取表达式直到获取所需的所有数字。
+如果存在 SWAP_COLORS，则在此矩阵应用时交换面的正面颜色和背面颜色。
+    内部变量 <code>transform_count</code> 记录变换的数量，
+   变换矩阵可以在运行时作为三维矩阵 view_transforms[][][] 访问。
+
+<hr>
+<a   id="scale_limit"></a><h2>缩放限制</h2>
+要设置梯度下降
+<a href="iterate.htm#scale-factor">缩放因子</a>的上界 <i>value</i>，
+在数据文件的顶部区域包含行
+<pre>
+   SCALE_LIMIT <i>value</i>
+</pre>
+上界可以在运行时使用 <a href="single.htm#m">m</a> 命令
+或设置 <code>scale_limit</code> 变量来更改。
+如果表面张力是主要能量，scale_limit 应设置为表面张力的倒数。
+
+<hr>
+<a   id="functions"></a><h2>函数和过程</h2>
+通常独立的用户定义
+<a href="commands.htm#function-definition">函数</a>
+和
+<a href="commands.htm#procedure-definition">过程</a>
+在数据文件的 <a href="datafile.htm#read-section">read 部分</a>中定义，
+但有时需要在数据文件的顶部区域定义它们，
+以便在其他顶部区域声明中使用。
+可以在顶部区域使用与 read 部分相同的语法定义它们。
+注意，这适用于带参数传递的函数和过程，
+用前导关键字 "function" 或 "procedure" 标记，
+而不是像 "gg := {...}" 这样的命令定义。
+警告：如果你打算在数据文件的顶部区域定义独立函数并将其放在属性声明之后，存在语法歧义。
+你应该在属性之前定义独立函数，或者用其他类型的声明将它们分开。
+
+<hr>
+<a   id="optimizing_parameter"></a> <a   id="optimising_parameter"></a>
+  <a id="pdelta"></a> <a   id="pscale"></a>
+<a id="p_force"></a> <a id="p_velocity"> </a>
+<a   id="parameter-scale"></a>
+<h2>优化参数</h2>
+可以通过数据文件声明使变量在
+<a href="iterate.htm#iteration-step">迭代</a>
+或 <a href="commands.htm#hessian-command">hessian</a> 命令期间接受优化：
+<pre>
+      OPTIMIZING_PARAMETER <em>identifier</em> = <em>constexpr</em> PDELTA = <em>constexpr</em> PSCALE = <em>constexpr</em>
+</pre>
+此类变量作为独立变量在优化过程中加入顶点坐标。
+然而，它与坐标的不同之处在于关于它的梯度是数值计算的，
+而不是解析计算的。因此它可以在允许使用变量的任何地方使用。
+带优化参数的 Hessian 矩阵已实现。
+可选的 pdelta 值是有限差分中使用的参数差异；默认值为 0.0001。
+可选的 pscale 值是参数运动的乘数，用于对参数与曲面能量进行"阻抗匹配"。
+这些属性可以设置在任何参数上，以备作为优化参数使用。
+在运行时，可以使用 FIX 和 UNFIX 命令切换参数是否优化。
+即 <code>fix radius</code>
+将使 radius 变量变为非优化（固定值）。
+此外，pdelta 和 pscale 属性可以在运行时访问，如
+<pre>
+height.pscale := 2*height.pscale
+</pre>
+在运行时，可以使用变量的 p_force 属性来查找约束校正前能量关于变量的变化率，
+使用 p_velocity 属性来查找变量关于 'g' 命令缩放因子的变化率。
+示例：
+<pre>
+    g
+    print height.p_velocity
+</pre>
+<p>
+ "Optimising_parameter" 是同义词。
+
+<hr>
+<a   id="gap_constant"></a>
+<a   id="spring_constant"></a>
+<a   id="gap-constant-decl"></a><h2>间隙常数声明</h2>
+<a href="energies.htm#gap-energy">间隙能量</a>的间隙常数初始值
+可以在数据文件中使用以下语法设置
+<pre>  GAP_CONSTANT <i>value</i> </pre>
+默认值为 1。同义词：spring_constant。
+
+<hr>
+<a   id="symmetric_content"></a><h2>对称内容</h2>
+数据文件关键字 <code>SYMMETRIC_CONTENT</code> 触发使用
+替代的曲面积分来计算体体积，即向量场 (x,y,z)/3。
+如果体的未建模侧面是从原点径向的，或者约束内容积分（通过近似求值）
+在应为对称的曲面上导致不对称结果，则此功能非常有用。
+
+<hr>
+<a   id="keep_originals"></a><h2>保留原始 ID</h2>
+数据文件顶部出现关键字
+<pre>
+keep_originals
+</pre>
+的效果与 -i 命令行选项相同，
+即内部保留与数据文件中相同的 ID 号，而不是按读取顺序重新编号。
+
+<hr>
+<a   id="evolver_version"></a>
+<a   id="version"></a><h2>版本</h2>
+
+如果数据文件包含仅在 Evolver 某个版本之后才有的功能，
+数据文件可以包含以下形式的行 <br>
+<code> evolver_version "2.10"</code><br>
+如果当前版本较早，这将生成版本错误消息，
+或者如果在早于 2.10 的 Evolver 版本上运行，则只产生语法错误。
+
+<hr>
+
+
+<a   id="constraint_tolerance-decl"></a><h2>约束容差</h2>
+这是数据文件中关于顶点被视为满足
+<a href="constrnt.htm#level-set-constraints">水平集约束</a>的容差声明。
+ 默认值为 1e-12。语法：
+<pre>  CONSTRAINT_TOLERANCE <i>const_expr</i> </pre>
+设置内部变量
+<a href="syntax.htm#constraint_tolerance">constraint_tolerance</a> 的值。
+
+<hr>
+<a   id="symmetry-decl"></a><h2>对称群声明</h2>
+要声明域是 <a href="model.htm#symmetry-groups">对称群</a>的商空间，
+数据文件的顶部区域必须包含以下形式的行
+<pre>
+SYMMETRY_GROUP "<em>name</em>"
+</pre>  "<em>name</em>" 是一个双引号括起来的名称，
+与 <a href="model.htm#implemented-symmetries">已定义的对称群</a>列表匹配。
+
+
+<hr>
+<a   id="length_method_name"></a><h2>长度方法</h2>
+ 此项 <code>length_method_name</code> 指定用作计算边长度的
+预定义方法的名称，代替默认的
+<a href="quants.htm#edge_length">edge_length</a> 方法。
+它是可选的。开发此功能是为了在二维泡沫中使用圆弧。
+当前合理的方法是 <a href="quants.htm#circular_arc_length">circular_arc_length</a>
+和 <a href="quants.htm#spherical_arc_length">spherical_arc_length</a>。
+使用意味着转换为 <a href="#everything_quantities">
+everything_quantities</a> 模式。
+语法：
+<pre>
+length_method_name <em>quoted_method_name</em>
+</pre>
+例如，
+<pre>
+string
+space_dimension 2
+length_method_name "circular_arc_length"
+</pre>
+
+<hr>
+<a   id="area_method_name"></a><h2>面积方法</h2>
+ 此项 <code>area_method_name</code> 指定用作计算面面积的
+预定义方法的名称，代替 string 模型中默认的
+<a href="quants.htm#edge_area">edge_area</a> 方法
+或 soapfilm 模型中的 <a href="quants.htm#facet_area">facet_area</a> 方法。
+它是可选的。开发此功能是为了在二维泡沫中使用圆弧。
+当前合理的方法是 <a href="quants.htm#circular_arc_area">circular_arc_area</a>
+和 <a href="quants.htm#spherical_arc_area_n">spherical_arc_area</a>。
+ 在 string 模型中与 <a href="#volume_method_name">
+volume_method_name</a> 同义。
+使用意味着转换为 <a href="#everything_quantities">
+everything_quantities</a> 模式。
+ 语法：
+<pre>
+area_method_name <em>quoted_method_name</em>
+</pre>
+例如，
+<pre>
+string
+space_dimension 2
+area_method_name "circular_arc_area"
+</pre>
+
+<hr>
+<a   id="volume_method_name"></a><h2>体积方法</h2>
+ 此项 <code>volume_method_name</code> 指定用作计算体体积的
+预定义方法的名称，代替 string 模型中默认的
+<a href="quants.htm#edge_area">edge_area</a> 方法
+或 soapfilm 模型中的 <a href="quants.htm#facet_volume">facet_volume</a> 方法。
+它是可选的。开发此功能是为了在二维泡沫中使用圆弧。
+ 在 string 模型中与 <a href="#area_method_name">
+area_method_name</a> 同义。
+使用意味着转换为 <a href="#everything_quantities">
+everything_quantities</a> 模式。
+ 语法：
+<pre>
+volume_method_name <em>quoted_method_name</em>
+</pre>
+例如，
+<pre>
+string
+space_dimension 2
+volume_method_name "circular_arc_area"
+</pre>
+
+<hr>
+<a   id="hessian_special_normal_vector"></a><h2>Hessian 特殊法向量</h2>
+
+当 <a href="toggle.htm#hessian_special_normal">hessian_special_normal</a>
+开启时，hessian 命令使用特殊的向量场作为扰动方向，
+而不是通常的曲面法向量。向量场以以下格式指定
+<pre>
+HESSIAN_SPECIAL_NORMAL_VECTOR
+c1: <em>expr</em>
+c2: <em>expr</em>
+c3: <em>expr</em>
+</pre>
+可以在表达式中使用顶点属性。注意
+hessian_special_normal 也适用于
+<a href="elements.htm#vertex_normal">vertex_normal</a> 属性计算的法向量
+和常规 <a href="commands.htm#vertex_average">顶点平均</a>使用的法向量。
+<hr>
+<a   id="simplex-decl"></a><h2>单纯形模型声明</h2>
+要声明数据文件以 <a href="model.htm#simplex-model">单纯形模型</a>列出曲面，
+数据文件的顶部区域应包含行
+<pre>
+SIMPLEX_REPRESENTATION
+</pre>
+对数据文件的主要影响是
+<a href="#faces-section">面</a>由有向顶点列表而不是边列表定义。
+
+<hr>
+<a   id="diffusion-decl"></a><h2>扩散</h2>
+
+Evolver 可以模拟现实生活中相邻气泡之间的气体扩散现象。
+这种扩散由穿过曲面的压差驱动。
+这通过数据文件第一部分中的关键字 DIFFUSION 调用，
+后跟扩散常数的值，即内部变量 diffusion_coeff。
+<pre>
+    DIFFUSION 0.1
+</pre>
+迭代期间穿过面的扩散量计算为
+scale*diffusion_coeff*facet_area*pressure_difference。
+缩放因子作为迭代的时间步长包含在内。
+该量被添加到或从面两侧的规定体积的体中减去。
+<p>
+如果你想对穿过各种曲面的扩散速率进行更精细的控制，
+可以在 string 模型中定义 edge_diffusion 边属性
+或在 soapfilm 模型中定义 facet_diffusion 面属性，
+并根据需要为边或面给出单独的值。
+如果定义了该属性，则使用其值代替全局扩散常数。
+<p>
+扩散可以在运行时使用 "diffusion" 切换命令切换。
+<p>
+
+<hr>
+<a   id="load_library"></a><h2>动态加载库</h2>
+要加载编译函数的 <a href="misc.htm#dynamic-load-library">动态库</a>，
+语法为
+<pre>
+ LOAD_LIBRARY "<em>filename</em>"
+</pre>
+其中双引号括起来的文件名是库。将在当前目录和
+<a href="install.htm#EVOLVERPATH">EVOLVERPATH</a> 中搜索该库。
+
+<hr>
+<a   id="wulff"></a> <a   id="hemisphere"></a> <a   id="lens"></a>
+<a   id="wulff-decl"></a><h2>结晶被积函数</h2>
+要声明表面积能应使用结晶被积函数计算，
+数据文件的顶部区域应包含以下形式的行
+<pre>
+ WULFF "<em>filename</em>"
+</pre>
+
+双引号括起来的文件名（带路径）指向一个文件，
+                          该文件给出被积函数的 Wulff 向量。
+                          文件格式是每行一个 Wulff 向量，
+                          其分量以 ASCII 十进制格式用空格分隔。
+                          第一个空行结束规范。
+                          一些特殊的被积函数可以通过给出特殊名称
+                          代替文件名来使用。
+                          目前，"hemisphere" 表示上单位半球的
+                          Wulff 形状，"lens" 表示两个厚度为 1/2 的
+                          单位球冠在水平面上粘合在一起。
+                          这两个不需要单独的文件。
+<hr>
+<a   id="phasefile"></a>
+<a   id="phase"></a>
+<a   id="phase-decl"></a><h2>相文件声明</h2>
+要声明边或面的
+<a href="energies.htm#surface-tension">表面张力</a>取决于
+其相邻 <a href="elements.htm#phase,-facet">面</a>或
+<a href="elements.htm#phase,-body">体</a>的相，
+数据文件的顶部区域应包含以下形式的行
+<pre>
+ PHASEFILE "<em>filename</em>"
+</pre>
+信息从 ASCII 文件中读取，文件名在双引号字符串中给出。
+                     文件的第一行是不同相的数量。
+                     之后每行由两个相编号和它们之间的表面张力组成。
+                     不以一对数字开头的行被视为注释。
+                     如果未提及一对相，则它们之间的表面张力取为 1.0。
+                     string 模型中的面或 soapfilm 模型中的体
+                     可以在数据文件中使用 <code>PHASE</code> <i>n</i> 短语标记相。
+<hr>
+<a   id="ideal-gas-decl"></a><h2>理想气体模型</h2>
+数据文件顶部区域中以下形式的行
+<pre>
+PRESSURE <em>constexpr</em>
+</pre>
+
+指定体是可压缩的，环境压力为 <em>constexpr</em> 的值。
+       默认情况下，具有给定体积的体是不可压缩的。
+<hr>
+<a   id="interp_bdry-decl"></a><h2>参数插值</h2>
+要在细化期间计算边中点的
+<a href="constrnt.htm#parametric-boundaries">参数</a>
+时使用插值而不是外推，使用关键字
+<pre>   INTERP_BDRY_PARAM
+</pre>
+仅在没有周期参数时才应这样做。
+
+<hr>
+<a   id="everything_quantities"></a><h2>Everything_quantities</h2>
+数据文件顶部区域的关键字。导致所有面积、体积等
+被转换为命名量和方法。等同于命令行
+<a href="general.htm#options">选项 -q</a>，
+或 <a href="commands.htm#convert_to_quantities">
+convert_to_quantities</a> 命令。
+<hr>
+<a   id="mobility_tensor"></a>
+<a   id="mobility-decl"></a><h2>迁移率声明</h2>
+可以在数据文件的顶部区域通过以下语法定义
+<a href="model.htm#mobility">迁移率</a>矩阵
+<pre>
+MOBILITY_TENSOR
+<em>expr expr expr</em>
+<em>expr expr expr</em>
+<em>expr expr expr</em>
+</pre>
+或
+<pre>
+MOBILITY <em>expr</em>
+</pre>
+第一种形式给出完整的迁移率矩阵，第二种形式
+给出矩阵为单位矩阵的标量倍数。
+公式在每次迭代的每个顶点处求值，
+因此公式可以依赖于顶点位置和任何顶点属性。
+<hr>
+<a   id="conformal_metric"></a>
+<a   id="klein_metric"></a>
+<a   id="metric-decl"></a><h2>度量声明</h2>
+可以在数据文件的顶部区域声明环境空间上的
+<a href="model.htm#Riemannian-metric">黎曼度量</a>，
+语法为
+<pre>METRIC
+<em>expr expr expr</em>
+<em>expr expr expr</em>
+<em>expr expr expr</em>
+</pre>
+或
+<pre>
+CONFORMAL_METRIC <em>expr</em>
+</pre>
+或
+<pre>
+KLEIN_METRIC
+</pre>
+关键字 <code>METRIC</code> 后面是度量张量的 N^2 个分量，
+              其中 N 是空间维度。分量不必遵循特定的行布局；
+              它们可以全部在一行上，或每个在单独一行上，或任意组合。
+              由用户维护对称性。
+              <a href="model.htm#conformal-metric">共形度量</a>是单位矩阵的标量倍数，
+              只需给出倍数即可。共形度量的运行速度约为两倍。
+	      <a href="model.htm#Klein-hyperbolic-metric">Klein 度量</a>
+是基于单位圆盘或球体建模的双曲 n-空间的内置度量。
+
+<hr>
+<a   id="merit_factor"></a> <h2>品质因数</h2>
+如果存在关键字 <code>MERIT_FACTOR</code>，则
+<a href="single.htm#i">i</a> 命令将打印比率
+total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
+这是早期试图超越 Kelvin 空间分割时的遗留功能。
+<hr>
+
+
+<a   id="square_curvature"></a> <a   id="curvature_power"></a>
+<a   id="square_gauss_modulus"></a>
+<a   id="squared_curvature"></a><h2>平方平均曲率</h2>
+
+要添加平方平均曲率能量，在数据文件顶部包含一行
+<pre>  SQUARED_CURVATURE modulus
+</pre>
+模量是能量的乘数，在运行时可通过读写变量 sq_curvature_modulus 访问。
+这是原始的平方平均曲率能量；后续版本在平方曲率命名方法中。
+<p>
+在 string 模型中，曲率的幂由内部读写变量 curvature_power 控制。
+<hr>
+<a   id="sqgauss"></a>
+<a   id="square_gaussian_curvature"></a>
+<a   id="squared_gaussian_curvature"></a><h2>平方高斯曲率</h2>
+
+要添加平方高斯曲率能量，在数据文件顶部包含一行
+<pre>  SQUARED_GAUSSIAN_CURVATURE modulus
+</pre>
+模量是能量的乘数，在运行时可通过读写变量 square_gauss_modulus 访问。
+同义词：<code>square_gaussian_curvature</code>、<code>sqgauss</code>
+
+<hr>
+<a   id="zoom_vertex"></a><h2>Zoom_vertex</h2>
+数据文件关键字，设置当前 <a href="commands.htm#zoom">zoom</a> 顶点。
+在给出 zoom 命令后用于转储文件中。
+
+<hr>
+<a   id="zoom_radius"></a><h2>Zoom_radius</h2>
+数据文件关键字，设置当前 <a href="commands.htm#zoom">zoom</a> 半径。
+在给出 zoom 命令后用于转储文件中。
+
+
+<hr>
+<a   id="unsuppress_warning"></a>
+<a   id="suppress_warning"></a><h2>抑制警告</h2>
+数据文件关键字，指示 Evolver 不打印某个警告。语法：
+<pre>
+  SUPPRESS_WARNING <em>number</em>
+</pre>
+其中 <em>number</em> 是警告的编号。用于抑制你知道无关紧要的恼人警告消息。
+可以使用以下语法恢复警告
+<pre>
+  UNSUPPRESS_WARNING <em>number</em>
+</pre>
+
+<hr>
+<a   id="vertices_predicted"></a><h2>Vertices_predicted</h2>
+数据文件顶部区域的关键字，指定顶点结构的初始分配。可选。
+目的是防止随着顶点列表增长或曲面演化而反复重新分配内存。
+应该更快，并防止内存碎片化。
+由 <a href="single.htm">d</a> 或 <a href="commands.htm">dump</a> 命令
+根据当前顶点数量自动放入转储文件。
+示例：
+<pre>
+    vertices_predicted 3074
+    edges_predicted    9216
+    facets_predicted   6144
+    bodies_predicted      1
+    facetedges_predicted  18432
+</pre>
+
+
+<hr>
+<a   id="edges_predicted"></a><h2>Edges_predicted</h2>
+数据文件顶部区域的关键字，指定边结构的初始分配。可选。
+目的是防止随着边列表增长或曲面演化而反复重新分配内存。
+应该更快，并防止内存碎片化。
+由 <a href="single.htm">d</a> 或 <a href="commands.htm">dump</a> 命令
+根据当前边数量自动放入转储文件。
+示例：
+<pre>
+    vertices_predicted 3074
+    edges_predicted    9216
+    facets_predicted   6144
+    bodies_predicted      1
+    facetedges_predicted  18432
+</pre>
+
+<hr>
+<a   id="facets_predicted"></a><h2>Facets_predicted</h2>
+数据文件顶部区域的关键字，指定面结构的初始分配。可选。
+目的是防止随着面列表增长或曲面演化而反复重新分配内存。
+应该更快，并防止内存碎片化。
+由 <a href="single.htm">d</a> 或 <a href="commands.htm">dump</a> 命令
+根据当前面数量自动放入转储文件。
+示例：
+<pre>
+    vertices_predicted 3074
+    edges_predicted    9216
+    facets_predicted   6144
+    bodies_predicted      1
+    facetedges_predicted  18432
+</pre>
+
+<hr>
+<a   id="bodies_predicted"></a><h2>Bodies_predicted</h2>
+数据文件顶部区域的关键字，指定体结构的初始分配。可选。
+目的是防止随着面列表增长或曲面演化而反复重新分配内存。
+应该更快，并防止内存碎片化。
+由 <a href="single.htm">d</a> 或 <a href="commands.htm">dump</a> 命令
+根据当前体数量自动放入转储文件。
+示例：
+<pre>
+    vertices_predicted 3074
+    edges_predicted    9216
+    facets_predicted   6144
+    bodies_predicted      1
+    facetedges_predicted  18432
+</pre>
+
+
+<hr>
+<a   id="facetedges_predicted"></a><h2>Facetedges_predicted</h2>
+数据文件顶部区域的关键字，指定面边结构的初始分配。可选。
+目的是防止随着面边列表增长或曲面演化而反复重新分配内存。
+应该更快，并防止内存碎片化。
+由 <a href="single.htm">d</a> 或 <a href="commands.htm">dump</a> 命令
+根据当前面边数量自动放入转储文件。
+示例：
+<pre>
+    vertices_predicted 3074
+    edges_predicted    9216
+    facets_predicted   6144
+    bodies_predicted      1
+    facetedges_predicted  18432
+</pre>
+
+<hr>
+<a   id="quantities_predicted"></a><h2>Quantities_predicted</h2>
+数据文件顶部区域的关键字，指定命名量结构的初始分配。可选。
+目的是防止随着量列表增长而反复重新分配内存。
+如果只有几个量则不重要，但有时可能有数千个量，
+例如在大泡沫上使用 "everything_quantities" 时。
+由 "d" 或 "dump" 命令根据当前量数量自动放入转储文件。
+此声明显然应在定义任何量之前。
+示例：
+<pre>
+    vertices_predicted 30748
+    edges_predicted    92166
+    facets_predicted   61446
+    bodies_predicted    2048
+    facetedges_predicted  184320
+    method_instances_predicted   4098
+    quantities_predicted   2050
+</pre>
+
+<hr>
+<a   id="method_instances_predicted"></a><h2>Method_instances_predicted</h2>
+
+数据文件顶部区域的关键字，指定方法实例结构的初始分配。可选。
+目的是防止随着实例列表增长而反复重新分配内存。
+如果只有几个方法实例则不重要，但有时可能有数千个实例，
+例如在大泡沫上使用 "everything_quantities" 时。
+由 "d" 或 "dump" 命令根据当前方法实例数量自动放入转储文件。
+此声明显然应在定义任何量之前。
+示例：
+<pre>
+    vertices_predicted 30748
+    edges_predicted    92166
+    facets_predicted   61446
+    bodies_predicted    2048
+    facetedges_predicted  184320
+    method_instances_predicted   4098
+    quantities_predicted   2050
+</pre>
+
+
+<hr>
+<hr>
+<a   id="element-lists"></a><h2>元素列表</h2>
+
+几何元素的列表遵循通用格式。每个元素在一行上定义。
+行上的第一个条目是元素编号。编号不必连续，可以省略某些编号，
+但请注意内部将按顺序重新编号。
+数据文件中的原始编号可作为元素的
+<a href="elements.htm#original">original</a> 属性访问。
+元素编号后面是基本定义数据，然后是任意顺序的可选属性。
+除了下面列出的每种元素类型的特定属性外，
+还可以为先前定义的任何
+<a href="elements.htm#extra-attributes">额外属性</a>
+指定值。语法是属性名称后跟适当数量的值。
+还可以列出任意数量的
+<a href="quants.htm#named-quantities">命名量</a>或
+<a href="quants.htm#method-instances">方法实例</a>。
+	      这些将此元素的方法值添加到命名量中。
+	      命名量或实例必须已在数据文件的顶部区域中声明。
+<hr>
+<a   id="vertices-section"></a><h2>顶点列表</h2>
+
+    数据文件顶点列表由行首关键字 <code>VERTICES</code> 开始。
+              后面是每行一个顶点规范的行。如果顶点不在
+<a href="constrnt.htm#parametric-boundaries">参数化边界</a>上，语法为
+<pre>
+<em>k   x y ...</em> [FIXED] [CONSTRAINT <em>c1 c2 ...</em>]  [BARE]
+            [<em>quantityname ...</em>] [<em>methodname ...</em>]
+</pre>
+在 <a href="constrnt.htm#parametric-boundaries">参数化边界</a>上的顶点语法为
+<pre>
+<em>k p1 [p2 ...] </em> BOUNDARY <em>b</em> [FIXED] [BARE] [<em>quantityname ...</em>]
+   [<em>methodname ...</em>]
+</pre>
+          这里 <em>k</em> 是顶点编号，正整数。顶点
+              不需要按顺序列出，编号可以有间隔。
+              但是，如果不是连续顺序，则转储文件中的编号将不同。
+              <em>x y ...</em> 是坐标的常量表达式。
+              在参数化边界格式中，给出边界参数值而不是坐标。
+           如果给出 <a href="elements.htm#fixed,-vertex"><code>FIXED</code></a>，
+              则顶点永远不会移动，可能的初始投影到约束除外。
+              如果给出 <code>CONSTRAINT</code>，则后面必须跟一个或多个
+<a href="constrnt.htm#level-set-constraints">约束</a>编号。
+              你可以列出任意多个约束，
+              只要任何时刻精确适用的约束是一致且独立的。
+              给定的坐标不必精确位于约束上；它们将被投影到约束上。
+              在参数化边界上的顶点不能同时在约束上。
+<p>
+	      <a href="elements.htm#bare,-vertex"><code>BARE</code></a>
+ 属性只是对检查例程的指示，
+	      表示此顶点在 soapfilm 模型中不应有相邻的面，
+	      因此不会产生虚假警告。
+	      当你想要显示裸线或勾勒基本域的轮廓时，这很有用。
+<p>可以列出任意数量的
+<a href="quants.htm#named-quantities">命名量</a>
+或 <a href="quants.htm#method-instances">方法实例</a>。
+	      这些将此元素的方法值添加到命名量中。
+	      命名量或实例必须已在数据文件的顶部区域中
+<a href="#named-quantity-decl">声明</a>。
+<p>
+<a href="commands.htm#list">list</a>
+<a href="commands.htm#list"> vertices</a> 命令
+以数据文件格式打印顶点列表。
+<hr>
+
+<a   id="edges-section"></a><h2>边列表</h2>
+              数据文件边列表跟在顶点列表后面，
+              由行首关键字 <code>EDGES</code> 开始。
+              后面是每行一个边规范的行，格式如下（此处行拼接）：
+<pre>
+<em>k v1 v2 [midv] [s1 s2 s3]</em> [WRAP <em>w</em>] [FIXED] [BOUNDARY <em>b</em>] \
+   [CONSTRAINTS <em>c1 [c2 ...]</em>] [TENSION <em>constexpr</em>] [COLOR <em>n</em>] \
+     [BARE]  [<em>quantityname ...</em>] [<em>methodname ...</em>]
+</pre>
+
+这里 <em>k</em> 是边编号，编号规则与顶点相同。
+  <em>v1</em> 和 <em>v2</em> 是边的尾顶点和头顶点的编号。
+  在 <a href="model.htm#quadratic-model">二次模型</a>中，
+边中点可以作为第三个顶点 <em>midv</em> 列出
+（否则将创建一个中点顶点）。
+  在 <a href="model.htm#torus-model">环面模型</a>中，
+后面必须跟符号 <em>s1 s2 s3</em>，
+指示边如何环绕每个单元方向：+ 表示正向一次，
+* 表示无环绕，- 表示负向一次。
+  在非环面 <a href="model.htm#symmetry-groups">对称群</a>中，
+每条边应有一个 <code>WRAP</code> 对称群元素编码为整数。
+<a href="elements.htm#fixed,-edge"><code>FIXED</code></a> 表示
+细分此边产生的所有顶点和边将具有 <code>FIXED</code> 属性；
+它不意味着端点将自动被固定。
+  同样，
+<a href="constrnt.htm#parametric-boundaries"><code>BOUNDARY</code></a> 和
+<a href="constrnt.htm#level-set-constraints"><code>CONSTRAINT</code></a>
+ 属性将由此边派生的所有边和顶点继承。
+  如果约束具有能量或内容被积函数，将为此边执行。
+  重要：如果约束编号为负，边能量和内容积分将按相反方向执行。
+  在 <a href="model.htm#string-model">string 模型</a>中，
+默认张力为 1，在 <a href="model.htm#soapfilm-model">soapfilm 模型</a>中，
+默认张力为 0。但是，可以在 soapfilm 模型中给边赋予非零张力，
+它们将对能量有贡献。
+<p>
+ 如果 <a href="model.htm#simplex-model">单纯形模型</a>
+ 生效，边比面低一个维度，
+	      由有序顶点列表给出。
+	      只有在具有积分的约束上的边才需要列出。
+<p>
+     <a href="elements.htm#bare,-edge"><code>BARE</code></a>
+ 属性只是对检查例程的指示，
+	      表示此边在 soapfilm 模型中不应有相邻的面，
+	      因此不会产生虚假警告。
+	      当你想要显示裸线或勾勒基本域的轮廓时，这很有用。
+
+<p>可以列出任意数量的
+<a href="quants.htm#named-quantities">命名量</a>
+或 <a href="quants.htm#method-instances">方法实例</a>。
+	      这些将此元素的方法值添加到命名量中。
+	      命名量或实例必须已在数据文件的顶部区域中
+<a href="#named-quantity-decl">声明</a>。
+如果量或实例具有方向相关的方法，名称后可以加破折号来反转应用的方向。
+<p>
+<a href="commands.htm#list">list</a>
+<a href="commands.htm#list">edges</a> 命令
+以数据文件格式打印边列表。
+<hr>
+
+<a   id="faces-section"></a><a   id="face"></a><a   id="faces"></a>
+<h2>   面列表</h2>
+
+       数据文件面列表跟在边列表后面，
+       由行首关键字 <code>FACES</code> 开始。
+       后面是每行一个面规范的行，格式如下：
+<pre>
+  <em>k   e1 e2 ...</em>  [FIXED] [TENSION <em>constexpr</em>] [BOUNDARY <em>b</em>] \
+  [CONSTRAINTS <em>c1 [c2 ...]</em>]     [NODISPLAY]   \
+   [COLOR <em>n</em>]} [FRONTCOLOR <em>n</em>] [BACKCOLOR <em>n</em>] \
+   [PHASE <em>n</em>] [<em>quantityname</em> ...] [<em>methodname</em> ...]
+</pre>
+              这里 <em>k</em> 是面编号，编号规则与
+<a href="#vertices-section">顶点</a>相同。后面是有向边编号的列表，
+              按逆时针方向围绕面排列。
+              负的边编号表示与边列表中定义的相反方向。
+              最后一条边的头部必须是第一条边的尾部
+             （在 <a href="model.htm#string-model">string 模型</a>中使用技巧的情况除外）。
+              边的数量没有限制。
+              在 <a href="model.htm#soapfilm-model">soapfilm 模型</a>中，
+如果面的边数超过三条，面将自动细分为三角形。
+              <a href="elements.htm#density,-facet"><code>TENSION</code></a>
+（同义词：<code>DENSITY</code>）
+值是面的单位面积能量
+             （<a href="energies.htm#surface-tension">表面张力</a>）；
+              默认值为 1。密度为 0 的面不施加力，
+              可用于定义体积或在显示中使用。
+              分数密度对于规定的接触角很有用。
+              <a href="elements.htm#nodisplay"><code>NODISPLAY</code></a>
+防止面被显示。
+	      <a href="elements.htm#color,-facet"><code>COLOR</code></a>
+ 属性适用于面的两侧；
+	      <a href="elements.htm#frontcolor"><code>FRONTCOLOR</code></a>
+ 适用于正面（边逆时针方向），
+<a href="elements.htm#backcolor"><code>BACKCOLOR</code></a> 适用于背面。
+              <a href="elements.htm#phase,-facet"><code>PHASE</code></a>
+编号在 <a href="model.htm#string-model">string 模型</a>中用于
+              确定不同相面之间边的表面张力（如果使用相）。
+<p>
+              如果 <a href="model.htm#simplex-model">单纯形模型</a>
+ 生效，边列表应替换为有向顶点编号列表。
+
+<p>可以列出任意数量的
+<a href="quants.htm#named-quantities">命名量</a>
+或 <a href="quants.htm#method-instances">方法实例</a>。
+	      这些将此元素的方法值添加到命名量中。
+	      命名量或实例必须已在数据文件的顶部区域中
+<a href="#named-quantity-decl">声明</a>。
+如果量或实例具有方向相关的方法，名称后可以加破折号来反转应用的方向。
+<p>
+              面部分在 <a href="model.htm#string-model">string 模型</a>中是可选的。
+
+<p>
+<a href="commands.htm#list">list</a>
+<a href="commands.htm#list">facets</a> 命令
+以数据文件格式打印面列表。
+<hr>
+
+
+<a   id="bodies-section"></a><h2> 体列表</h2>
+
+              数据文件体列表跟在面列表后面，
+              由行首关键字 <code>BODIES</code> 开始。
+              后面是每行一个体规范的行，格式如下：
+<pre>
+<em>k  f1 f2 f3 ....</em> [VOLUME <em>constexpr</em>] [VOLCONST <em>constexpr</em>] [ACTUAL_VOLUME <em>constexpr</em>] \
+[PRESSURE <em>p</em>] [DENSITY <em>constexpr</em>] [PHASE <em></em>]
+</pre>
+
+              这里 <em>k</em> 是体编号，
+              <em>f1 f2 f3 ...</em> 是无序的有符号面编号列表。
+              正号表示面法向量（由面列表中边顺序的右手法则给出）
+              从体向外，负号表示法向量向内。
+              给出 <code>VOLUME</code> 值 <em>constexpr</em> 表示体具有
+<a href="elements.htm#target-volume">体积约束</a>，
+              除非 <a href="datafile.htm#ideal-gas-decl">理想气体模型</a>
+生效，此时 <em>constexpr</em>
+              是环境压力下的体积。
+              <a href="elements.htm#body-volconst"><code>VOLCONST</code></a>
+ 是添加到体积的值；当面和边积分的体积计算
+              与真实体积相差一个常量时（如在
+	      <a href="model.htm#torus-model">环面模型</a>中可能发生）很有用。
+<code>ACTUAL_VOLUME</code> 是一个数字，
+	       可以在环面体积 volconst 计算给出错误答案的罕见情况下指定；
+	       volconst 将被调整以给出此体的体积。
+              给出 <code>PRESSURE</code> 值表示体被认为具有恒定的内部
+              <a href="elements.htm#pressure,-body">压力</a>；
+这对于规定的平均曲率问题很有用。
+              它与规定体积不兼容。
+              给出 <a href="elements.htm#density,-body"><code>DENSITY</code></a> 值表示
+              将包含 <a href="energies.htm#gravity-energy">重力势能</a>。
+<p>
+              要在 <a href="model.htm#string-model">string 模型</a>中
+赋予面 <code>VOLUME</code>、<code>PRESSURE</code> 或 <code>DENSITY</code> 属性，
+只需用一个面定义一个体。
+<p>
+              <a href="elements.htm#phase,-body"><code>PHASE</code></a>
+ 编号在 <a href="model.htm#soapfilm-model">soapfilm 模型</a>中用于
+    确定不同相体之间面的 <a href="energies.htm#surface-tension">表面张力</a>（如果使用相）。
+<p>
+              <code>BODIES</code> 部分是可选的。
+<p>
+<a href="commands.htm#list">list</a>
+<a href="commands.htm#list">bodies</a> 命令
+以数据文件格式打印体列表。
+<hr>
+<a   id="read-section"></a><h2> READ 部分</h2>
+  数据文件的最后部分可以包含命令。
+  这些命令被读取并立即执行，就像在命令提示符下输入的一样。
+       在数据文件中遇到关键字 <code>READ</code> 会导致
+       Evolver 从数据文件模式切换到命令模式，
+       并将数据文件的其余部分作为命令输入读取。
+       此功能对于通过细化、迭代、定义自己的命令等
+       自动初始化曲面非常有用。
+        <code>READ</code> 部分是可选的。
+示例：
+<pre>  bodies
+  1   1 2 3 4 5 6 volume 1
+
+  read
+
+  // automatically do this when datafile is loaded
+  refine edge where on_constraint 1
+
+  // typical evolution
+  gogo := { g 5; r; g 10; r; g 20 }
+
+</pre>
+<a href="commands.htm#bottominfo">list bottominfo</a> 命令
+打印转储文件中将打印的 <code>READ</code> 部分。
+<hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档：性能分析 </title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+
+<h1 class="center">
+<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+
+<hr><a   id="profiling"> </a>
+<h2>Surface Evolver 执行时间分析</h2>
+
+<hr>
+<H3>粗略分析</H3>
+粗略计时的分辨率约为 0.01 秒，可以使用 Evolver 的
+<a href="syntax.htm#clock"><code>clock</code></a> 变量来完成。
+例如，要对迭代进行计时，我通常的做法是：
+<pre>
+
+   Enter command: quiet; start := clock; g 100; print start-clock; quiet off
+</pre>
+这将以秒为单位打印出经过的时间。这里使用
+<a href="toggle.htm#quiet"><code>quiet</code></a> 来抑制屏幕输出，
+因为屏幕输出会显著降低运行速度。
+<p>
+<hr>
+<H3>精细分析</H3>
+纳秒级分辨率可以使用 Evolver 的
+<a href="syntax.htm#cpu_counter"><code>cpu_counter</code></a>
+变量来实现。
+
+<p>
+<hr>
+<a   id="print-profiling"></a>
+<a   id="reset_profiling"></a>
+<H3>表达式求值分析</H3>
+
+在 Evolver 具有
+<a href="syntax.htm#cpu_counter"><code>cpu_counter</code></a>
+功能且 Evolver 编译时定义了宏常量 PROF_EVALS 的系统上，
+Evolver 内部的表达式求值器会跟踪每次表达式求值期间所消耗的时钟周期数。
+这些表达式包括过程（procedure）、函数（function）、约束（constraint）
+和边界（boundary）公式、含量被积函数（content integrand）、
+能量被积函数（energy integrand）、量被积函数（quantity integrand）等；
+即所有在 dump 文件中以代码形式打印出来的内容。
+<a href="#print-profiling">
+<code>print profiling</code></a> 命令将打印出迄今为止每种表达式类型
+所累积的 CPU 周期数。这些时间包含了所有子函数或子过程的执行时间。
+以下是在 mound.fe 中运行 "gogo" 后的一个示例：
+<pre>
+Enter command: print profiling
+Inclusive profiling counts:
+                      Name            CPU Cycles
+                              re           1,952,792
+                            gogo         125,201,889
+                           gogo2                   0
+                           gogo3                   0
+                           gogo4                   0
+                           gogo5                   0
+
+Constraint expressions
+                    Constraint  Formula Cycles   Energy Cycles  Content Cycles
+                             1         877,047       2,337,727               0
+</pre>
+请注意，面积、体积等硬编码的计算不会显示在此处，
+除非它们对整体经过时间产生影响。
+<p>
+<code>reset_profiling</code> 命令会将所有周期计数值重置为 0。
+
+<p>
+<hr>
+<h3>执行采样</h3>
+当然，如果您自行编译 Evolver，可以使用您通常在 C 程序上使用的
+任何类型的性能分析工具。这方面就留给您自行探索了。
+<p>
+<hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+</body>
+</html>

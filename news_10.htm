@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 简报 10)</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-10"></a>
+<h1>Surface Evolver 简报 第10期</h1>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><pre>
+
+
+
+                      Surface Evolver 简报 第10期
+                              1994年12月16日
+
+                    编辑: Ken Brakke, brakke@geom.umn.edu
+
+目录:
+  关于曲率的询问。
+  版本 1.97
+
+
+关于曲率的询问。
+  来自 Christian Burger &lt;burger@pc1442.phys-chemie.uni-marburg.de&gt;：
+
+     我对研究物理系统感兴趣，这些系统通常是高度对称的两相系统，
+     由界面分隔，界面应该是某种最小表面。通常，这些系统是双连续的，
+     即两个不相连的 3D 网络域存在于周围的公共基质中（我在这里用物理术语
+     说话，而不是数学的）。自然地，我使用环面模型的 evolver。
+     这些域具有定义的体积且不可压缩。此类系统的物理示例包括微乳液、
+     聚电解质-表面活性剂复合物、嵌段共聚物等。曲率可能对这些系统
+     起重要作用。如果构建界面的结构单元不对称，这会导致"自发曲率"，
+     即在 evolver 术语中有限的 H_ZERO。
+     如果你知道迄今为止人们使用 evolver 在这个方向上所做的任何工作，
+     我希望得到一些参考文献。
+
+版本 1.97：
+
+ 版本 1.97 现已可通过 ftp 获取（Mac 版本尚未更新。）
+
+ 与 1.96 相比的变化主要是许多模糊的错误修复。
+ 但也有一些普遍感兴趣的新功能。
+
+ 新的 Hessian 命令："eigenprobe value" 将打印能量 Hessian 矩阵中
+ 小于、等于和大于给定值的特征值数量。使用精确的特征值（如 0）作为值
+ 是可以的。对探测稳定性很有用。
+ "lanczos value" 将执行一点 Lanczos 算法并报告最接近给定值的
+ 15 个近似特征值。不要使用特征值作为值！尚未真正完善。
+
+ 分解 Hessian 矩阵的默认方式是使用耶鲁稀疏矩阵包 (YSMP) 的例程，
+ 稍作修改以处理对角线上的零。我一直在尝试自己的最小度分解版本，
+ 它对表面结构更有意识。可以通过 "ysmp off" 激活，通过 "ysmp on" 停用。
+ 我的版本似乎减少了 10-20% 的填充，因此稍快一些。
+ 它似乎也没有那么多虚假的对角线零。此外，为了应对不定 Hessian 矩阵，
+ 有一个切换 "bunch_kauffman"，可以在我的版本中启用 Bunch-Kauffman
+ 分解版本。
+
+ 某些命名量属性现在可以在表达式中引用。
+ 对于量 qqq，qqq.value 是当前值，qqq.target 是约束值，
+ qqq.modulus 与数据文件定义中的模数相同，qqq.pressure 是
+ 约束量的拉格朗日乘子。你可以为 qqq.modulus 和 qqq.target 赋值。
+
+ 转储命令 'd' 现在保存几乎所有切换状态（除了一些调试切换），
+ 如果不是默认值的话。
+
+</pre><hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 简报 9</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-9"></a>
+<h1>Surface Evolver 简报 第9期</h1>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><pre>
+
+
+                      Surface Evolver 简报 第9期
+                              1994年9月30日
+
+                    编辑: Ken Brakke, brakke@geom.umn.edu
+
+版本 1.96 现已可用。
+
+新功能：
+
+   索引可用于命令中的元素生成器。也就是说，你可以说
+   "list vertex[23]" 代替 "list vertex where id==23"。
+   新语法避免了为单个元素搜索整个元素列表。
+   你也可以将索引应用于组件元素，如
+   "foreach edge ee do print ee.vertex[1].id"。
+   组件元素通过线性搜索列表访问，但列表通常很短。
+   记住索引从 1 开始。
+
+   命名量可以由方法实例的任意函数组成，而不仅仅是求和。
+   关键字 "function" 表示这一点。示例：
+   method_instance inst_1 method edge_length global
+   method_instance inst_2 method vertex_scalar_integral global
+   scalar_integrand x^2-y*z
+   quantity comp energy function inst_1^2 + sin(inst_2)
+
+   命名量可以在被积函数表达式中引用元素属性。
+   通过对不同元素使用面片密度等，可以对量进行更有区分性的控制。
+   这个功能与 `extra` 属性特别有用，这些属性完全在用户控制下添加。
+
+   Hessian 矩阵：牛顿法可以大大加速收敛到最小值，但使用 "hessian"
+   命令的用户知道，在命令工作之前必须非常接近最小值。
+   这主要是由于三角剖分重新排列时表面切向运动造成的。
+   现在有一个切换 "hessian_normal"，将运动约束为沿表面法线方向
+   （准确地说是体积梯度）。没有明确定义法线的点（如沿三重交汇线
+   或四面体点）不受约束。
+
+   更多 Hessian：可以使用命令 "hessian_menu" 访问一些使用 Hessian 矩阵
+   的实验性内容。这会弹出一个包含各种选项的菜单。
+   一些更有趣的选项：选项 E 将找到最小特征值和对应的特征向量。
+   在鞍点时有用。使用 E 后，使用选项 S 沿特征向量方向移动到最小能量。
+   选项 P 找到高于和低于某个值的特征值数量。
+
+   命令 "saddle" 将沿最小特征值的特征向量寻找最低能量，
+   无需进入 hessian_menu。
+
+   共轭梯度法现在默认使用 Polak-Ribiere 变体算法。
+   似乎比之前的 Fletcher-Reeves 变体工作得更好，特别是在
+   遇到麻烦时自动重启方面。
+
+   用户可以通过 Evolver 发送 geomview 命令。语法：
+   geomview "command"
+   示例：
+   geomview "(transform mound mound Camera rotate 1 0 0)"
+   在脚本中用于让 geomview 为电影保存帧很有用。
+
+   重力设置 'G' 命令现在接受数值参数而不是重复次数。
+   所以 "G 5" 将重力设置为 5，而不是产生 5 个重力提示。
+
+   当前数据文件的名称可以在命令中作为 `datafilename' 引用，
+   在任何可以使用字符串的地方。见下一项。
+
+   sprintf、printf 现在接受字符串参数，但字符串指针作为 8 字节
+   推送到 C 的 sprintf 调用栈上，因此格式字符串中的 %s 后面
+   应该跟 %0.0s 以处理另一半。示例：
+   printf "This is %s%0.0s with total energy %f\n",datafilename,total_energy
+
+   print 命令也接受字符串。示例：print datafilename
+
+   'Extra' 属性现在对相同类型的元素继承。即，从细分边形成的边
+   将继承其额外属性。
+
+   添加了 'jiggle' 切换命令和 jiggle_temperature 内部变量。
+
+   添加了 total_time 内部变量。也可设置。
+
+
+简报 9 结束。
+
+</pre><hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+</body>
+</html>

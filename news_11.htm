@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 简报 11</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-11"></a>
+<h1>Surface Evolver 简报 第11期</h1>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><pre>
+
+
+
+                    Surface Evolver 简报 第11期
+                              1995年3月15日
+
+                   编辑: Ken Brakke, brakke@geom.umn.edu
+
+目录
+  寻求博士后/教学职位。
+  版本 1.98 就绪。
+  新功能。
+
+寻求博士后/教学职位
+
+  Anmin Zhu 预计于 1995 年 8 月从亚利桑那州立大学获得博士学位。
+  他在 Hans Mittelmann 指导下的论文涉及毛细表面和最小表面的计算。
+  他的兴趣在于常微分方程、偏微分方程的数值求解以及微分几何的应用。
+  他具有丰富的 EVOLVER 经验，在数学和计算机科学方面有广泛的背景，
+  并且是代数和微积分（包括改革微积分）的成功教师。
+
+  联系方式：Hans Mittelmann (mittelmann@math.la.asu.edu, (602)965-6595)
+  	   Anmin Zhu       (azhu@asu.edu, (602)965-0406)
+
+
+版本 1.98 就绪。
+  新版本可通过匿名 ftp 从 geom.umn.edu 的 /pub/software/evolver
+  目录获取。Mac 和 DOS 版本也已更新。Mac 版本现在在 Evolver.sea.Bin 中，
+  这是一个经 BinHex 5.0 处理的自解压存档。尚无 PowerMac 版本，
+  但我希望很快会有。新手册的 PostScript 版本在
+  /pub/documents/preprints/GCG71/manual.198.ps 中。
+
+新功能：
+
+  在手册教程章节末尾添加了一个小的高等微积分教程。
+
+  Geomview 拾取：如果你在 geomview 窗口中右键单击鼠标，
+  Evolver 将打印你点击的顶点、边或面片的 ID 编号。
+  这些 ID 编号保存在变量 pickvnum、pickenum、pickfnum 中。
+
+  Hessian 内容：
+
+    在手册的模型章节中添加了关于特征值和特征向量的部分，
+    作为使用一些相关命令分析 Hessian 矩阵的简要指南。
+
+    命令 Hessian_normal 允许顶点仅沿垂直于表面的方向移动。
+    如果不让顶点侧向滑动，收敛会容易得多。
+
+    命令 "eigenprobe x" 将报告小于、等于或大于值 x 的特征值数量。
+    这些数字记录在变量 eigenneg、eigenzero 和 eigenpos 中。
+
+    "Lanczos x" 打印最接近 x 的 15 个近似特征值。
+    "Lanczos(x,n)" 将打印最接近 x 的 n 个近似特征值。
+    但重数不可靠。
+
+    "Ritz(x,n)" 对 n 维随机子空间执行移位逆迭代。
+    比 Lanczos 慢，但在值和重数方面更准确。
+    当你对它收敛不耐烦时，按 CTRL-C，它将打印当前近似值。
+
+    为了获得可以与使用 L_2 范数定义的光滑表面的特征值和特征向量
+    进行比较的值，添加了 linear_metric 命令。
+    使用的度量是将顶点与相邻面积加权的凸组合，以及应用于
+    面片上线性插值的 L_2 范数。变量 linear_metric_mix 给出后者的比例。
+    默认值 0.5 似乎为几个测试案例提供了最准确的特征值。
+    仅与 hessian_normal 一起使用！！！
+
+    如果你使用 hessian_menu，实际上可以看到特征向量。
+    使用菜单选项 1、V 和 4。有关更多详细信息，请参阅手册。
+
+    如果你的文件涉及尚未实现 Hessian 的能量或约束，
+    请使用 -q 选项运行 Evolver。这会将它可以转换的所有内容
+    在内部转换为命名量，它们有更多 Hessian 实现。
+    实际上，-q 不久将成为默认选项，但所有当前的数据文件语法
+    仍将被识别。
+
+  Hessian 内容结束。
+
+  BREAK 和 CONTINUE 已添加到命令语言中，用于跳出循环。
+  还有 BREAK n 和 CONTINUE n 用于 n 级循环。
+
+  'P' 命令接受菜单选项编号，即 'P 8' 用于快速 geomview。
+  也有 'geomview' 命令用于相同目的。
+
+    -q 选项
+
+  添加了 'random_seed' 内部读写变量，用于设置随机数生成器的种子。
+  在数据文件开始时重新设定为 1。
+
+  添加了 12 点 6 阶和 28 点 11 阶的面片积分规则。
+  6 阶现在是二次面积的默认值，因为之前的 5 阶总是被搞乱
+  （至少对我来说是这样）。
+
+  边和面片的数值积分阶数现在可以分别通过变量 integral_order_1d
+  和 integral_order_2d 控制，它们是精确积分的多项式阶数。
+  但旧的 integral_order 语法仍保留以保持兼容性，尽管已过时。
+
+  无法通过管道传递到进程的 DOS 和 Mac 版本现在可以识别文件开头的
+  "+" 表示追加。
+
+  gravity_method 命名量现在考虑相邻物体的密度，而在早期版本中
+  它只计算密度为 1 的情况，用户必须在模数中考虑密度。
+
+  添加了物体体积的 "target" 属性，可设置和获取。即
+  set body[1].target 3
+
+  添加了 maximum(x,y) 和 minimum(x,y) 到算术中。这些有两个
+  值作为参数，与接受迭代器的 min() 和 max() 函数形成对比。
+
+  添加了 "set element orientation -1 where ... " 命令，用于否定
+  边和面片上的有向积分。当切割表面并将边粘在约束上而方向错误时很有用。
+
+  有长度和面积命名量的 density_ 版本，它们乘以密度。
+
+  简化了环面显示模式的询问。
+
+简报 11 结束。
+</pre><hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+</body>
+</html>

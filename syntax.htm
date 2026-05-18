@@ -1,0 +1,1388 @@
+<!DOCTYPE HTML>
+<html><head><TITLE>Surface Evolver 文档 - 通用语法</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<!--NewPage-->
+
+<h1 class="center">
+ <a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+<h1>Surface Evolver 语法</h1>
+数据文件和用户命令都遵循本文件描述的通用语法，但有一些差异如所述。
+<table><tr><td style="vertical-align:text-top"><ul>
+<li><a href="#lexical-format">词法格式</a>
+<li><a href="#comments">注释</a>
+<li><a href="#line-splicing">行拼接</a>
+<li><a href="#case">大小写</a>
+<li><a href="#whitespace">空白字符</a>
+<li><a href="#identifiers">标识符</a>
+<li><a href="#numbers">数字</a>
+<li><a href="#colors">颜色</a>
+<li><a href="#atomic-values">原子值</a>
+<li><a href="#internal-variables">内部变量</a>
+<li><a href="#variables">用户定义变量</a>
+</ul></td><td  style="vertical-align:text-top"><ul>
+<li><a href="#attr-values">元素属性</a>
+<li><a href="#arrays">数组</a>
+<li><a href="#expressions">算术表达式</a>
+<li><a href="#constexpr">常量表达式</a>
+<li><a href="#operators">算术运算符</a>
+<li><a href="#boolean-ops">布尔运算符</a>
+<li><a href="#precedence">运算符优先级</a>
+<li><a href="#functions">数学函数</a>
+<li><a href="#stringexpr">字符串表达式</a>
+<li><a href="#misc-functions">杂项函数</a>
+
+</ul></td></tr>
+</table>
+<hr><a   id="lexical-format"></a><h2>词法格式</h2>
+
+         对于了解这方面的人来说，
+         数据文件和命令是通过 lex 程序生成的词法分析器读取的。
+         规范在 datafile.lex 中。命令进一步由 yacc 生成的解析器解析。
+<p>
+          在解析表达式时，使用最长的合法表达式。
+          这允许坐标通过几个连续的表达式指定，无需特殊分隔符。
+<hr>
+<a   id="comments"></a><h2>注释</h2>
+
+         注释可以包含在 /* */ 对中（如 C 语言），
+         可以跨越多行。// 表示该行的其余部分是注释，
+         如 C++ 中一样。
+
+<hr><a   id="line-splicing"></a><h2>行和行拼接</h2>
+
+         文件由行组成。换行是有意义的。
+         下一个物理行可以通过在当前行末尾放置 \ 来拼接到当前行。
+         行拼接在 // 注释中无效。
+         空行和注释行可以自由放置在任何地方。
+	 各种计算机系统使用的 CR 和 NL 的各种组合都能被识别。
+
+<hr><a   id="case"></a><h2>大小写</h2>
+
+     在数据文件中，大小写不敏感，除了 #define 宏名称。
+     在运行时命令中，大小写仅对
+     <a href="single.htm#single-letter">单字母命令</a>敏感。
+
+<hr><a   id="whitespace"></a><h2>空白字符</h2>
+
+         在数据文件中，空白字符包括空格、制表符、逗号、冒号和分号。
+         所以如果你想用逗号分隔坐标值，用冒号美化约束定义，都是可以的。
+         在命令中，空白字符包括空格和制表符。
+	 CTRL-Z 也是空白字符，这是为了方便从 DOS 导入的文件。
+
+<hr>
+<a   id="identifiers"></a><h2>标识符</h2>
+
+         标识符遵循标准 C 规则（由字母数字字符和 '_' 组成，
+         首字符不能是数字），且不能是关键字。
+         标识符用于宏名称（在数据文件中）和用户定义的
+<a href="#variables">变量</a>以及
+<a href="commands.htm#command-definition">命令</a>。
+         标识符必须至少有两个字符，
+	 因为单个字符可能与命令混淆。
+         要交互式地查找某个名称是否已作为关键字或用户定义名称使用，
+         请使用 <a href="commands.htm#help">help</a> 命令。在脚本中，
+         可以使用 is_defined 函数，其语法为
+<pre> is_defined(<em>stringexpr</em>)
+</pre>
+<em>stringexpr</em> 必须是带引号的字符串或其他字符串表达式。
+如果名称未定义则返回值为 0，已定义则为 1。
+此函数在运行时求值，但整个命令中的变量在命令执行前就被解析，
+所以像 <code> if is_defined("newvar") then newvar := 1 else newvar := 2</code>
+这样的命令会给 <code> newvar</code> 赋值 1，即使这是它第一次出现。
+在脚本中更好的测试方法是使用 <a href="commands.htm">define</a>
+命令来定义变量而不初始化，然后测试它是否有默认值，
+即数字变量为 0，字符串变量的 <a href="#sizeof">sizeof</a> 为 0。
+
+<hr><a   id="numbers"></a><a   id="hexadecimal-numbers"></a>
+<a   id="binary-numbers"></a>
+<h2>数字</h2>
+
+         常量值可以是任何常用形式。这包括整数、定点数和科学计数法，例如
+<pre>      2    -3    .5    23.    5e-10    +0.7D2
+</pre>
+以 0x 开头的十六进制整数也被接受，如 0x12Af，
+以及二进制数如 11001b，由尾部的 'b' 表示。
+<a href="#colors">颜色</a>名称被解释为整数。
+<hr>
+
+<a   id="clear"></a>
+<a   id="black"></a>
+<a   id="blue"></a>
+<a   id="green"></a>
+<a   id="cyan"></a>
+<a   id="red"></a>
+<a   id="magenta"></a>
+<a   id="brown"></a>
+<a   id="lightgray"></a>
+<a   id="lightgrey"></a>
+<a   id="darkgray"></a>
+<a   id="darkgrey"></a>
+<a   id="gray"></a>
+<a   id="grey"></a>
+<a   id="lightblue"></a>
+<a   id="lightgreen"></a>
+<a   id="lightcyan"></a>
+<a   id="lightred"></a>
+<a   id="lightmagenta"></a>
+<a   id="yellow"></a>
+<a   id="white"></a>
+<a   id="transparent"></a>
+<a   id="colors"></a><h2>颜色</h2>
+
+ <a href="elements.htm#color,-edge">边</a>
+ 和 <a href="elements.htm#color,-facet">面</a>的颜色
+ 以整数形式记录在 -1 到 15 的范围内。
+ 这些整数如何转换为屏幕上的颜色取决于 Evolver 的图形驱动程序的编写方式。
+ 提供了以下同义词，并希望图形驱动程序能正确显示它们：<br>
+<table><tr><td style="vertical-align:text-top">
+-1  CLEAR（清除/透明）<br>
+0  BLACK（黑色）<br>
+1 BLUE（蓝色）<br>
+2 GREEN（绿色）<br>
+3 CYAN（青色）<br>
+4 RED（红色）<br></td>
+<td style="vertical-align:text-top">
+5 MAGENTA（品红色）<br>
+6 BROWN（棕色）<br>
+7 LIGHTGRAY（浅灰色）<br>
+8 DARKGRAY（深灰色）<br>
+9 LIGHTBLUE（浅蓝色）<br>
+10 LIGHTGREEN（浅绿色）<br></td>
+<td style="vertical-align:text-top">
+11 LIGHTCYAN（浅青色）<br>
+12 LIGHTRED（浅红色）<br>
+13 LIGHTMAGENTA（浅品红色）<br>
+14 YELLOW（黄色）<br>
+15 WHITE（白色）<br></td></tr>
+</table>
+特殊颜色值 CLEAR (-1) 使面透明。
+"Transparent" 是 clear 的同义词。
+<p>
+这些标记在任何出现的地方都被简单地转换为整数值，因此它们是保留字。
+边和面的颜色可以在数据文件中设置，也可以通过 <a href="commands.htm#set">set</a> 命令设置。
+
+<hr>
+<a   id="expr"></a>
+<a   id="expressions"></a><h2>算术表达式</h2>
+
+ 算术表达式求值为实数。布尔表达式是其子类，
+ 零为假，非零为真；真结果求值为 1。使用普通代数记法。
+
+<ul>
+<li> <a href="#atomic-values">原子值</a>
+<li> <a href="#operators">算术运算符</a>
+<li> <a href="#boolean-ops">布尔运算符</a>
+<li> <a href="#precedence">运算符优先级</a>
+<li> <a href="#functions">数学函数</a>
+<li> <a href="#aggregate-functions">聚合函数</a>
+</ul>
+
+<hr>
+<a   id="constant-expressions"></a><h2>常量表达式</h2>
+<a   id="constexpr"></a>
+常量表达式在解析时求值。它们在各种语法定义中用 <em>constexpr</em> 表示。
+它们主要出现在数据文件中。虽然它们可以包含变量，
+但在解析后更改变量值不会产生影响。
+<a   id="var-expr">变量表达式</a>（在语法定义中用 <em>expr</em> 表示）
+被记录为解析树，并在每次需要时重新求值。
+<hr>
+<a   id="pi"></a>
+<a   id="atomic-values"></a> <h2>原子值</h2>
+以下在表达式中求值为单个数字：
+<dl>
+<dt><b>number</b></dt>
+   <dd>  整数、实数或十六进制<a href="#numbers">常量</a>。
+         十六进制数以 <code>0x</code> 开头。</dd>
+<dt><b> pi</b></dt>
+   <dd> 数学常数，圆周与半径之比。</dd>
+<dt> <b>x1,x2,...; x,y,z,w </b></dt>
+    <dd>   根据上下文，空间坐标、顶点坐标、
+    边向量分量或面法向分量。</dd>
+<dt><b>p1,p2,...</b></dt>
+    <dd>顶点在
+      <a href="constrnt.htm#parametric-boundaries">参数化边界</a>上的参数。</dd>
+<dt> <a   id="G-value"><b>G</b></a></dt>
+  <dd>当前用于计算
+<a href="energies.htm#gravity-energy">重力能量</a>的重力常数。
+</dd>
+
+<dt><b> <a href="#variables">用户定义变量</a> </b></dt>
+  <dd> 在数据文件或运行时定义的任意变量。</dd>
+<dt><b> 索引<a href="#arrays">数组</a>变量。</b></dt>
+  <dd> 用户定义的实数或多维整数数组，以及一些内部定义的数组。</dd>
+<dt> <a href="#internal-variables"><b>内部变量</b></a></dt>
+ <dd> 特殊的预定义变量。</dd>
+<dt> <a href="#attr-values"><b>元素属性</b></a></dt>
+<dd>   如顶点坐标、边长度、面面积、颜色等。</dd>
+<dt> <a href="quants.htm#named-quantities"><b>命名量</b></a>属性
+  </dt><dd> 包括模量、目标、值、压力。</dd>
+<dt> <a href="quants.htm#method-instances"><b>方法实例</b></a>属性
+  </dt><dd> 包括模量、值。</dd>
+<dt><b> toggle 名称</b></dt> <dd>
+任何 <a href="toggle.htm">toggle 命令</a>
+名称都可以用作表达式中的布尔变量（完整的 toggle 单词，不是单个字母）。
+但要注意将 toggle 解释为命令或值时的歧义。
+你可能需要强制将 toggle 解释为值。
+"<code>ad := autodisplay</code>" 将 ad 设置为 autodisplay 的命令同义词，
+而 "<code>ad := (autodisplay)</code>" 记录当前的布尔值。</dd>
+</dl>
+<hr>
+<a   id="stringexpr"></a><h2>字符串表达式</h2>
+字符串表达式求值为一个字符串。目前，
+产生字符串的唯一方式是：
+<ul>
+<li> 双引号字符串字面量，例如 <code>"this is a string"</code>。
+识别以下标准 C 转义序列：
+  <ul>
+  <li> \n   换行
+  <li> \r   回车
+  <li> \t   制表符
+  <li> \b   退格
+  <li> \q   双引号
+  <li> \<em>c</em>   字符 <em>c</em> 本身
+  </ul>
+在 DOS、MS-Windows 或 Windows NT 路径中，使用 / 作为目录分隔符，
+因为 \ 是转义字符。DOS 和 Windows 一直接受 / 作为目录分隔符。
+<li> 连续的双引号字符串在读取时会被连接成一个字符串。
+<li> 字符串变量，可以是内部的如 <a href="#datafilename">
+<code>datafilename</code></a>，或用户定义的。
+<li> <a href="commands.htm#sprintf"><code>sprintf</code></a> 的输出。
+</ul>
+<hr>
+<a   id="operators"></a><h2>算术运算符</h2>
+<a   id="idiv"></a>
+<a   id="imod"></a>
+<a   id="mod"></a>
+<a   id="conditional"></a>
+这些是可以出现在<a href="#expressions">表达式</a>中的算术运算符：
+<dl>
+<dt> +,-,*,/</dt><dd>普通的实数算术；+,-,* 也适用于数组。
+          注意：前面有<a href="syntax.htm#whitespace">空白字符</a>、
+          后面跟数字的 '+' 或 '-' 被视为带符号数字。
+          因此 "3 - 5" 和 "3-5" 是单个表达式，
+          但 "3 -5" 不是。这是为了方便在数据文件中同一行上
+          列出多个表达式时分隔顶点坐标、度量分量等。<p></dd>
+
+<dt> idiv </dt><dd>整数除法。先向零取整，然后进行整数除法。
+          例如：7 idiv 2 是 3；-3.5 idiv 2.1 是 -1；-3 idiv 2 是 -1。
+<p></dd>
+<dt>%, mod</dt><dd>实数算术取模，x % y = x - floor(x/y)*y。<p></dd>
+<dt> imod</dt><dd> 整数算术取模，
+x imod y = floor(x) - floor(floor(x)/floor(y))*floor(y)。<p></dd>
+<dt> =</dt><dd> 不是赋值运算符。被视为低优先级的 '-'，
+  所以像 x^2 + y^2 - R^2 这样的水平集约束公式可以自然地写为
+  x^2 + y^2 = R^2。<p></dd>
+<dt> (,)</dt><dd> 用于分组和函数记法的括号。<p></dd>
+<dt> ^,**</dt><dd> 求实数幂。<p></dd>
+<dt> ? : </dt><dd> 条件表达式，如 C 语言中一样。
+    x ? y : z 在 x 非零时求值为 y，在 x 为零时求值为 z。<p></dd>
+<dt> ++,--  </dt><dd> C 风格的前缀和后缀递增和递减命令。这些仅适用于
+       单个变量，并且只能作为独立命令使用，例如在 "for" 循环中：
+<pre>
+           for ( inx := 1 ; inx &lt;= 10 ; inx++ )
+</pre>
+</dd>
+</dl>
+
+<hr>
+<a   id="and"></a>
+<a   id="or"></a>
+<a   id="not"></a>
+<a   id="boolean-ops"></a><h2>布尔运算符</h2>
+ 布尔表达式
+ 是算术表达式的子类，
+ 零为假，非零为真；真结果求值为 1。
+<table border>
+<tr><td> ==,&gt;,&lt;,&gt;=,&lt;=,!= </td>
+  <td> 数值或布尔比较。</td></tr>
+<tr><td> NOT, !</td><td>  布尔非</td></tr>
+<tr><td> AND, &amp;&amp;</td><td>  布尔与，带短路求值。</td></tr>
+<tr><td> OR, || </td><td> 布尔或，带短路求值。</td></tr>
+</table>
+<hr>
+<a   id="precedence"></a><h2>运算符优先级</h2>
+以下是运算符优先级顺序，从高到低排列，
+相同优先级在同一行，并带有结合性。
+<table border>
+<tr><th>运算符</th><th>  结合性</th></tr>
+<tr><td>^,**</td><td>  左结合 </td></tr>
+<tr><td>一元 -</td><td>  右结合 </td></tr>
+<tr><td>*,/,%,IMOD,IDIV </td><td>  左结合 </td></tr>
+<tr><td>+,- </td><td>  左结合 </td></tr>
+<tr><td>   <a href="elements.htm#on_boundary">on_boundary</a>
+<br><a href="elements.htm#on_constraint">on_constraint</a>
+<br><a href="elements.htm#hit_constraint">hit_constraint</a>
+<br><a href="elements.htm#on_quantity">on_quantity</a>
+<br><a href="elements.htm#on_method_instance">on_method_instance</a>
+</td><td>  非结合 </td></tr>
+<tr><td>==,&gt;,&lt;,&gt;=,&lt;=,!= </td><td>  右结合 </td></tr>
+<tr><td>NOT, ! </td><td>  右结合 </td></tr>
+<tr><td>AND, &amp;&amp; </td><td>  左结合 </td></tr>
+<tr><td>OR, || </td><td>  左结合 </td></tr>
+<tr><td>? : </td><td>  左结合 </td></tr>
+<tr><td>=   </td><td>  左结合 </td></tr>
+</table>
+ <hr>
+<a   id="functions"></a> <h2>数学函数</h2>
+这些是在表达式中可用的数学函数。它们在括号中接受一个参数，
+除非另有说明。
+<dl>
+<dt><a   id="abs"></a>
+ abs(x) </dt><dd>      绝对值。
+<!--EndName-->
+<p></dd>
+<dt><a   id="sqr"></a>
+ sqr(x) </dt><dd>          平方。<p></dd>
+<!--EndName-->
+<dt><a   id="sqrt"></a>
+ sqrt(x)   </dt><dd>        平方根。参数必须非负。<p></dd>
+<!--EndName-->
+<dt><a   id="sin"></a>
+<a   id="cos"></a>
+<a   id="tan"></a>
+ sin(x), cos(x), tan(x)</dt><dd>   三角函数，参数以弧度为单位。<p></dd>
+<!--EndName-->
+<dt><a   id="acos"></a>
+<a   id="asin"></a>
+<a   id="atan"></a>
+ acos(x), asin(x), atan(x)</dt><dd> 反三角函数（acos、asin 参数限制在 [-1,1]）。
+   输出以弧度为单位。<p></dd>
+<!--EndName-->
+<dt><a   id="atan2"></a>
+ atan2(y,x)</dt><dd>          反正切，范围 -pi 到 pi。<p></dd>
+<!--EndName-->
+<dt><a   id="log"></a>
+<a   id="exp"></a>
+ log(x), exp(x)</dt> <dd>       自然对数，以 e 为底的指数。<p></dd>
+<!--EndName-->
+<dt><a   id="sinh"></a>
+<a   id="cosh"></a>
+<a   id="tanh"></a>
+ sinh(x), cosh(x), tanh(x)</dt><dd>      双曲函数。<p></dd>
+<!--EndName-->
+<dt><a   id="asinh"></a>
+<a   id="acosh"></a>
+<a   id="atanh"></a>
+ asinh(x), acosh(x), atanh(x)</dt><dd>   反双曲函数。<p></dd>
+<!--EndName-->
+<dt><a   id="pow"></a>
+ pow(x,y)    </dt><dd>        将 x 求 y 次实数幂；如果 y 是整数，x 可以是负数。<p></dd>
+<!--EndName-->
+<dt><a   id="ceil"></a>
+<a   id="floor"></a>
+ ceil(x), floor(x)</dt><dd>     向上或向下取整到整数。<p></dd>
+<!--EndName-->
+<dt><a   id="minimum"></a>
+<a   id="maximum"></a>
+ minimum(a,b), maximum(a,b)</dt><dd> 两个参数的极值。<p></dd>
+<!--EndName-->
+<dt><a   id="ellipticK"></a>
+<a   id="ellipticE"></a>
+ ellipticE(x), ellipticK(x)</dt><dd> 完全椭圆函数。<p></dd>
+<!--EndName-->
+<dt><a   id="incompleteEllipticF"></a>
+<a   id="incompleteEllipticE"></a>
+ incompleteEllipticE(phi,m), incompleteEllipticF(phi,m)</dt><dd> 参数为 (phi,m) 的不完全椭圆函数；
+ 与 Mathematica 定义一致。<p></dd>
+<!--EndName-->
+
+<dt><a   id="matrix_multiply"></a>
+ matrix_multiply(A,B,C)</dt><dd>
+    内置的数组矩阵乘法。将 A*B 存储在 C 中。A、B 和 C 必须是
+独立的 1 维或 2 维数组变量，维度需要适当匹配；
+特别是，你不能用这个得到向量的标量积，
+除非你将 A 声明为 1xN，B 声明为 Nx1，C 声明为 1x1。
+C 必须与 A 和 B 不同。不返回值。
+  目前也不适用于数组属性。已过时，因为 * 运算符现在支持向量和数组。<p></dd>
+<!--EndName-->
+
+<dt><a   id="matrix_inverse"></a>
+ matrix_inverse(A,B)</dt><dd>
+  内置的数组矩阵求逆。将 A 的逆存储在 B 中。A 和 B 必须是
+独立的 2 维数组变量，维度匹配。B 可以与 A 相同。
+返回值，成功为 1，失败或奇异矩阵为 0。
+<p></dd>
+<!--EndName-->
+
+<dt><a   id="matrix_determinant"></a>
+ matrix_determinant(A)</dt><dd>
+  内置的方阵行列式计算。
+具有函数语法，因此返回行列式的值。
+<p>
+语法：det := matrix_determinant(A)
+<pre>
+  Enter command: define aaa real[2][2]
+  Enter command: aaa[1][1] := 2; aaa[1][2] := 3; aaa[2][1] := 4; aaa[2][2] := 5
+  Enter command: print matrix_determinant(aaa)
+                  -2
+</pre>
+也适用于元素的方阵 2D 数组属性。不修改数组。
+<p></dd>
+<!--EndName-->
+
+<dt><a   id="wrap_inverse"></a>
+ wrap_inverse(w) </dt><dd>对称群元素 w 的逆，在数值表示中。
+ 仅在数据文件中声明了<a href="model.htm#symmetry-groups">对称群</a>时有用。<p></dd>
+<!--EndName-->
+<dt>
+<a   id="wrap_compose"></a>
+ wrap_compose(w1,w2) </dt><dd> 对称群元素 w1、w2 的复合，在数值表示中。
+ 仅在数据文件中声明了<a href="model.htm#symmetry-groups">对称群</a>时有用。<p></dd>
+<!--EndName-->
+<dt><a   id="usr"></a>
+ usr<em>n</em>  </dt><dd>
+<a href="#user-funcs">用户定义函数</a><p></dd>
+<!--EndName-->
+</dl>
+
+<hr><a   id="misc-functions"></a><h2>杂项函数</h2>
+<ul>
+<li><a href="#is_defined">IS_DEFINED</a>
+<li><a href="#sizeof">SIZEOF</a>
+<li><a href="#valid_boundary">VALID_BOUNDARY</a>
+<li><a href="#valid_constraint">VALID_CONSTRAINT</a>
+<li><a href="#valid_element">VALID_ELEMENT</a>
+</ul>
+
+<p> <a   id="is_defined"></a> <h3>IS_DEFINED</h3>
+         要查明某个名称是否已作为关键字或用户定义名称使用，
+         请使用 is_defined 函数，其语法为
+<pre> IS_DEFINED(<em>stringexpr</em>)
+</pre>
+<em>stringexpr</em> 必须是带引号的字符串或其他字符串表达式。
+如果名称未定义则返回值为 0，已定义则为 1。
+此函数在运行时求值，但整个命令中的变量在命令执行前就被解析，
+所以像 <code> if is_defined("newvar") then newvar := 1 else newvar := 2</code>
+这样的命令会给 <code> newvar</code> 赋值 1，即使这是它第一次出现。
+在脚本中更好的测试方法是使用 <a href="commands.htm">define</a>
+命令来定义变量而不初始化，然后测试它是否有默认值，
+即数字变量为 0，字符串变量的 <a href="#sizeof">sizeof</a> 为 0。
+
+<hr>
+
+<a   id="sizeof"></a><h3>SIZEOF</h3>
+返回<a href="#arrays">数组</a>或数组<a href="elements.htm#extra-attributes">额外属性</a>中的条目数。
+也可以应用于字符串或字符串变量以获取字符串中的字符数。
+ 语法：
+<pre>
+  SIZEOF(name)
+  SIZEOF(string)
+</pre>
+第一种形式中，name 是数组或额外属性的名称，不带引号。
+
+
+<hr>
+<a   id="valid_boundary"></a><h3>VALID_BOUNDARY</h3>
+
+布尔函数。根据具有给定编号的参数化边界是否存在返回 1 或 0
+（注意，命名边界的名称在内部被解释为数字）。语法：
+<pre> VALID_BOUNDARY(expression)
+</pre>
+一个用途是与 high_boundary 内部变量结合使用来遍历所有参数化边界。例如，
+<pre>
+  for ( bnum := 1 ; bnum &lt;= high_boundary ; bnum += 1 )
+    if valid_boundary(bnum) then
+       printf "Boundary %d has %d vertices on it\n",bnum,
+          sum(vertex,on_boundary bnum);
+</pre>
+
+
+<hr>
+<a   id="valid_constraint"></a><h3>VALID_CONSTRAINT</h3>
+布尔函数。根据具有给定编号的水平集约束是否存在返回 1 或 0
+（注意，命名约束的名称在内部被解释为数字）。语法：
+<pre> VALID_CONSTRAINT(expression)
+</pre>
+一个用途是与 high_constraint 内部变量结合使用来遍历所有水平集约束。例如，
+<pre>
+  for ( cnum := 1 ; cnum &lt;= high_constraint ; cnum += 1 )
+    if valid_constraint(cnum) then
+       printf "Constraint %d has %d vertices on it\n",cnum,
+          sum(vertex,on_constraint cnum);
+</pre>
+
+
+
+<hr>
+<a   id="valid_element"></a><h3>VALID_ELEMENT</h3>
+布尔函数。
+根据具有给定索引的元素是否存在返回 1 或 0。语法：
+<pre> VALID_ELEMENT(indexed_element)
+</pre>
+示例：
+<pre>
+   if valid_element(edge[12]) then refine edge[12]
+   if valid_element(body[2]) then set body[2].facet color red
+</pre>
+
+<hr>
+<a   id="user-funcs"></a><h2>用户定义内置函数</h2>
+	  用户定义函数可以在 userfunc.c 中用 C 定义，
+      所以如果你想使用这些函数，需要自己编译 Evolver。
+	  它们适用于表达式解释太慢的情况，
+	  或需要椭圆积分等函数的情况。目前，它们自动是坐标的函数。
+	  不要在表达式中给出任何参数；
+	  例如 "(usr1 + usr3)/usr10"。
+<hr>
+<a   id="max"></a>
+<a   id="min"></a>
+<a   id="sum"></a>
+<a   id="avg"></a>
+<a   id="count"></a>
+<a   id="aggregate-functions"></a><h2>聚合函数</h2>
+可以使用聚合函数对一组元素执行表达式的最大值、最小值、总和或平均值。语法为
+<pre>
+   <i>aggregate(generator,expr)</i>
+</pre>
+其中 <i>aggregate</i> 是 <code>max, min, sum, </code> 或 <code>avg</code>，
+<i>generator</i> 是<a href="commands.htm#generators">元素生成器</a>。
+示例：打印所有绿色面的总面积：<pre>
+   print sum(facet where color == green, area)
+</pre>
+"Count" 是一个聚合函数，它给出生成的元素数量，与表达式无关。
+<hr>
+
+<a   id="attr-values"></a><h2>表达式中的元素属性值</h2>
+任何<a href="elements.htm#geometric-elements">元素属性</a>的值都可以在表达式中使用。
+如果存在默认活动元素，可以单独使用属性名。示例：<pre>
+   foreach facet do print area
+</pre>
+否则，属性被称为元素的字段：
+<pre>
+   foreach facet ff do print ff.area
+</pre>
+索引<a href="elements.htm#extra-attributes">额外属性</a>需要方括号中的索引：
+<pre>
+   foreach facet ff do print ff.something[3]
+</pre>
+索引值向下取整为整数值。索引从 1 开始。
+<p>
+大多数属性是数值或布尔类型，但有些是
+<a href="commands.htm#generators">元素生成器</a>。
+<p>
+以下属性可用（有关详细信息，请参阅
+<a href="elements.htm#geometric-elements">元素</a>）：
+<dl>
+          <dt> X1,X2,...,X,Y,Z,W</dt><dd>顶点的坐标、边向量或面法向的分量。
+		  也可以用 X,Y,Z 表示（如 x,y,z 一样）。
+		  X 与 X1 同义，Y 与 X2 同义，Z 与 X3 同义。
+		  W 用于四维空间的第四个坐标。
+		  X,Y,Z 和 W 仅在声明了适当的维数时才可用。
+		  注意：对于顶点，这些是顶点坐标。
+		  对于边，这些是边向量的分量（即终点减起点）。
+		  对于面，这些是面法向的分量。
+		  对于体，这些是体的重心坐标。
+		  </dd>
+          <dt> P1,P2  </dt><dd><a href="constrnt.htm#parametric-boundaries">参数化边界</a>的参数。</dd>
+          <dt> ID</dt><dd> 元素标识号。</dd>
+          <dt> OID</dt><dd> 有向元素标识号。</dd>
+          <dt> ORIGINAL</dt><dd>父数据文件元素的编号。</dd>
+<dt> COLOR</dt><dd> 表示面颜色（如果背面不同则是正面颜色）或边颜色的整数。</dd>
+          <dt> FRONTCOLOR</dt><dd> 面正面的颜色。</dd>
+          <dt> BACKCOLOR</dt><dd> 面背面的颜色。</dd>
+          <dt> VALENCE</dt><dd>顶点上的边数、边上的面数、面上的边数或体上的面数。</dd>
+          <dt> AREA</dt><dd>面的面积。</dd>
+          <dt> LENGTH</dt><dd>边的长度。</dd>
+          <dt> VOLUME</dt><dd>体的实际体积。</dd>
+          <dt> TARGET</dt><dd>体的目标固定体积。</dd>
+          <dt> VOLCONST</dt><dd>添加到体的计算体积中的常数。</dd>
+          <dt> DENSITY</dt><dd>边、面或体的密度。</dd>
+          <dt> DIHEDRAL</dt><dd>边上两个面之间的二面角。</dd>
+          <dt> ORIENTATION</dt><dd>边或面的有向积分的符号。</dd>
+<dt> ON_CONSTRAINT <em>n</em> </dt><dd>如果元素在给定<a href="constrnt.htm#level-set-constraints">约束</a>上则为真。<em>n</em> 可以是约束编号或约束名称。</dd>
+<dt> HIT_CONSTRAINT <em>n</em> </dt><dd>如果元素恰好在约束上则为真。对<a href="constrnt.htm#one-sided-constraints">单侧约束</a>有用。<em>n</em> 可以是约束编号或约束名称。</dd>
+<dt> ON_BOUNDARY <em>n</em></dt><dd>如果元素在给定<a href="constrnt.htm#parametric-boundaries">边界</a>上则为真。<em>n</em> 可以是边界编号或边界名称。</dd>
+<dt> ON_QUANTITY <em>quantityname</em></dt><dd> 如果给定的命名量适用于该元素则为真。</dd>
+<dt> ON_METHOD_INSTANCE <em>instancename</em></dt><dd> 如果给定的方法实例适用于该元素则为真。</dd>
+          <dt> WRAP</dt><dd><a href="model.htm#torus-model">环面模型</a>或其他<a href="model.htm#quotient-spaces">商空间</a>中的数值边缠绕。</dd>
+	<dt>	quantity_name</dt><dd> 元素对<a href="quants.htm#named-quantities">命名量</a>的贡献。</dd>
+	<dt>	instance_name</dt><dd> 元素对<a href="quants.htm#method-instances">命名方法实例</a>的贡献。</dd>
+	<dt>	 extra_attribute[expr]</dt><dd> 用户定义的<a href="elements.htm#extra-attributes">额外属性</a>的名称，如果需要则带下标。</dd>
+   <dt> VERTEX</dt><dd>边或面顶点的<a href="commands.htm#generators">生成器</a>。</dd>
+   <dt> MIDV</dt><dd> 二次模型中边中点的 ID。</dd>
+   <dt> EDGE</dt><dd>附着在顶点上的边或围绕面的边的<a href="commands.htm#generators">生成器</a>。</dd>
+   <dt> FACET</dt><dd>围绕顶点或边的面的<a href="commands.htm#generators">生成器</a>。</dd>
+   <dt> BODY</dt><dd>面所属体的<a href="commands.htm#generators">生成器</a>。</dd>
+</dl>
+
+<hr>
+<a   id="variables"></a><h2>变量</h2>
+Evolver 命令语言有自己版本的用户定义变量，
+这是大多数编程语言都有的功能。变量根据赋给它们的值的类型进行分类：
+数值型或字符串型。用户可以通过数据文件中的<a href="datafile.htm#datafile-variables">变量声明</a>定义数值变量，
+也可以通过在命令中<a href="commands.htm#variable-assignment">赋值</a>给标识符来定义两种类型。
+变量可以通过在数据文件中声明为<a href="datafile.htm#optimizing_parameter">优化参数</a>来进行优化。
+
+<hr>
+<p><a   id="arrays"></a>
+<h2>数组</h2>
+可以使用以下语法定义整数或实数的多维数组：
+<pre>
+   DEFINE <em>variablename</em>  REAL|INTEGER|STRING <em>expr</em>]...
+</pre>
+此语法在数据文件头部和命令提示符下都有效。
+如果数组已经存在，它将被调整大小，旧元素会尽可能保留。
+不要用不同数量的维度来调整大小。注意数组索引从 1 开始。
+大小为 0 是合法的，当你暂时不使用数组并想要释放存储空间时很有用。
+有运行时数组边界检查。示例：
+<pre>
+   define fvalues integer[10][4]
+   define basecoord real[10][space_dimension]
+   define primcol string[3]
+</pre>
+声明为 <a href="commands.htm#local">local</a> 的标识符名称可以在过程和函数的数组声明中使用；
+可以使用动态大小，但静态大小可能稍快一些，因为不需要动态分配内存。
+<p>
+
+在数据文件顶部，可以在定义后使用嵌套括号初始化器来初始化数组。例如：
+<pre>
+   define qwerty integer[4] = { 23, 45, 12, 2 }
+   define vmat real[3][2] = {{1,2},{3,4},{5,6}}
+   define primcol string[3] = {"red","green","blue"}
+</pre>
+初始化器不需要完整；缺失的值将为零。
+<p>
+数组元素可以像编程语言中通常的那样进行赋值和引用：
+<pre>
+   fvalues[3][4] := 234;
+   if basecoord[3][1] &gt; 2 then print "hello world!\n";
+</pre>
+
+<p>
+数组初始化语法也适用于运行时对数组和数组切片的赋值，
+包括作为数组的元素属性。初始化器中的条目必须是单个数字，不是数组。
+赋值左右两侧的维度数必须一致，但每个维度的大小不需要一致。
+右侧缺失的元素被视为零。示例：
+<pre>
+   vertex[1].__x := { 1.2, 3.1, 4.7 }
+   define mat real[2][2];
+   mat := {{1,2},{3,4}}
+</pre>
+右侧在每次执行赋值时求值，因此右侧的条目可以是任何求数字的表达式。
++= 和 -= 的赋值也有效，*= 和 /= 也有效，但请注意所有这些都按元素操作
+（即 *= 和 /= 不是矩阵乘法和除法）。
+<p>
+
+<a href="commands.htm#print">print</a> 命令可用于以括号形式打印整个数组或数组切片。示例：
+<pre>
+   print fvalues
+   print fvalues[4]
+</pre>
+
+有一些基本的全数组操作允许数组出现在赋值语句的左侧：
+<pre>
+   array := scalar
+   array := array
+   array := scalar * array
+   array := array + array
+   array := array - array
+   array := array * array
+   scalar := array * array  // 如果两个右侧数组都是一维的，则为点积
+</pre>
+这里赋值两侧的 "array" 表示单个完整的数组；
+不是产生数组的表达式或数组切片。
+但 "scalar" 可以是任何求单个值的表达式。
+对于乘法，数组必须是二维的且大小适当匹配。
+这些操作也适用于作为数组的元素属性。
+
+<p>
+还有一个 <a href="#matrix_inverse">matrix_inverse</a> 过程和一个
+<a href="#matrix_determinant">matrix_determinant</a> 函数。
+<p>
+<a   id="dot_product"></a>
+对于一维数组，* 运算符给出对应条目乘积的总和。示例：
+<pre>
+   print vertex[1].__velocity * facet[3].__facet_normal
+</pre>
+
+<hr>
+<a   id="internal_variables"></a><h2>内部变量</h2>
+以下是内置的内部变量列表，按字母顺序排列。
+有关每个变量的更多详细信息，请参阅下面的单个条目。
+某些变量是只读的。某些在启动时根据初始化设置或默认值分配初始值。
+<table><tr><td style="vertical-align:text-top"><ul>
+<li><a href="#ambient_pressure_value"> ambient_pressure_value</a>
+<li><a href="#background"> background</a>
+<li><a href="#body_count"> body_count</a>
+<li><a href="#breakflag"> breakflag</a>
+<li><a href="#body_dissolve_count"> body_dissolve_count</a>
+<li><a href="#brightness"> brightness</a>
+<li><a href="#check_count"> check_count</a>
+<li><a href="#clock">clock</a>
+<li><a href="#console_title">onsole_title</a>
+<li><a href="#constraint_tolerance"> constraint_tolerance</a>
+<li><a href="#cpu_counter">cpu_counter</a>
+<li><a href="#datafilename"> datafilename</a>
+<li><a href="#date_and_time"> date_and_time</a>
+<li><a href="#delete_count"> delete_count</a>
+<li><a href="#detorus_epsilon"> detorus_epsilon</a>
+<li><a href="model.htm#display_origin"> display_origin</a>
+<li><a href="#dissolve_count"> dissolve_count</a>
+<li><a href="#edge_count"> edge_count</a>
+<li><a href="#edge_delete_count"> edge_delete_count</a>
+<li><a href="#edge_dissolve_count"> edge_dissolve_count</a>
+<li><a href="#edge_refine_count"> edge_refine_count</a>
+<li><a href="#edge_pop_count"> edge_pop_count</a>
+<li><a href="#edgeswap_count"> edgeswap_count</a>
+<li><a href="#eigenneg">eigenneg</a>
+<li><a href="#eigenpos">eigenpos</a>
+<li><a href="#eigenvalues">eigenvalues</a>
+<li><a href="#eigenzero">eigenzero</a>
+</ul></td><td  style="vertical-align:text-top"><ul>
+<li><a href="#equi_count"> equi_count</a>
+<li><a href="#estimated_change"> estimated_change</a>
+<li><a href="#facet_count"> facet_count</a>
+<li><a href="#facetedge_count"> facetedge_count</a>
+<li><a href="#facet_delete_count"> facet_delete_count</a>
+<li><a href="#facet_dissolve_count"> facet_dissolve_count</a>
+<li><a href="#fix_count"> fix_count</a>
+<li><a href="#graphics_title"> graphics_title</a>
+<li><a href="#gravity_constant"> gravity_constant</a>
+<li><a href="#hessian_epsilon"> hessian_epsilon</a>
+<li><a href="#hessian_slant_cutoff"> hessian_slant_cutoff</a>
+<li><a href="#high_boundary"> high_boundary</a>
+<li><a href="#high_constraint"> high_constraint</a>
+<li><a href="#instance_name-modulus"><em>instance_name</em>.modulus</a>
+<li><a href="#instance_name-value"> <em>instance_name</em>.value</a>
+<li><a href="#inverse_periods"> inverse_periods</a>
+<li><a href="#integral_order">integral_order</a>
+<li><a href="#integral_order_1d">integral_order_1d</a>
+<li><a href="#integration_order_2d">integral_order_2d</a>
+<li><a href="#iteration_counter"> iteration_counter </a>
+<li><a href="#jiggle_temperature"> jiggle_temperature</a>
+<li><a href="#lagrange_order"> lagrange_order </a>
+<li><a href="#last_eigenvalue"> last_eigenvalue</a>
+<li><a href="#last_error">last_error</a>
+<li><a href="#last_hessian_scale"> last_hessian_scale</a>
+</ul></td><td style="vertical-align:text-top"><ul>
+<li><a href="#linear_metric_mix">  linear_metric_mix </a>
+<li><a href="#memory_arena"> memory_arena</a>
+<li><a href="#memory_used"> memory_used</a>
+<li><a href="#notch_count"> notch_count</a>
+<li><a href="#pickvnum">  pickvnum </a>
+<li><a href="#pickenum">  pickenum </a>
+<li><a href="#pickfnum">  pickfnum </a>
+<li><a href="#pop_count"> pop_count</a>
+<li><a href="#pop_edge_to_tri_count"> pop_edge_to_tri_count</a>
+<li><a href="#pop_quad_to_quad_count"> pop_quad_to_quad_count</a>
+<li><a href="#pop_tri_to_edge_count"> pop_tri_to_edge_count</a>
+<li><a href="#quadratic_metric_mix">  quadratic_metric_mix </a>
+<li><a href="#quantity_name-modulus"><em>quantity_name</em>.modulus</a>
+<li><a href="#quantity_name-pressure"> <em>quantity_name</em>.pressure</a>
+<li><a href="#quantity_name-target"> <em>quantity_name</em>.target</a>
+<li><a href="#quantity_name-value"> <em>quantity_name</em>.value</a>
+<li><a href="#random">random </a>
+<li><a href="#random_seed"> random_seed</a>
+<li><a href="#refine_count"> refine_count </a>
+<li><a href="#rotation_order"> rotation_order</a>
+<li><a href="#scale"> scale</a>
+<li><a href="#scale_scale"> scale_scale</a>
+<li><a href="#scrollbuffersize"> scrollbuffersize</a>
+<li><a href="#scrollbuffersize"> scrollbuffersize</a>
+</ul></td><td style="vertical-align:text-top" ><ul>
+<li><a href="#self_sim_coeff"> self_sim_coeff</a>
+<li><a href="#simplex_representation"> simplex_representation</a>
+<li><a href="#space_dimension"> space_dimension</a>
+<li><a href="#string_curve_tolerance"> string_curve_tolerance</a>
+<li><a href="#surface_dimension"> surface_dimension</a>
+<li><a href="#symmetry_group"> symmetry_group</a>
+<li><a href="#t1_edgeswap_count"> t1_edgeswap_count</a>
+<li><a href="#target_tolerance"> target_tolerance</a>
+<li><a href="#temperature"> temperature</a>
+<li><a href="#thickness"> thickness</a>
+<li><a href="#torus"> torus </a>
+<li><a href="#torus_periods"> torus_periods</a>
+<li><a href="#total_area"> total_area</a>
+<li><a href="#total_energy"> total_energy</a>
+<li><a href="#total_length"> total_length</a>
+<li><a href="#total_time"> total_time</a>
+<li><a href="#transform_count"> transform_count</a>
+<li><a href="#unfix_count"> unfix_count</a>
+<li><a href="#vertex_count"> vertex_count</a>
+<li><a href="#vertex_dissolve_count"> vertex_dissolve_count</a>
+<li><a href="#vertex_pop_count"> vertex_pop_count</a>
+<li><a href="#view_transforms_unique_point"> view_transforms_unique_point</a>
+<li><a href="#where_count"> where_count</a>
+<li><a href="#window_aspect_ratio"> window_aspect_ratio</a>
+</ul>
+</td></tr>
+</table>
+<dl>
+
+<dt><a   id="ambient_pressure_value"> ambient_pressure_value</a></dt>
+<dd> 内部读写变量。理想气体模型中外压的值。</dd>
+
+<dt><a   id="background"> background </a></dt>
+   <dd> 内部读写变量。某些屏幕图形（目前是 xgraph 和 Windows）中使用的背景颜色。
+   </dd>
+<dt><a   id="body_count"> body_count </a></dt>
+		    <dd>内部只读变量。体的数量。
+		    </dd>
+<dt><a   id="breakflag"> breakflag </a></dt>
+		    <dd>内部读写变量。
+            当设置为非零值时，导致命令解释器
+         中止并返回命令提示符。相当于
+          按键盘中断（通常是 CTRL-C）。中断
+          不会立即发生，而是在解释器循环中
+           定期检查用户中断的某个时刻。
+        用于从嵌套命令中退出，因为
+        <a href="commands.htm#return">return</a> 只跳出当前过程。
+
+<dt><a   id="body_dissolve_count"> body_dissolve_count</a> </dt>
+	<dd>内部只读变量。被 <a href="commands.htm#dissolve">dissolve</a> 命令溶解的体的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+<dt><a   id="brightness"> brightness </a></dt>
+		    <dd>内部只读变量。PostScript 输出和屏幕图形中使用的中值灰度级。
+		  </dd>
+<dt><a   id="check_count"> check_count </a></dt>
+		    <dd>内部只读变量。
+    最近一次 <a href="single.htm#C">C</a> 命令发现的错误数量。
+		    </dd>
+
+<dt><a   id="clock">clock </a></dt>
+    <dd> 内部只读变量。Evolver 执行的总经过时间（秒）。读取系统进程经过时间，其分辨率通常相当粗糙，为 0.01 秒。对于纳秒计时，
+请参阅 <a href="#cpu_counter">cpu_counter</a>。
+</dd>
+
+
+<dt><a   id="console_title">console_title </a></dt>
+<dd>内部读写字符串变量。这是显示在 Evolver 命令控制台窗口上的标题。默认值是
+"Surface Evolver - datafilename"（当然是当前数据文件的名称）。当你同时运行多个实例，
+想要区分哪个在哪个控制台窗口中运行时很有用。只需将字符串赋给 console_title 就会自动更改窗口上的标题。
+</dd>
+
+<dt><a   id="constraint_tolerance"> constraint_tolerance </a></dt>
+		<dd>  内部读写变量。当顶点被投影到
+<a href="constrnt.htm#level-set-constraints">水平集约束</a>时，
+通过牛顿法的投影重复进行
+直到水平集函数小于 constraint_tolerance。
+默认值 1e-12。
+</dd>
+
+<dt><a   id="cpu_counter">cpu_counter </a></dt>
+    <dd> 内部只读变量。处理器周期计数器，仅在我知道如何访问的系统上可用（目前是 x86）。给出自系统启动以来的 CPU 周期数。请注意这是墙钟时间，不是进程时间。还要注意，当计算机休眠时它会重置为零，因此不保证在进程生命周期内单调递增！此外，机器中的多个处理器可能没有相同的 CPU 计数器，因此 Evolver 进程应分配给特定处理器（在 Windows 中，可以在任务管理器中通过设置进程的"亲和性"来完成）。
+对于进程经过时间，请参阅 <a href="#clock">clock</a>。
+</dd>
+
+
+<dt><a   id="datafilename"> datafilename </a></dt>
+   <dd>内部只读变量。包含当前数据文件名的字符串。
+    </dd>
+
+<dt><a   id="delete_count"> delete_count </a></dt>
+		    <dd>内部只读变量。
+   <a href="#edge_delete_count">edge_delete_count</a> 和
+<a href="#facet_delete_count">facet_delete_count</a> 的总和。
+保留用于向后兼容。
+		    </dd>
+
+<dt><a   id="detorus_epsilon"> detorus_epsilon </a></dt>
+		    <dd>内部读写变量，当 detorus_sticky 打开时，detorus 用来识别顶点的容差。
+
+<dt><a   id="display_origin-vector"> display_origin </a></dt>
+   <dd>内部读写向量。对于环面模式的曲面，
+如果裁剪模式生效，裁剪框的中心
+由此数组设置，其维度是环境空间的维度。此数组默认不存在，
+必须由用户创建。
+<a href="model.htm#display_origin">详情。</a>
+
+    </dd>
+
+
+<dt><a   id="dissolve_count"> dissolve_count </a></dt>
+		    <dd>内部只读变量。
+   <a href="#vertex_dissolve_count">vertex_dissolve_count</a>、
+<a href="#edge_dissolve_count">edge_dissolve_count</a>、
+ <a href="#facet_dissolve_count">facet_dissolve_count</a> 和
+<a href="#body_dissolve_count">body_dissolve_count</a> 的总和。
+保留用于向后兼容。
+		    </dd>
+
+<dt><a   id="date_and_time"> date_and_time </a></dt>
+   <dd>内部只读变量。包含当前日期和时间的字符串。
+    </dd>
+
+<dt><a   id="edge_count"> edge_count </a></dt>
+		    <dd>内部只读变量。<a href="elements.htm#edges">边</a>的数量。
+		    </dd>
+
+<dt><a   id="edge_delete_count"> edge_delete_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#delete">delete</a> 命令删除的边的数量。
+这不计删除边引起的次级边删除。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+<dt><a   id="edge_dissolve_count"> edge_dissolve_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#dissolve">dissolve</a> 命令溶解的边的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+<dt><a   id="edge_refine_count"> edge_refine_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#refine">refine edges</a> 命令细分的边的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+<dt><a   id="edge_pop_count"> edge_pop_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#pop">pop edges</a>、
+<a href="single.htm#o">o</a> 或 <a href="single.htm#O">O</a> 命令弹出的边的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+<dt><a   id="edgeswap_count"> edgeswap_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#edgeswap">edgeswap</a> 命令交换的边的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+
+<dt><a   id="eigenneg"> </a><a   id="eigen_neg"> eigenneg </a></dt>
+	<dd>内部只读变量。最近一次 <a href="eigentut.htm">Hessian</a> 分解中的负特征值数量。
+		       </dd>
+
+<dt><a   id="eigenpos"> </a><a   id="eigen_pos"> eigenpos</a> </dt>
+	<dd>内部只读变量。最近一次 <a href="eigentut.htm">Hessian</a> 分解中的正特征值数量。
+	    </dd>
+
+<dt><a   id="eigenvalues"> eigenvalues[]</a> </dt>
+	<dd>内部只读数组。包含 <a href="commands.htm#ritz">ritz</a> 命令产生的特征值列表。示例：
+<code>print eigenvalues[2]</code>
+</dd>
+
+<dt><a   id="eigenzero"> </a><a   id="eigen_zero"> eigenzero </a></dt>
+	<dd>内部只读变量。最近一次 <a href="eigentut.htm">Hessian</a> 分解中的零特征值数量。
+</dd>
+
+<dt><a   id="equi_count"> equi_count </a></dt>
+      <dd>内部只读变量。被 <a href="single.htm#u">equiangulation</a> 翻转的边的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+</dd>
+
+<dt><a   id="estimated_change"> estimated_change </a></dt>
+                     <dd> 内部只读变量。在启用了
+                  <a href="toggle.htm#estimate">estimate</a> 选项的最近一次迭代中，
+                  能量的估计变化量。
+                     </dd>
+
+<dt><a   id="facet_count"> facet_count </a></dt>
+		    <dd>内部只读变量。<a href="elements.htm#facets">面</a>的数量。
+		    </dd>
+
+<dt><a   id="facetedge_count"> facetedge_count </a></dt>
+		    <dd>内部只读变量。<a href="elements.htm#facetedges">面边</a>的数量。
+		    </dd>
+
+<dt><a   id="facet_delete_count"> facet_delete_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#delete">delete</a> 命令删除的面的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+<dt><a   id="facet_dissolve_count"> facet_dissolve_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#dissolve">dissolve</a> 命令溶解的面的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+<dt><a   id="facet_refine_count"> facet_refine_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#refine">refine facets</a> 命令细分的面的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+<dt><a   id="fix_count"> fix_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#pop">fix</a> 命令固定的元素数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+
+<dt><a   id="graphics_title"></a>  <a   id="graphics_title2"> </a> <a   id="graphics_title3">graphics_title </a></dt>
+	<dd>内部读写字符串变量。
+              这是显示在 Evolver 图形窗口上的标题。默认值是数据文件名。当你同时运行多个实例，
+想要区分哪个在哪个图形窗口中运行时很有用。只需将字符串赋给 graphics_title 就会自动更改窗口上的标题。
+如果你有第二个或第三个图形窗口，还有 graphics_title2 和 graphics_title3 变量。
+	</dd>
+
+<dt><a   id="gravity_constant"> gravity_constant </a></dt>
+	<dd>内部读写变量。重力常数的值，也可以通过
+	<a href="single.htm#G">G</a> 命令设置。
+	</dd>
+
+<dt><a   id="hessian_epsilon"> hessian_epsilon </a></dt>
+<dd>  内部读写变量。当 <a href="commands.htm#hessian-command">hessian 命令</a>分解 Hessian 矩阵时，
+被视为零的大小。如果在分解过程中主元位置的对角线上出现零，
+则检查该行的其余部分是否为零。如果是，则在对角线上放置 1；否则报告错误。
+</dd>
+
+<dt><a   id="hessian_slant_cutoff"> hessian_slant_cutoff </a></dt>
+<dd>  内部读写变量。
+Hessian 命令将法向量几乎垂直于约束的顶点视为固定顶点。hessian_slant_cutoff 是角度的余弦值。适用于 hessian_normal 模式中有一个自由度的顶点。默认值 0。
+
+</dd>
+
+<dt><a   id="high_boundary"> high_boundary </a></dt>
+<dd>
+内部只读变量，给出已定义的最高参数边界的编号。记住，命名边界的名称在内部被解释为数字，该边界可以通过该数字来引用。在遍历所有边界时很有用，例如
+<pre>
+  for ( bnum := 1 ; bnum &lt;= high_boundary ; bnum += 1 )
+    if valid_boundary(bnum) then
+       printf "Boundary %d has %d vertices on it\n",bnum,
+          sum(vertex,on_boundary bnum);
+</pre>
+</dd>
+
+<dt><a   id="high_constraint"> high_constraint </a></dt>
+<dd>
+内部只读变量，给出最高水平集约束的编号。记住，命名约束的名称在内部被解释为数字，该约束可以通过该数字来引用。在遍历所有约束时很有用，例如
+<pre>
+  for ( cnum := 1 ; cnum &lt;= high_constraint ; cnum += 1 )
+    if valid_constraint(cnum) then
+       printf "Constraint %d has %d vertices on it\n",cnum,
+          sum(vertex,on_constraint cnum);
+</pre>
+
+<dt><a   id="instance_name-modulus"><em>instance_name</em>.modulus </a></dt>
+		<dd> 内部读写变量。
+<a href="quants.htm#method-instances">命名方法实例</a>的
+<a href="quants.htm#instance-modulus">模量</a>。
+</dd>
+<dt><a   id="instance_name-value"> <em>instance_name</em>.value</a></dt>
+	<dd> 内部只读变量。
+<a href="quants.htm#method-instances">命名方法实例</a>的值。
+</dd>
+<dt><a   id="inverse_periods"> inverse_periods[<i>expr</i>][<i>expr</i>] </a></dt> <dd>
+内部只读变量。<a href="#torus_periods">torus_periods</a> 矩阵的逆矩阵。使用基于 1 的索引。
+对于将顶点坐标归一化到周期基很有用。计算周期基坐标的语法如下：
+<pre>
+   define perx real[space_dimension];
+   perx := vertex[1].__x * inverse_periods
+</pre>
+</dd>
+
+<dt><a   id="integral_order"></a><a   id="integration_order"></a>integral_order </dt>
+		 <dd> 内部读写变量。
+		    1D 和 2D 高斯积分完成的多项式阶数。
+                      最好分别设置 1D 和 2D。
+                    同义词：integration_order
+		    </dd>
+<dt><a   id="integral_order_1d"></a>
+<a   id="integration_order_1d"> integral_order_1d </a> </dt>
+		 <dd> 内部读写变量。
+		    1D 高斯积分完成的多项式阶数。
+                    同义词：integration_order_1D
+		    </dd>
+<dt><a   id="integration_order_2d"></a>
+ <a   id="integral_order_2d"> integral_order_2d </a> </dt>
+		 <dd> 内部读写变量。
+		    2D 高斯积分完成的多项式阶数。
+                    同义词：integration_order_2D
+		    </dd>
+
+<dt><a   id="iteration_counter"> iteration_counter  </a></dt><dd>
+       内部只读变量。命令中最后一个循环的循环计数。
+       </dd>
+<dt><a   id="jiggle_temperature"> jiggle_temperature </a></dt>
+	<dd> 内部只读变量。<a href="single.htm#j">jiggling</a> 的当前温度。
+</dd>
+
+<dt><a   id="lagrange_order"> lagrange_order </a> </dt>
+		 <dd> 内部只读变量。
+    <a href="model.htm#Lagrange-model">Lagrange 模型</a>的阶数。
+    通过 <a href="commands.htm#lagrange-command">lagrange <em>n</em></a> 命令设置。
+    </dd>
+<dt><a   id="last_eigenvalue"> last_eigenvalue </a></dt>
+	<dd>内部只读变量。来自最近一次 <a href="commands.htm#saddle">saddle</a> 或
+	     <a href="commands.htm#ritz">ritz</a> 命令的特征值。
+</dd>
+<dt><a   id="last_error">last_error </a></dt><dd>内部读写变量。包含最近错误消息的错误编号。</dd>
+
+<dt><a   id="last_hessian_scale"> last_hessian_scale </a></dt>
+	<dd> 内部只读变量。来自最近一次 <a href="commands.htm#saddle">saddle</a> 或
+      <a href="commands.htm#hessian_seek">hessian_seek</a> 命令的步长。
+      </dd>
+<dt><a   id="linear_metric_mix">  linear_metric_mix </a></dt>
+                 <dd>  内部读写变量。
+		       <a href="eigentut.htm#hessian-metric">Hessian 度量</a>中线性插值的比例。
+</dd>
+
+<dt><a   id="memory_arena"> memory_arena </a></dt>
+  <dd> 内部只读变量。
+  分配给程序堆的总内存。仅在 SGI 和 Win32 版本上可用。
+  </dd>
+
+<dt><a   id="memory_used"> memory_used </a></dt>
+  <dd> 内部只读变量。
+  程序堆中使用的总内存。仅在 SGI 和 Win32 版本上可用。
+  </dd>
+
+<dt><a   id="notch_count"> notch_count </a></dt>
+	<dd>内部只读变量。最近一次 <a href="single.htm#n">notch</a> 命令中刻痕的边的数量。
+		      </dd>
+<dt><a   id="pickvnum">  pickvnum  </a></dt>
+                <dd>  内部读写变量。在图形窗口中最近一次
+<a href="graphics.htm#picking">拾取</a>的顶点编号。
+		       </dd>
+<dt><a   id="pickenum">  pickenum  </a></dt>
+                <dd>  内部读写变量。在图形窗口中最近一次
+<a href="graphics.htm#picking">拾取</a>的边编号。
+		       </dd>
+<dt><a   id="pickfnum">  pickfnum  </a></dt>
+                <dd>  内部读写变量。在图形窗口中最近一次
+<a href="graphics.htm#picking">拾取</a>的面编号。
+		       </dd>
+
+<dt><a   id="pop_count"> pop_count </a></dt>
+	<dd>内部只读变量。
+<a href="#vertex_pop_count">vertex_pop_count</a> 和
+<a href="#edge_pop_count">edge_pop_count</a> 的总和。保留用于向后兼容。
+		       </dd>
+
+<dt><a   id="pop_edge_to_tri_count"> pop_edge_to_tri_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#pop_edge_to_tri">pop_edge_to_tri</a> 命令翻转为三角形的边的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+<dt><a   id="pop_quad_to_quad_count"> pop_quad_to_quad_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#pop_quad_to_quad">pop_quad_to_quad</a> 命令翻转的四边形的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+<dt><a   id="pop_tri_to_edge_count"> pop_tri_to_edge_count</a> </dt>
+	<dd>内部只读变量。被 <a href="commands.htm#pop_tri_to_edge">pop_tri_to_edge</a> 命令翻转为边的三角形的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+
+<dt><a   id="quadratic_metric_mix">  quadratic_metric_mix  </a></dt>
+                 <dd>  内部读写变量。
+二次模型中 <a href="eigentut.htm#hessian-metric">Hessian 度量</a>中线性插值的比例。不太有用。
+</dd>
+
+<dt><a   id="quantity_name-modulus"><em>quantity_name</em>.modulus</a> </dt>
+		<dd> 内部读写变量。
+<a href="quants.htm#named-quantities">命名量</a>的
+<a href="quants.htm#quantity-modulus">模量</a>。
+</dd>
+<dt><a   id="quantity_name-pressure"> <em>quantity_name</em>.pressure </a></dt>
+	<dd> 内部只读变量。
+      <a href="quants.htm#fixed-quantity">受约束命名量</a>的
+<a href="quants.htm#quantity-pressure">拉格朗日乘子</a>。
+      </dd>
+<dt><a   id="quantity_name-target"> <em>quantity_name</em>.target </a></dt>
+	<dd> 内部读写变量。
+<a href="quants.htm#fixed-quantity">命名量</a>的受约束值。
+</dd>
+<dt><a   id="quantity_name-value"> <em>quantity_name</em>.value </a></dt>
+	<dd> 内部只读变量。
+<a href="quants.htm#named-quantities">命名量</a>的值。
+</dd>
+<dt><a   id="random">random  </a></dt><dd> 内部只读变量。
+  0 到 1 之间的随机数。
+  </dd>
+<dt><a   id="random_seed"> random_seed </a></dt>
+            <dd> 内部读写变量。随机数生成器的种子，例如用于 <a href="single.htm#j">jiggling</a>
+或在各种 <a href="eigentut.htm">Hessian</a> 特征向量算法中查找随机初始向量。
+  在数据文件开始时默认为 1。
+  </dd>
+<dt><a   id="refine_count"> refine_count </a> </dt><dd>
+        内部只读变量。最近一次 refine 命令中细分的元素数量。
+	</dd>
+<dt><a   id="rotation_order"> rotation_order </a></dt>
+            <dd> 内部读写变量。对称群 <a href="model.htm#rotate-symmetry-group">rotate</a> 和
+<a href="model.htm#flip-rotate-symmetry-group">flip_rotate</a> 的旋转群阶数。
+</dd>
+<dt><a   id="scale"> scale </a></dt>
+		<dd> 内部读写变量。在 '<code><a href="single.htm#g">g</a></code>' 命令中，
+		将力乘以运动的当前比例因子。
+		</dd>
+<dt><a   id="scale_scale"> scale_scale </a></dt>
+		<dd> 内部读写变量。在
+		'<code><a href="single.htm#g">g</a></code>' 命令中使用的比例因子的乘数。默认值 1。
+		</dd>
+
+<dt><a   id="scrollbuffersize"> scrollbuffersize </a></dt>
+		<dd> 内部读写变量。
+    Windows 机器上命令窗口滚动缓冲区的大小。适用于没有此菜单属性选项的非 NT Windows。
+  </dd>
+
+<dt><a   id="self_sim_coeff"> self_sim_coeff </a></dt>
+		<dd> 内部读写变量。
+当 <a href="toggle.htm#self_similar">self_similar</a> 打开时用作幅度系数。
+
+<dt><a   id="simplex_representation"> simplex_representation </a></dt>
+		<dd>内部只读变量。<a href="model.htm#simplex-model">单纯形模型</a>是否生效。
+</dd>
+<dt><a   id="space_dimension"> space_dimension </a></dt>
+		<dd>内部只读变量。环境空间的<a href="model.htm#space-dimension">维度</a>。
+</dd>
+
+<dt><a   id="sq_curvature_modulus"> sq_curvature_modulus </a></dt>
+		<dd>内部读写变量。
+当在数据文件顶部以旧方式声明时，
+<a href="datafile.htm#squared_curvature">squared_curvature</a> 能量的乘数。
+</dd>
+
+<dt><a   id="string_curve_tolerance">string_curve_tolerance</a></dt>
+		<dd>内部读写变量。
+ 在 <a href="model.htm#quadratic-model">二次模型</a>中，
+弯曲二次边的绘图平滑度可以通过内部变量
+<code>string_curve_tolerance</code> 控制，
+它是构成边的连续绘图线段之间的期望角度（以度为单位）。
+		</dd>
+
+
+<dt><a   id="surface_dimension"> surface_dimension </a></dt>
+		<dd>内部只读变量。曲面的维度。
+		</dd>
+<dt><a   id="symmetry_group"> symmetry_group </a></dt>
+		<dd>内部只读变量。是否有任何
+<a href="model.htm#symmetry-groups">对称群</a>处于活动状态（布尔值）。
+</dd>
+<dt><a   id="t1_edgeswap_count"> t1_edgeswap_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#t1_edgeswap">t1_edgeswap</a> 命令交换的边的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+<dt><a   id="target_tolerance"> target_tolerance </a></dt>
+		<dd>  内部读写变量。
+当执行 <a href="elements.htm#target-volume">体积约束</a>
+或 <a href="constrnt.htm#named-quantity-constraints">命名量约束</a>时，
+重复牛顿法直到偏离目标值的总偏差
+小于 <code>target_tolerance</code>。默认值 1e-4。
+</dd>
+<dt><a   id="temperature"> temperature </a></dt>
+  <dd> 内部只读变量。
+  <a href="toggle.htm#jiggle">jiggling</a> 的振幅。
+  </dd>
+<dt><a   id="thickness"> thickness </a></dt>
+  <dd> 内部只读变量。
+  <a href="single.htm#P">P</a> 命令中图形输出加厚曲面的厚度。当面的
+<a href="elements.htm#frontcolor">正面颜色</a>和
+<a href="elements.htm#backcolor">背面颜色</a>不同时使用。
+默认值为曲面最大线性尺寸的 0.001 倍。
+如果背面颜色透出来，请增加厚度。
+</dd>
+<dt><a   id="torus"> torus </a> </dt><dd>内部只读变量。
+<a href="model.htm#torus-model">环面模型</a>是否生效（布尔值）。
+</dd>
+<dt><a   id="torus_periods"> torus_periods[<i>expr</i>][<i>expr</i>]  </a></dt><dd>
+内部只读变量。<a href="model.htm#torus-model">环面模型</a>中周期向量的当前值。torus_periods[i][j]
+是向量 i 的分量 j。使用基于 1 的索引。
+要更改 torus_periods，请在数据文件中用变量定义周期，并修改变量。
+</dd>
+<dt><a   id="total_area"> total_area </a></dt>
+    <dd>内部只读变量。<a href="model.htm#soapfilm-model">soapfilm</a> 或
+<a href="model.htm#simplex-model">simplex</a> 模型中曲面的总面积。
+请注意，这不是随着曲面的每次变化而连续更新的，
+而是在返回命令提示符时更新。如果脚本需要重新计算当前 total_area，
+应在使用 total_area 之前执行 "recalc" 命令。
+</dd>
+<dt><a   id="total_energy"> total_energy</a> </dt>
+    <dd>内部只读变量。曲面的总能量。
+请注意，这不是随着曲面的每次变化而连续更新的，
+而是在返回命令提示符时更新。如果脚本需要重新计算当前 total_energy，
+应在使用 total_energy 之前执行 "recalc" 命令。
+    </dd>
+<dt><a   id="total_length"> total_length </a></dt>
+    <dd>内部只读变量。
+<a href="model.htm#string-model">string 模型</a>中曲面的总长度。
+</dd>
+<dt><a   id="total_time"> total_time </a></dt>
+    <dd>内部只读变量。以总<a href="iterate.htm#scale-factor">比例因子</a>形式表示的演化经过时间。
+</dd>
+
+<dt><a   id="transform_count"> transform_count </a></dt>
+    <dd>内部只读变量。活动的图像变换数量，由
+    <a href="commands.htm#transform_expr"><code>transform_expr</code></a> 命令生成。
+    </dd>
+
+
+<dt><a   id="unfix_count"> fix_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#pop">unfix</a> 命令取消固定的元素数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+<dt><a   id="vertex_count"> vertex_count </a></dt>
+    <dd>内部只读变量。顶点的数量。
+    </dd>
+
+<dt><a   id="vertex_dissolve_count"> vertex_dissolve_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#dissolve">dissolve</a> 命令溶解的顶点的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+<dt><a   id="vertex_pop_count"> vertex_pop_count </a></dt>
+	<dd>内部只读变量。被 <a href="commands.htm#pop">pop</a> 或
+<a href="single.htm#o">o</a> 命令弹出的顶点的数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+		     </dd>
+
+<dt><a   id="view_transforms_unique_point"> view_transforms_unique_point </a></dt>
+	<dd>内部读写向量变量。由
+  <a href="toggle.htm#view_transforms_use_unique_point">
+view_transforms_use_unique_point</a> 模式用于定义重复视图变换。
+
+
+<dt><a   id="where_count"> where_count </a></dt>
+<dd>内部只读变量。满足最近一次 <code>where</code> 条件的项目数量。
+在命令执行结束时打印并重置为 0，或在执行
+<a href="commands.htm#flush_counts">flush_counts</a> 时重置。
+也被 <a href="commands.htm#reset_counts">reset_counts</a> 重置。
+	       </dd>
+
+
+<dt><a   id="window_aspect_ratio"> window_aspect_ratio </a></dt>
+<dd>内部读写变量。显示窗口垂直与水平尺寸的比率。如果设置，这会将宽高比锁定为给定值。窗口可以用鼠标调整大小，但宽高比将保持不变。window_aspect_ratio 的未设置值为 0；将 window_aspect_ratio 设置为 0 将解锁宽高比。如果 <a href="toggle.htm#full_bounding_box">full_bounding_box</a> 打开，也适用于 PostScript 边界框。目前仅在带有 GLUT 图形的 Evolver 中实现。注意：窗口并不总是完全跟随鼠标；继续尝试即可。
+	       </dd>
+
+</dl>
+<hr>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+</body>
+</html>

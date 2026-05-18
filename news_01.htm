@@ -1,0 +1,234 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 通讯 1</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-1"></a>
+<h1>Surface Evolver 通讯第1期</h1>
+<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+<hr><pre>
+
+		      Surface Evolver 通讯第1期
+			      1993年1月25日
+
+             编辑: Ken Brakke, brakke@geom.umn.edu
+
+目录:
+  引言
+  公告
+  参考文献
+  最新功能
+
+引言:
+
+  本通讯的目的是让Surface Evolver用户（及其他相关方）了解最新动态，
+  并促进有共同兴趣者之间的交流。内容将包括：
+     Evolver的最新功能。
+     新功能的未来计划。
+     新功能建议，其添加可能性与需求成正比。
+     使用Evolver的论文参考文献，希望附有简要摘要。
+     即将举办的研讨会、讲座等。
+     正在使用Evolver的项目描述。
+     用户已将Evolver移植到的系统列表。
+     任何人希望贡献的任何其他内容。
+
+  请将投稿发送至 brakke@geom.umn.edu。
+  如果您不在通讯邮件列表中但希望加入，请发送电子邮件至 brakke@geom.umn.edu。
+
+公告:
+
+  有可能将Evolver移植到CM5，这是一台大规模并行计算机。
+  主要好处在于加速具有数千个面片的迭代过程。如果任何人
+  有项目可能受益，请告知我。即使您自己从未计划在CM5上运行，
+  我们也希望能够引用在申请CM5时间进行移植时可能受益的应用类型。
+   -- Ken Brakke
+
+
+参考文献:
+
+K. A. Brakke, The Surface Evolver Manual, version 1.87.  Research
+   Report GCG45, The Geometry Center, 1300 South Second Street,
+   Minneapolis, MN 55454. October, 1992.
+
+     几何中心定期印刷并装订一批手册副本。这是最新版本。
+     当然，它不如ftp包中的版本更新。
+
+K. A. Brakke, "The Surface Evolver," Experimental Mathematics, vol. 1 (1992),
+     no. 2, pp 141-165.
+
+     一篇期刊文章，概述了Evolver的一般描述和一些示例。
+     在您的论文中引用的很好文章。
+
+K. A. Brakke, "The Opaque Cube Problem," Am. Math. Monthly, vol. 99,
+    no. 9 (November, 1992), pp 866-871.
+
+     使用Evolver计算不透明立方体问题的拟议解决方案的面积，
+     该问题是要找到与立方体中所有直线相交的最小面积曲面。
+
+K. A. Brakke, "Grain growth with the Surface Evolver,"
+      Video Proceedings of the Workshop on Computational Crystal Growing, 
+      J. E. Taylor, ed., American Mathematical Society, Providence RI, 1992.
+
+      Evolver从一个正方形中的100个单元开始，通过平均曲率演化直至平衡。
+
+M. Callahan, P. Concus and R. Finn, "Energy minimizing capillary surfaces 
+      for exotic containers,"  Computing Optimal Geometries, 
+      American Mathematical Society, Providence RI, 1991.
+
+      去年进行的航天飞机实验模拟。
+      参见1992年8月22日的《科学新闻》（我认为）关于航天飞机实验的报告。
+
+H. Mittelmann, "Symmetric capillary surfaces in a cube" and  
+     "Symmetric capillary surfaces in a cube Part 2: Near the
+      limit angle," preprints.
+
+      Evolver处理立方体内部具有各种接触角的固定体积体的族。
+
+L. M. Racz, J. Szekely, and K. A. Brakke, "On some meniscus
+      problems in materials processing," to appear in  Trans. Iron and
+	    Steel Inst. vol. 33(1993) no. 2.
+
+      Evolver的一般描述以及一些在材料加工中的应用，
+      例如液态焊料。
+
+J. Tegart, "Three-dimensional fluid interfaces in cylindrical
+      containers," AIAA paper AIAA-91-2174, 27th Joint Propulsion Conference,
+      Sacramento, CA, June 1991.
+
+      Martin-Marietta的工程师使用Evolver模拟失重状态下
+      航天飞机小型燃料箱中的液体燃料形状。
+
+
+
+最新功能:
+
+最新的ftp版本是1.88a，1993年1月6日。对于那些有一段时间没有下载的用户，
+这里是过去一年手册中的历史列表：
+
+版本1.76 1992年3月20日
+
+     用于自动演化的字符串模型中的自动弹出和自动切割功能。
+
+     相位相关的晶界能。
+
+     近似多面体曲率。
+
+     近似曲率的稳定性测试。
+
+     高斯曲率的平方仅作为能量的一部分，而不是力。
+
+     ``system'' 命令用于执行shell命令。
+
+     ``check_increase'' 用于防止迭代过程中的爆炸。
+
+     ``effective_area'' 仅计算对垂直于表面运动的阻力。
+
+     Runge-Kutta迭代。
+
+版本1.80 1992年7月25日
+
+      命令和查询语言得到大幅扩展。
+
+      添加了geomview接口。（SGI机器必备。geomview可通过ftp从geom.umn.edu获取。
+      使MinneView过时。）
+
+      添加了固定面积作为约束。
+
+      可以在数据文件中指定多个视图变换，
+      因此对称表面的一个基本区域可以显示为整个表面。
+
+      命令可以包含在数据文件的末尾，由关键字READ引入。
+
+ 版本1.83 1992年9月9日
+
+      添加了一些曲率平方的替代定义。
+      通过 ``effective_area ON | OFF'' 或 
+      ``normal_curvature ON  | OFF'' 调用。
+
+版本1.84 1992年9月10日
+
+      为xgraph和cheygraph添加了阴影颜色。
+
+版本1.85 1992年9月29日
+
+      添加了将运动限制在表面法线方向的功能。切换 
+      ``normal_motion''。
+
+      平均曲率平方、高斯曲率和高斯曲率平方
+      扩展到具有边界的表面。
+ 
+      为soapfilm模型中的顶点和边添加了数据文件元素属性 ``bare''，
+      以便它们不会产生错误的警告。
+
+      为高斯曲率平方添加了力计算，以便
+      可以在能量中使用。
+
+      所有需要实数值响应的提示现在都接受
+      任意表达式。
+
+ 版本1.86 1992年10月19日
+ 
+      添加了用户定义的迁移率，包括标量和张量形式。
+
+      默认曲率平方适用于$R^n$中的2维表面。
+
+ 版本1.87 1992年10月27日
+
+      添加了 ``close_show'' 命令以关闭显示窗口（本地图形窗口，
+      而不是geomview）。
+
+      图形命令在执行任何变换之前检查字符串中的非法字符。
+
+      二面角现在适用于任何维度中的2维表面。
+
+      可以使用 ``\tt ::='' 而不是 ``:='' 进行永久变量赋值。
+      这样的赋值在开始新表面时不会被遗忘。
+
+      添加了C形式的条件表达式：expr ? expr : expr。
+      对于将约束拼接在一起很有用。
+
+版本1.88 1992年12月16日
+
+      为本机图形添加了 ``SET BACKGROUND color'' 命令。
+
+      添加了视图变换生成器和表达式。
+
+      为PostScript文件计算精确的边界框。
+
+版本1.88a 1993年1月6日
+
+      默认constraint_tolerance从1e-5降低到1e-12。
+
+      修复了在1.88中引入的体积约束计算错误。
+
+版本1.88b （尚未在ftp中） 
+
+      Postscript在表面内部绘制固定边和边界边。
+      所有内部图形在它们绘制的特殊边（裸边、三重边等）方面应保持一致。
+
+      视图矩阵可以从数据文件读取并转储。
+      关键字 VIEW_MATRIX
+
+      添加了模运算符 `%'，以及函数floor()、ceil()。
+
+      添加了 `rebody' 命令，用于在颈部收缩和任何其他主体破坏后
+      重新计算连接的主体。
+
+通讯结束。
+
+    
+
+</pre>
+
+<hr>
+<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+</body>
+</html>
+    
+

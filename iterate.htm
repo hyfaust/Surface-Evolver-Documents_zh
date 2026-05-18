@@ -1,0 +1,237 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档：迭代 </title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<!--NewPage-->
+
+<h1 class="center">
+<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+
+<hr><a   id="gradient-descent-iteration"> </a>
+<h2>梯度下降迭代</h2>
+
+基本的曲面演化通过梯度下降迭代来完成。
+相关主题如下：
+<ul>
+<li><a href="#iteration-step">迭代步</a>
+<li><a href="#scale-factor">比例因子</a>
+<li><a href="#optimizing-scale">优化比例因子</a>
+<li><a href="#conjugate-gradient">共轭梯度</a>
+<li><a href="#diffusion">扩散</a>
+<li><a href="#stability">稳定性</a>
+</ul>
+<hr>
+<a   id="iteration-step"></a><h2>梯度下降迭代步</h2>
+每次 <a href="single.htm#g">g</a> 命令迭代执行以下操作：
+<ul>
+<li> 计算每个顶点处的力向量，即总<a href="energies.htm">能量</a>的梯度。
+<li> 计算受约束的<a href="elements.htm#body-volume">物体体积</a>和
+<a href="quants.htm#fixed-quantity">命名量</a>在每个顶点处的梯度。
+同时计算恢复约束目标值所需的梯度运动的倍数。
+<li> 将力投影到与<a href="constrnt.htm#level-set-constraints">水平集约束</a>、
+体积约束（此处计算压力）和固定量约束相切的方向。
+<li> 如果启用了任何 <a href="model.htm#mobility">迁移率</a>选项，
+则进行相应的力到速度的转换。
+<li> 如果 <a href="toggle.htm#normal_motion">normal_motion</a> 开关处于开启状态，
+则将速度投影到曲面法线方向。
+<li> 如果共轭梯度处于启用状态，则进行
+<a href="#conjugate-gradient">共轭梯度</a>投影。
+<li> 保存当前顶点位置。
+<li> 如果优化模式处于开启状态，则进行试探性运动以寻找最优比例因子。
+<li> 比例因子乘以 <a href="syntax.htm#scale_scale">scale_scale</a> 内部变量的值。
+（仅当您出于某种特殊原因想要修改最优比例因子时才有用。）
+<li> 每个顶点按照比例因子乘以速度进行移动，
+再加上体积和固定量的恢复运动。如果
+<a href="toggle.htm#runge_kutta">runge_kutta</a>
+处于启用状态，则执行四阶 Runge-Kutta 步进，而非简单的 Euler 步进。
+<li> 强制执行所有水平集约束。
+	 违反不等式或等式约束的顶点将被投影到约束面上（牛顿法）。可能需要进行多次投影步骤，
+	 直到违反量小于某个容差或达到某个步数上限（此时会产生警告消息）。
+	 默认约束容差为 1e-12，但可以通过数据文件中的
+<a href="datafile.htm#constraint_tolerance-decl">CONSTRAINT_TOLERANCE</a>
+选项来设置，
+	 或者通过设置
+<a href="syntax.htm#constraint_tolerance">constraint_tolerance</a> 变量来修改。
+<li> 如果 <a href="toggle.htm#jiggle">jiggling</a>（抖动）处于开启状态，
+则对曲面施加随机扰动。
+<li> 如果 <a href="toggle.htm#autopop">autopop</a>（自动弹出）或
+<a href="toggle.htm#autochop">autochop</a>（自动切割）处于开启状态，
+则执行相应的边删除或分割操作。
+<li> 计算新的能量、体积和量。
+<li> 如果 <a href="toggle.htm#check_increase">check_increase</a> 处于开启状态
+且曲面能量增加，则将顶点恢复到旧值。
+<li> 如果 <a href="toggle.htm#estimate">estimating</a>（估计）处于开启状态，
+则打印能量变化的线性估计值。该值由速度、梯度和比例因子计算得出。
+<li> 打印剩余迭代次数、新的面积、能量和比例因子。
+<li> 如果图形显示处于活动状态且设置为
+<a href="toggle.htm#autodisplay">autodisplay</a>（自动显示），
+则重新绘制图形。
+</ul>
+<hr>
+<a   id="scale-factor"></a><h2>比例因子</h2>
+一旦确定了运动方向，必须将该方向乘以一个比例因子来计算实际运动量。
+如果将运动方向解释为速度（如平均曲率流中的运动），则比例因子就变成了时间步长。
+比例因子可以通过 <a href="single.htm#m">m</a> 命令固定，
+也可以处于<a href="#optimizing-scale">优化</a>模式。
+默认设置为启动时处于优化模式。
+<hr>
+<a   id="optimizing-scale"></a><h2>优化比例</h2>
+在使用梯度下降法寻求最小能量时，首先找到一个运动方向，然后沿该方向进行线搜索以找到最小能量。
+Evolver 在优化比例模式下会执行此操作。
+线搜索包括对当前<a href="#scale-factor">比例因子</a>进行折半或加倍，
+直到能量最小值被包围；然后使用二次插法来估计最优比例。
+优化比例是默认模式；也可以通过 <a href="single.htm#m">m</a>
+命令或 <a href="commands.htm#optimizing">optimizing</a> 命令来开启。
+
+<p>
+为安全起见，比例因子有一个上界；默认值为 1，
+但可以通过 <a href="commands.htm#optimizing">optimizing</a> 命令来更改。
+还有一个下界；如果 Evolver 在尝试寻找最小值时，
+比例因子低于比例界限的 1e-12，则会放弃并使用比例 0。
+比例 0 并非空操作，因为它仍然会向约束面投影（如果约束未被精确满足的话）。
+<p>
+
+一般来说，一个好的比例因子取决于所最小化的能量类型和细化级别。
+然而，对于最小化面积而言，当三角剖分表现良好且
+<a href="model.htm#area-normalization">面积归一化</a>关闭时，
+最优比例因子通常在 0.2 左右，与细化程度无关。
+在优化模式下，比例因子变小（例如低于 0.01）表明存在三角剖分问题。
+过大的固定比例因子会表现为总能量增加。
+如果您开启了面积归一化运动，请使用较小的比例因子（如 0.001），
+直到您对合适的值有所了解。
+ <p>
+ 如果 <a href="toggle.htm#check_increase">check_increase</a> 被切换为开启状态，
+则如果运动会增加能量，则不执行该运动。
+但请注意，为了满足约束条件，能量有时可能必须增加。
+<hr>
+
+<a   id="conjugate-gradient"></a><h2>共轭梯度</h2>
+"共轭梯度"是一种加速梯度下降的方法。
+在普通梯度下降中，使用能量梯度来找到最陡下降方向，
+然后沿该方向移动到该方向上的能量最小点。
+因此，连续的步骤是相互垂直的。
+然而，这可能非常低效，因为您可能会花费大量时间在能量"山谷"中来回锯齿运动，
+而没有沿"下游"方向取得多少进展。
+使用共轭梯度时，搜索方向被选择为与前一个方向"共轭"的方向。
+有关数学解释，请参阅任何优秀的数值分析教材，
+例如 <a href="biblio.htm#refP">[P]</a>。
+在实践中，共轭梯度方法会记住一个累积的"历史向量"，
+将其与普通梯度组合以计算共轭梯度方向。
+最终结果是，共轭梯度可以比普通梯度下降收敛得更快。
+<p>
+共轭梯度可以通过 <a href="single.htm#U">U</a> 命令切换，
+或通过 <a href="toggle.htm#conj_grad">conj_grad</a> 开关切换。
+应始终与<a href="#optimizing-scale">优化比例</a>一起使用。
+<p>
+注意：共轭梯度方法是为二次能量函数设计的。
+只要能量函数接近二次形式（在能量最小值附近应该如此），
+共轭梯度就能很好地工作。
+否则，它可能表现异常，要么步长过大，要么停滞不前。
+这两种情况都是由于历史向量产生误导所致。
+为防止步长过大，在对曲面进行重大更改（细化、更改约束等）后，
+应先不使用共轭梯度进行几次迭代。
+另一方面，如果看起来共轭梯度正在收敛，
+它可能只是被自己的历史弄混淆了。
+请参阅<a href="catenoid.htm">悬链面</a>示例中的具体案例。
+一个危险信号是比例因子变为零。
+如果您有所怀疑，请关闭并重新开启共轭梯度
+（"<code>U 2</code>"即可）以清除历史向量并重新开始。
+
+
+
+<hr>
+<a   id="diffusion"></a><h2>扩散</h2>
+<a   id="diffusion_coeff"></a>
+<a   id="edge_diffusion"></a>
+<a   id="facet_diffusion"></a>
+         Evolver 可以模拟气泡之间气体扩散的现实物理现象。
+         这种扩散由穿过曲面的压力差驱动。
+         通过在数据文件的第一部分使用关键字 DIFFUSION
+         后跟扩散常数的值来启用此功能。
+         在一次迭代中穿过一个面片的扩散量计算公式为：
+    scale*diffusion_constant*facet_area*pressure_difference。
+         比例因子作为迭代的时间步长包含在内。
+         该量会被加到面片两侧物体的规定体积上，
+         或从其中减去。
+         扩散常数在运行时可通过可读写的内部变量
+         <code>diffusion_coeff</code> 来访问。
+<p>  如果您想要更精细地控制穿过各种曲面的扩散速率，
+您可以在弦模型中定义 edge_diffusion 边属性，
+或在肥皂膜模型中定义 facet_diffusion 面片属性，
+并根据需要为各个边或面片设置单独的值。
+如果定义了该属性，则使用其值代替全局扩散常数。
+
+<hr>
+<a   id="stability"></a><h2>稳定性</h2>
+
+迭代的时间步长不应大到足以放大曲面的扰动。
+短波长扰动最容易被放大。
+本节概述了各种迁移率模式的稳定性特征，
+足以让用户将最大时间步长与最小面片或边的尺寸联系起来。
+讨论了两个示例：锯齿形弦线和具有等边三角剖分的近平坦曲面。
+有效面积未包含在内，因为它对近平坦曲面来说是一个不显著的修正。
+本节的总体结论是：迭代中的最大时间步长受限于最短边的长度或最小面片的面积，
+但有一种情况例外。
+
+<h3>锯齿形弦线</h3>
+
+设扰动相对于中线的振幅为 Y，边长度为 L。
+则当 Y 较小时，顶点上的力为 F = -4Y/L。
+设时间步长（Evolver 比例因子）为 \Delta t，
+设 V 为顶点速度。则扰动放大的临界时间步长由
+V\Delta t = -2Y 给出，即 \Delta t = -2Y/V。
+<p>
+ 顶点迁移率。此处 V = F，因此 \Delta t = L/2。
+<p>
+ 面积归一化。此处顶点星的长度为 2L，
+因此 V = F/L，\Delta t = L^2/2。
+<p>
+ 近似曲率。事实证明，锯齿形是迁移率矩阵 M 的一个特征向量，
+对应于最大特征值 3/L，
+因此 V = 3F/L，\Delta t = L^2/6。这是近似曲率的一个主要缺点。
+如果扰动不稳定性是时间步长的限制因素，
+则与面积归一化相比，需要三倍的迭代次数才能完成相同的演化。
+
+<h3> 具有等边三角剖分的受扰动平面。</h3>
+
+考虑一个以面积为 A 的等边三角形进行三角剖分的平面。
+扰动由六边形凹坑的拼贴组成，其中心高度为 Y，
+高于其边缘。
+中心顶点处的力为 -sqrt(3)Y，边缘顶点处的力为 sqrt(3)Y/2。
+<p>
+顶点迁移率。临界时间步长由以下公式给出：
+<br>
+(\sqrt(3)Y + sqrt(3)Y/2)\Delta t = 2Y，
+<br>
+因此 \Delta t = 4/3*sqrt(3)。注意这与三角形大小无关。
+这与使用优化比例因子进行演化的经验一致，
+其中最优时间步长在 0.2 - 0.3 的范围内，与三角形大小无关。
+这是此版本迁移率的一个明显优势，
+因为曲面的不同部分可以具有不同大小的三角剖分，
+而同一大小的时间步长可以适用于所有部分。
+<p>
+面积归一化。每个顶点的星面积为 6A，
+因此速度变为 -sqrt(3)Y/2A 和 sqrt(3)Y/4A，
+临界时间步长 \Delta t = 4/6*sqrt(3)A。
+因此在具有不同大小三角形的曲面上，时间步长受限于最小三角形的面积。
+<p>
+近似面积。此力是迁移率矩阵的特征向量，
+对应特征值为 2/A。因此速度是面积归一化的四倍，
+临界时间步长缩短为四分之一。
+
+<hr>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+</body>
+</html>

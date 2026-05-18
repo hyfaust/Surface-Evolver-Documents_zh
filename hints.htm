@@ -1,0 +1,207 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档：提示
+</title>
+<link rel="stylesheet" type="text/css" href="../evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+
+<h1 class="center">
+ <a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+<H1> 提示（HINTS）</h1>
+这里汇集了我自身使用 Evolver 的经验以及帮助他人过程中积累的有用提示。
+
+<ul>
+<li> Evolver 使用无量纲单位（dimensionless units）进行运算，默认设置在尺寸、表面张力（surface tension）、体积（volume）等数值接近 1 时效果最佳。如果你选择的单位产生非常大或非常小的数值，可能需要调整诸如
+<a href="datafile.htm#scale_limit" class="keyword">scale_limit</a>、
+<a href="syntax.htm#target_tolerance" class="keyword">target_tolerance</a> 和
+<a href="syntax.htm#constraint_tolerance" class="keyword">constraint_tolerance</a> 等参数。
+<p>
+
+<li> 在绘制初始数据文件（datafile）的构造草图时，应尽可能画大一些，因为上面需要标注大量的标记。给所有顶点（vertex）、边（edge）和面片（facet）编号。在边上标注方向箭头，并标明面片的方向（我喜欢用围绕面片编号的弯曲箭头来表示）。
+<p>
+<li> 初始面片应为凸形（convex）。虽然 Evolver 可以处理非凸面片，但其三角剖分（triangulation）算法非常简单，对非凸面片的三角剖分结果可能很差。只需添加一两条额外的边，将面片划分为几个凸面片即可。
+<p>
+<li> 对于带有约束能量（constraint energy）或含量积分（content integrals）的边，以及不带这些的边，应分别创建独立的约束（constraints）。即使其他边是固定的，当只有精确需要的边附带有积分的约束时，检查被积函数（integrand）是否正确也会容易得多。
+<p>
+<li> 如果你的所有元素没有连续编号（这通常是由于你使用的编号方案，或者添加或删除了元素），请使用 -i 命令行选项运行 Evolver，这样鼠标拾取（mouse-picking）报告的元素编号与数据文件中的一致。你也可以在数据文件顶部添加 "keep_originals" 来达到相同效果。
+<p>
+<li> 确保你的所有体（body）的面片方向正确。如果普通边上的面片方向不匹配，Evolver 会报错，但固定边（fixed edges）、约束边（constrained edges）等不受此检查限制。一个很好的检查方法是使用着色，例如：
+<pre>   set body[1].facet color green </pre>
+<p>
+<li> 确保顶点、边和面片位于其正确的约束上。你可以通过着色进行视觉检查，例如：
+<pre>  set edge color red where on_constraint 1
+  set facet color green where on_constraint 1 </pre>
+你无法直接给顶点着色，但可以通过细化（refine）几次并给与顶点相邻的边着色来达到近似效果：
+<pre>  foreach vertex vv where on_constraint 1 do set vv.edge color blue </pre>
+<p>
+<li> 检查你初始数据文件中的所有能量（energies）、体积（volumes）、量（quantities）等是否正确。有关如何进行详细检查的更多信息，请参见<a href="#checking">下面</a>的章节。
+<p>
+<li> 如果你要模拟带有固体壁上接触线（contact lines）的液体，我建议先创建一个数据文件，将液体的所有边界表面显式表示为面片，然后再创建第二个版本的数据文件，使用约束能量和含量积分来替代固定壁上的面片。在第一个版本中更容易得到正确的能量和体积，但它在演化过程中也更容易出问题。使用第一个版本来检查第二个版本的正确性，并使用第二个版本进行正式工作。
+<p>
+<li>
+如果你在弯曲约束（curved constraint）上的边试图抄近路（shortcut the curve），有几种方法可以阻止这种情况：
+  <ul>
+   <li> 创建第二条引导约束（guide constraint），使两条约束的交集为顶点定义运行轨道。通过使用顶点属性来自定义引导约束，你只需一条引导约束即可。例如：
+<pre>    define vertex attribute guides real[2]
+    constraint 1
+    formula:  x^2 + y^2 = rad^2   // curved constraint
+    constraint 2
+    formula:  guides[1]*x + guides[2]*y = 0  // radial guide planes  </pre>
+然后你可以在运行时使用以下命令设置引导系数：
+<pre>   set vertex.guides[1] -y where on_constraint 1
+   set vertex.guides[1] x where on_constraint 1  </pre>
+   <li> 如果你确切了解是哪种能量或体积条件导致了抄近路行为，可以调整弯曲约束上的能量或含量被积函数来进行补偿，以消除这种倾向。这基本上意味着需要计算边与弯曲约束之间间隙的表面积，或间隙所围成的体积。
+   <li> 将弯曲约束声明为
+    <a href="constrnt.htm#convex-constraint" class="keyword">CONVEX</a>（凸约束）。这会添加一个大致与间隙面积成比例的能量。这很简单，只要将 gap_constant 设置得足够高就能生效（但应将 gap constant 尽量保持在能工作的最低值），不过使用凸约束后你将无法使用任何 Hessian 命令。
+   </ul>
+<p>
+<li>
+      在细化之前先在低分辨率下运行。一个好的演化（evolution）脚本通常会交替进行细化和演化。三角形过多不仅计算耗时长，而且每次迭代（iteration）中运动只能传播一个三角形的距离。不要在某个特定的细化级别上过度演化。请记住这只是一种近似。将一个精度仅为 4 位的近似演化到 12 位精度是没有太大意义的。
+
+<p>
+<li> 使用以下命令来整修（groom）你的表面三角剖分：
+      <a href="single.htm#V" class="keyword">V</a>（顶点平均，vertex averaging）、
+      <a href="single.htm#u" class="keyword">u</a>（等角化，equiangulation）、
+      <a href="single.htm#l" class="keyword">l</a>（长边分割，long edge division）和
+      <a href="single.htm#t" class="keyword">t</a>（微小边删除，tiny edge deletion）。
+      可能需要一些实验才能找到正确的操作顺序，并与细化相结合。分割某些长边可能比简单地细化整个表面更好。然而，过度操作可能对收敛（convergence）产生反效果；有时收敛后的表面不希望被完全等角化或平均化，你可能会陷入迭代与整修的无限循环中。一旦你制定出一个好的脚本，请将其写入数据文件末尾的便捷命令中以便使用。
+ <p>
+<li> 使用 <a href="commands.htm#dump" class="keyword">dump</a> 或
+     <a href="single.htm#d" class="keyword">d</a> 命令定期保存你演化后的表面。请记住 Evolver 没有撤销（undo）功能来撤回灾难性的命令。
+
+<p>
+<li> 使用<a href="iterate.htm#conjugate-gradient">共轭梯度</a>（conjugate gradient）模式可以加快梯度下降（gradient descent）的速度，但不要过早使用。先使用常规梯度下降来适应体积或约束的变化。共轭梯度只应在常规运动稳定下来后才使用。共轭梯度假设能量函数是二次的，当情况不是这样时可能会出现问题。共轭梯度可能需要反复关闭和打开，以使其忘记之前的历史信息。
+<p>
+<li> 在梯度下降（包括共轭梯度）过程中，请密切关注缩放因子（scale factor）。缩放因子应保持相对稳定。缩放因子趋向 0 并不意味着收敛；它意味着表面正在遇到困难。然而，合理的缩放因子可能取决于细化程度和其他因素。请参见<a href="#reasonable">合理缩放因子</a>一节。
+
+<p>
+<li> 二阶 Hessian 收敛（second-order Hessian convergence）比一阶梯度下降快得多，前提是 Hessian 方法有效。因此我的建议是，仅使用梯度下降来到达可以安全使用
+      <a href="commands.htm#hessian" class="keyword">hessian</a>
+      <a href="commands.htm#hessian_seek" class="keyword">hessian_seek</a> 的阶段。实际上，hessian_seek 几乎总是可以安全使用的，因为它会确保能量不断减小。我已经发现，在某些情况下，即使表面远未收敛，hessian_seek 作为迭代步骤也能取得惊人的效果。
+
+<p>
+<li> 小心能量的鞍点（saddle point）。一个对称的表面，例如焊盘上或导线周围的一滴焊料，可能看起来已经通过梯度下降收敛了，但实际上只是到达了鞍点。使用 <a href="commands.htm#eigenprobe" class="keyword">eigenprobe</a> 命令来测试稳定性，如果不稳定，使用
+      <a href="commands.htm#saddle" class="keyword">saddle</a> 命令来脱离鞍点。
+
+<p>
+<li>
+      在梯度下降中判断收敛是很困难的。如果迭代以大致恒定的缩放因子运行，能量变化不大，并且在共轭梯度模式下长时间运行后也没有明显变化，那么你的情况可能已经很好。但请使用 <a href="eigentut.htm#eigenprobe" class="keyword">eigenprobe</a> 命令来确认，
+      并使用 <a href="commands.htm#hessian" class="keyword">hessian</a> 来完成最终收敛。
+
+<p>
+<li> 如果你打算使用二次模式（quadratic mode）或拉格朗日模式（Lagrange mode）来获得更高的精度，请先在线性模型（linear model）中演化至最终阶段，因为它速度更快，而且有更多可用的三角剖分整修命令。
+</ul>
+
+<hr>
+
+<a   id="checking"></a>
+<h4>检查你的数据文件</h4>
+
+你应该始终检查你的初始数据文件，确保它完全按照你的意图运行。很容易出现被积函数符号错误，或者将量应用到错误的元素上。当你加载初始数据文件时，初始能量、体体积和量的值应该与你通过手工计算或你信任的另一个数据文件得到的预期值完全一致。特别是，当使用约束积分来替代省略的面片时，我建议你另外创建一个使用面片代替积分的独立数据文件，用于检查两者之间的一致性。
+<p>
+借助命名方法（named methods）和量（quantities）功能，可以获取非常详细的信息来了解数值的来源。如果你发出 "convert_to_quantities" 命令，每个能量、体积和约束被积函数都会在内部转换为命名方法和量（尽管所有用户界面保持不变）。这些内部量通常不会被 'v' 或 'Q' 命令显示，但如果你执行 "show_all_quantities"，它们就会被显示出来。此外，'Q' 还会显示所有组成的方法实例（method instances）。以下面的输出为例：
+<pre> Enter command: convert_to_quantities
+ Enter command: show_all_quantities
+ Enter command: Q
+Quantities and instances:
+(showing internal quantities also; to suppress, do "show_all_quantities off")
+ 1. default_length                        64.2842712474619  info_only quantity
+                            modulus       1.00000000000000
+ 2. default_area                          4.00000000000000  energy quantity
+                            modulus       1.00000000000000
+ 3. constraint_1_energy                 -0.342020143325669  energy quantity
+                            modulus       1.00000000000000
+ 4. constraint_2_energy                 -0.342020143325669  energy quantity
+                            modulus       1.00000000000000
+ 5. body_1_vol                            1.00000000000000  fixed quantity
+                             target       1.00000000000000
+                            modulus       1.00000000000000
+    body_1_vol_meth                      0.000000000000000  method instance
+                            modulus       1.00000000000000
+    body_1_con_2_meth                     1.00000000000000  method instance
+                            modulus       1.00000000000000
+ 6. gravity_quant                        0.000000000000000  energy quantity
+                            modulus      0.000000000000000
+</pre>
+以下是对上述 Q 命令输出的详细说明：
+<p><b>default_length</b> - 总边长度，使用 edge_length 方法。这将是弦模型（string model）中的默认能量，我认为它在这里实际上不需要存在。但它是一个 info_only 量，这意味着只有在有人请求其值时才会被求值。
+<p>
+<b>default_area</b> - 肥皂膜模型（soapfilm model）中的默认能量，此处包含在能量中，如右侧的 "energy quantity" 所示。
+<p>
+<b>constraint_1_energy</b> - 约束 1 的能量积分（energy integral），使用 edge_vector_integral 方法应用于约束 1 上的所有边。
+<p>
+<b>constraint_2_energy</b> - 约束 2 的能量积分，使用 edge_vector_integral 方法应用于约束 2 上的所有边。
+<p>
+<b>body_1_vol</b> - 体 1 的体积，由多个方法实例的总和构成。<b>body_1_vol_meth</b> 是 (0,0,z) 在该体所有面片上的 facet_vector_integral。<b>body_con_2_meth</b> 是约束 2 含量被积函数在体 1 面片上属于约束 2 的所有边上的积分。
+<p>
+<b>gravity_quant</b> - 所有已分配密度的体的总重力能量（gravitational energy）。即使你没有任何体或没有任何体密度，这个量也始终存在。但你会注意到其模量（modulus）为 0，这意味着跳过其求值，因此这个量的存在不会造成任何问题。
+<p>
+你可以通过将量或方法名用作元素的属性来查找单个元素的量或方法贡献。使用量名实际上意味着对其适用于该元素的所有组成方法求和。例如，在 plates_column 中：
+<pre> Enter command: foreach edge ee where on_constraint 2 do printf "%d  %f\n",id, ee.body_1_con_2_meth
+5  0.000000
+6  0.000000
+7  1.000000
+8  0.000000
+Enter command: foreach edge where constraint_1_energy != 0 do print constraint_1_energy
+  -0.342020143325669
+</pre>
+<hr>
+
+<a   id="reasonable"></a>
+<h3> 合理的缩放因子。 </h3>
+演化中的困难通常由较小的缩放因子发出信号，这意味着演化遇到了某种障碍。当然，这意味着你需要知道什么是合理的缩放因子，这取决于你使用的能量类型以及表面的细化程度。在正常演化中，缩放因子的大小由表面小尺度粗糙度的发展决定。结合一点量纲分析（dimensional analysis），可以得出结论：缩放因子应与 L<sup>2-q</sup> 成正比，其中 L 是典型的边长度，能量的单位是 length<sup>q</sup>。量纲分析如下：设 D 为一个顶点偏离平衡表面的扰动。一般而言，能量在平衡点附近是二次的，因此：
+<pre>
+   E = D<sup>2</sup>L<sup>q-2</sup>
+</pre>
+
+因此该顶点处的能量梯度为：
+<pre>
+    grad E = 2<sup>D </sup>L<sup>q-2</sup>
+</pre>
+
+运动是缩放因子乘以梯度，我们希望它与 D 成正比，所以：
+<pre>
+    scale * grad E = scale * 2 D L<sup>q-2</sup> = D
+</pre>
+因此缩放因子的量级为 L <sup>2-q</sup>。以下是一些示例：
+<table border="1" style="margin-left:auto;margin-right:auto">
+<caption ><b>缩放因子的量纲依赖关系</b></caption>
+<tr><td><b>能量类型</b></td><td><b>能量量纲</b></td>
+<td><b>缩放因子</b> </td><td><b>示例文件</b></td></tr>
+<tr>
+<td>肥皂膜面积 </td><td style="text-align:center">L<sup>2</sup> </td>
+<td style="text-align:center"> L<sup>0</sup> </td><td>quad.fe</td></tr>
+<tr>
+<td>弦长度 </td><td style="text-align:center">L<sup>1</sup>
+ </td><td style="text-align:center"> L<sup>1</sup> </td><td>flower.fe</td></tr>
+<tr>
+<td>弦曲率的平方 </td><td style="text-align:center">
+L<sup>-1</sup> </td>
+ <td style="text-align:center"> L<sup>3</sup></td>
+   <td>elastic8.fe</td></tr>
+<tr>
+<td>肥皂膜平均曲率的平方 </td>
+<td style="text-align:center">L<sup>0</sup> </td>
+<td style="text-align:center"> L<sup>2</sup></td>
+ <td>sqcube.fe</td></tr>
+</table>
+特别是，面积演化的缩放因子与细化无关，但对于大多数其他能量，缩放因子会随细化而减小。
+<p>
+影响面积演化缩放因子的另一个常见因素是表面张力。在面片表面张力赋值为 470 的单位系统中进行液态焊料模拟，意味着所有计算得到的梯度都乘以 470，因此缩放因子需要减小 470 倍才能得到相同的几何运动。因此，你应该将 scale_limit 设置为表面张力的倒数。
+
+
+<hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+</body>
+</html>

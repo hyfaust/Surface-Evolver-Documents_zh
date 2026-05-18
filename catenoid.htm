@@ -1,0 +1,174 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Surface Evolver 悬链面示例</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+</head>
+<BODY>
+<h1 class="center"><a href="http://www.susqu.edu/facstaff/b/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a><br>
+<a href="twointor.htm">下一篇：Kelvin 泡沫示例。</a> <br>
+<a href="tutorial.htm#tutorial">返回教程顶部。</a>
+
+<a id="catenoid_example"></a>
+<h1> 示例：悬链面（Catenoid）。</h1>
+
+悬链面是两个相距不太远的圆环之间形成的极小曲面。
+在柱坐标系中，其方程为 <code>r = (1/a)cosh(az)</code>。
+在 cat.fe 文件中，上下两个圆环都定义为单参数
+边界线。分离距离和半径都是参数，因此
+您可以在运行过程中通过赋值语句或
+<a href="single.htm#A" class="keyword">A</a> 命令来更改它们。
+给定的初始半径是对于给定圆环间距悬链面能够存在的
+最小值。要获得稳定的悬链面，您
+需要增大这个值。然而，如果您使用
+原始值运行，您可以看到颈部逐渐收缩。
+初始曲面
+由六个矩形组成，形成两个圆环之间的圆柱体。
+边界上的顶点是固定的，否则它们会沿着边界滑动
+以减小曲率；两个直径比一个周长更短。边界边也是固定的，这样
+细分边产生的顶点同样固定。<P>
+
+<table>
+<tr><td>
+<img src="catbare.gif" alt="悬链面骨架"></td>
+<td>  初始悬链面骨架，带
+顶点和边的编号。 </td></tr>
+</table>
+
+这是悬链面数据文件：
+<pre>
+// cat.fe
+// 悬链面的 Evolver 数据。
+
+PARAMETER  RMAX = 1.5088795   // 高度对应的最小半径
+PARAMETER  ZMAX = 1.0
+
+boundary 1 parameters 1     //  上圆环
+x1:  RMAX * cos(p1)
+x2:  RMAX * sin(p1)
+x3:  ZMAX
+
+boundary 2 parameters 1    //   下圆环
+x1:  RMAX * cos(p1)
+x2:  RMAX * sin(p1)
+x3:  -ZMAX
+
+vertices   // 用边界参数给出
+1    0.00  boundary 1   fixed
+2    pi/3  boundary 1   fixed
+3  2*pi/3  boundary 1   fixed
+4    pi    boundary 1   fixed
+5  4*pi/3  boundary 1   fixed
+6  5*pi/3  boundary 1   fixed
+7    0.00  boundary 2   fixed
+8    pi/3  boundary 2   fixed
+9  2*pi/3  boundary 2   fixed
+10   pi    boundary 2   fixed
+11 4*pi/3  boundary 2   fixed
+12 5*pi/3  boundary 2   fixed
+
+edges
+1    1  2  boundary 1   fixed
+2    2  3  boundary 1   fixed
+3    3  4  boundary 1   fixed
+4    4  5  boundary 1   fixed
+5    5  6  boundary 1   fixed
+6    6  1  boundary 1   fixed
+7    7  8  boundary 2   fixed
+8    8  9  boundary 2   fixed
+9    9  10 boundary 2   fixed
+10   10 11 boundary 2   fixed
+11   11 12 boundary 2   fixed
+12   12 7  boundary 2   fixed
+13   1  7
+14   2  8
+15   3  9
+16   4  10
+17   5  11
+18   6  12
+
+faces
+1   1 14 -7 -13
+2   2 15 -8 -14
+3   3 16 -9 -15
+4   4 17 -10 -16
+5   5 18 -11 -17
+6   6 13 -12 -18
+
+</pre>
+
+边界定义中的参数始终是 <code>p1</code>（双参数边界中是 <code>p2</code>）。
+Evolver 可以处理周期性参数化，
+正如本示例中所做的那样。
+
+ 尝试以下命令序列
+（在方便时显示）：
+<pre>
+    <a href="single.htm#r">r</a>       （细化以获得粗糙但可用的三角剖分）
+    <a href="single.htm#u">u</a>       （等角化使三角剖分更好）
+    <a href="single.htm#g">g</a> 120   （需要这么多次迭代才能使颈部坍缩）
+    <a href="single.htm#t">t</a> 0.05  （通过消除所有长度短于 0.05 的边
+                      将颈部坍缩为单个顶点）
+    <a href="single.htm#o">o</a>       （分裂颈部顶点以分离上下表面）
+    <a href="single.htm#g">g</a>       （尖刺坍缩）
+</pre>
+悬链面展示了演化的一些微妙之处。假设
+初始半径设置为 <code>RMAX = 1.0</code>，初始高度设置为
+<code>ZMAX = 0.55</code>（这些在 <code>catman.fe</code> 中预设）。
+使用优化比例因子进行五十次迭代后，面积为 6.458483。
+ 此时，每次迭代仅减少面积 0.0000001，
+三角形都接近等边，一切
+看起来良好，天真的用户可能会认为曲面已经非常接近其最小值。但这实际上是能量的鞍点。
+进一步迭代表明，每次迭代的面积变化在大约第 70 次迭代时达到最低点，
+到第 300 次迭代时面积降至 6.4336。
+三角剖分实际上希望扭曲，使得有边
+沿着曲率线（即垂直子午线和
+水平圆）延伸。因此最优三角剖分似乎是
+带对角线的矩形。<P>
+
+可以通过使用
+<a href="single.htm#U" class="keyword">U</a>
+命令开启
+<a href="iterate.htm#conjugate-gradient" >共轭梯度</a>
+方法来加速演化。
+使用 <code>catman.fe</code>，尝试脚本 "<code>r; u; U; g 70</code>"。
+对于共轭梯度行家，
+鞍点展示了 Fletcher-Reeves
+和 Polak-Ribiere 版本共轭梯度之间的区别。鞍点
+似乎使 Fletcher-Reeves 版本感到困惑（它曾经是默认值）。
+然而，Polak-Ribiere 版本（当前默认值）几乎没有问题。
+<a href="single.htm#U" class="keyword">U</a>
+命令切换共轭梯度的开关，而
+<a href="toggle.htm#ribiere" class="keyword">ribiere</a>
+切换 Polak-Ribiere 版本。
+使用 Fletcher-Reeves 共轭梯度时，
+鞍点在第 17 次迭代时达到，面积再次开始减少
+直到第 30 次迭代，达到 6.4486。但随后迭代停滞，
+必须关闭并重新开启共轭梯度模式以
+清除历史向量。重新启动后，再进行 20 次迭代将
+面积降至 6.4334。
+在 Polak-Ribiere 模式下，不需要重新启动。<P>
+
+读者练习：让 Surface Evolver 显示一个不稳定的
+悬链面，方法是将悬链面的面声明为某个体的边界，
+并使用
+<a href="single.htm#b" class="keyword">b</a>
+命令调整该体的体积以获得零压力。
+参见示例数据文件 <code>catbody.fe</code>。
+<P>
+
+<hr>
+<a href="twointor.htm">下一篇：Kelvin 泡沫示例。</a> <br>
+<a href="tutorial.htm#tutorial">返回教程顶部。</a>
+<br>
+<a href="evolver.htm#doc-top">返回 Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+</body>
+</html>

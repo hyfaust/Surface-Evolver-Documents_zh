@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<head>
+   <title>Surface Evolver 文档 - 约束</title>
+   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+</head>
+<body>
+<h1 class="center"><a href="http://www.susqu.edu/brakke/evolver/evolver.htm"
+   class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+<a   id="general-constraints"></a>
+<h1>约束和边界</h1>
+
+<a   id="global-constraints"></a>
+<a   id="pointwise-constraints"></a>
+<p>Surface Evolver 的常规操作模式是在约束条件下最小化能量。
+约束有两大类：
+</p>
+
+<ul>
+<li>逐点约束： 
+<ul>
+<li><a HREF="elements.htm#fixed-vertex">固定顶点</a> </li>
+
+<li><a HREF="#level-set-constraints">水平集约束</a> </li>
+
+<li><a HREF="#one-sided-constraints">单侧约束</a> </li>
+
+<li><a HREF="#parametric-boundaries">参数化"边界"曲线和曲面</a>
+</li>
+</ul>
+</li>
+<li>全局约束： 
+<ul>
+<li><a HREF="elements.htm#target-volume">体积约束</a> </li>
+
+<li><a HREF="#named-quantity-constraints">命名量约束</a>
+</li>
+</ul>
+</ul>
+
+<p>
+<hr><a   id="level-set-constraints"></a>
+<h2>水平集约束</h2>
+水平集约束是将顶点限制在函数的零水平集上。
+                公式可以包含任何 Evolver 已知值的表达式，给定特定顶点。
+最常见的是只使用顶点的坐标 (x,y,z)，但也可以使用变量、量值或顶点额外属性。
+使用顶点额外属性是将单个公式自定义到各个顶点的好方法。
+例如，如果有一个名为 zfix 的顶点额外属性，可以通过一个公式为 z = zfix 的约束将顶点强制到各自的 z 值，当然要先为每个顶点分配适当的 zfix 值。
+  
+
+水平集约束可以有几种角色：
+<p>
+
+<ul>
+<li>顶点可能需要位于约束上（等式约束）或一侧（<a HREF="#one-sided-constraints">不等式约束</a>）。
+约束可以声明为 <a href="datafile.htm#constraint-decl">GLOBAL</a>，
+此时它适用于所有顶点。
+参见 <a HREF="mound.htm">mound.fe</a> 示例。 </li>
+
+<li>约束可以有一个相关的 <a href="datafile.htm#constraint-decl">能量向量场</a>，
+该向量场在位于约束中的边上积分以给出 <a href="energies.htm#constraint-energy-integrals">能量</a>。
+这对于指定壁面接触角和计算重力势能很有用。
+不对 FIXED 的边进行积分。参见 <a href="mound.htm">mound.fe</a> 示例。
+在 <a href="model.htm#string-model">弦模型</a> 中，
+能量被积函数是在约束上的顶点处计算的单个分量。</li>
+
+<li> 约束可以有一个相关的 <a href="datafile.htm#constraint-decl">内容向量场</a>，
+该向量场在位于约束中的边上积分以给出对体的 <a href="elements.htm#body-volume">体积</a> 贡献，
+该体的边界面包含这些边。这对于在不完全用其他无用面片包围体的情况下获得正确的体积很有用。
+理解内容如何添加到体中对于正确设置符号非常重要。
+积分沿边的正方向进行。如果边在面上是正定向的，且面在体上是正定向的，则积分添加到体中。
+这可能最终给出与你认为的自然方向相反的被积函数符号。
+不对 FIXED 的边进行积分。参见 tankex.fe 示例。
+在 <a href="model.htm#string-model">弦模型</a> 中，
+内容被积函数是在约束上的顶点处计算的单个分量。</li>
+
+<li>
+有一个约束属性 <code>content_rank</code>，如果顶点（弦模型）或边（肥皂膜模型）位于多个具有内容积分的边界上（例如墙壁相交处），则如果存在内容等级，等级最低的内容积分将贡献给负侧体的内容，最高等级的内容将贡献给正侧体的内容。
+<li><a   id="convex-constraint"></a>约束可以声明为 <a href="datafile.htm#constraint-decl">CONVEX</a>，
+此时约束中的边具有与其相关的能量，该能量与直边和曲面壁之间的面积成正比。
+这个能量（称为"<a href="energies.htm#gap-energy">间隙能量</a>"）旨在补偿平面面片遇到曲面壁时通过延长壁上的一些边并缩短其他边来最小化其面积的趋势，其净效果是增加边与壁之间的净间隙。参见 tankex.fe 示例。
+</li>
+
+</ul>
+
+<p>水平集约束在 <a HREF="datafile.htm#constraint-decl">数据文件</a> 的顶部声明。
+它们可以应用于 <a HREF="elements.htm#vertex-constraints">顶点</a>、
+<a HREF="elements.htm#edge-constraints">边</a> 或 <a HREF="elements.htm#facet-constraints">面片</a>。
+约束通常应用于顶点和边，如 <a href="mound.htm">mound.fe</a>。
+请记住，你需要将约束应用于边，以便该约束应用于通过细化在该边上创建的顶点。
+有时将约束应用于面片，通常是为了使面片符合预定形状。
+确保应用于顶点的约束在顶点处线性无关。
+<p>
+约束通常在数据文件的 <a href="datafile.htm#vertices-section">顶点</a>、
+<a href="datafile.htm#edges-section">边</a> 和
+<a href="datafile.htm#faces-section">面片</a> 部分中应用，
+但也可以通过 <a href="commands.htm#set">set</a> 或 <a href="commands.htm#unset">unset</a> 命令设置或移除。示例：
+<pre>   set vertex[4] constraint 4
+   unset edge constraint 1 where id &lt; 10
+</pre>
+取消设置不在约束上的元素没有问题。
+当顶点设置到约束上时，顶点坐标会立即投影到约束上。
+将边设置到约束上不会设置其顶点。面片也是如此。
+
+<p>
+几个元素属性在水平集约束中很有用：
+<ul>
+<li> <a href="elements.htm#on_constraint">on_constraint</a>
+ - 布尔属性，表示元素是否已被放置在约束上。
+<li> <a href="elements.htm#hit_constraint">hit_constraint</a>
+   - 布尔顶点属性，表示约束是否精确满足约束。
+   用于单侧约束；对于精确约束始终为 1。
+<li> <a href="elements.htm#value_of_constraint">value_of_constraint</a>
+   - 顶点属性，是约束公式在顶点处的值。
+<li> <a href="elements.htm#v_constraint_list">v_constraint_list</a>、-
+     <a href="elements.htm#e_constraint_list">e_constraint_list</a>、-
+     <a href="elements.htm#f_constraint_list">f_constraint_list</a>--
+   向量属性，其第一个元素是元素所在的约束数量，后跟约束编号列表（使用命名约束的内部编号）。
+<li><a href="elements.htm#constraint-normal">约束法线</a>
+         - 在顶点处垂直于水平集的单位向量。
+</ul>
+<a   id="constraint-fixed"></a>
+特定水平集约束是等式约束还是单侧约束可以在运行时通过表达式查询：
+<pre>     is_constraint[number].fixed
+或   is_constraint[name].fixed
+</pre>
+"number" 可以是表达式；"name" 是约束的不带引号的名称（如果有的话）。
+如果约束是等式约束，则值为 1，否则值为 0。列出顶点所在的所有等式约束的示例：
+<pre>   foreach vertex vv do
+   { for ( inx := 1 ; inx &lt; vv.v_constraint_list[1] ; inx++ )
+       if is_constraint[vv.v_constraint_list[i+1]].fixed then
+         printf "Vertex %d on equality constraint %d\n",
+           vv.id,vv.v_constraint_list[i+1];
+   };
+</pre>
+
+<a   id="one_sided_lagrange"></a> <a   id="nonnegative"> </a>
+<a id="nonpositive"></a>
+<hr><a   id="one-sided-constraints"></a>
+<h2>单侧约束</h2>
+如果 <a HREF="#level-set-constraints">水平集约束</a> 在 <a HREF="datafile.htm#constraint-decl">数据文件</a> 中声明为 <code>NONNEGATIVE</code> 或 <code>NONPOSITIVE</code>，
+受约束影响的顶点必须保持在水平集函数域的该部分。
+通常不建议为单侧约束上的边提供边积分或声明它们为 <a HREF="energies.htm#gap-energy">CONVEX</a>。
+顶点是否精确满足约束可以通过顶点的 <a HREF="elements.htm#hit_constraint">hit_constraint</a> 属性查询。
+'g' 迭代步骤会检查顶点是否想要离开它已经遇到的单侧约束，但 hessian 命令不会；因此，当涉及单侧约束时，明智的做法是在 hessian 或 hessian_seek 之间穿插 'g'。
+<p>
+示例：假设要将气泡保持在半径为 5 的球形罐内。那么可以在数据文件中定义约束：
+<pre>constraint 1 nonpositive
+formula: x^2 + y^2 + z^2 = 25
+</pre>
+为了评估非负性或非正性，所有项都移到公式的左侧。
+然后将此约束应用于气泡表面的所有顶点、边和面片。
+<p>
+如果定义实值顶点额外属性 one_sided_lagrange，则将记录遇到单侧约束的顶点的拉格朗日乘子。
+one_sided_lagrange 可以定义为数组。如果顶点遇到的约束多于 one_sided_lagrange 的大小，则只记录前几个合适的。
+<p>
+
+约束的类型可以在运行时作为表达式查询：<pre>
+     is_constraint[number].nonnegative
+     is_constraint[name].nonnegative
+     is_constraint[number].nonpositive
+     is_constraint[name].nonpositive
+     is_constraint[number].fixed
+     is_constraint[name].fixed </pre>
+如果约束是指定类型，则值为 1，否则值为 0。
+"number" 可以是表达式；"name" 是约束的不带引号的名称（如果有的话）。
+示例：
+<pre>
+     print is_constraint[floorcon].nonnegative
+</pre>
+
+<hr><a   id="boundary"></a>
+<a   id="boundaries"></a>
+<a   id="parametric-boundaries"></a>
+<h2>参数化"边界"曲线和曲面</h2>
+顶点位置可以用参数化曲线或曲面上的参数给出。
+在 Evolver 术语中，这样的曲线或曲面称为"边界"，因为它们通常用作曲面的边界曲线，
+例如，金属丝环上的肥皂膜可以将金属丝实现为边界。
+顶点、边和面片可以被视为位于边界中。对于顶点，这意味着顶点的基本参数是边界的参数，
+其坐标根据这些参数计算。边界上的顶点在迭代期间可以移动，除非声明为固定。
+参见 <a href="catenoid.htm">cat.fe</a> 示例。 <p>
+
+<p>
+边界在 <a href="datafile.htm#boundary-decl">数据文件</a> 的顶部定义。
+边界上的顶点在数据文件中列出时使用其参数值而不是坐标，并在每个这样的 <a href="datafile.htm#vertices-section">顶点定义</a> 后附加 "<code>boundary </code><i>n</i>"。
+边界上的边和面照常定义，但在每个定义后附加 "<code>boundary </code><i>n</i>"。
+因此数据文件中有如下行：
+<pre>
+boundary 1 parameters 1
+x1:  cos(p1)
+x2:  sin(p1)
+x3:  0.75
+...
+Vertices
+1   0.0  boundary 1
+2   pi/3 boundary 1
+...
+Edges
+1   1 2 boundary 1
+...
+</pre>
+
+<p>将边放在边界上意味着在该边上创建的顶点将位于边界上。
+边界上的边必须至少有一个端点位于边界上，用于外推任何创建顶点的边界参数。
+外推而不是插值中点参数解决了在圆形或圆柱体等边界上的环绕问题。
+但是，如果你确实想要插值，可以在数据文件顶部使用关键字 
+<code><a href="datafile.htm#interp_bdry-decl">INTERP_BDRY_PARAM</a></code>，
+或使用切换命令 <a href="toggle.htm#interp_bdry_param">interp_bdry_param</a>。
+<a   id="extra_boundary"></a><a   id="extra_boundary_param"></a>
+插值要求边的两个端点位于同一边界上，这在不同边界上的边相交时无法实现。
+要处理这种情况，可以通过声明两个特定的顶点额外属性 <code>extra_boundary</code> 和 <code>extra_boundary_param</code> 向顶点添加额外边界信息：
+<pre>
+interp_bdry_param
+define vertex attribute extra_boundary integer
+define vertex attribute extra_boundary_param real[1]
+</pre>
+然后在关键顶点上声明属性值，例如：
+<pre>
+vertices
+1    0.00  boundary 1   fixed extra_boundary 2 extra_boundary_param 2*pi
+</pre>
+如果在需要时顶点上未设置 extra_boundary 属性，Evolver 将悄悄地回退到插值。
+
+
+<p> 将面放在边界上意味着从细化该面创建的所有边和顶点都将位于边界上。
+在这种情况下，边界应该有两个参数（或曲面的任何维度）。
+这对于使曲面符合已知参数形状很有用。
+<p>
+边界上的边具有类似水平集约束边的能量和内容积分，但它们在内部实现为 <a href="quants.htm#named-quantities">命名量</a>。
+</p>
+
+<p> 
+元素是否位于特定边界上可以通过 <a href="elements.htm#on_boundary">on_boundary</a> 布尔属性查询。
+元素可以通过 <a href="commands.htm#unset">unset</a> 命令从边界中移除，
+也可以通过 <a href="commands.htm#set">set</a> 命令设置到边界上。
+<code>unset</code> 的典型用途是使用 2 参数边界定义初始曲面，细化几次，然后取消设置。示例：
+<pre>  list vertex where on_boundary 2
+  unset vertex boundary 1 where on_boundary 1
+  unset edge boundary 1
+  unset facet boundary 1
+  set vertex[10] boundary 1
+</pre>
+取消设置不在边界上的元素没有问题。
+<p>
+<a   id="__v_boundary"></a><a   id="__e_boundary"></a>
+<a   id="__f_boundary"></a>
+元素所在的边界编号在只读属性 __v_boundary、__e_boundary 或 __f_boundary 中。
+如果元素不在边界上，则为 0。如果没有定义边界，则这些属性不存在。
+请注意，命名边界在内部被分配编号，这些编号在这里显示。
+<p>
+顶点参数可以在表达式中作为属性 p1（以及 p2,... 用于更多参数）访问。
+顶点参数可以通过 <a href="commands.htm#set">set</a> 命令更改。示例：
+<pre>  print vertex[5].p1
+  set vertex p1 p1+.1 where id &lt; 4
+  vertex[2].p1 := 3
+</pre>
+只要某个顶点在边界上（以便在顶点结构中为参数分配空间），访问不在边界上的顶点的参数不是错误。
+
+<p>一般准则是将约束用于二维墙壁，边界用于一维金属丝。
+如果你使用边界金属丝，你可能可以将边界上的顶点和边声明为 FIXED。
+然后边界就变成了细化边界边的指南。
+</p>
+
+<p>注意：边界上的顶点不能同时具有约束。
+
+<hr><a   id="named-quantity-constraints"></a>
+<h2>命名量约束</h2>
+参见 <a href="quants.htm#named-quantities">固定命名量</a>。
+
+<hr><a HREF="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+<p>
+
+</body>
+</html>

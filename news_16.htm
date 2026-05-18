@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 简报 16</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-16"></a>
+<h1>Surface Evolver 简报 第 16 期</h1>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><pre>
+
+                    Surface Evolver 简报 第 16 期
+                               1999年8月18日
+
+                       作者：Ken Brakke, brakke@susqu.edu
+
+目录
+  版本 2.14
+  新示例
+  新功能和更改
+
+版本 2.14
+
+  版本 2.14 现已在以下地址可用：
+  http://www.susqu.edu/facstaff/b/brakke/evolver/evolver.htm。
+  也可从几何中心（Geometry Center）geom.umn.edu 获取，
+  但我不知道该网站还能维持多久。这是自一年前的 2.10c 版本
+  以来首次公开发布的版本，尽管 2.13 版本曾在五月非正式发布。
+
+  终于有了适用于 PowerPC 的最新 Mac 版本。
+
+示例
+
+  三重周期性极小曲面（triply periodic minimal surfaces）的展示
+  （包含许多新内容）位于：
+  http://www.susqu.edu/facstaff/b/brakke/examples/periodic/periodic.html。
+  此页面是我与 Alan Schoen 合作的成果。
+
+  有三个液态焊料模型示例，每个都包含一系列数据文件和注释：
+
+      球栅阵列（BGA）接点（圆形焊盘之间的简单柱体）
+      http://www.susqu.edu/facstaff/b/brakke/evolver/bga/bga.htm
+
+      鸥翼引线（Gull Wing Lead）（矩形焊盘上方的弯曲引线）
+      http://www.susqu.edu/facstaff/b/brakke/evolver/gullwing/gullwing.html
+
+      立碑效应（Tombstone）（芯片被焊料张力拉起直立）
+      http://www.susqu.edu/facstaff/b/brakke/tombstone/tomb.htm
+
+新功能和更改
+
+    几乎所有更改都是错误修复、内部改进和专门的新功能。
+    以下几项具有普遍意义：
+
+    hessian_normal 现在默认为 ON（开启）。
+
+    加入了自动 convert_to_quantities；仍有一两处无法即时转换。
+    命令行选项 -a- 可禁用此功能。
+
+    新增 "verbose"（详细模式）切换命令，用于 pop edge（弹出边）、
+    pop vertex（弹出顶点）、delete（删除）、notch（切口）、
+    refine（细分）、dissolve（溶解）和 edgeswap（边交换）等操作的
+    动作消息。
+
+    "dissolve"（溶解）命令现在可以在肥皂膜模型中溶解体上的面，
+    在弦模型（string model）中溶解面上的边。
+
+    在弦模型中，边具有 frontbody（前体）和 backbody（后体）属性。
+
+    新增了 chdir 命令用于更改工作目录。
+
+    元素额外属性可以在声明时附带计算其值的代码。
+</pre><hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+</body>
+</html>

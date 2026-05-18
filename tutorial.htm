@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Surface Evolver 教程</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+<BODY>
+<!--NewPage-->
+
+<h1 class="center">
+<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+<a   id="tutorial"></a>
+<h1>Surface Evolver 教程</h1>
+要开始使用 Surface Evolver，请阅读基本概念部分以获得快速介绍，然后尝试示例。
+更多示例可在<a href="http://www.susqu.edu/facstaff/b/brakke/evolver/examples/examples.htm">
+Evolver 示例网页</a>上找到。
+<ul>
+<li> <a href="#basic-concepts">基本概念</a>
+<li> <a href="cube.htm">立方体示例</a>
+<li> <a href="mound.htm">土堆示例</a>
+<li> <a href="catenoid.htm">悬链面示例</a>
+<li> <a href="twointor.htm">环面模型示例（开尔文泡沫）</a>
+<li> <a href="ringblob.htm">旋转环示例</a>
+<li> <a href="column.htm">液柱示例</a>
+</ul>
+<hr>
+<a   id="basic-concepts"></a>
+<h1> 基本概念 </h1>
+
+        用于表示表面的基本几何元素是顶点、边、面片和体。
+        顶点是空间中的点。
+        边是连接成对顶点的直线段。
+        面片是由三条边围成的平面三角形。表面是面片的并集。（实际上，程序中没有单独的表面实体；所有面片都属于一个逻辑表面。）体通过指定其边界面片来定义。<P>
+
+        术语“表面”用于指代 Evolver（演化器）操作的对象时，指的是所有几何元素加上辅助数据，如约束、边界和力。<P>
+
+        对于多少条边可以共享一个顶点，或者多少个面片可以共享一条边，没有限制。因此，任意拓扑结构都是可能的，包括肥皂膜特征的表面三重交汇。<P>
+
+        边和面片为了记录目的而具有方向，但对相邻面片的方向没有限制。因此，无方向的表面是可能的。<P>
+
+        表面被认为具有总能量，该能量来自表面张力、重力势能，可能还有其他来源。Evolver 最小化的就是这个能量。<P>
+
+        不使用特定的测量单位。程序只处理数值。如果您希望将程序值与真实世界关联，则所有值应在同一个一致的系统内，例如 cgs 或 mks 单位制。<P>
+
+        初始表面在文本文件（此后称为数据文件）中指定，该文件可以用任何标准文本编辑器创建。
+        （我总是用 <code>.fe</code> 扩展名作为数据文件，它代表 facet-edge（面片-边），指的是用于表示表面的内部数据结构。您可以为数据文件使用任何您喜欢的名称。）<P>
+
+        Evolver 的基本操作是读取数据文件并从用户那里接受命令。主要命令提示符是
+<pre>
+     Enter command:
+</pre>
+        最常见的命令是单个字母（大小写对这些命令很重要），
+        有时带有一个数值参数。最常用的命令是：
+<pre>
+     g n     执行 n 次迭代（'g' 代表 'go'，即“运行”）
+     r       细化表面的三角剖分
+     P       图形输出（选项 8 用于 geomview，选项 3 用于 PostScript）
+     s       在屏幕上显示表面（Evolver 自己的简单图形）
+     q       退出
+</pre>
+        还有一种更复杂的命令语言（其中大小写不重要）。
+        命令后必须按 ENTER 键；Evolver 只读取完整的行。<P>
+
+        一次迭代就是一个演化步骤。该步骤的运动计算如下：首先，从表面总能量关于该顶点位置的梯度计算每个顶点上的力。力给出了运动方向。其次，使力符合任何适用的约束。第三，实际运动通过将力乘以一个全局比例因子得到。<P>
+<hr>
+<a href="cube.htm">下一个：立方体示例。</a> <br>
+<a href="#tutorial">返回教程顶部。</a>
+<br>
+<a href="evolver.htm#doc-top">返回 Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+</body>
+</html>

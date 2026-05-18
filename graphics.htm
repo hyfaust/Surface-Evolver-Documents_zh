@@ -1,0 +1,635 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档：图形
+</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+<BODY>
+
+<h1 class="center">
+<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+<a   id="graphics"></a>
+<h1>Surface Evolver 图形</h1>
+
+<h2>目录</h2>
+<ul>
+<li> <a href="#overview">概述</a>
+<li> <a href="#screen-graphics">屏幕图形</a>。
+<li> <a href="#OpenGL">OpenGL 图形</a>。
+<li> <a href="#geomview">Geomview 图形</a>。
+<li> <a href="#graphics-commands">图形提示命令</a>。
+<li> <a href="#view-matrix">视图矩阵</a>。
+<li> <a href="#view-transforms">多重视图变换</a>。
+<li> <a href="#picking">拾取</a> 鼠标选取元素。
+<li> <a href="#clip-view">裁剪视图</a> - 查看曲面内部！
+<li> <a href="#slice-view">切片视图</a> - 三维曲面的二维截面。
+<li> <a href="#postscript">PostScript 输出</a> - 用于出版物、电影帧、网站图像等。
+<li> <a href="#graphics-related">其他图形相关功能。</a>
+</ul>
+
+<a   id="overview"></a>
+<hr>
+<h2>概述</h2>
+Surface Evolver 的图形功能包括绘制边和面片。系统有一个单一的图形驱动程序，负责生成带颜色的三维边和面片，并将其发送到一组显示例程。主要有三组显示例程：
+<ul>
+<li> <a href="#screen-graphics">原生屏幕图形</a>，内置于 Evolver 中的各种平台上的各种质量级别的图形，
+<li> 与 <a href="#geomview">Geomview</a> 三维查看器的接口，适用于没有将 OpenGL/GLUT 图形编译进 Evolver 的 Unix/Linux 用户，
+<li> <a href="#postscript">PostScript</a> 文件，适用于所有想要为出版物、网站等制作二维图像的用户。
+</ul>
+<hr>
+<H2><a   id="screen-graphics"></a>
+ 原生屏幕图形</H2>
+
+Surface Evolver 能够直接生成自己的屏幕图形。Windows 版本具有出色的
+<a href="#OpenGL">OpenGL/GLUT 图形</a>，
+这在任何 Unix/Linux/Mac OSX 系统上也应该可用。
+Mac OS 9 版本有一些简单的图形，还有一个用于 Unix/Linux 系统的原始 X-windows 图形模块，适用于某些无法使用 OpenGL 的情况。编译 Unix 版本的用户必须链接相应的图形模块。
+<p>
+屏幕图形显示在自己的窗口中，但可以通过在主窗口的"graphics command: "提示符下输入<a href="#graphics-commands">图形命令</a>来控制。
+OpenGL 图形还可以通过图形窗口中的鼠标和键盘<a href="#graphics-actions">操作</a>来控制。
+<p>
+与屏幕图形相关的主要提示命令：
+<ul>
+<li> <a href="single.htm#s"><code>s</code></a> 用于启动屏幕图形并进入<a href="#graphics-commands">图形命令模式</a>
+<li> <a href="single.htm#D"><code>D</code></a> 或 <a href="toggle.htm#AUTODISPLAY">
+<code>autodisplay</code></a> 用于切换曲面变化时的自动重绘。默认为自动重绘。
+<li> <a href="commands.htm#close_show"><code>close_show</code></a> 用于结束屏幕图形
+</ul>
+
+<p>
+原生屏幕图形视图由视图变换矩阵控制，该矩阵可以在<a href="datafile.htm#viewing-matrix">数据文件</a>中指定，
+并且可以通过 <a href="single.htm#d"><code>d</code></a> 或
+<a href="commands.htm#list-topinfo"><code>list topinfo</code></a> 命令导出。
+视图矩阵可以通过<a href="#graphics-commands">图形模式命令</a>更改。
+视图矩阵元素可以在运行时通过 <code>view_matrix[i][j]</code> 读取或设置，其中索引从 1 开始。特别是，可以编写命令脚本来保存和重新加载特定的视图矩阵；
+参见发行包中的 <code>saveview.cmd</code>。
+视图矩阵不影响 geomview。
+<p>
+显示完全由面片和边组成。特殊边
+（<a href="elements.htm#fixed,-edge">固定</a>边、
+<a href="elements.htm#boundary,-edge">边界</a>边、
+<a href="elements.htm#constraints,-edge">约束</a>边、三重边、
+<a href="elements.htm#bare,-edge">裸</a>边）始终显示，除非将其颜色设置为 <a href="syntax.htm#clear">CLEAR</a>。
+单个面片边可以通过图形模式命令
+`<a href="#e-(graphics)">e</a>' 切换显示。
+
+<hr>
+<a   id="u-(graphics)"></a>
+<a   id="d-(graphics)"></a>
+<a   id="r-(graphics)"></a>
+<a   id="l-(graphics)"></a>
+<a   id="c-(graphics)"></a>
+<a   id="C-(graphics)"></a>
+<a   id="z-(graphics)"></a>
+<a   id="s-(graphics)"></a>
+<a   id="arrow-keys"></a>
+<a   id="graphics-commands"></a><H2>图形模式命令</H2>
+
+当通过 '<a href="single.htm#s"><code>s</code></a>' 命令或各种 `<a href="commands.htm#show"><code>show</code></a>' 命令调用原生图形显示时，Evolver 进入图形模式，提示符为 `Graphics command: '。图形命令是由一组字母后跟 RETURN 组成的字符串。每个字母对应一个操作。某些命令前面可以加一个整数表示重复次数。示例命令：<code>15u2z</code>，执行 '<code>u</code>' 15 次和 '<code>z</code>' 两次。旋转命令前面可以加一个实数表示旋转角度（度）；整数将给出重复次数，默认角度为 6 度。实数通过包含小数点来表示。
+<p>
+
+<h4>   可重复命令：</h4>
+
+<table style="border-spacing:20px">
+ <tr>  <td style="vertical-align:text-top"><code>u </code></td> <td>
+  <a href="#graphics-commands">图形模式</a>命令。
+ 向上倾斜。绕水平轴旋转图像，默认 6 度。
+示例：`<code>15u</code>' 旋转 90 度，
+`<code>15.0u</code>' 旋转 15 度。  </td>
+</tr>
+
+ <tr>  <td style="vertical-align:text-top"><code>d </code></td> <td>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 向下倾斜。向相反方向旋转图像，默认 6 度。
+示例：`<code>15d</code>' 旋转 90 度，
+`<code>15.0d</code>' 旋转 15 度。 </td>
+</tr>
+
+ <tr>  <td style="vertical-align:text-top"><code>r </code></td> <td>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 向右旋转。绕垂直轴旋转，默认 6 度。
+示例：`<code>15r</code>' 旋转 90 度，
+`<code>15.0r</code>' 旋转 15 度。 </td>
+</tr>
+
+ <tr>  <td style="vertical-align:text-top"><code>l </code></td> <td>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 向左旋转。绕垂直轴旋转，默认 6 度。
+示例：`<code>15l</code>' 旋转 90 度，
+`<code>15.0l</code>' 旋转 15 度。 </td>
+</tr>
+
+ <tr>  <td style="vertical-align:text-top"><code>c </code></td> <td>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 绕屏幕中心顺时针旋转，默认 6 度。
+示例：`<code>15c</code>' 旋转 90 度，
+`<code>15.0c</code>' 旋转 15 度。 </td>
+</tr>
+
+ <tr>  <td style="vertical-align:text-top"><code>C </code></td> <td>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 绕屏幕中心逆时针旋转，默认 6 度。
+示例：`<code>15C</code>' 旋转 90 度，
+`<code>15.0C</code>' 旋转 15 度。 </td>
+</tr>
+
+ <tr>  <td style="vertical-align:text-top"><code>z </code></td> <td>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 缩放。按因子放大图像，默认 1.2。示例：
+`<code>z</code>' 放大 1.2 倍，`<code>2z</code>' 放大 1.44 倍，'<code>2.0z</code>' 放大 2 倍。 </td>
+</tr>
+
+ <tr>  <td style="vertical-align:text-top"><code>s</code> </td> <td>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 缩小。按因子缩小图像，默认 1.2。 </td>
+</tr>
+
+ <tr>  <td style="vertical-align:text-top">方向键 </td> <td>
+<a href="#graphics-commands">图形模式</a>命令。
+向相应方向移动图像。可以加一个实数前缀，表示移动屏幕宽度的三分之一的倍数。默认移动为屏幕宽度的 1/12。
+             可能不适用于所有终端。 </td>
+</table>
+<h4>     不可重复命令： </h4>
+
+<a   id="R-(graphics)"></a>
+<a   id="m-(graphics)"></a>
+<a   id="e-(graphics)"></a>
+<a   id="h-(graphics)"></a>
+<a   id="b-(graphics)"></a>
+<a   id="t-(graphics)"></a>
+<a   id="w-(graphics)"></a>
+<a   id="B-(graphics)"></a>
+<a   id="v-(graphics)"></a>
+<a   id="+-(graphics)"></a>
+<a   id="--(graphics)"></a>
+<a   id="?-(graphics)"></a>
+<a   id="q-(graphics)"></a>
+<a   id="x-(graphics)"></a>
+
+<table style="border-spacing:20px">
+
+ <tr>  <td style="vertical-align:text-top"><code>R</code> </td> <td>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 将视角重置为原始默认值，并重新缩放图像以适应查看窗口。 </td>
+
+ <tr>  <td style="vertical-align:text-top"><code>m</code> </td> <td>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 将图像居中于查看窗口。 </td>
+
+ <tr>  <td style="vertical-align:text-top"><code>e</code> </td> <td>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 切换显示所有面片边。 </td>
+
+ <tr>  <td style="vertical-align:text-top"><code>h</code> </td> <td>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 切换隐藏面隐藏。开启时，显示图像所需时间更长，但效果更好。 </td>
+
+ <tr>  <td style="vertical-align:text-top"><code>b</code> </td> <td>
+<a   id="bounding-box"></a><a   id="bounding_box_color"></a>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 切换边界框的显示。对于可视化方向很有用。在原生图形窗口中，'o' 键执行相同操作。边界框的颜色可以通过设置 bounding_box_color 变量来更改。
+</td>
+
+ <tr>  <td style="vertical-align:text-top"><code>t</code> </td> <td>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 重置<a href="model.htm#torus-model">环面模型</a>的显示模式。可选择
+   <a href="toggle.htm#raw_cells">原始单元格</a>、
+   <a href="toggle.htm#clipped">裁剪单元格</a>或
+   <a href="toggle.htm#connected">连接体</a>。 </td>
+
+ <tr>  <td style="vertical-align:text-top"><code>w</code> </td> <td>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 切换完全位于<a href="constrnt.htm#level-set-constraints">约束</a>上的面片的显示。
+对于<a href="constrnt.htm#one-sided-constraints">单侧约束</a>，适用于顶点全部接触该约束的面片。
+             "w" 代表"wall"（壁面）。   </td>
+
+ <tr>  <td style="vertical-align:text-top"><code>B</code> </td> <td>
+<a href="#graphics-commands">图形模式</a>命令。
+  切换位于<a href="constrnt.htm#parametric-boundaries">边界</a>或<a href="constrnt.htm#level-set-constraints">等式约束</a>上的面片的显示。 </td>
+
+ <tr>  <td style="vertical-align:text-top"><code>v</code> </td> <td>
+ <a href="#graphics-commands">图形模式</a>命令。
+ 切换以不同颜色显示凸边和凹边。"v" 代表"valleys"（谷线）。  </td>
+
+ <tr>  <td style="vertical-align:text-top"><code>+</code> </td> <td>
+<a href="#graphics-commands">图形模式</a>命令。
+  增加面片边使用的颜色编号。  </td>
+
+ <tr>  <td style="vertical-align:text-top"><code>-</code> </td> <td>
+<a href="#graphics-commands">图形模式</a>命令。
+  减少面片边使用的颜色编号。  </td>
+
+ <tr>  <td style="vertical-align:text-top"><code>?</code> </td> <td>
+<a href="#graphics-commands">图形模式</a>命令。
+  打印图形命令的帮助屏幕。   </td>
+
+ <tr>  <td style="vertical-align:text-top"><code>q,x</code> </td> <td>
+<a href="#graphics-commands">图形模式</a>命令。
+ 退出图形模式，返回主命令模式。 </td>
+
+</table>
+
+
+<hr>
+<a   id="OpenGL"></a>
+<h2>OpenGL 图形</h2>
+理想情况下，您拥有一个使用 OpenGL/GLUT 进行屏幕图形显示的 Evolver 版本。OpenGL（开放图形库）在 Mac OSX、大多数 Unix 系统和 Microsoft Windows 上是标准配置。
+图形显示通过 '<code>s</code>' 主提示命令调用，这会让您进入图形提示符，您应该立即输入 '<code>q</code>' 退出，因为图形命令最好在图形窗口中给出。或者您可以使用 `<code>showq</code>' 命令，它会自动返回主提示符。
+<a   id="graphics-actions"></a>
+<p>
+<H3>鼠标左键：</H3>  按住鼠标左键拖动可以以各种方式移动曲面。左键的模式可以通过按下 <code>t</code>（平移）、<code>r</code>（旋转）、<code>z</code>（缩放）或 <code>c</code>（顺时针旋转）键来更改。
+默认为 <code>r</code> 模式。
+
+
+<H3>鼠标右键：</h3> 默认情况下，右键用于<a href="#picking">拾取</a>顶点、边和面片。如果您在图形窗口中按下 `<code>M</code>' 键，右键将弹出图形窗口菜单。
+
+<H3>图形窗口键盘命令：</h3>
+
+<table>
+
+<tr><td><code>h</code>  </td><td>  <a   id="h-graphics-key"> </a>
+   在控制台窗口打印帮助屏幕。</td></tr>
+
+<tr><td><code>r</code>  </td><td> <a   id="r-graphics-key"></a>
+      鼠标左键的旋转模式。</td></tr>
+
+<tr><td><code>t</code>  </td><td> <a   id="t-graphics-key"></a>
+   鼠标左键的平移模式。</td></tr>
+
+<tr><td><code>z</code>  </td><td>    <a   id="z-graphics-key"></a>
+    鼠标左键的缩放模式（使用 F 聚焦到特定顶点）。</td></tr>
+
+<tr><td><code>c</code>  </td><td>   <a   id="c-graphics-key"></a>
+  鼠标左键的顺时针/逆时针旋转模式。</td></tr>
+
+<tr><td><code>+</code>  </td><td> <a   id="+-graphics-key"></a>
+   加宽边。</td></tr>
+
+<tr><td><code>-</code>  </td><td> <a   id="--graphics-key"></a>
+     收窄边。</td></tr>
+
+<tr><td><code>b</code>  </td><td> <a   id="b-graphics-key"></a>
+    将边前偏移减少 0.001。</td></tr>
+
+<tr><td><code>B</code>  </td><td>  <a   id="B-graphics-key"></a>
+    将边前偏移增加 0.001（使边更清晰）。</td></tr>
+
+<tr><td><code>R</code>  </td><td>  <a   id="R-graphics-key"></a>
+     重置视图。</td></tr>
+
+<tr><td><code>m</code>  </td><td> <a   id="m-graphics-key"></a>
+    将图像居中。</td></tr>
+
+<tr><td><code>M</code>  </td><td>  <a   id="M-graphics-key"></a>
+   让鼠标右键弹出菜单而不是拾取。</td></tr>
+
+<tr><td><code>P</code>  </td><td>  <a   id="P-graphics-key"></a>
+  让鼠标右键进行拾取而不是菜单（默认）。</td></tr>
+
+<tr><td><code>p</code>  </td><td>  <a   id="p-graphics-key"></a>
+  切换正交/透视投影。</td></tr>
+
+<tr><td><code>s</code> </td><td>  <a   id="s-graphics-key"></a>
+  切换交叉眼立体显示。</td></tr>
+
+<tr><td><code>e</code>  </td><td>  <a   id="e-graphics-key"></a>
+ 切换显示边，无论 "<a href="commands.htm#show"
+    class="keyword">show edge</a>" 条件如何。</td></tr>
+
+<tr><td><code>f</code>  </td><td> <a   id="f-graphics-key"></a>
+  切换显示遵循 "<a href="commands.htm#show"
+    class="keyword">show facet</a>" 条件的面片或不显示面片。</td></tr>
+
+<tr><td><code>F</code>  </td><td>  <a   id="F-graphics-key"></a>
+   将旋转/缩放原点移动到最后拾取的顶点。</td></tr>
+
+<tr><td><code>G</code>  </td><td>   <a   id="G-graphics-key"></a>
+   启动另一个具有独立相机的图形窗口。</td></tr>
+
+<tr><td><code>o</code>  </td><td>   <a   id="o-graphics-key"></a>
+   切换绘制边界框。</td></tr>
+
+<tr><td><code>g</code>  </td><td>   <a   id="g-graphics-key"></a>
+  切换 Gourard（平滑）着色。</td></tr>
+
+<tr><td><code>l</code>  </td><td> <a   id="l-graphics-key"></a>
+ 在平移模式下启用<a href="#clip-view">裁剪平面</a>。</td></tr>
+
+<tr><td><code>L</code>  </td><td> <a   id="L-graphics-key"></a>
+  禁用<a href="#clip-view">裁剪平面</a>。</td></tr>
+
+<tr><td><code>k</code>  </td><td> <a   id="k-graphics-key"></a>
+   在旋转模式下启用<a href="#clip-view">裁剪平面</a>。</td></tr>
+
+<tr><td><code>x</code>  </td><td>  <a   id="x-graphics-key"></a>
+   关闭图形窗口。</td></tr>
+
+<tr><td>方向键 </td><td> <a   id="arrows-graphics-keys"></a>
+   稍微平移。</td></tr>
+
+<tr><td></td><td>以及一些大多数用户永远不会使用的高级命令，但为完整性而列出：</td></tr>
+
+<tr><td><code>H</code>  </td><td> <a   id="H-graphics-key"></a>
+    打印高级帮助。</td></tr>
+
+<tr><td><code>a</code>  </td><td> <a   id="a-graphics-key"></a>
+    切换使用 OpenGL 元素数组。</td></tr>
+
+<tr><td><code>i</code>  </td><td> <a   id="i-graphics-key"></a>
+   切换 OpenGL 数组中的交错元素。</td></tr>
+
+<tr><td><code>I</code>  </td><td>  <a   id="I-graphics-key"></a>
+   切换索引化 OpenGL 数组。</td></tr>
+
+<tr><td><code>S</code>  </td><td> <a   id="S-graphics-key"></a>
+  切换 OpenGL 三角形条带。</td></tr>
+
+<tr><td><code>Y</code>  </td><td>  <a   id="Y-graphics-key"></a>
+  切换条带着色（出于好奇想看看 OpenGL 三角形条带是什么样子）。
+  切换关闭时恢复原始颜色。隐式调用 'S'。</td></tr>
+
+<tr><td><code>D</code>  </td><td> <a   id="D-graphics-key"></a>
+     切换使用显示列表。</td></tr>
+
+<tr><td><code>Q</code>  </td><td>  <a   id="Q-graphics-key"></a>
+   切换打印绘制统计信息。</td></tr>
+</table>
+
+
+
+<hr><a   id="geomview"></a>
+<h2>Geomview 图形</h2>
+Unix 系统上的出色屏幕图形可以通过免费的三维查看程序
+<a href="install.htm#geomview-install">geomview</a>（几何查看器）来实现。
+Geomview 可以通过 <a href="single.htm#P">P</a> 命令选项 8 启动。
+注意：geomview 不能很好地处理低于 1e-5 的对象尺寸，因此使用 MKS 单位显示微米级对象是不明智的。
+
+<p>
+与 geomview 相关的主要提示命令：
+<ul>
+<li> <a href="commands.htm#geomview-command"><code>geomview</code></a>
+ 或 <code><a href="single.htm#P">P</a> 8</code> 启动 geomview
+<li> <code><a href="single.htm#P">P</a> 9</code> 结束 geomview
+<li> <a href="commands.htm#geompipe"><code>geompipe</code></a>
+ 将 geomview 输入管道到其他位置
+<li> <a href="commands.htm#geomview-command"><code>geomview</code></a>
+<a href="syntax.htm#stringexpr"><em>string</em></a>
+向 geomview 发送用户命令
+<li> <a href="toggle.htm#gv_binary"><code>gv_binary</code></a>
+ 切换以控制接口模式
+<li> <a href="toggle.htm#view_4d"><code>view_4D</code></a>
+ 切换向 geomview 发送三维或四维信息
+<li> <a href="single.htm#D">D</a> 或 <a href="toggle.htm#autodisplay">
+autodisplay</a> 用于切换曲面变化时的自动重绘。启动 geomview 时默认为自动重绘。
+</ul>
+
+<hr>
+<h2><a   id="view-matrix"></a>视图矩阵</h2>
+从环境空间到图形显示的坐标映射由称为视图矩阵的矩阵完成。该矩阵使用齐次坐标，因此是一个方阵，其大小比环境空间的维数大一。视图矩阵可以在<a href="datafile.htm#view_matrix">数据文件</a>的顶部初始化，或者其元素可以在运行时通过 <code>view_matrix[i][j]</code> 读取或设置，其中索引从 1 开始。特别是，可以编写命令脚本来保存和重新加载特定的视图矩阵；参见发行包中的 <code>saveview.cmd</code>。视图矩阵保存在转储文件中。
+<p>
+<a   id="saveview"></a>
+Evolver 发行包的 <code>fe</code> 子目录中的文件 <code>saveview.cmd</code> 有一个脚本 <code>saveview</code>，它以可以读回以恢复视图的格式写出视图矩阵的当前值。示例：
+<pre>
+   Enter command: read "saveview.cmd"
+   Enter command: saveview >>> "thisview.cmd"
+   ...
+   Enter command: read "thisview.cmd"
+</pre>
+<hr>
+<h2><a   id="view-transforms"></a>多重视图变换。</h2>
+<a   id="view_transform_swap_colors"></a>
+<a   id="view_transform_parity"></a>
+Evolver 可以同时显示曲面的多个变换，适用于所有可能的图形显示。每个变换由齐次坐标中的矩阵定义，对于三维曲面意味着一个 4x4 矩阵，其左上角有一个 3x3 旋转矩阵，最后一列有一个平移向量，底部有一行 (0,0,0,1)。有两种指定变换矩阵的方式：
+<ol>
+<li>在数据文件中逐个列出每个矩阵；参见
+<a href="datafile.htm#view_transforms">view_transforms</a>。
+<li>在数据文件中列出一组变换（参见
+<a href="datafile.htm#view_transform_generators">view_transform_generators</a>）
+并在运行时使用 <a href="commands.htm#transform_expr">transform_expr</a>
+命令生成一组变换。我更喜欢第二种方式。
+</ol>
+最终的变换列表可以通过矩阵 <code>view_transforms[][][]</code> 访问。
+因为某些变换可能会反转曲面的正面和背面，变换可以使面片交换 frontcolor 和 backcolor 属性；参见
+<a href="datafile.htm#view_transforms">view_transforms</a> 或
+<a href="datafile.htm#view_transform_generators">view_transform_generators</a>)
+了解语法。只读数组 <code>view_transform_swap_colors[]</code>
+对于交换颜色的变换具有 1 条目。
+<p>
+变换可以通过 <a href="commands.htm#detorus">detorus</a> 命令转换为曲面的实际副本。
+
+
+<hr>
+<h2><a   id="picking"></a><b>拾取元素。</b></h2>
+使用 geomview 或 OpenGL 版本的一大优势是您可以通过在 geomview 窗口中右键单击来拾取顶点、边和面片，拾取对象的
+<a href="elements.htm#id">id</a> 编号将打印在主窗口中。拾取时要小心；它并不总是按您期望的方式工作。可能需要放大曲面才能清晰地看到您想要的元素。
+<p>
+拾取的顶点、边和面片编号分别存储在内部变量
+<code>pickvnum</code>、<code>pickenum</code> 和 <code>pickfnum</code> 中。
+图形窗口中的 'F' 键命令将旋转和缩放中心设置为 pickvnum 顶点。Pickvnum 可以通过普通赋值命令设置，因此用户可以放大到任何所需的顶点。
+<p>
+请注意，拾取输出可能会在命令窗口中造成一些混乱，特别是如果您部分输入了命令，然后进行了拾取，然后尝试完成命令。
+
+
+
+
+<hr><a   id="clip-view"></a>
+<a   id="clip_coeff"></a>
+<h2>曲面裁剪视图</h2>
+
+可以让图形显示用多个裁剪平面裁剪曲面。
+裁剪平面由形式为 ax + by + cz = d 的平面定义。
+可见体积为 ax + by + cz &lt;= d。
+最多可以在数组 <code>clip_coeff[][]</code> 中存储 10 个裁剪平面，第一个平面的系数 a,b,c,d 存储在 <code>clip_coeff[1][1]</code>
+ 到 <code>clip_coeff[1][4]</code> 中，依此类推。
+用户不必创建 <code>clip_coeff[][]</code>。
+  要使用裁剪视图，首先设置所需裁剪平面的系数，然后使用 <code>clip_view</code> 切换。
+例如，要获得一个平行于 y 和 z 轴且位于其前方的垂直裁剪平面：
+<pre>
+   clip_coeff[1][1] := 1;
+   clip_coeff[1][2] := 0;
+   clip_coeff[1][3] := 0;
+   clip_coeff[1][4] := .2;
+   clip_view;
+</pre>
+使用 OpenGL 图形时，第一个裁剪平面可以通过在图形窗口中按下 '<code>l</code>' 键（小写 L）并水平拖动鼠标来交互式更改。
+'<code>k</code>' 键将使鼠标拖动改变裁剪平面的方向。
+按下 '<code>r</code>' 或 '<code>c</code>' 或 '<code>t</code>' 以返回到其他鼠标模式。'<code>L</code>' 将关闭 clip_view。
+<p> 裁剪视图独立于环面模型查看模式（如 <a href="toggle.htm#clipped" class="keyword">clipped</a> 和
+<a href="toggle.htm#connected" class="keyword">connected</a>）工作，并在其之后生效，因此将它们一起使用没有问题。
+<p>如果 <code>clip_view</code> 和 <a href="#slice-view"><code>slice_view</code></a>
+都生效，则 <code>slice_view</code> 代替 <code>clip_view</code> 运行。
+
+
+<hr>
+<a   id="slice_coeff"></a><a   id="slice-view"></a>
+<h2>曲面切片视图</h2>
+
+可以绘制曲面的横截面切片。
+切片由形式为 ax + by + cz = d 的平面定义。
+系数 a,b,c,d 存储在数组中
+（用户不必创建）。要使用切片视图，
+首先设置系数，然后使用 slice_view 切换。
+例如，要获得一个平行于 x 和 y 轴且位于其前方的垂直切片：
+<pre>
+   slice_coeff[1] := 1;
+   slice_coeff[2] := 0;
+   slice_coeff[3] := 0;
+   slice_coeff[4] ;= .2;
+   slice_view;
+</pre>
+横截面将以与其所在面片颜色相同的线段形式显示。使用 OpenGL 图形时，切片平面可以通过在图形窗口中按下 '<code>l</code>' 键（小写 'L'）并水平拖动鼠标来交互式更改。
+'<code>k</code>' 键将使鼠标拖动改变裁剪平面的方向。
+按下 '<code>r</code>' 或 '<code>c</code>' 或 '<code>t</code>' 以返回到其他鼠标模式。
+'<code>L</code>' 将关闭 <code>slice_view</code>。
+
+<p> 切片视图独立于环面模型查看模式（如 <a href="toggle.htm#clipped" class="keyword">clipped</a> 和
+<a href="toggle.htm#connected" class="keyword">connected</a>）工作，并在其之后生效，因此将它们一起使用没有问题。
+<p>如果 <code>slice_view</code> 和 <a href="#clip-view"><code>clip_view</code></a>
+都生效，则 <code>slice_view</code> 代替 <code>clip_view</code> 运行。
+
+
+
+<hr><a   id="postscript"></a>
+<h2>PostScript 文件</h2>
+Surface Evolver 可以通过
+<a href="commands.htm#postscript-command">postscript</a> 命令或
+<a href="single.htm#P"><code>P</code></a> 命令选项 3（或简写为 "P 3"）生成 PostScript 文件。
+图像与<a href="#screen-graphics">原生屏幕图形</a>显示的图像相同，
+因此应使用 <a href="single.htm#s"><code>s</code></a> 命令和
+<a href="#graphics-commands">图形模式命令</a>使图像达到所需效果。变量
+<a href="syntax.htm#brightness">brightness</a> 可用于设置中值灰度级。PostScript 图像放置在页面左下角的 8 英寸正方形中。
+<P>
+使用 P 命令时，系统会提示您输入选项。
+<dl>
+<dt><code>Show grid lines?</code> </dt>
+<dd>如果您正在绘制二维曲面，会询问此问题。如果回答 'y'，
+将绘制所有三角形边。如果回答 'n'，只绘制特殊边
+（三重交界、边界等；这可以通过
+<a href="commands.htm#show"><code>show edges</code></a> 命令控制）。
+默认 'n'。
+<a href="commands.htm#postscript-command">postscript</a> 命令使用 <a href="toggle.htm#ps_gridflag">ps_gridflag</a> 切换来控制此项。
+</dd>
+<dt><code>Do colors? </code> </dt>
+<dd> 如果回答 'y'，边和面片将使用其颜色属性和<a href="toggle.htm#shading">着色</a>（如果已激活）绘制。如果回答 'n'，则所有边绘制为黑色，所有面片绘制为带阴影的白色。
+默认 'n'。
+<a href="commands.htm#postscript-command">postscript</a> 命令使用 <a href="toggle.htm#ps_colorflag">ps_colorflag</a> 切换来控制此项。
+</dd>
+<dt><a   id="crossings"><code>Do crossings? </code></a> </dt>
+<dd>如果曲面是一维的（<a href="model.htm#string-model">弦模型</a>）且空间维度至少为 3，会询问此问题。如果回答 'y'，将通过从后到前绘制边来创建三维效果，每条边首先绘制为粗白线，然后绘制为细黑线。这会在每个交叉点处创建断开的背景线和连续的前景线。
+默认 'n'。
+<a href="commands.htm#postscript-command">postscript</a> 命令使用 <a href="toggle.htm#ps_crossingflag">ps_crossingflag</a> 切换来控制此项。
+</dd>
+<dt>
+<a   id="ps_labelsize"></a>
+<a   id="labels"><code>Do labels? (i for ids, o for originals)</code></a> </dt>
+<dd>此 PostScript P 3 命令子提示让您有机会在顶点、边和面片上放置数字标签，这对于调试或修改数据文件很有用。
+边标签稍微向边的头部偏移，面片标签根据可见面片的一侧进行符号标记。
+选择 'i' 或 'y' 表示当前元素 <a href="elements.htm#id">id</a>，
+或选择 'o' 表示<a href="elements.htm#original">原始</a>元素编号。
+如果不需要任何标签，只需按 RETURN。
+<a href="commands.htm#postscript-command">postscript</a> 命令使用 <a href="toggle.htm#ps_labelflag">ps_labelflag</a>
+切换来控制此项。
+标签的相对大小可以通过 <code>ps_labelsize</code> 变量控制，默认值为 3.0。
+</dd>
+
+<dt><code>Enter file name (.ps will be added): </code> </dt>
+<dd>给出 PostScript 输出文件的名称。如果缺少 "<code>.ps</code>" 或 "<code>.eps</code>" 扩展名，将自动添加 "<code>.ps</code>"。不建议直接按 RETURN，因为那会产生文件 "<code>.ps</code>"。
+</dd>
+</dl>
+<a   id="ps_linewidth"></a>
+<a   id="ps_bareedgewidth"></a>
+<a   id="ps_fixededgewidth"></a>
+<a   id="ps_conedgewidth"></a>
+<a   id="ps_tripleedgewidth"></a>
+<a   id="ps_gridedgewidth"></a>
+<a   id="ps_stringwidth"></a>
+PostScript 边的线宽可以由用户控制。宽度相对于图像大小，图像大小为 3 个单位的正方形。
+如果定义了实数值边额外属性 <code>ps_linewidth</code>，则使用该值作为边宽度。否则，将依次查阅各种类型边的一些内部可读写变量：
+<br>
+<code>ps_stringwidth</code> - 弦模型中的边，默认 0.002 <br>
+<code>ps_bareedgewidth</code> - "裸"边，无相邻面片，默认 0.0025 <br>
+<code>ps_fixededgewidth</code> - "固定"边，默认 0.002 <br>
+<code>ps_conedgewidth</code> - 约束或边界上的边，默认 0.002<br>
+<code>ps_tripleedgewidth</code> - 具有三个或更多相邻面片的边，默认 0.0015 <br>
+<code>ps_gridedgewidth</code> - 其他边，默认 0.001 <br>
+
+<br>
+PostScript 文件中列出的边界框通常是窗口中曲面的实际范围（即边界框永远不会大于窗口，但可能更小）。<a href="toggle.htm#full_bounding_box">full_bounding_box</a> 切换将强制边界框为整个窗口。这在制作不同视图或曲面演化阶段的一系列图像时控制图像大小很有用。边界框的颜色可以通过设置 bounding_box_color 变量来更改。
+
+<p>
+<a   id="visibility_test"></a><a   id="visibility_debug"></a>
+<b>可见性测试。</b> 复杂曲面的 PostScript 文件可能包含大量在最终图像中不可见的面片。这会占用大量额外的文件空间和渲染时间。有一个选项可以处理 PostScript 面片列表以消除不可见面片，即 <code>visibility_test</code> 选项命令。出于调试目的，还有一个 <code>visibility_debug</code> 切换，它会导致打印详细信息；请勿使用。
+
+<hr>
+
+<a   id="graphics-related"></a>
+<h2> 其他图形相关功能。</h2>
+本节包含您应查阅的其他主题的链接。
+<p>
+与图形相关的内部 Evolver 状态信息：
+<ul>
+<li> <a href="elements.htm#color,-edge">边颜色</a>
+<li> <a href="elements.htm#color,-facet">面片颜色</a>、
+  <a href="elements.htm#frontcolor">前面颜色</a>和 <a href="elements.htm#backcolor">背面颜色</a>
+<li> 边 <a href="commands.htm#show">show</a> 表达式
+<li> 面片 <a href="commands.htm#show">show</a> 表达式
+<li> 面片<a href="toggle.htm#shading">着色</a>切换
+<li> 面片 <a href="syntax.htm#brightness">brightness</a>
+<li> <a href="toggle.htm#facet_colors">facet_colors</a> 切换
+<li> <a href="#view-matrix">视图矩阵</a>
+<li> <a href="commands.htm#transform_expr">视图变换表达式</a>
+<li> <a href="toggle.htm#transforms">变换切换</a>
+<li> <a href="model.htm#torus-model">环面模型</a>显示模式：
+   <a href="toggle.htm#raw_cells">raw_cells</a>、
+   <a href="toggle.htm#clipped">clipped</a> 或
+   <a href="toggle.htm#connected">connected</a>
+<li> <a href="syntax.htm#thickness">曲面厚度</a>
+<li> <a href="toggle.htm#show_inner">show_inner</a>
+   和 <a href="toggle.htm#show_inner">show_outer</a> 切换
+<li> <a href="syntax.htm#background">背景</a>颜色
+<li> <a href="syntax.htm#window_aspect_ratio">window_aspect_ratio</a> 变量
+</ul>
+
+与图形相关的数据文件功能：
+<ul>
+<li> <a href="datafile.htm#edges-section">边颜色</a>
+<li> <a href="datafile.htm#faces-section">面片颜色</a>、
+<a href="datafile.htm#faces-section">前面颜色</a>和 <a href="datafile.htm#faces-section">背面颜色</a>
+<li> <a href="datafile.htm#view-transforms">视图变换</a>
+<li> <a href="datafile.htm#view-generators">视图变换生成器</a>
+<li> <a href="datafile.htm#viewing-matrix">视图矩阵</a>
+</ul>
+与所有图形相关的主要提示命令：
+<ul>
+<li> <a href="commands.htm#show"><code>show</code></a>、
+   <a href="commands.htm#showq"><code>showq</code></a> 和
+ <a href="commands.htm#show_expr"><code>show_expr</code></a>
+  用于控制显示哪些元素。
+<li> <a href="commands.htm#set"><code>set edge color</code></a>
+<li> <a href="commands.htm#set"><code>set facet color, frontcolor, backcolor</code></a>
+<li> <a href="toggle.htm#transforms"><code>transforms</code></a> 切换
+<li> <a href="commands.htm#transform_expr"><code>transform_expr</code></a>
+<li> <a href="syntax.htm#thickness"><code>thickness</code></a>
+<li> <a href="model.htm#torus-model">环面模型</a>显示模式切换：
+   <a href="toggle.htm#raw_cells"><code>raw_cells</code></a>、
+   <a href="toggle.htm#clipped"><code>clipped</code></a> 或
+   <a href="toggle.htm#connected"><code>connected</code></a>
+<li> <a href="toggle.htm#show_inner"><code>show_inner</code></a>
+   和 <a href="toggle.htm#show_outer"><code>show_outer</code></a> 切换
+<li> <a href="commands.htm#display_text"><code>display_text</code></a>
+<li> <a href="commands.htm#delete_text"><code>delete_text</code></a>
+<li> <a href="commands.htm#detorus" class="keyword">detorus</a>
+</ul>
+
+<hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+</body>
+</html>

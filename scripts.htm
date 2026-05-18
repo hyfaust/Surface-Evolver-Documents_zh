@@ -1,0 +1,2075 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 脚本示例</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<!--NewPage-->
+
+<h1 class="center">
+<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+<h1>Surface Evolver 脚本示例</h1>
+
+本页列出了一些示例命令脚本文件。更详细的说明见下文。
+这些文件包含在 Evolver 发行版的 <code>fe</code> 文件夹中，
+因此应该位于 <a href="install.htm#evolverpath">EVOLVERPATH</a> 路径上，
+以便 Evolver 能够找到它们。
+<p>
+您可以使用 <a href="commands.htm#read" class="code">read</a> 命令将脚本文件读入 Evolver，例如：
+<pre>
+   Enter command: read "3ds.cmd"
+</pre>
+一般来说，每个脚本包含一个主命令，其名称与文件名相同，
+例如 <code>adjoint.cmd</code> 包含 <code>adjoint</code> 命令，
+除非这会导致非法名称或与 Evolver 关键字冲突。
+每个文件的顶部注释中都有使用说明。
+
+<p>
+脚本文件列表：
+
+<table>
+<tr>
+<td>
+<ul>
+  <li>    <a href="#3ds.cmd">3ds.cmd</a>
+  <li>    <a href="#adjoint.cmd">adjoint.cmd</a>
+  <li>    <a href="#adjointc.cmd">adjointc.cmd</a>
+  <li>    <a href="#ansys.cmd">ansys.cmd</a>
+  <li>    <a href="#band.cmd">band.cmd</a>
+  <li>    <a href="#bonnet_movie.cmd">bonnet_movie.cmd</a>
+  <li>    <a href="#cmccousin.cmd">cmccousin.cmd</a>
+  <li>    <a href="#coff.cmd">coff.cmd</a>
+  <li>    <a href="#collada.cmd">collada.cmd</a>
+  <li>    <a href="#complex.cmd">complex.cmd</a>
+  <li>    <a href="#dirichlet_to_disk.cmd">dirichlet_to_disk.cmd</a>
+  <li>    <a href="#dxf.cmd">dxf.cmd</a>
+  <li>    <a href="#dxf_thick.cmd">dxf_thick.cmd</a>
+  <li>    <a href="#embox.cmd">embox.cmd</a>
+  <li>    <a href="#foamface.cmd">foamface.cmd</a>
+  <li>    <a href="#foamface_jvx.cmd">foamface_jvx.cmd</a>
+</ul>
+</td>
+<td>
+<ul>
+  <li>    <a href="#fourier.cmd">fourier.cmd</a>
+  <li>    <a href="#gaussequi.cmd">gaussequi.cmd</a>
+  <li>    <a href="#gaussmap.cmd">gaussmap.cmd</a>
+  <li>    <a href="#gaussref.cmd">gaussref.cmd</a>
+  <li>    <a href="#iges.cmd">iges.cmd</a>
+  <li>    <a href="#iges114.cmd">iges114.cmd</a>
+  <li>    <a href="#iges128.cmd">iges128.cmd</a>
+  <li>    <a href="#iges144.cmd">iges144.cmd</a>
+  <li>    <a href="#intersect.cmd">intersect.cmd</a>
+  <li>    <a href="#jvx.cmd">jvx.cmd</a>
+  <li>    <a href="#maya.cmd">maya.cmd</a>
+  <li>    <a href="#maya1.cmd">maya1.cmd</a>
+  <li>    <a href="#neville.cmd">neville.cmd</a>
+  <li>    <a href="#obj.cmd">obj.cmd</a>
+  <li>    <a href="#off.cmd">off.cmd</a>
+  <li>    <a href="#offn.cmd">offn.cmd</a>
+</ul>
+</td>
+<td>
+<ul>
+  <li>    <a href="#off_show.cmd">off_show.cmd</a>
+  <li>    <a href="#order.cmd">order.cmd</a>
+  <li>    <a href="#percolate.cmd">percolate.cmd</a>
+  <li>    <a href="#ply.cmd">ply.cmd</a>
+  <li>    <a href="#polyfilm.cmd">polyfilm.cmd</a>
+  <li>    <a href="#povray.cmd">povray.cmd</a>
+  <li>    <a href="#povrays.cmd">povrays.cmd</a>
+  <li>    <a href="#quadbbox.cmd">quadbbox.cmd</a>
+  <li>    <a href="#quadmeet.cmd">quadmeet.cmd</a>
+  <li>    <a href="#quadtbox.cmd">quadtbox.cmd</a>
+  <li>    <a href="#reorder.cmd">reorder.cmd</a>
+  <li>    <a href="#rewrap.cmd">rewrap.cmd</a>
+  <li>    <a href="#rgb.cmd">rgb.cmd</a>
+  <li>    <a href="#rib.cmd">rib.cmd</a>
+  <li>    <a href="#rotate.cmd">rotate.cmd</a>
+  <li>    <a href="#save_view.cmd">save_view.cmd</a>
+  <li>    <a href="#show_equi.cmd">show_equi.cmd</a>
+</ul>
+</td>
+<td>
+<ul>
+  <li>    <a href="#simply_connected.cmd">simply_connected.cmd</a>
+  <li>    <a href="#slice.cmd">slice.cmd</a>
+  <li>    <a href="#slice.cmd">slice2.cmd</a>
+  <li>    <a href="#slicer.cmd">slicer.cmd</a>
+  <li>    <a href="#stl.cmd">stl.cmd</a>
+  <li>    <a href="#strdup.cmd">strdup.cmd</a>
+  <li>    <a href="#strips.cmd">strips.cmd</a>
+  <li>    <a href="#tuber.cmd">tuber.cmd</a>
+  <li>    <a href="#unseam.cmd">unseam.cmd</a>
+  <li>    <a href="#unshear.cmd">unshear.cmd</a>
+  <li>    <a href="#vrml.cmd">vrml.cmd</a>
+  <li>    <a href="#vrml2.cmd">vrml2.cmd</a>
+  <li>    <a href="#wavefront.cmd">wavefront.cmd</a>
+  <li>    <a href="#wetfoam2.cmd">wetfoam2.cmd</a>
+  <li>    <a href="#x3d.cmd">x3d.cmd</a>
+  <li>    <a href="#xray.cmd">xray.cmd</a>
+  <li>    <a href="#zebra.cmd">zebra.cmd</a>
+</ul>
+</td>
+</tr>
+</table><p>
+其中，许多人对能够导出其他软件可读文件的脚本特别感兴趣，
+因此以下是文件导出脚本的列表。这些脚本通常通过将输出重定向到文件来运行，例如：
+<pre>
+   Enter command: read "collada.cmd"
+   Enter command: collada >>> "filename.cda"
+</pre>
+注意 <code>>>></code> 会覆盖同名的现有文件。
+<br>导出脚本文件：
+<table>
+<tr>
+<td>
+<ul>
+  <li>    <a href="#3ds.cmd">3ds.cmd</a>
+  <li>    <a href="#ansys.cmd">ansys.cmd</a>
+  <li>    <a href="#coff.cmd">coff.cmd</a>
+  <li>    <a href="#collada.cmd">collada.cmd</a>
+  <li>    <a href="#dxf.cmd">dxf.cmd</a>
+  <li>    <a href="#dxf_thick.cmd">dxf_thick.cmd</a>
+  <li>    <a href="#iges.cmd">iges.cmd</a>
+  <li>    <a href="#iges114.cmd">iges114.cmd</a>
+  <li>    <a href="#iges128.cmd">iges128.cmd</a>
+  <li>    <a href="#iges144.cmd">iges144.cmd</a>
+  <li>    <a href="#jvx.cmd">jvx.cmd</a>
+  <li>    <a href="#maya.cmd">maya.cmd</a>
+  <li>    <a href="#maya1.cmd">maya1.cmd</a>
+</ul>
+</td>
+<td>
+<ul>
+  <li>    <a href="#obj.cmd">obj.cmd</a>
+  <li>    <a href="#off.cmd">off.cmd</a>
+  <li>    <a href="#offn.cmd">offn.cmd</a>
+  <li>    <a href="#off_show.cmd">off_show.cmd</a>
+  <li>    <a href="#ply.cmd">ply.cmd</a>
+  <li>    <a href="#polyfilm.cmd">polyfilm.cmd</a>
+  <li>    <a href="#povray.cmd">povray.cmd</a>
+  <li>    <a href="#povrays.cmd">povrays.cmd</a>
+  <li>    <a href="#rib.cmd">rib.cmd</a>
+  <li>    <a href="#stl.cmd">stl.cmd</a>
+  <li>    <a href="#vrml.cmd">vrml.cmd</a>
+  <li>    <a href="#vrml2.cmd">vrml2.cmd</a>
+  <li>    <a href="#wavefront.cmd">wavefront.cmd</a>
+  <li>    <a href="#x3d.cmd">x3d.cmd</a>
+</ul>
+</td>
+</tr>
+</table>
+
+
+  <hr> <h3>    <a   id="3ds.cmd" class="name">3ds.cmd</a></h3>
+
+生成 Autodesk 3DS 格式文件的脚本。
+<p>
+   用法：<code>do_3ds >>> "filename.3ds"</code>
+<p>
+   假设条件：3D 肥皂膜（soapfilm）模型，线性模型，非环面（torus）或对称群
+    （如有必要，请使用 <a href="commands.htm#detorus">detorus</a>
+  命令将环面或对称群转换为展开表面，但请注意 detorus 会修改表面）。
+<br>限制为 65535 个面片（facet）。
+<br>    仅处理面片，不处理边。
+<br>    面片颜色：正面和背面均使用 frontcolor。
+
+<!--========================== adjoint.cmd ==============================-->
+
+  <hr> <h3>    <a   id="adjoint.cmd" class="name">adjoint.cmd</a></h3>
+
+   使用 Konrad Polthier 的离散共轭方法进行 Bonnet 旋转来计算伴随最小曲面（adjoint minimal surface）的脚本。参见
+<p class="indent">
+      Ulrich Pinkall and Konrad Polthier,
+   <a href="http://page.mi.fu-berlin.de/polthier/articles/diri/diri_jem.pdf">
+     Computing Discrete Minimal Surfacee and Their Conjugates</a>,
+     Experim. Math. 2(1) (1993) 15-36
+</p>
+   以及
+<p class="indent">
+Konrad Polthier,
+<a href="http://page.mi.fu-berlin.de/polthier/articles/harmonic/Harmonic_preprint.pdf">
+Conjugate Harmonic Maps and Minimal Surfaces</a>.
+</p>
+   光滑最小曲面的"伴随"（adjoint）是另一个与之等距的最小曲面，
+   在每个点处法线方向相同，但无穷小面元绕法线旋转了 90 度。
+   Schwartz 的 P 曲面和 D 曲面互为伴随。
+<p>
+   "离散最小曲面"由平面三角形组成。如果相邻三角形的顶点重合，
+   则称为"协调的"（conforming）；如果相邻三角形仅在其中点处相交，
+   则称为"非协调的"（nonconforming）。Polthier 证明了如果一个协调的
+   离散最小曲面最小化面积，那么它有一个精确的非协调伴随。
+<p>
+  本文件中的 <code>adjoint</code> 命令接收一个协调表面，计算非协调伴随，
+  然后调整顶点使其协调，从而成为一个合法的 Surface Evolver 表面。
+<p>
+  假设条件：
+<ul>
+<li> 3D 肥皂膜模型。
+<li> 线性模型。
+<li> 无环面或对称群。
+<li> 每条边只有一到两个相邻面片。
+<li>  所有面片具有相同的朝向。
+  原始表面在执行 "adjoint" 之前应清除所有水平集约束和边界；
+  <a href="elements.htm#fixed">fixed</a>（固定）顶点和边是可以的。
+</ul>
+<p>
+  用法：<code>adjoint</code>
+<p>
+  运行 <code>adjoint</code> 后，您可以使用 <code>flip</code> 命令在原始表面和伴随表面之间来回切换。
+<p>
+  用法：<code>flip</code>
+<p>
+
+  在运行 <code>adjoint</code> 之前，您可以将变量 <code>starte</code> 设置为
+  其中点将保持固定不动的边的编号；默认值为 edge[1]。
+
+<p>
+  Bonnet 旋转的角度由变量 <code>bangle</code> 设置，您可以在执行 <code>adjoint</code>
+  之前将其设置为任意角度值。bangle 的默认值为 90 度。
+<p>
+
+   此外，本文件还包含命令 <code>write_conjugate</code>，用于将非协调离散伴随
+   的数据文件写入标准输出，顶点是分离的。用此可以看到 Polthier 想法的真实形式。
+<p>
+   用法：<code>write_conjugate >>> "filename.fe"</code>
+<p>
+   如需使用复数进行伴随坐标的更精细方法（对于多次任意旋转更快），
+   请参见 adjointc.cmd。本文件和
+   <a href="#adjointc.cmd">adjointc.cmd</a> 的命名空间不重叠，
+   因此可以同时加载。
+<p>
+   参见我关于<a href="http://www.susqu.edu/brakke/evolver/examples/periodic/periodic.html">
+三周期最小曲面</a>的页面，了解使用 <code>adjoint</code> 创建的示例。
+
+<!--========================== adjointc.cmd ==============================-->
+
+  <hr> <h3>    <a   id="adjointc.cmd" class="name">adjointc.cmd</a></h3>
+
+   另一个使用 Konrad Polthier 的离散共轭方法进行 Bonnet 旋转来计算
+   伴随最小曲面的脚本。参见
+<p class="indent">
+      Ulrich Pinkall and Konrad Polthier,
+   <a href="http://page.mi.fu-berlin.de/polthier/articles/diri/diri_jem.pdf">
+     Computing Discrete Minimal Surfacee and Their Conjugates</a>,
+     Experim. Math. 2(1) (1993) 15-36
+</p>
+   以及
+<p class="indent">
+Konrad Polthier,
+<a href="http://page.mi.fu-berlin.de/polthier/articles/harmonic/Harmonic_preprint.pdf">
+Conjugate Harmonic Maps and Minimal Surfaces</a>.
+</p>
+   光滑最小曲面的"伴随"是另一个与之等距的最小曲面，
+   在每个点处法线方向相同，但无穷小面元绕法线旋转了 90 度。
+   Schwartz 的 P 曲面和 D 曲面互为伴随。
+<p>
+   "离散最小曲面"由平面三角形组成。如果相邻三角形的顶点重合，
+   则称为"协调的"；如果相邻三角形仅在其中点处相交，
+   则称为"非协调的"。Polthier 证明了如果一个协调的离散最小曲面
+   最小化面积，那么它有一个精确的非协调伴随。
+<p>
+  本文件中的 <code>adjointc</code> 过程接收一个协调表面，计算非协调伴随，
+  然后调整顶点使其协调，从而成为一个合法的 Surface Evolver 表面。
+<p>
+  假设条件：
+<ul>
+<li> 3D 肥皂膜模型。
+<li> 线性模型。
+<li> 无环面或对称群。
+<li>  每条边只有一到两个相邻面片。
+<li>  所有面片具有相同的朝向。
+<li>  原始表面在执行 <code>adjointc</code> 之前应清除所有水平集约束和边界；
+  但 <a href="elements.htm#fixed">fixed</a>（固定）顶点和边是可以的。
+</ul>
+<p>
+  用法：<code>adjointc( real bangle, integer origin_vertex )</code> <br>
+    参数：
+<ul class="arglist">
+<li>   <code>bangle</code> - Bonnet 旋转角度（度）。
+<li>   <code>origin_vertex</code> - 要保持固定的顶点的 id。
+</ul>
+
+<p>
+运行 <code>adjointc</code> 后，可以通过调用 <code>bonnet_rotation()</code>
+更快地执行其他 Bonnet 旋转。
+<p>  用法：<code> bonnet_rotation(real bangle, integer origin_vertex )</code>
+<br>    参数：
+<ul class="arglist">
+<li>   <code>bangle</code> - Bonnet 旋转角度（度）。
+<li>   <code>origin_vertex</code> - 要保持固定的顶点。
+</ul>
+<p>
+
+   此外，本文件还包含命令 "write_conj"，用于将非协调离散伴随
+   的数据文件写入标准输出，顶点是分离的。用此可以看到 Polthier 想法的真实形式。
+<p>
+   用法：<code>write_conj >>> "filename.fe"</code>
+<p>
+   如需仅使用实数进行伴随坐标的更简单方法，请参见
+   <a href="#adjoint.cmd">adjoint.cmd</a>。本文件和 adjoint.cmd 的命名空间不重叠，
+   因此可以同时加载。
+
+<p>
+   参见我关于<a href="http://www.susqu.edu/brakke/evolver/examples/periodic/periodic.html">
+三周期最小曲面</a>的页面，了解可以使用 <code>adjointc</code> 的文件示例。<!--========================== ansys.cmd  =============================-->
+
+  <hr> <h3>    <a   id="ansys.cmd" class="name">ansys.cmd</a></h3>
+
+生成 ANSYS 输入文件的命令，用于生成顶点、边和面的表面以供 ANSYS 网格划分。
+请注意这是一个非常简单的 ANSYS 格式转换。
+<p>
+假设条件和限制：
+<ul>
+<li>   3D 肥皂膜模型。
+<li>   线性或二次模型。
+<li>   无环面或对称群。
+<li>   不处理颜色。
+<li>   处理所有边和面片，不考虑 <a href="commands.htm#show">show</a> 状态。
+<li>  不假设元素编号连续。
+</ul>
+<p>
+   用法：<code>ansys >>> "filename"</code>
+
+<!--========================== band.cmd  =============================-->
+
+  <hr> <h3>    <a   id="band.cmd" class="name">band.cmd</a></h3>
+
+在指定边和顶点周围创建三角化带状区域的命令脚本。
+目的是在 PostScript 文件中为表面创建极其精确的边界，
+因为仅绘制粗边在内部面片随后绘制时会导致缺口。
+<p>
+警告：此命令通过创建大量微小面片来修改表面。
+您应该仅在表面的临时副本上使用。
+<p>
+假设条件：
+<ul>
+<li>  3D 肥皂膜模型。
+<li>  线性模型。
+</ul>
+<p>
+用法：
+<ol>
+<li> 将 <code>bandcolor</code> 和 <code>bandwidth</code> 设置为所需值；
+     <code>bandwidth</code> 是带状区域在边的一侧的表面坐标宽度。
+<li> 将边属性 <code>inband</code> 设置为非零值，以在这些边周围绘制带状区域。
+<li>   运行 <code>makeband</code>。
+</ol>
+示例：
+<pre>
+   read "band.cmd";
+   bandwidth := 0.003;
+   bandcolor := black;
+   set edge inband on_constraint topcon;
+   makeband
+   set edge inband on_constraint leftcon;
+   makeband
+   set edge inband original==1;
+   makeband
+</pre>
+注意：如果 <code>makeband</code> 在角落和其他棘手位置出现问题，
+请对不同的边集多次运行 <code>makeband</code>。
+在为后续运行设置 <code>inband</code> 时，请确保将前一次运行的边的
+<code>inband</code> 清零。注意示例中的条件是布尔值，应用于所有边。
+
+
+<!--========================== bonnet_movie.cmd  =============================-->
+
+  <hr> <h3>    <a   id="bonnet_movie.cmd" class="name">bonnet_movie.cmd</a></h3>
+
+
+在内存中创建最小曲面 Bonnet 旋转的电影，每度一帧，共 360 度。
+使用 <a href="#adjoint.cmd">adjoint.cmd</a>，因此具有相同的假设条件。
+<p>
+用法：
+<ol>
+<li>演化初始最小曲面，移除所有水平集约束和边界，在图形窗口中获得良好的视图。
+<li>   运行 <code>make_movie</code> 计算旋转。
+<li>   运行 <code>show_movie</code> 查看 Bonnet 旋转的屏幕显示。
+<li>   运行 <code>movie</code> 查看无限循环的 Bonnet 旋转显示。
+<li>   运行 <code>postscript_movie</code> 创建 PostScript 文件序列。
+       PostScript 文件的名称将是数据文件名后附加帧号。
+</ol>
+
+<!--========================== cmccousin.cmd  =============================-->
+
+  <hr> <h3>    <a   id="cmccousin.cmd" class="name">cmccousin.cmd</a></h3>
+
+R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有一个"表亲"
+（cousin）最小曲面，它与之等距且切平面旋转了 90 度。
+在 S^3 中，平移通过四元数群完成。
+<p>
+此表示使用第 4 个坐标作为四元数标量分量，以获得 R^3 和 S^3 之间在四元数单位处的更好映射。
+<p>
+数据文件应在 4 维中设置，S^3 实现为水平集约束 x^2 + y^2 + z^2 + w^2 = 1。
+<p>
+如果起始边 starte 位于表面中心附近而非外部，效果最佳。
+<p>
+本文件包含：
+<dl>
+<dt>
+<code>s3_to_r3</code>:
+          <dd> 将 S^3 中的最小曲面转换为 R^3 中的 CMC 1 表面。
+          调用前请移除所有约束和边界。</dd>
+<dt>
+<code>r3_to_s3</code>: <dd> 将 R^3 中的 CMC 1 表面转换为 S^3 中的最小曲面。
+          调用前请移除所有约束和边界。 </dd>
+<dt>
+<code>centralize(integer v_id)</code>: <dd> 将 S^3 平移使给定顶点位于 (0,0,0,1) 的过程。 </dd>
+</dl>
+
+<!--========================== coff.cmd  =============================-->
+
+  <hr> <h3>    <a   id="coff.cmd" class="name">coff.cmd</a></h3>
+
+以 ASCII 格式打印 Geomview 彩色 OFF 文件的命令脚本。
+<p>
+ 假设条件和限制：
+<ul>
+<li>   3D 肥皂膜模型。
+<li>   线性模型。
+<li>   无环面或对称群。如有必要，请先使用 <a href="commands.htm#detorus">detorus</a>。
+<li>   处理面片颜色，但必须是常规颜色，而非 <a href="toggle.htm#rgb_colors">
+    rgb_colors</a>。
+<li>  使用面片 frontcolor；忽略 backcolor。
+<li> 仅列出符合当前 <a href="commands.htm#show">show facets</a> 准则的面片。
+<li>  不处理边，因为 OFF 格式不包含边。
+<li>  不假设元素编号连续。
+</ul>
+<p>
+<p>
+用法：
+<ol>
+<li> 读取命令文件。
+<li> 设置 "<a href="commands.htm#show">show facets</a>" 准则（可选）。
+<li> 运行 <code>coff</code> 并将输出重定向到文件。
+</ol>
+示例：
+<pre>
+  Enter command: read "coff.cmd"
+  Enter command: show facet where not fixed
+  Enter command: coff >>> "filename.coff"
+</pre>
+
+<!--========================== collada.cmd  =============================-->
+
+  <hr> <h3>    <a   id="collada.cmd" class="name">collada.cmd</a></h3>
+
+创建 Collada 格式表面文件的命令脚本。
+<p>
+ 假设条件和限制：
+<ul>
+<li>   3D 肥皂膜模型。
+<li>   线性模型。
+<li>   无环面或对称群。如有必要，请先使用 <a href="commands.htm#detorus">detorus</a>。
+<li>   处理面片颜色，但必须是常规颜色，而非 <a href="toggle.htm#rgb_colors">
+    rgb_colors</a>。
+<li>  使用面片 frontcolor 和 backcolor。
+<li> 仅列出符合当前 <a href="commands.htm#show">show facets</a> 准则的面片。
+<li>  不处理边。
+<li>  不假设元素编号连续。
+</ul>
+<p>
+<p>
+用法：
+<ol>
+<li> 读取命令文件。
+<li> 设置 <a href="commands.htm#show">show facets</a> 表达式（可选）。
+<li> 运行 <code>collada</code> 并将输出重定向到文件。
+</ol>
+示例：
+<pre>
+  Enter command: read "collada.cmd"
+  Enter command: show facet where not fixed
+  Enter command: collada >>> "filename.col"
+</pre><!--==========================   =============================-->
+
+  <hr> <h3>    <a   id="complex.cmd" class="name">complex.cmd</a></h3>
+
+一些复数参数的复函数，主要用于最小曲面的 Weierstrass 表示。
+每个函数有两个版本，分别返回实部和虚部。
+<p>
+   内容：
+<ul>
+ <li><code>re_sqrt(real rex,real imx), im_sqrt(real rex, real imx)</code>
+ <li><code>re_sin(real rex,real imx), im_sin(real rex, real imx)</code>
+<li> <code>re_arcsin(real rex,real imx), im_arcsin(real rex, real imx)</code>
+<li>  <code>re_incompleteEllipticF(real rex, real imx, real m_param,
+   real nbr_value,integer nbr_test),<br>
+  im_incompleteEllipticF(real rex, real imx, real m_param,
+   real nbr_value,integer nbr_test)</code>
+</ul>
+<p>
+   参数：<br>
+     <code>rex</code>、<code>imx</code>：复数参数的实部和虚部。<br>
+关于 <code>incompleteEllipticF</code> 的附加信息：
+需要注意 +/- arcsin(1/sqrt(m)) + 2*pi*k 处的分支点，
+因此 <code>nbr_value</code> 输入参数用于通过连续性选择正确的分支；
+如果为 0，则选择主分支。分支值相差 2*ellipticK(m)。
+<code>nbr_test</code> 是一个布尔标志，表示是否应用上述连续性测试。<br>
+参考：Abramowitz and Stegun 17.4.11
+
+
+<!--========================== dirichlet_to_disk.cmd========================-->
+
+  <hr> <h3>    <a   id="dirichlet_to_disk.cmd" class="name">dirichlet_to_disk.cmd</a></h3>
+
+将单连通区域映射到单位圆盘的命令脚本，
+通过最小化 Dirichlet 能量来获得共形映射（conformal mapping）。
+<p>
+前提条件：具有单连通表面的 2D 肥皂膜模型。
+使用命名量定义 Dirichlet_elastic 能量，但不定义其他量，
+即所有面片张力设为 0。
+<p>
+用法：移除所有约束和边界。运行 to_disk 或 to_triangle。
+然后演化。
+<p> 示例数据文件：dirichlet_E.fe
+
+<!--========================== dxf.cmd  =============================-->
+
+  <hr> <h3>    <a   id="dxf.cmd" class="name">dxf.cmd</a></h3>
+
+生成 AutoCad DXF 文件的命令脚本。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 处理面片颜色，但仅使用 frontcolor；参见 <a href="#dxf_thick.cmd">
+  dxf_thick.cmd</a> 了解 backcolor。
+<li> 不处理边。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code>dxf >>> "filename.dxf"</code>
+
+<!--==========================   =============================-->
+
+  <hr> <h3>    <a   id="dxf_thick.cmd" class="name">dxf_thick.cmd</a></h3>
+
+
+生成具有分离面片 frontcolor 和 backcolor 的 AutoCad DXF 文件的命令脚本。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 通过在 frontcolor 和 backcolor 不同时创建两个略有偏移的面片来处理面片 frontcolor 和 backcolor。
+<li> 不处理边。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code>dxf_thick >>> "filename.dxf"</code>
+
+<!--==========================   =============================-->
+
+  <hr> <h3>    <a   id="embox.cmd" class="name">embox.cmd</a></h3>
+
+
+ 创建包围泡沫截面外部的体包围面片的命令脚本，
+通过使用 <a href="commands.htm#detorus">detorus</a> 命令
+对以 <a href="toggle.htm#clipped">clipped</a> 模式显示的泡沫进行处理。
+<br>
+ 假设条件：
+<ul>
+<li>   3D 肥皂膜环面模型。
+<li>   泡沫填充单位晶胞。
+<li>   detorus 后无价数为 1 的内部边。
+ <li>  torus_periods 和 inverse_periods 仍保持有效值，
+     因此 embox 不能在 detorus 完成后创建的转储文件上运行。
+</ul>
+<p>
+ 用法：将 torus mode view 设置为
+<a href="toggle.htm#clipped">clipped</a>，运行
+<a href="commands.htm#detorus">detorus</a>，
+然后运行 <code>embox</code>。
+<p>
+
+ 警告：embox 不能很好地处理恰好位于边界框壁上的面片，
+因此如果存在此类面片，建议在执行 detorus 之前移动表面，即：
+<pre>
+     clipped;
+     set vertex x x+0.1;
+     set vertex y y+0.1;
+     set vertex z z+0.1;
+     detorus;
+     embox;
+</pre>
+
+<!--========================== foamface.cmd  =============================-->
+
+  <hr> <h3>    <a   id="foamface.cmd" class="name">foamface.cmd</a></h3>
+
+
+ 本文件包含几个命令脚本，用于以完整泡沫面（而非 Evolver 面片）的形式分析 3D 泡沫。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜模型。
+<li> 用于环面模型，但也适用于线性、二次和 Lagrange 模型。
+</ul><p>
+ 有五个有用的命令：
+<ul>
+<li> <code>foamface_mark</code>：查找连续面，并用面片属性 <code>fmark</code>
+    的相同值标记每个连续面的面片，其值范围从 1 到完整面的数量，
+     保存在变量 <code>foamface_count</code> 中。
+<li> <code>foamface_min</code>：查找面积最小的连续面。
+    会自行运行 <code>foamface_mark</code>，因此您不必手动运行。
+<li> <code>foamedge_mark</code>：查找连续三重边，并用边属性 <code>emark</code>
+   的相同值标记每个连续三重边的边，其值从 1 到 <code>foamedge_count</code>。
+<li> <code>foamedge_min</code>：查找长度最小的连续三重边。
+    会自行运行 <code>foamedge_mark</code>，因此您不必手动运行。
+<li> <code>foam_signature</code>：查找每个体上每种类型的多边形数量。
+    完成后，数组 <code>body_poly_counts</code> 保存每个体的给定边数的面数。
+    foam_signature 之后，您可以执行
+<pre>
+       print body_poly_counts
+</pre>
+    来查看结果。例如，对于有两个体的 twointor.fe，结果为：
+<pre>
+       {{0,0,0,6,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,6,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}
+</pre>
+</ul>
+
+<!--========================== foamface_jvx.cmd  =============================-->
+
+  <hr> <h3>    <a   id="foamface_jvx.cmd" class="name">foamface_jvx.cmd</a></h3>
+
+
+ 生成 JavaView jvx 文件，泡沫单元面作为单个 jvx 面。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 使用面片 frontcolor 和 backcolor 的平均值。
+<li> 处理透明度；在运行 <code>foamface_jvx</code> 之前将变量 <code>jvx_transparency</code>
+设置为所需的透明度（0 到 1 之间）。
+<li> 不处理边本身，但面边会显示。
+<li> 不需要元素编号连续。
+</ul>
+ 用法：<code>foamface_jvx >>> "filename.jvx"</code>
+
+<!--========================== fourier.cmd  =============================-->
+
+  <hr> <h3>    <a   id="fourier.cmd" class="name">fourier.cmd</a></h3>
+
+  打印闭合曲线的傅里叶分量的过程。该曲线被视为单位圆到 3D 的映像，
+顶点是均匀分布在圆上的点的映像。计算并打印给定阶数的正弦和余弦傅里叶系数。
+结果也存储在变量
+<code>x_sin_coeff</code>、
+<code>y_sin_coeff</code>、
+<code>z_sin_coeff</code>、
+<code>x_sin_coeff</code>、
+<code>y_sin_coeff</code> 和
+<code>z_sin_coeff</code> 中，方便您使用。
+<p>
+假设条件：
+<ul>
+<li>  3D 线性弦模型（string model）。
+<li>  非环面或对称模型。
+<li>  边形成闭合曲线。
+</ul>
+
+用法：<code>f_component(integer order)</code>
+<br>
+<!--========================== gaussequi.cmd  =============================-->
+
+  <hr> <h3>    <a   id="gaussequi.cmd" class="name">gaussequi.cmd</a></h3>
+
+使用高斯映射（Gauss map）作为交换准则进行边等角化（equiangulation）的命令脚本。
+高斯映射将表面映射到单位球面，每个点映射到其单位法向量。
+原始表面的面片在高斯球面上诱导出三角剖分，可以对球面三角剖分进行等角化计算。
+此命令执行该计算并进行指定的边交换。
+目的是使面片更好地跟随曲率。
+但它可能存在问题；它可能产生零面积的面片。此外，交换一条边会改变高斯映射，
+因此可能不会改善情况。
+<p>
+假设条件：
+<ul>
+<li>  3D 线性肥皂膜模型。
+<li>  允许环面模型。
+</ul>
+用法：<code>gaussequi</code>
+
+<!--========================== gaussmap.cmd  =============================-->
+
+  <hr> <h3>    <a   id="gaussmap.cmd" class="name">gaussmap.cmd</a></h3>
+
+ 高斯映射将表面映射到单位球面，每个点映射到其单位法向量。
+此命令脚本将表面物理转换为球面。它将每个顶点坐标转换为其单位法线。
+原始坐标保存在顶点向量属性 <code>oldx</code> 中，
+因此本文件定义的 <code>revert</code> 命令可以恢复原始表面。
+
+<p>
+假设条件：
+<ul>
+<li>  3D 线性肥皂膜模型。
+<li>  无环面模型或对称群。
+<li>  不应有顶点位于约束、边界上或被固定。
+</ul>
+用法：<code>gaussmap</code>
+
+<!--========================== gaussref.cmd  =============================-->
+
+  <hr> <h3>    <a   id="gaussref.cmd" class="name">gaussref.cmd</a></h3>
+
+ 使用高斯映射作为细化准则来细化边的过程。
+高斯映射将表面映射到单位球面，每个点映射到其单位法向量。
+原始表面的面片在高斯球面上诱导出三角剖分，可以计算球面三角剖分的边长度。
+其思想是基于曲率而非长度来细化边，并将所需边数保持在最低。
+<p>
+假设条件：
+<ul>
+<li>  3D 线性肥皂膜模型。
+<li>  允许环面模型。
+</ul>
+用法：<code>gaussequi(real maxarc)</code>
+<br> 其中 <code>maxarc</code> 是细化的截断弧长（弧度）。
+
+
+<!--========================== iges.cmd  =============================-->
+
+  <hr> <h3>    <a   id="iges.cmd" class="name">iges.cmd</a></h3>
+
+使用 IGES 参数化曲面片实体（类型 114）为表面写入 IGES 文件的命令脚本。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor。
+<li> 不处理边。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code>iges >>> "filename.igs"</code>
+
+<!--==========================  iges114.cmd  =============================-->
+
+  <hr> <h3>    <a   id="iges114.cmd" class="name">iges114.cmd</a></h3>
+
+使用 IGES 参数化曲面片实体（类型 114）为表面写入 IGES 文件的命令脚本。
+与 <a href="#iges.cmd">iges.cmd</a> 的不同之处在于它遵循
+<a href="commands.htm#show">show facets</a> 准则，
+并且还处理二次和三次模型。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性、二次或 Lagrange 阶数 3 模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor。
+<li> 显示遵循 <a href="commands.htm#show">show facets</a> 准则的面片。
+<li> 不处理边。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code>iges114 >>> "filename.igs"</code><!--========================== iges128.cmd  =============================-->
+
+  <hr> <h3>    <a   id="iges128.cmd" class="name">iges128.cmd</a></h3>
+
+使用 IGES 有理 B 样条实体（类型 128）为表面写入 IGES 文件的命令脚本。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色作为 frontcolor，但如果您将变量
+ <code>iges_double_sided</code> 设置为 1，则将为每个面片创建正面和背面版本。
+<li> 显示遵循 <a href="commands.htm#show">show facets</a> 准则的面片。
+<li> 不处理边本身，但如果您将变量
+ <code>iges_edge_tubes</code> 设置为 1，则每条边将显示为细长管。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code>iges128 >>> "filename.igs"</code>
+
+<!--==========================   =============================-->
+
+  <hr> <h3>    <a   id="iges144.cmd" class="name">iges144.cmd</a></h3>
+
+使用 IGES 修剪参数化曲面实体（类型 144）为表面写入 IGES 文件的命令脚本。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性、二次或 Lagrange 阶数 3 模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor。
+<li> 显示遵循 <a href="commands.htm#show">show facets</a> 准则的面片。
+<li> 不处理边。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code>iges144 >>> "filename.igs"</code>
+
+
+<!--========================== intersect.cmd  =============================-->
+
+  <hr> <h3>    <a   id="intersect.cmd" class="name">intersect.cmd</a></h3>
+
+检测线性边和面片相交的命令脚本。
+对于每个面片，查找是否有任何边在其内部相交。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性、二次模型。但在二次模型中，将边和面片视为简单的线性。
+<li> 无环面或对称群。
+<li> 对于大型表面较慢，因为它测试所有边与所有面片的交集。
+<li> 变量 <code>intersect_eps</code> 是被视为等于零的容差，
+   即用于检测平行或边界相交的面片。
+</ul>
+<p>
+用法：<code>detect</code>
+<br>输出：打印相交的面片和边的 id。
+       在 Lagrange 模型中不工作。
+
+<!--========================== jvx.cmd  =============================-->
+
+  <hr> <h3>    <a   id="jvx.cmd" class="name">jvx.cmd</a></h3>
+
+创建 JavaView jvx 文件的命令脚本。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor。
+<li> 显示遵循 <a href="commands.htm#show">show facets</a> 准则的面片。
+<li> 显示遵循 <a href="commands.htm#show">show edges</a> 准则的边。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code>jvx >>> "filename.jvx"</code>
+
+
+<!--========================== maya.cmd  =============================-->
+
+  <hr> <h3>    <a   id="maya.cmd" class="name">maya.cmd</a></h3>
+
+
+使用整个表面的一个网格创建 Maya ASCII 文件的命令脚本。
+参考：http://caad.arch.ethz.ch/info/maya/manual/FileFormats/index.html
+以及 Maya 文档：
+   Developer Resources > File Formats > Maya ASCII file format >
+Maya ASCII f format > Organizationof Maya Ascii files
+<p>
+假设条件和功能：
+<ul>
+<li> 目前似乎还不能正常工作。请暂时使用 <a href="#maya1.cmd">maya1.cmd</a>。
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor。
+<li> 不遵循 <a href="commands.htm#show">show facets</a> 准则。
+<li> <a href="commands.htm#show">show edges</a> 准则。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code>maya >>> "filename.ma"</code>
+<p>
+注意：默认长度单位是厘米（cm），但如果您想使用不同的单位，
+请在加载 maya.cmd 之后、运行 <code>maya</code> 命令之前将 <code>maya_length_unit</code>
+变量设置为相应的字符串，例如：
+<pre>
+   maya_length_unit := "in"
+   maya >>> "filename.ma"
+</pre>
+有效的长度单位字符串为：
+ "mm"、"millimeter"、"cm"、"centimeter"、"m"、"meter"、"km"、"kilometer"、
+ "in"、"inch"、"ft"、"foot"、"yd"、"yard"、"mi"、"mile"。
+<p>
+注意：为防止此脚本生成的名称与现有 maya 名称或其他数据文件的名称冲突，
+有一个字符串变量 <code>maya_name</code> 会被添加到此脚本生成的所有名称前面。
+有一个 maya 命名空间功能可能可以替代此方法，但我还不了解它。
+<code>maya_name</code> 的默认值是 "AAA"；我没有使用数据文件名，
+因为它可能包含非法字符，并且会阻止从同一数据文件生成多个 maya 对象。
+因此，如果您要同时使用多个表面，请在执行 maya 命令之前更改 <code>maya_name</code>。
+
+<!--========================== maya1.cmd  =============================-->
+
+  <hr> <h3>    <a   id="maya1.cmd" class="name">maya1.cmd</a></h3>
+
+为每个面片使用单独的网格对象创建 Maya ASCII 文件的命令脚本。
+参考：http://caad.arch.ethz.ch/info/maya/manual/FileFormats/index.html
+以及 Maya 文档：
+   Developer Resources > File Formats > Maya ASCII file format >
+Maya ASCII f format > Organizationof Maya Ascii files
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor。
+<li> 不遵循 <a href="commands.htm#show">show facets</a> 准则。
+<li> <a href="commands.htm#show">show edges</a> 准则。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code>maya1 >>> "filename.ma"</code>
+<p>
+注意：默认长度单位是厘米（cm），但如果您想使用不同的单位，
+请在加载 maya.cmd 之后、运行 <code>maya</code> 命令之前将 <code>maya_length_unit</code>
+变量设置为相应的字符串，例如：
+<pre>
+   maya_length_unit := "in"
+   maya >>> "filename.ma"
+</pre>
+有效的长度单位字符串为：
+ "mm"、"millimeter"、"cm"、"centimeter"、"m"、"meter"、"km"、"kilometer"、
+ "in"、"inch"、"ft"、"foot"、"yd"、"yard"、"mi"、"mile"。
+<p>
+注意：为防止此脚本生成的名称与现有 maya 名称或其他数据文件的名称冲突，
+有一个字符串变量 <code>maya_name</code> 会被添加到此脚本生成的所有名称前面。
+有一个 maya 命名空间功能可能可以替代此方法，但我还不了解它。
+<code>maya_name</code> 的默认值是 "AAA"；我没有使用数据文件名，
+因为它可能包含非法字符，并且会阻止从同一数据文件生成多个 maya 对象。
+因此，如果您要同时使用多个表面，请在执行 maya 命令之前更改 <code>maya_name</code>。<!--========================== neville.cmd  =============================-->
+
+  <hr> <h3>    <a   id="neville.cmd" class="name">neville.cmd</a></h3>
+
+  用于计算 B 样条值的 Neville 算法的过程。
+可以在一次调用中对不同的数据进行多次插值。
+<p>
+ 内容：
+<ul>
+<li>   <code>neville1</code>  - 一维插值和导数
+<li>   <code>neville2</code>  - 二维插值和导数。
+</ul>
+
+neville1 的用法：
+全局数组 <code>neville1_data</code> 应由调用者设置，必要时重新调整维度。
+<pre>
+  define neville1_data real[order+1][dim];
+  // 在 neville1_data 中填充节点数据
+  ...
+  neville1(order,dim,u);
+</pre>
+其中 <code>u</code> 是需要插值的 0 到 1 之间的值。
+输入数组 neville1_data 不会被修改。插值值和
+关于 <code>u</code> 的导数返回在一维数组
+<code>neville1_value[dim]</code> 和 <code>neville1_deriv[dim]</code> 中。
+<p>
+neville2 的用法：
+全局数组 <code>neville2_data</code> 应由调用者设置，必要时重新调整维度。
+<pre>
+  define neville2_data real[order+1][order+1][dim];
+  // 在 neville2_data 中填充节点数据
+  ...
+  // 用插值点的坐标填充数组 nevill2_u[2]
+  neville2_u[1] := 0.3;
+  neville2_u[2] := 0.56;
+  neville2(order,dim);
+</pre>
+输入数组 neville2_data 不会被修改。插值值和关于 <code>u</code> 的偏导数
+返回在一维数组 <code>neville1_value[dim]</code> 和二维数组
+<code>neville1_deriv[dim][2]</code> 中。
+
+<!--========================== obj.cmd  =============================-->
+
+  <hr> <h3>    <a   id="obj.cmd" class="name">obj.cmd</a></h3>
+
+创建 OBJ 格式 3D 图形文件的命令脚本。
+生成的 OBJ 文件需要 EvolverOBJcolors.mtl 文件（包含在 Evolver 发行版 fe 文件夹中）
+在同一文件夹中以提供颜色信息。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor，除非变量
+<code>obj_double_sided</code> 设置为 1，此时每个面片将绘制两次，略有偏移。
+<li> 遵循 <a href="commands.htm#show">show facets</a> 准则。
+<li> 遵循 <a href="commands.htm#show">show edges</a> 准则。
+<li> 边显示为线，除非变量 <code>obj_edge_flag</code> 设置为 1（默认值）。
+边显示为 4 面管。管的相对大小可以通过变量 <code>tube_radius</code> 设置，
+默认值为 0.002。
+</ul>
+<p>
+
+用法：
+<ol>
+<li>  使用 "<code>show edge where ...</code>" 和 "<code>show facet where ...</code>"
+   命令设置要显示的边和面片。
+<li>  如果需要面片背面，请将 <code>obj_double_sided</code> 设置为 1。
+<li>  如果不显示边，请将 <code>obj_edge_flag</code> 设置为 0。
+<li>  运行 <code>obj</code> 并将输出重定向到文件，例如：<br>
+      <code>obj >>> "filename.obj"</code>
+</ol>
+
+<!--========================== off.cmd  =============================-->
+
+  <hr> <h3>    <a   id="off.cmd" class="name">off.cmd</a></h3>
+
+以 ASCII 格式打印 Geomview OFF 文件的命令脚本。
+<p>
+ 假设条件和限制：
+<ul>
+<li>   3D 肥皂膜模型。
+<li>   线性模型。
+<li>   无环面或对称群。如有必要，请先使用 <a href="commands.htm#detorus">detorus</a>。
+<li>   不处理面片颜色。
+<li>  处理所有面片。参见 <a href="#off_show.cmd">off_show</a> 了解
+   遵循面片 <a href="commands.htm#show">show</a> 准则的等效命令。
+<li>  不处理边，因为 OFF 格式不包含边。
+<li>  不假设元素编号连续。
+</ul>
+<p>
+用法：<code> do_off >>> "filename.off"</code>
+
+<!--========================== offn.cmd  =============================-->
+
+  <hr> <h3>    <a   id="offn.cmd" class="name">offn.cmd</a></h3>
+
+写入带法线的 Geomview OFF 文件的命令脚本。为了合理处理角落和连接处，
+在这些点创建多个 OFF 顶点，每个顶点具有不同的法线。
+判断表面弯曲是否需要单独法线的标准是变量 <code>cosine_cutoff</code>（默认 0.8）。
+法线之间夹角余弦小于截断值的相邻面片将获得单独的顶点。
+<p>
+ 假设条件和限制：
+<ul>
+<li>   3D 肥皂膜模型。
+<li>   线性模型。
+<li>   无环面或对称群。如有必要，请先使用 <a href="commands.htm#detorus">detorus</a>。
+<li>   不处理面片颜色。
+<li>  处理所有面片。
+<li>  不处理边，因为 OFF 格式不包含边。
+<li>  不假设元素编号连续。
+</ul>
+<p>
+用法：<code> offn >>> "filename.off"</code>
+
+
+<!--========================== off_show.cmd  =============================-->
+
+  <hr> <h3>    <a   id="off_show.cmd" class="name">off_show.cmd</a></h3>
+
+以 ASCII 格式打印 Geomview OFF 文件的命令脚本。
+与 <a href="#off.cmd">off.cmd</a> 的不同之处在于遵循面片
+<a href="commands.htm#show">show</a> 准则。
+<p>
+ 假设条件和限制：
+<ul>
+<li>   3D 肥皂膜模型。
+<li>   线性模型。
+<li>   无环面或对称群。如有必要，请先使用 <a href="commands.htm#detorus">detorus</a>。
+<li>   不处理面片颜色。
+<li>  处理遵循面片 <a href="commands.htm#show">show</a> 准则的面片。
+<li>  不处理边，因为 OFF 格式不包含边。
+<li>  不假设元素编号连续。
+</ul>
+<p>
+用法：<code> do_off >>> "filename.off"</code>
+
+<!--========================== order.cmd  =============================-->
+
+  <hr> <h3>    <a   id="order.cmd" class="name">order.cmd</a></h3>
+
+将弦模型（string model）顶点连续编号的命令脚本。
+结果是每个顶点的顺序号存储在顶点额外属性 <code>order_number</code> 中，
+该属性由脚本自行创建。它不修改顶点或边的 <a href="elements.htm#id">id</a> 编号。
+<p>
+假设条件：
+<ul>
+<li> 弦线性模型。
+<li> 所有边在一个环中。
+</ul>
+用法：<code>order</code>
+<br>
+使用 order 和 <a href="commands.htm#reorder_storage">reorder_storage</a>
+以及 <a href="commands.htm#renumber_all">renumber_all</a> 使 <code>id</code>
+编号围绕环连续的示例：
+<pre>
+
+   define vertex attribute vertex_order_key real;
+   define edge attribute edge_order_key real;
+   define facet attribute facet_order_key real;
+   define body attribute body_order_key real;
+   define facetedge attribute facetedge_order_key real;
+
+   read "order.cmd";
+
+   renumber := {
+     order;
+     set vertex vertex_order_key order_number;
+     set edge ee edge_order_key ee.vertex[1].vertex_order_key;
+     set facetedge fe facetedge_order_key fe.edge[1].edge_order_key;
+     set facet ff facet_order_key min(ff.vertex,vertex_order_key);
+     set body bb body_order_key min(bb.facet,facet_order_key);
+     reorder_storage;
+     renumber_all;
+     }
+</pre><!--========================== ovito.cmd  =============================-->
+
+  <hr> <h3>    <a   id="ovito.cmd" class="name">ovito.cmd</a></h3>
+
+以面向行的格式写入 poly（PolyData）文件的命令脚本。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor。
+<li> 不处理边。
+<li> 遵循 <a href="commands.htm#show">show facets</a> 准则。
+</ul>
+<p>
+
+用法：poly >>> "filename.poly"
+
+<p>
+注意：在 Visual Studio 中使用 make 编译时，添加 -D_ENABLE_EXTENDED_ALIGNED_STORAGE 选项。
+<!--========================== parameters.cmd  =============================-->
+
+  <hr> <h3>    <a   id="parameters.cmd" class="name">parameters.cmd</a></h3>
+
+以适合读回 Surface Evolver 的格式打印曲率或压力参数的命令脚本。
+（即使参数名本身被加引号也可以工作。）
+<p>
+假设条件：无。
+<p>
+用法：  <code>list_constraints_and_bodies</code>
+
+<!--========================== perimeter.cmd  =============================-->
+
+  <hr> <h3>    <a   id="perimeter.cmd" class="name">perimeter.cmd</a></h3>
+
+ 计算闭合曲线弧长的命令脚本。
+假设曲线形成闭合环。
+假设条件：
+<ul>
+<li> 弦模型或有界线性（string or bond linear）。
+<li> 3D（目前不支持 2D）。
+</ul>
+<p>
+用法：<code>find_perimeters()</code>
+
+<!--========================== ply.cmd  =============================-->
+
+  <hr> <h3>    <a   id="ply.cmd" class="name">ply.cmd</a></h3>
+
+ 以 ASCII 格式打印 PLY（Polygon）文件的命令脚本。
+假设不使用对称群，面片颜色仅作为 frontcolor。
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群。
+</ul>
+<p>
+用法：  ply >>> "filename.ply"
+
+<!--========================== poisson.cmd  =============================-->
+
+  <hr> <h3>    <a   id="poisson.cmd" class="name">poisson.cmd</a></h3>
+
+使用 Galerkin 有限元方法在某些约束上求解泊松方程（Poisson equation）
+的命令脚本。特别地，适用于使用电阻阵列和储液器的 Appollonius 问题。
+特定约束由字符串变量 <code>poisson_constraint</code> 给出，例如
+<pre>
+   poisson_constraint := "copper"
+</pre>
+<p>
+假设条件：
+<ul>
+<li> 线性三角形面片。
+<li> 约束的顶点有固定值。
+</ul>
+<p>
+用法：  <code>poisson</code>
+<br>结果存储在顶点额外属性 <code>potential</code> 中，
+其梯度存储在边额外属性 <code>flux</code> 中。
+
+<!--========================== pp.cmd  =============================-->
+
+  <hr> <h3>    <a   id="pp.cmd" class="name">pp.cmd</a></h3>
+
+ 预处理器命令脚本。
+<p>
+这组命令脚本用于生成管道内表面的网格。给定
+表面约束，它生成一个表面并细化到给定精度。
+假设：
+<ul>
+<li> 所有约束都是线性的。
+<li> 任何约束都不会相互交叉。
+<li> 管道可以是周期性的。
+</ul>
+<p>
+包含文件：<code>met.cmd</code>、<code>bracket.cmd</code>。
+<p>
+用法：参见 <a href="http://oldsite.wesleyan.edu/~mschwartz/sfe">http://oldsite.wesleyan.edu/~mschwartz/sfe</a>。
+<p>
+<!--========================== procs27.cmd  =============================-->
+
+  <hr> <h3>    <a   id="procs27.cmd" class="name">procs27.cmd</a></h3>
+
+ 这是 UMass 的一些旧例程的集合。我已将其完整保留在这里，
+以防用户觉得有用。
+<ol>
+<li><code>component(i)</code>：查找并列出组件 <code>i</code> 的所有边和顶点。
+<li><code>autonumber</code>：通过实际编号所有新元素来避免已知问题的 hack。
+<li><code>resetnormals</code>：由于组合法线（combinatorial normals）
+对细化不起作用而使用的。
+<li><code>findnormals</code>：在非约束上找到组合法线。
+<li><code>find_normals_c</code>：找到约束 c 上的法线。
+<li><code>midface</code>：查找面 <code>i</code> 的"中心"。
+<li><code>midedge</code>：查找边 <code>i</code> 的中心。
+<li><code>findxy(j)</code>：使用
+  <i>log(z)</i> 映射查找边 <code>j</code> 中点的复坐标。
+<li><code>findz</code>：查找所有边中点的 <i>z</i> 坐标。
+<li><code>vertices</code>：查找所有边的顶点坐标，作为复数。
+<li><code>edges</code>：查找边的坐标。
+<li><code>findt</code>：查找边中点的 <i>t</i> 坐标。
+<li><code>findw</code>：查找边中点的 <i>w</i> 坐标。
+<li><code>normalize</code>：规范化，即移动一个面片使其具有最大面积。
+<li><code>midpointrr</code>：用于计算对称域上的中点插值。
+<li><code>addmid</code>：将边标记为待细化。
+<li><code>doit</code>：细化 addmid 找到的所有边。
+</ol>
+
+<!--========================== pscolor.cmd  =============================-->
+
+  <hr> <h3>    <a   id="pscolor.cmd" class="name">pscolor.cmd</a></h3>
+
+打印带有隐藏面消除和面片颜色的 PostScript 文件的命令脚本。
+<p>
+ 假设条件：
+<ul>
+<li>   3D 肥皂膜模型。
+<li>   线性模型（linear model）。
+<li>   无环面或对称群。如有必要，请先使用 <a href="commands.htm#detorus">detorus</a>。
+</ul>
+<p>
+用法：<code> psff >>> "filename.ps"</code>
+
+<!--========================== psgraph.cmd  =============================-->
+
+  <hr> <h3>    <a   id="psgraph.cmd" class="name">psgraph.cmd</a></h3>
+
+打印灰度 PostScript 文件的命令脚本。
+<p>
+ 假设条件：
+<ul>
+<li>   3D 肥皂膜模型。
+<li>   线性模型。
+<li>   无环面或对称群。如有必要，请先使用 <a href="commands.htm#detorus">detorus</a>。
+</ul>
+<p>
+用法：<code> psff >>> "filename.ps"</code><!--========================== quad_be.cmd  =============================-->
+
+  <hr> <h3>    <a   id="quad_be.cmd" class="name">quad_be.cmd</a></h3>
+
+过程 <code>quad_to_be</code> 将线性模型转换为具有二次样条或
+Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier 三角形面片的子面片。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 顶点可能固定或位于约束上。
+<li> 不能是环面或对称模型。
+</ul>
+
+<p>
+注意：必须使用约束的贝塞尔形式（Bezier form）而不是三次样条形式（cubic spline form）。
+数据文件中约束的形式由其 <code>cubic</code> 关键字确定。
+如果需要，通过在 constraint 定义中添加 <code>cubic</code> 关键字
+将三次约束转换为贝塞尔形式。
+如果您的约束已经是三次的，您可以使用<code>cubic_to_bezier</code> 命令进行转换，
+它会同时更改约束的内部形式并将曲线型边（curved edges）转换为二次边（quadratic edges）。
+此命令仅适用于将曲面型边（curved edges）转换为贝塞尔形式（Bezier form）；不能处理样条形式（spline form）。
+
+<p>
+用法：<code>quad_to_bezier</code>
+
+<!--========================== quad_loop.cmd  =============================-->
+
+  <hr> <h3>    <a   id="quad_loop.cmd" class="name">quad_loop.cmd</a></h3>
+
+创建二次样条面片的命令脚本，以每个内部顶点为中心有四个面片。
+它通过四重化线性面片创建（quadruples the linear facets）。然后将内部顶点从
+初始位置调整到样条面片曲线交点的平均位置。
+
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 不能是环面或对称模型。
+</ul>
+
+<p>
+用法：<code>loop_quad</code>
+
+
+<!--========================== quad_s.cmd  =============================-->
+
+  <hr> <h3>    <a   id="quad_s.cmd" class="name">quad_s.cmd</a></h3>
+
+创建二次样条面片的命令脚本，每个原始面片周围有四个面片。
+原始面片由样条面片围绕。然后将顶点调整到样条面片曲线交点的
+平均位置。
+
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 不能是环面或对称模型。
+</ul>
+
+<p>
+用法：<code>spline_quad</code>
+
+<!--========================== radii.cmd  =============================-->
+
+  <hr> <h3>    <a   id="radii.cmd" class="name">radii.cmd</a></h3>
+
+用于获取 3D 顶点球体和 3D 边管的命令脚本。
+这是为了实现 Hales 猜想证明中的"飞碟"（flying saucer）配置。
+实际上，它在顶点放置指定半径的球体，在边放置圆柱形管。
+顶点球体和边管的形状用额外的体来表示，
+并使用 <a href="constraints.htm#content">content</a>
+约束来设置正确的体积。
+
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 顶点和边具有名为 radius 的额外属性。
+<li> 不能是环面模型。
+</ul>
+
+<p>
+用法：<code>add_radii</code>
+
+<p>
+撤销：<code>remove_radii</code>
+
+<!--========================== randpert.cmd  =============================-->
+
+  <hr> <h3>    <a   id="randpert.cmd" class="name">randpert.cmd</a></h3>
+
+产生随机扰动（random perturbation）的命令脚本。
+在出现错误收敛（false convergence）的情况下很有用。
+扰动幅度由 <code>randamp</code> 给出。它会立即改变坐标。
+
+<p>
+ 假设条件：
+<ul>
+<li>  无环面或对称群。
+</ul>
+<p>
+用法：<code>randpert(real amplitude)</code>
+
+<!--========================== rft.cmd  =============================-->
+
+  <hr> <h3>    <a   id="rft.cmd" class="name">rft.cmd</a></h3>
+
+ 正向（正）和反向快速离散傅里叶变换（Fourier transform）。
+数组索引从 0 到 n-1。 n 必须是 2 的幂。
+使用迭代版本的快速傅里叶变换（Fast Fourier Transform），
+因此不需要递归。
+<p>
+过程：
+<ol>
+<li> <code>rft(a[],n,dir)</code>，其中 <code>a[]</code> 是要变换的数组（原地修改），
+  <code>n</code> 是元素数量，<code>dir</code> 是变换方向
+  （正向为 1，反向为 -1）。
+  数组可以是 1D 或 2D。如果是一维的，它被当作长度为 n 的向量处理。
+  如果是二维的，它被当作 2D 实数数组处理，对每一行单独进行变换。
+</ol>
+
+<!--========================== ringeval.cmd  =============================-->
+
+  <hr> <h3>    <a   id="ringeval.cmd" class="name">ringeval.cmd</a></h3>
+
+将环面单元（torus cells）评估为几何体的命令脚本。
+将环面单元值设置为物理坐标中的多边形，以便可以使用 <code>Volume</code>
+和 <code>print vertex where...</code> 等命令。它还打印单元面积。
+<p>
+假设条件：
+<ul>
+<li> 环面模型，3D 弦模型（3D string model）。
+<li> 仅 2D 周期。
+</ul>
+<p>
+用法：<code>ringeval</code>
+
+<!--========================== rms.cmd  =============================-->
+
+  <hr> <h3>    <a   id="rms.cmd" class="name">rms.cmd</a></h3>
+
+一个查找表面均方根（rms）不规则性的命令脚本。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型，弦或有界（string or bond）。
+</ul>
+<p>
+用法：<code> rms()</code>
+<p>
+ <!--========================== rmsgraph.cmd  =============================-->
+
+  <hr> <h3>    <a   id="rmsgraph.cmd" class="name">rmsgraph.cmd</a></h3>
+
+一个生成 GnuPlot 文件以绘制不规则性历史记录的命令脚本。
+假设数据在名为 <code>rmslog</code> 的文件中（由 <code>rms.cmd</code> 生成），
+并写入 <code>grmslog</code> 以便 GnuPlot 可以读取。
+<p>
+假设条件：
+<ul>
+<li> rms.log 必须存在。
+</ul>
+<p>
+用法：<code> rms_graph()</code><!--========================== rmshort.cmd  =============================-->
+
+  <hr> <h3>    <a   id="rmshort.cmd" class="name">rmshort.cmd</a></h3>
+
+ 删除小于给定长度的边的命令脚本。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无对称群。允许环面。
+</ul>
+<p>
+用法：<code>rmshort(real length)</code>
+
+
+<!--========================== rmxfe.cmd  =============================-->
+
+  <hr> <h3>    <a   id="rmxfe.cmd" class="name">rmxfe.cmd</a></h3>
+
+ 删除 X-Windows 图形窗口中的面片的命令脚本。
+它使用 XFree86 鼠标协议，其中三次鼠标点击表示您希望从显示中删除的面片的顶点。
+这不会影响实际表面。要影响表面本身，请使用 <code>remove</code>。
+<p>
+ 假设条件：
+<ul>
+<li>   必须在 X-Windows 下运行。
+<li>   仅适用于线性模型。
+</ul>
+<p>
+用法：<code> rmxfe</code>
+
+
+<!--========================== sbcc.cmd  =============================-->
+
+  <hr> <h3>    <a   id="sbcc.cmd" class="name">sbcc.cmd</a></h3>
+
+创建体心立方（simple body-centered cubic）晶胞（unit cell）的过程。
+<p>
+假设条件：无。
+<p>
+用法：<code>sbcc(real side)</code>
+<p>
+<!--========================== shew.cmd  =============================-->
+
+  <hr> <h3>    <a   id="shew.cmd" class="name">shew.cmd</a></h3>
+
+通过倾斜边来防止面片变平的命令脚本。它适用于二维模型。
+<p>
+假设条件：
+<ul>
+<li> 二维模型（2D model）。
+<li> 肥皂膜或线性线模型（soapfilm or linear string model）。
+</ul>
+<p>
+用法：<code>skew(real amt)</code>
+
+
+<!--========================== skew.cmd  =============================-->
+
+  <hr> <h3>    <a   id="skew.cmd" class="name">skew.cmd</a></h3>
+
+用于倾斜表面使其具有零平均曲率的命令脚本。
+用于阿波罗尼乌斯电阻阵列建模（Appollonius resistance array modeling）。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+</ul>
+<p>
+用法：<code>skew(real tilt)</code>
+
+
+<!--========================== skewflip.cmd  =============================-->
+
+  <hr> <h3>    <a   id="skewflip.cmd" class="name">skewflip.cmd</a></h3>
+
+ 用于旋转表面使其具有零平均曲率的命令脚本。
+用于阿波罗尼乌斯电阻阵列建模。与 <a href="#skew.cmd">skew.cmd</a> 类似，
+但采用旋转方法而不是简单的倾斜。生成的平均曲率更准确。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+</ul>
+<p>
+用法：<code>skewflip(real tilt)</code>
+
+<!--========================== sphi.cmd  =============================-->
+
+  <hr> <h3>    <a   id="sphi.cmd" class="name">sphi.cmd</a></h3>
+
+创建具有立方对称性的一般球体命令脚本。
+<p>
+假设条件：无。
+<p>
+用法：<code>sphi(integer N)</code>
+
+
+<!--========================== spoly.cmd  =============================-->
+
+  <hr> <h3>    <a   id="spoly.cmd" class="name">spoly.cmd</a></h3>
+
+ 正多边形柱体（regular polygon prisms）命令脚本。
+<p>
+假设条件：无。
+<p>
+用法：<code>spoly(integer n, real r, real h)</code>
+<p>
+<!--========================== ssi.cmd  =============================-->
+
+  <hr> <h3>    <a   id="ssi.cmd" class="name">ssi.cmd</a></h3>
+
+用于阿波罗尼乌斯电阻阵列建模的命令脚本。
+它计算控制方程，即 f 的梯度等于 0。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+</ul>
+<p>
+用法：<code>ssi()</code>
+<p>
+<!--========================== stl.cmd  =============================-->
+
+  <hr> <h3>    <a   id="stl.cmd" class="name">stl.cmd</a></h3>
+
+以 ASCII 格式打印 STL 文件的命令脚本。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群。
+</ul>
+用法：<code> stl >>> "filename.stl"</code>
+
+<!--========================== stl_binary.cmd  =============================-->
+
+  <hr> <h3>    <a   id="stl_binary.cmd" class="name">stl_binary.cmd</a></h3>
+
+ 以二进制格式打印 STL 文件的命令脚本。使用 C 语言风格的二进制 I/O。
+比 ASCII 格式写入速度快且文件更小，但不太易读。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code> stl_binary >>> "filename.stl"</code>
+
+<!--========================== stl_binary_vcolor.cmd  =============================-->
+
+  <hr> <h3>    <a   id="stl_binary_vcolor.cmd" class="name">stl_binary_vcolor.cmd</a></h3>
+
+ 以二进制格式打印 STL 文件的命令脚本，
+每个顶点都有颜色，使用 C 语言风格的二进制 I/O。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor。
+<li> 遵循 <a href="commands.htm#show">show facets</a> 准则。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code> stl_binary_vcolor >>> "filename.stl"</code>
+
+<!--========================== stl_vcolor.cmd  =============================-->
+
+  <hr> <h3>    <a   id="stl_vcolor.cmd" class="name">stl_vcolor.cmd</a></h3>
+
+ 以 ASCII 格式打印 STL 文件的命令脚本，每个顶点都有颜色。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor。
+<li> 遵循 <a href="commands.htm#show">show facets</a> 准则。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code> stl_vcolor >>> "filename.stl"</code>
+
+<!--========================== sv.cmd  =============================-->
+
+  <hr> <h3>    <a   id="sv.cmd" class="name">sv.cmd</a></h3>
+
+为没有 Delaunay 对偶（Delaunay duals）的表面创建对偶。
+它生成一个单独的文件并使用 Mathematica 读取它。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 不能有对称群。
+</ul>
+<p>
+用法：<code>sv(integer flag)</code>
+
+<!--========================== svg.cmd  =============================-->
+
+  <hr> <h3>    <a   id="svg.cmd" class="name">svg.cmd</a></h3>
+
+用于创建 SVG 文件的命令脚本。将 3D 点投影到 2D 平面，
+平面法线为变量 <code>svg_normal</code>（默认值 [0,0,1]，即 xy 平面）。
+变量 <code>svg_background</code> 设置背景颜色（默认白色）。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群。
+<li> 面片颜色仅作为 frontcolor。
+<li> 显示遵循 <a href="commands.htm#show">show facets</a> 准则的面片。
+<li> 显示遵循 <a href="commands.htm#show">show edges</a> 准则的边。
+<li> 不处理隐藏面或透明度。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code> svg >>> "filename.svg"</code><!--========================== svg2d.cmd  =============================-->
+
+  <hr> <h3>    <a   id="svg2d.cmd" class="name">svg2d.cmd</a></h3>
+
+用于创建 SVG 文件的命令脚本，用于 2D 模型。
+变量 <code>svg_background</code> 设置背景颜色（默认白色）。
+<p>
+假设条件和功能：
+<ul>
+<li> 2D 肥皂膜线性模型。
+<li> 无环面或对称群。
+<li> 面片颜色仅作为 frontcolor。
+<li> 显示遵循 <a href="commands.htm#show">show facets</a> 准则的面片。
+<li> 显示遵循 <a href="commands.htm#show">show edges</a> 准则的边。
+<li> 不处理隐藏面或透明度。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code> svg2d >>> "filename.svg"</code>
+
+<!--========================== sweep.cmd  =============================-->
+
+  <hr> <h3>    <a   id="sweep.cmd" class="name">sweep.cmd</a></h3>
+
+ 沿路径扫描 2D 模型的命令脚本。将现有的 2D 模型转换为 3D，
+使其横截面由现有模型给出，路径由包含脚本的函数的参数给出。
+路径函数 <code>sweep_path</code> 应返回 3D 点。
+目前仅适用于线性模型和开曲线。
+<p>
+ 假设条件：
+<ul>
+<li>   2D 肥皂膜模型。
+<li>   线性模型。
+<li>   开曲线（open curve）。
+</ul>
+<p>
+用法：<code>sweep(integer nslices)</code>
+<p>
+<!--========================== tanjutangen.cmd  =============================-->
+
+  <hr> <h3>    <a   id="tanjutangen.cmd" class="name">tanjutangen.cmd</a></h3>
+
+使用 Tan Jutangen 的重新配置方法（Tan Jutangen reconfiguration method）
+来修改表面的命令脚本。它通过添加或减去楔形物（wedges）来改变表面
+使其具有所需的体积。楔形物在表面的中间添加。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 不能是环面或对称模型。
+</ul>
+<p>
+用法：<code>tangutangen(integer n, real delta)</code>
+
+
+<!--========================== teapot.cmd  =============================-->
+
+  <hr> <h3>    <a   id="teapot.cmd" class="name">teapot.cmd</a></h3>
+
+犹他茶壶（Utah teapot）命令脚本。基于经典犹他茶壶数据生成表面。
+数据以条带形式读取（与附带的 teapot 数据文件一起使用）。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 不能是环面或对称模型。
+</ul>
+<p>
+用法：<code>teapot()</code>
+
+<!--========================== tetra.cmd  =============================-->
+
+  <hr> <h3>    <a   id="tetra.cmd" class="name">tetra.cmd</a></h3>
+
+创建正二十面体（regular icosahedron）命令脚本。
+<p>
+假设条件：无。
+<p>
+用法：<code>icosahed</code>
+
+<!--========================== tilings.cmd  =============================-->
+
+  <hr> <h3>    <a   id="tilings.cmd" class="name">tilings.cmd</a></h3>
+
+用于创建某些镶嵌（tilings）的命令脚本。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+</ul>
+<p>
+用法：<code>tilings(integer n)</code>
+
+<!--========================== tordup.cmd  =============================-->
+
+  <hr> <h3>    <a   id="tordup.cmd" class="name">tordup.cmd</a></h3>
+
+复制周期区域的命令脚本，以便可以
+使用更多副本。它修改周期性变换矩阵和所有相关的变换矩阵。
+新旧变换矩阵存储在全局数组 <code>tordup_old</code> 和 <code>tordup_new</code> 中，
+以供外部进一步操作。
+<p>
+ 假设条件：
+<ul>
+<li>  必须有 <a href="periodic.htm">环面模型</a>。
+<li>  3D 肥皂膜模型。
+</ul>
+<p>
+用法：<code>tordup(integer count)</code>
+<p>
+例如：
+<pre>
+ read "tordup.cmd"
+ tordup(3)
+</pre>
+将产生 3 个环面副本的版本。
+
+<!--========================== toStl.cmd  =============================-->
+
+  <hr> <h3>    <a   id="toStl.cmd" class="name">toStl.cmd</a></h3>
+
+ 以二进制格式打印 STL 文件的命令脚本。使用 C 语言风格的二进制 I/O。
+比 ASCII 格式写入速度快且文件更小，但不太易读。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code> stl_binary >>> "filename.stl"</code>
+
+<!--========================== tovtk.cmd  =============================-->
+
+  <hr> <h3>    <a   id="tovtk.cmd" class="name">tovtk.cmd</a></h3>
+
+将表面写入 VTK 文件的命令脚本。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code> vtk >>> "filename.vtk"</code>
+
+
+<!--========================== translat.cmd  =============================-->
+
+  <hr> <h3>    <a   id="translat.cmd" class="name">translat.cmd</a></h3>
+
+用于三角形顶点的随机排列（random permutation）的命令脚本。
+用于改变三角形的角以避免某种锁定。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+</ul>
+<p>
+用法：<code>translat(integer n)</code>
+<p>
+<!--========================== transform.cmd  =============================-->
+
+  <hr> <h3>    <a   id="transform.cmd" class="name">transform.cmd</a></h3>
+
+ 将变换矩阵应用于表面的命令脚本。
+<p>
+ 假设条件：
+<ul>
+<li>   3D 肥皂膜模型。
+<li>   线性模型。
+</ul>
+<p>
+用法：<code>transform(real t[3][3])</code>
+
+<!--========================== trip.cmd  =============================-->
+
+  <hr> <h3>    <a   id="trip.cmd" class="name">trip.cmd</a></h3>
+
+计算不规则度（irregularity）的命令脚本。
+该计算基于最大角度。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无对称群。
+</ul>
+<p>
+用法：<code>tripler()</code>
+<p>
+<!--========================== unsymmetrize.cmd  =============================-->
+
+  <hr> <h3>    <a   id="unsymmetrize.cmd" class="name">unsymmetrize.cmd</a></h3>
+
+删除当前对称群的命令脚本。如果存在对称群，则删除它并使用群的各个变换创建几何体的独立副本。
+所有元素被重新编号，并存储旧 id 和新 id 之间的映射。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 不能是环面模型。
+</ul>
+<p>
+用法：<code>unsymmetrize</code>
+<p>
+
+<!--========================== utils.cmd  =============================-->
+
+  <hr> <h3>    <a   id="utils.cmd" class="name">utils.cmd</a></h3>
+
+包含来自 A. Kusner 的许多有用过程的命令脚本。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+</ul>
+<p>
+用法：参见文件头部的注释。
+<p>
+<!--========================== voronoi.cmd  =============================-->
+
+  <hr> <h3>    <a   id="voronoi.cmd" class="name">voronoi.cmd</a></h3>
+
+ 从 3D 肥皂膜表面生成 2D Voronoi 图的命令脚本。通过与表面相交的
+平面的切片产生 2D 轮廓，然后对轮廓执行 Voronoi 转换。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+</ul>
+<p>
+用法：<code> voronoi(real z)</code>
+
+<!--========================== vrml.cmd  =============================-->
+
+  <hr> <h3>    <a   id="vrml.cmd" class="name">vrml.cmd</a></h3>
+
+ 创建 VRML 文件（Virtual Reality Modeling Language 文件）的命令脚本。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor。
+<li> 不遵循 <a href="commands.htm#show">show facets</a> 准则。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code> vrml >>> "filename.wrl"</code>
+
+<!--========================== vrml1.cmd  =============================-->
+
+  <hr> <h3>    <a   id="vrml1.cmd" class="name">vrml1.cmd</a></h3>
+
+创建 VRML 1.0 文件的命令脚本。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor。
+<li> 遵循 <a href="commands.htm#show">show facets</a> 准则。
+<li> 遵循 <a href="commands.htm#show">show edges</a> 准则。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code> vrml1 >>> "filename.wrl"</code><!--========================== wireframe.cmd  =============================-->
+
+  <hr> <h3>    <a   id="wireframe.cmd" class="name">wireframe.cmd</a></h3>
+
+创建 VRML 线框文件（VRML wireframe file）的命令脚本。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor。
+<li> 不遵循 <a href="commands.htm#show">show facets</a> 准则。
+<li> <a href="commands.htm#show">show edges</a> 准则。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code> wireframe >>> "filename.wrl"</code>
+
+<!--========================== wrl.cmd  =============================-->
+
+  <hr> <h3>    <a   id="wrl.cmd" class="name">wrl.cmd</a></h3>
+
+创建 VRML 2.0 文件的命令脚本。在三角形中使用面片颜色，边使用灰色线。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor。
+<li> 遵循 <a href="commands.htm#show">show facets</a> 准则。
+<li> 遵循 <a href="commands.htm#show">show edges</a> 准则。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code> wrl >>> "filename.wrl"</code>
+
+
+<!--========================== wuwe.cmd  =============================-->
+
+  <hr> <h3>    <a   id="wuwe.cmd" class="name">wuwe.cmd</a></h3>
+
+ <code>wuwe.cmd</code> 文件提供了 Surface Evolver 内置极小化算法的替代方案。
+它使用一种新的 BFGS（quasi-Newton）算法。
+当前形式仅适用于标准面积和体积，但应该可以
+很容易地推广到其他物理量。
+<p>
+<u>数据文件</u>：wuwe.txt
+
+<p>
+用法：在 Surface Evolver 数据文件或命令行中，
+<pre>
+       read "wuwe.cmd"
+       wuwe
+</pre>
+<p>
+（可选）在读取 wuwe.cmd 之前，
+您可以定义以下变量来自定义算法：
+<pre>
+   wuwe_eps :  the (small) epsilon for the numerical gradient.  Default: 1e-6.
+   wuwe_max :  the maximum number of energy evaluations.  Default: 1000.
+   wuwe_tol :  the tolerance for the stopping criterion.  Default: 1e-4.
+</pre>
+
+<p>
+ 王百炼提出了一种带有线搜索的 BFGS 算法，并在
+ Surface Evolver 中实施，尽管还没有完全自动化，也没有达到标准 Evolver 的效率。
+不过，通过适当地使用，它应该可以在更少的
+迭代步骤中实现可比的精度。它使用有限差分（finite differencing）而不是自动微分（automatic differentiation），
+因为它不知道何时梯度被修改。
+<p>
+要使用 <code>wuwe</code>，在 Surface Evolver 数据文件或命令行中，键入
+<pre>
+       read "wuwe.cmd"
+       wuwe
+</pre>
+（您需要在 Surface Evolver 可执行文件所在目录中运行 Evolver，
+或者修改 wuwe.cmd 中的 <code>read "wuwe.txt"</code> 行。）
+有关更多详细信息，请参见文件 <code>wuwe.cmd</code>。
+<!--========================== xyz.cmd  =============================-->
+
+  <hr> <h3>    <a   id="xyz.cmd" class="name">xyz.cmd</a></h3>
+
+打印 XYZ 格式 3D 图形文件的命令脚本。每个面片都是一个 VRML 多边形。
+<p>
+假设条件和功能：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无环面或对称群；如有必要，请先使用 <a href="commands.htm#detorus">
+     detorus</a>。
+<li> 面片颜色仅作为 frontcolor。
+<li> 遵循 <a href="commands.htm#show">show facets</a> 准则。
+<li> 遵循 <a href="commands.htm#show">show edges</a> 准则。
+<li> 不需要元素编号连续。
+</ul>
+<p>
+用法：<code> xyz >>> "filename.xyz"</code>
+
+<!--========================== zebra.cmd  =============================-->
+
+  <hr> <h3>    <a   id="zebra.cmd" class="name">zebra.cmd</a></h3>
+
+使用交替颜色（alternating colors）突出显示面片，以便轻松看到表面的连通性。
+通过设置 frontcolor 来实现。它对每个连续面片使用交替的黑白色。
+<p>
+假设条件：
+<ul>
+<li> 3D 肥皂膜线性模型。
+<li> 无对称群。允许环面。
+</ul>
+<p>
+用法：<code> zebra()</code>
+
+
+<!--========================== 底部导航  =============================-->
+
+  <p> <a href="example.htm">
+    <font size="-1">示例</font>
+    </a> 
+  <a href="commands.htm">
+   <font size="-1">命令</font>
+  </a>  
+  <a href="index.htm">
+    <font size="-1">索引</font>
+  </a>
+  <a href="w3c.htm">
+    <font size="-1">HTML</font>
+  </a>
+  <a href="volrev.htm">
+    <font size="-1">Volume Rev</font>
+  </a>
+  <a href="datafile.htm">
+    <font size="-1">datafile</font>
+  </a>
+  <a href="variables.htm">
+    <font size="-1">variables</font>
+  </a>
+
+</body>
+</html>

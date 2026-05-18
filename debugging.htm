@@ -1,0 +1,324 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档：调试
+</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+
+<h1 class="center">
+<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+
+<hr><a   id="debugging"> </a>
+<h1>Surface Evolver 调试</h1>
+
+Evolver 内置了多种调试功能。脚本调试面向普通用户；其他调试功能主要面向 Evolver 开发者（我）。
+
+<ul>
+<li><a href="#script-debugging">脚本调试</a>
+<li><a href="#syntax-debugging">语法调试</a>
+<li><a href="#memory-debugging">内存调试</a>
+<li><a href="#gradient-debugging">梯度调试</a>
+<li><a href="#Hessian-debugging">Hessian 调试</a>
+<li><a href="#iteration-debugging">迭代调试</a>
+</ul>
+
+<hr>
+<a   id="script-debugging"><h2>脚本调试</h2></a>
+
+这里的“脚本”指的是任何 Evolver 命令，无论是在过程还是函数中。
+<p>
+调试可以通过传统方式完成，即在代码中插入打印语句。另一种方法是在脚本中使用
+<a href="commands.htm#subcommand"><code>subcommand</code></a>，让用户在脚本的特定点探索表面的状态。如果无法或不想修改脚本，则可以设置断点。
+
+<h3> <a   id="breakpoints">断点</a></h3>
+用户可以在已加载的脚本中使用 "set breakpoint" 命令设置断点。语法为：
+<pre>
+  BREAKPOINT <em>scriptname</em> <em>linenumber</em>
+</pre>
+其中 <em>scriptname</em> 是函数或过程的名称，<em>linenumber</em> 是文件中要设置断点的行号。该行必须有可执行代码，否则会出错。<em>linenumber</em> 可以是表达式。
+<p>
+断点可以单独取消：
+<pre>
+  UNSET BREAKPOINT <em>scriptname</em> <em>linenumber</em>
+</pre>
+或批量取消：
+<pre>
+  UNSET BREAKPOINTS
+</pre>
+<p>
+当遇到断点时，Evolver 将进入子命令提示符，用户可以在其中输入任何 Evolver 命令（尽管某些命令如 <code>load</code> 非常不明智）。要退出子命令提示符，使用 <code>q</code> 或 <code>exit</code> 或 <code>quit</code>。
+<p>
+<a   id="single-stepping"></a>
+<b>单步执行：</b>在调试提示符下，有一个特殊的单步命令 <code>n</code>，它将继续执行到下一行（准确地说，直到行号改变）。
+
+<p>
+<a   id="stack-trace"></a> <a   id="whereami"></a>
+<b>堆栈跟踪：</b>在调试提示符下，<code>whereami</code> 命令将打印堆栈跟踪，显示到达当前位置的函数或过程调用序列。
+
+
+<hr>
+<a   id="syntax-debugging"><h2>语法调试</h2></a>
+Evolver 命令解析器生成的错误消息试图提供帮助，但有时相当晦涩。常见错误包括关键字拼写错误、变量拼写与关键字相同、使用未初始化的变量以及缺少分号。在尝试这里描述的花式语法调试之前，请先检查这些。可以打印出解析步骤，但这不适合胆小者，因为输出采用非常不友好的 YACC 格式。您必须了解移位-归约解析的工作原理才能理解输出。<code>debug</code> 开关控制 YACC 跟踪功能。示例：
+<pre>
+
+Enter command: debug
+YACC debugging was OFF.
+Now ON.
+Enter command: print asdf
+Starting parse
+Entering state 0
+Reading a token: Next token is token COMMAND_START_ ()
+Shifting token COMMAND_START_ ()
+Entering state 2
+Reading a token: Next token is token PRINT_ ()
+Reducing stack by rule 2 (line 158), -> @1
+Stack now 0 2
+Entering state 5
+Next token is token PRINT_ ()
+Shifting token PRINT_ ()
+Entering state 180
+Reducing stack by rule 454 (line 1555), PRINT_ -> print
+Stack now 0 2 5
+Entering state 308
+Reading a token: Next token is token NEWIDENT_ ()
+Shifting token NEWIDENT_ ()
+Entering state 11
+Reading a token: Now at end of input.
+syntax error
+
+Shifting token error ()
+Entering state 316
+Reducing stack by rule 391 (line 1295), NEWIDENT_ error -> rexpr
+ERROR 2381: Syntax error: Unexpected new identifier 'asdf'.
+  Input line so far:
+print asdf
+
+</pre>
+
+
+<hr>
+<a   id="memory-debugging"><h2>内存调试</h2></a>
+<code><a href="single.htm#c">c</a></code> 命令提供简要的内存使用情况输出，包括根据现有元素数量计算的元素内存，以及总分配的数据内存。例如，在 Windows 上：
+<pre>
+
+Enter command:  c
+Vertices: 50  Edges: 144  Facets: 96  Bodies: 1  Facetedges: 288
+Element memory: 40280
+Total data memory: 302122 bytes.
+</pre>
+如果 <code>verbose</code> 开关打开，则会打印更详细的信息（可能因系统而异）：
+<pre>
+
+Enter command: verbose
+Verbose ON. (was off)
+Enter command: c
+Vertices: 50  Edges: 144  Facets: 96  Bodies: 1  Facetedges: 288
+Element memory: 40280
+    vertex size:  152 bytes;  number allocated: 156
+      edge size:   80 bytes;  number allocated: 244
+     facet size:   96 bytes;  number allocated: 196
+      body size:  424 bytes;  number allocated: 154
+ facetedge size:   40 bytes;  number allocated: 388
+quantity size:    360 bytes
+instance size:    656 bytes
+
+blocks in use: 181    memory in use: 360740
+blocks free:    16    memory free:    45080
+Heap top: 03477000
+Heap size: 48.71 MB
+Physical memory size: 1072680960 bytes   Virtual memory top: 7FFE0000
+Session:       4 blocks,      11200 bytes
+Permanent:    77 blocks,     290922 bytes
+Temporary:     0 blocks,          0 bytes
+Total data memory: 81 blocks, 302122 bytes.
+</pre>
+
+<p>
+
+
+<b>仅限专家。</b><a href="toggle.htm#memdebug" class="keyword">memdebug</a> 命令会在每次内存分配、重新分配或释放时打印详细信息。用于调试 Evolver 本身。如果 Evolver 编译时定义了 <code>MEMSTRINGS</code>，则还会打印每次内存操作的文件和行位置。在某些系统上，它还会在每次内存操作时进行堆检查。
+
+<hr>
+<a   id="gradient-debugging"><h2>梯度调试</h2></a>
+
+<b>主要面向专家。</b>
+<a href="toggle.htm#estimate"><code>estimate</code></a> 开关可用于验证梯度计算是否正确。当开启时，<code>estimate</code> 将对每个 '<code>g</code>' 步骤，打印基于梯度的能量变化，即计算每个顶点的速度和能量梯度的内积并求和，然后打印运动期间的实际能量变化。对于小尺度，这些数字应该非常接近，因为能量在短尺度上应接近线性变化。例如：
+<pre>
+Enter command: estimate
+Estimation ON. (was off)
+Enter command: m 1e-6
+Scale fixed at 1e-006.
+Enter command: g 2
+Estimated energy change: -9.16981132075472e-006
+Actual energy change   : -9.16979039722321e-006
+  2. area:  5.99999083020960 energy:  5.99999083020960  scale: 1.00000e-006
+Estimated energy change: -9.16972762183562e-006
+Actual energy change   : -9.16970669440076e-006
+  1. area:  5.99998166050291 energy:  5.99998166050291  scale: 1.00000e-006
+</pre>
+
+但是，如果不满足体积约束或量约束，则可能需要几次迭代才能达成一致：
+<pre>
+
+Enter command: body[1].target := 2
+Enter command: estimate
+Estimation ON. (was off)
+Enter command: m 1e-6
+Scale fixed at 1e-006.
+Enter command: g 5
+Estimated energy change: -1.20000000000000e-005
+Actual energy change   :     2.74061897546020
+  5. area:  8.74061897546020 energy:  8.74061897546020  scale: 1.00000e-006
+Estimated energy change: -8.05951562616423e-006
+Actual energy change   : -0.000107080144722715
+  4. area:  8.74051189531548 energy:  8.74051189531548  scale: 1.00000e-006
+Estimated energy change: -8.05945861736465e-006
+Actual energy change   : -8.06006082854083e-006
+  3. area:  8.74050383525465 energy:  8.74050383525465  scale: 1.00000e-006
+Estimated energy change: -8.05934708554515e-006
+Actual energy change   : -8.05931920133673e-006
+  2. area:  8.74049577593545 energy:  8.74049577593545  scale: 1.00000e-006
+Estimated energy change: -8.05923555500071e-006
+Actual energy change   : -8.05920767277257e-006
+  1. area:  8.74048771672778 energy:  8.74048771672778  scale: 1.00000e-006
+Enter command:
+</pre>
+
+<p>
+对于优化尺度，当演化表现良好时，估计值大约是实际变化的两倍，因为这是完美二次能量函数的比率。示例：
+<pre>
+Enter command: estimate
+Estimation ON. (was off)
+Enter command: g 5
+Estimated energy change:    -1.23332147258421
+Actual energy change   :   -0.647118913175537
+  5. area:  5.35288108682446 energy:  5.35288108682446  scale: 0.233721
+Estimated energy change:   -0.420072251955455
+Actual energy change   :   -0.203503019926857
+  4. area:  5.14937806689761 energy:  5.14937806689761  scale: 0.212928
+Estimated energy change:   -0.219347968060792
+Actual energy change   :   -0.108607336477709
+  3. area:  5.04077073041990 energy:  5.04077073041990  scale: 0.197501
+Estimated energy change:   -0.130401658330236
+Actual energy change   :  -0.0647701891524211
+  2. area:  4.97600054126748 energy:  4.97600054126748  scale: 0.213378
+Estimated energy change:  -0.0809651401128813
+Actual energy change   :  -0.0401832076359208
+  1. area:  4.93581733363156 energy:  4.93581733363156  scale: 0.198322
+Enter command:
+</pre>
+<p>
+请注意，非平滑演化（例如单侧约束）可能会使 <code>estimate</code> 背后的假设无效。
+
+
+<hr>
+<a   id="hessian-debugging"><h2>Hessian 调试</h2></a>
+
+<a href="toggle.htm#hessian_quiet" class="keyword">hessian_quiet</a> 开关可以关闭，以打印 Hessian 分解期间（<a href="commands.htm#hessian">hessian</a>、<a href="commands.htm#hessian_seek">hessian_seek</a>、<a href="commands.htm#ritz">ritz</a>、<a href="commands.htm#eigenprobe">eigenprobe</a> 命令）的内存使用和工作量信息。例如：
+<pre>
+
+Enter command: hessian_quiet off
+Enter command: eigenprobe 0
+Sparse init alloc: 36897
+Expanded hashtable size: 73794.
+Expanded hashtable size: 147588.
+Sparse entries: 61444  Final hashtable size: 147588
+Hash extra probes: 256957
+Variables: 12291  Original fill: 61446
+Workspace: 8 bytes
+Passes through main loop: 34
+Total_fill:  538907
+Total_flops: 7.25226e+007
+Eigencounts:    3 &lt;,  0 ==,  12286 >
+</pre>
+根据 <a href="toggle.htm#ysmp" class="keyword">ysmp</a> 开关是否开启（使用 Yale 稀疏矩阵包）或关闭（使用我自制的最小度算法），输出会有一些差异。
+<p>
+<b>仅限专家。</b>
+Evolver 有一个功能，允许对命名量的 Hessian 计算例程的正确性进行数值检查。<a href="toggle.htm#hessian_diff" class="keyword">hessian_diff</a> 开关使 Hessian 通过梯度的有限差分而不是相关例程来计算。数值 Hessian 在某些类型的表面上有一些限制，主要是不能用于体积或量约束。但由于任何量都可以作为能量测试，这并不影响其主要目的。
+<p>
+<a   id="mindeg_debug_level"></a>
+<a   id="mindeg_min_region_size"></a>
+<a   id="mindeg_margin"></a>
+用于调试和调整我的最小度算法的一些内部变量：
+<dl>
+<dt><code>mindeg_debug_level</code></dt><dd> 控制调试消息的详细程度。</dd>
+<dt><code>mindeg_min_region_size</code></dt><dd> 期望的最小区域大小；较小的区域将与父节点合并。默认值 0。</dd>
+<dt><code>mindeg_margin</code></dt><dd> 在寻找好的消去时，高于最小度的范围。默认值 5。</dd>
+</dl>
+
+
+
+
+<hr>
+<a   id="iteration-debugging"><h2>迭代调试</h2></a>
+<a href="toggle.htm#itdebug" class="keyword">itdebug</a> 命令切换 '<a href="single.htm#g" class="keyword">g</a>' 命令期间的信息打印。它打印移动的尺度因子、体积或固定量约束的收敛进度（以总误差与容差的倍数表示），然后是移动产生的能量和体积。使用 cube.fe 优化尺度的示例：
+<pre>
+
+Enter command: g
+Calculating volgrads.
+First move, scale 0.1
+Diff: 74.4218    Old_diff: 74.4218
+Next diff: 5.17892
+Diff: 5.17892    Old_diff: 74.4218
+Next diff: 0.350987
+first move:
+scale1 0.1 energy1     5.31028806222661
+Body             target volume        actual volume        pressure
+  1                         1      0.999964901275881     2.26415094339623
+
+0th move:
+scale1 0 energy1                    6
+Body             target volume        actual volume        pressure
+  1                         1                      1     2.26415094339623
+
+Doubling scale, scale 0.2
+Diff: 284.517    Old_diff: 284.517
+Next diff: 38.248
+Diff: 38.248    Old_diff: 284.517
+Next diff: 4.87311
+Diff: 4.87311    Old_diff: 38.248
+Next diff: 0.61629
+scale2 0.2 energy2     5.11714524527486
+Body             target volume        actual volume        pressure
+  1                         1      0.999938371022819     2.26415094339623
+
+Doubling scale, scale 0.4
+Diff: 1032.7    Old_diff: 1032.7
+Next diff: 261.432
+Diff: 261.432    Old_diff: 1032.7
+Next diff: 59.494
+Diff: 59.494    Old_diff: 261.432
+Next diff: 13.1576
+Diff: 13.1576    Old_diff: 59.494
+Next diff: 2.89075
+Diff: 2.89075    Old_diff: 13.1576
+Next diff: 0.634175
+scale2 0.4 energy2     5.89816432999747
+Body             target volume        actual volume        pressure
+  1                         1       0.99993658248485     2.26415094339623
+
+Final scale: 0.20612
+Diff: 301.341    Old_diff: 301.341
+Next diff: 41.6649
+Diff: 41.6649    Old_diff: 301.341
+Next diff: 5.45074
+Diff: 5.45074    Old_diff: 41.6649
+Next diff: 0.707497
+  1. area:  5.12110729535848 energy:  5.12110729535848  scale: 0.206120
+Enter command:
+</pre>
+
+<hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+</body>
+</html>

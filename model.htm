@@ -1,0 +1,780 @@
+<!DOCTYPE HTML>
+<html><head><TITLE>Surface Evolver 文档 - 数学模型</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<!--NewPage-->
+
+<h1 class="center">
+  <a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+<a   id="models"></a>
+<h1> 曲面模型 </h1>
+
+Surface Evolver 可以处理多种不同的曲面模型。
+实际上，有几种不同类别的模型涉及不同特征，
+因此每个类别的一种变体处于活动状态。然而，某些组合是<a href="#incompatible-models">不兼容的</a>。
+<h3>模型类别：</h3>
+<ul>
+<li><a href="#combinatorics">曲面表示</a>
+<ul>
+<li><a href="#string-model">弦模型</a>
+<li><a href="#soapfilm-model">皂膜模型</a>（默认）
+<li><a href="#simplex-model">单纯形模型</a>
+</ul>
+<li><a href="#element-representation">曲面元素的表示</a>
+<ul>
+<li><a href="#linear-model">线性模型</a>（默认）
+<li><a href="#quadratic-model">二次模型</a>
+<li><a href="#Lagrange-model">拉格朗日模型</a>
+</ul>
+<li><a href="#space-dimension">环境空间维度</a>（默认为3）
+<li><a href="#symmetries">对称性</a>
+<ul>
+<li><a href="#default-symmetry">无对称性</a>（默认）
+<li><a href="#torus-model">环面模型</a>
+<li><a href="#symmetry-groups">对称群</a>
+</ul>
+<li><a href="#metric">度量</a>
+<ul>
+<li><a href="#Euclidean-metric">欧几里得度量</a>（默认）
+<li><a href="#Riemannian-metric">黎曼度量</a>
+<li><a href="#conformal-metric">共形度量</a>
+<li><a href="#Klein-hyperbolic-metric">克莱因双曲度量</a>
+</ul>
+<li><a href="#mobility">迁移率</a>
+<ul>
+<li><a href="#unit-mobility">单位迁移率</a>（默认）
+<li><a href="#area-normalization">面积加权迁移率</a>
+<li><a href="#user-defined-mobility">用户定义迁移率</a>
+</ul>
+</ul>
+<hr>
+<a   id="incompatible-models"></a><h2>不兼容的模型</h2>
+以下<a href="#models">曲面模型</a>的组合是不兼容的：
+<ul>
+<li> <a href="#simplex-model">单纯形模型</a>与
+<a href="#torus-model">环面模型</a>或其他<a href="#symmetry-groups">
+对称群</a>。这是因为单纯形模型没有必要的边来承载对称环绕。
+</ul>
+<hr>
+<hr>
+<a   id="combinatorics"></a><h2>曲面表示与组合数学</h2>
+所有曲面都是由基本元素组成的单纯复形：
+顶点、边和面。
+Evolver有三种不同的方式表示曲面的组合数学，
+取决于曲面的维度。任何这些方法都可以在
+至少与曲面维度一样大的任何环境空间维度中使用。
+<ul>
+<li><a href="#string-model">弦模型</a>，用于1维曲面。
+<li><a href="#soapfilm-model">皂膜模型</a>（默认），用于2维曲面。
+<li><a href="#simplex-model">单纯形模型</a>，用于3维或更高维曲面。
+</ul>
+
+<hr>
+<a   id="string-model"></a><h2>弦模型</h2>
+术语"弦模型"意味着曲面是一维的。
+数据文件必须在其顶部包含关键字"STRING"或"SURFACE_DIMENSION 1"。
+边由其顶点定义，面由边界边的列表定义。
+面不被分成三角形，可以有任意数量的边。
+面的边不必形成闭合循环，例如，如果面
+部分受约束限制。
+体通过将其与一个面相关联来定义，
+体的体积是面的面积。
+默认能量是边长度。
+<hr><a   id="soapfilm-model"></a><h2>皂膜模型</h2>
+术语"皂膜模型"意味着曲面的维度为2。
+这是默认模型。曲面被细分为三角形面，
+默认能量是表面积。边由其顶点定义。
+面由三个边的定向列表定义，这些边必须形成一个闭合循环。
+然而，数据文件中的面可以有超过三个边，
+因为它们在加载时会自动细化为面。
+在官方Evolver术语中，"face"出现在数据文件中，
+而"facet"是Evolver内部曲面表示中的三角形。
+体由一组定向面定义，这些面不必形成体的完整边界，
+例如，如果部分边界在约束上。
+<p>
+在内部，曲面通过一组称为"面边"的结构连接在一起。
+边在面上的每次关联都有一个这样的结构。
+围绕每个面有一个面边的双向链表，
+因此可以按顺序遍历边，并且围绕每条边有一个
+双向链表，因此可以按几何顺序遍历边周围的面。
+Evolver从数据文件中的几何数据计算出几何顺序。
+如果几何顺序没有意义，例如当空间维度为4或更多时，
+则顺序是随机的。
+<hr>
+<a   id="simplex-model"></a><h2>单纯形模型</h2>
+
+单纯形模型使得表示任意维度的曲面成为可能，
+但许多Evolver功能在其中不可用。
+这里每个面被表示为k+1个顶点的定向列表，其中k是
+曲面的维度。边可以指定为k-1维单纯形，
+但它们仅用于计算约束和命名量积分；
+不需要完整的边列表。
+体被指定为定向面的列表。
+<p>
+数据文件必须在其顶部包含关键字SIMPLEX_REPRESENTATION，
+如果k不是2，则需要短语'SURFACE_DIMENSION k'。
+k = 1和k = 2是允许的，但与<a href="#string-model">弦</a>或
+<a href="#soapfilm-model">皂膜</a>模型相比不太有用。
+如果域不是3维的，则还必须包含'SPACE_DIMENSION n'。
+数据文件边部分是可选的。
+每个面应列出k+1个顶点编号。
+不允许非单纯形面。参见示例数据文件simplex3.fe。
+<p>
+大多数功能未实现。
+<a href="#quadratic-model">二次模型</a>不允许，
+但<a href="#Lagrange-model">拉格朗日模型</a>是允许的。
+顶点可以是FIXED。
+约束是允许的，带有能量被积函数。
+几种基本命名量方法有效。
+没有<a href="#torus-model">环面模型</a>或
+<a href="#symmetry-groups">对称群</a>。
+不允许改变曲面拓扑或组合数学，
+除了使用<a href="single.htm#r">r</a>命令进行全局细化。
+细化将每个单纯形1-边细分，
+边中点继承边端点的共同属性。
+细化将使面的数量增加2^k倍。
+<hr>
+<hr>
+
+<a   id="element-representation"></a><h2>曲面元素的表示</h2>
+曲面通过有限元方法表示，其中每个元素
+是一个单纯形。最简单的元素类型只是直线段
+和平面三角形。这些组合表示分段线性曲面，
+对于该曲面，计算量通常比理想光滑曲面具有h^2阶的误差，
+其中h是元素的线性尺寸。
+存在各种表示更精确的弯曲元素的方法，
+Evolver实现了几种称为"拉格朗日元素"的版本。
+<ul>
+<li><a href="#linear-model">线性模型</a>（默认）
+<li><a href="#quadratic-model">二次模型</a>
+<li><a href="#Lagrange-model">拉格朗日模型</a>
+</ul>
+<hr>
+<a   id="linear-model"></a><h2>线性模型</h2>
+在线性模型中，所有边和三角形面分别是
+平坦的线段和三角形。对于所有计算，
+边由其两个端点定义，
+面（在<a href="#soapfilm-model">皂膜模型</a>中）
+由其三个顶点定义。这是默认的。
+二次或拉格朗日模型可以使用
+<a href="single.htm#M">M 1</a>或
+<a href="commands.htm#linear">linear</a>命令更改为线性。
+一个例外是如果<a href="model.htm#string-model">弦模型</a>中
+使用<a href="quants.htm#spherical_arc_length">spherical_arc_length</a>
+方法作为<a href="datafile.htm#length_method_name">length_method_name</a>，
+在这种情况下，边在以原点为中心的球体上计算和绘制。
+
+<hr>
+<a   id="quadratic-model"></a><h2>二次模型</h2>
+
+默认情况下，边和面是线性的。
+但可以通过使用二次模型将边表示为二次曲线，面表示为
+二次曲面。每条边被赋予一个中点顶点。
+大多数功能已为二次表示实现，
+但一些命名量方法不可用，例如
+涉及曲率的方法。
+<p>
+一个特殊情况是圆弧模式，它在弦模型中使用
+<a href="quants.htm#circular_arc_length">circular_arc_length</a>方法作为
+<a href="datafile.htm#length_method_name">length_method_name</a>时有效。
+然后边作为通过其三个顶点的精确圆弧计算和绘制。
+<p>
+曲线二次边的图形平滑度可以通过内部变量
+<a href="syntax.htm#string_curve_tolerance"><code>string_curve_tolerance</code></a>
+控制，这是构成边的连续图形线段之间的期望角度（度）。
+<p>
+二次模型可以通过在数据文件的顶部包含
+<a href="datafile.htm#quadratic-decl">QUADRATIC</a>关键字
+或使用<a href="commands.htm#quadratic">quadratic</a>或
+<a href="single.htm#M">M 2</a>命令来调用。
+<hr>
+<a   id="Lagrange-model"></a><h2>拉格朗日模型</h2>
+Evolver对高阶元素有非常有限的实现。
+在n阶拉格朗日模型中，每条边由
+参数域中均匀间隔的n+1个顶点的插值定义，
+每个面由参数域中三角形模式均匀间隔的(n+1)(n+2)/2个顶点的
+插值定义。也就是说，在有限元分析的术语中，
+这些元素是拉格朗日元素。
+<p>
+拉格朗日模型仅为
+<a href="quants.htm">命名量和方法</a>定义，
+因此当您调用拉格朗日模型时，Evolver将自动执行
+<a href="commands.htm#convert_to_quantities">
+<code>convert_to_quantities</code></a>。
+当前接受拉格朗日模型的方法有
+<ul>
+<li> <a href="quants.htm#vertex_scalar_integral">vertex_scalar_integral</a>
+<li> <a href="quants.htm#edge_length">edge_length</a>
+<li> <a href="quants.htm#edge_area">edge_area</a>
+<li> <a href="quants.htm#edge_scalar_integral">edge_scalar_integral</a>
+<li> <a href="quants.htm#edge_vector_integral">edge_vector_integral</a>
+<li> <a href="quants.htm#edge_general_integral">edge_general_integral</a>
+<li> <a href="quants.htm#facet_area">facet_area</a>
+<li> <a href="quants.htm#facet_volume">facet_volume</a>
+<li> <a href="quants.htm#facet_vector_integral">facet_vector_integral</a>
+<li> <a href="quants.htm#facet_scalar_integral">facet_scalar_integral</a>
+<li> <a href="quants.htm#facet_general_integral">facet_general_integral</a>
+</ul>
+曲面可以使用命令"lagrange n"转换为n阶
+拉格朗日模型。这将转换
+<a href="model.htm#linear-model">线性</a>或
+<a href="model.htm#quadratic-model">二次模型</a>为拉格朗日，
+并将在不同阶拉格朗日模型之间转换。
+命令<a href="commands.htm#linear">linear</a>和
+<a href="commands.htm#quadratic">quadratic</a>将
+把拉格朗日模型转换回线性或二次模型。
+<p>
+在拉格朗日模型中没有三角剖分操作可用。
+没有细化、平衡或任何操作。
+有一些顶点平均，但仅在边和面内部。
+使用线性或二次模型建立最终的三角剖分，
+然后使用拉格朗日模型获得额外的精度。
+<p>
+当前阶数可以通过只读内部变量
+<a href="syntax.htm#lagrange_order">lagrange_order</a>访问。
+拉格朗日模型可以<a href="commands.htm#dump">转储</a>并重新加载。
+<p>
+随着拉格朗日阶数的提高，计算速度迅速减慢。
+这不仅是因为涉及大量的点，
+还因为高斯积分的阶数也提高了。
+<p>
+拉格朗日元素通常在其顶点上细分绘制，
+但如果<a href="toggle.htm#smooth_graph">smooth_graph</a>
+标志开启，则它们以8倍细分绘制。
+<p>
+toggle命令<a href="toggle.htm#bezier_basis">bezier_basis</a>
+将拉格朗日插值多项式（通过控制点）替换为
+贝塞尔基多项式（不通过内部控制点，
+但具有正值，这保证边或面在控制点的凸包内）。
+目前这是实验性的，并非所有功能（如图形或细化）
+都已适当调整。
+<hr>
+<hr>
+
+<a   id="space-dimension"></a><h2>空间维度</h2>
+<a   id="MAXCOORD"></a>
+
+默认情况下，曲面存在于3维空间中。
+然而，数据文件头中的短语"SPACE_DIMENSION n"将维度设置为n。
+这意味着所有坐标和向量具有n个分量。
+唯一的限制是Evolver必须使用在Makefile或model.h中
+定义为至少为n的MAXCOORD宏编译。
+默认MAXCOORD是4。如果您需要超过四维，
+请更改MAXCOORD并重新编译。
+实际的空间维度可以通过只读变量
+<a href="syntax.htm#space_dimension">space_dimension</a>在命令中访问。
+
+超过三维的空间将仅显示前三个维度，
+但geomview除外，它内置了四维查看器
+（尽管其使用现在很笨拙）。
+<hr><hr>
+<a   id="metric"></a><h2>度量</h2>
+为了使长度和面积有意义，环境空间必须赋予一个度量。
+Evolver提供了几种选择，但请记住
+它们仅用于计算默认长度和面积。
+其他依赖于度量的量，如体积，由用户使用
+<a href="quants.htm">命名量</a>手动输入。
+所有显示都像度量是欧几里得的那样进行。
+<ul>
+<li><a href="#Euclidean-metric">欧几里得度量</a>（默认）
+<li><a href="#Riemannian-metric">黎曼度量</a>
+<li><a href="#conformal-metric">共形度量</a>
+<li><a href="#Klein-hyperbolic-metric">克莱因双曲度量</a>
+</ul>
+<hr>
+<a   id="Euclidean-metric"></a> <h2>欧几里得度量</h2>
+环境空间上的默认度量是普通的欧几里得度量。
+没有像米或克这样的内置测量单位，
+因此用户应该在某个一致的单位系统中表达所有物理量，
+例如MKS或cgs。
+<hr>
+<a   id="Riemannian-metric"></a><h2>黎曼度量</h2>
+
+环境空间可以通过在<a href="datafile.htm#metric-decl">数据文件</a>中
+放置关键字METRIC后跟度量张量的元素来赋予一个一般的黎曼度量。
+只允许一个坐标补丁，
+但<a href="#quotient-spaces">商空间</a>特征使其非常灵活。
+边和面在坐标中是线性的，它们不是测地线。
+度量仅用于计算长度和面积。
+它不用于体积。要在体上获得体积约束，
+您将需要使用<a href="quants.htm#fixed-quantity">命名量约束</a>
+定义自己的约束。
+参见quadm.fe作为度量的示例。
+<hr>
+<a   id="conformal-metric"></a><h2>共形度量</h2>
+环境空间可以通过在<a href="datafile.htm#metric-decl">数据文件</a>中
+放置关键字CONFORMAL_METRIC后跟共形因子的公式来赋予一个共形黎曼度量，
+即给出度量的单位矩阵的倍数。
+只允许一个坐标补丁，
+但商空间特征使其非常灵活。
+边和面在坐标中是线性的，它们不是测地线。
+度量仅用于计算长度和面积。
+它不用于体积。要在体上获得体积约束，
+您将需要使用<a href="quants.htm#fixed-quantity">命名量约束</a>
+定义自己的约束。
+参见quadm.fe作为度量的示例。
+<hr>
+<a   id="Klein-hyperbolic-metric"></a><h2>克莱因双曲度量</h2>
+有一个特殊的内置度量可用。
+它是n维双曲空间的克莱因模型。
+域是欧几里得坐标中的单位圆盘或球体。
+在数据文件的顶部包含关键字KLEIN_METRIC将调用此度量。
+长度和面积是精确计算的，
+但与其他度量一样，体积和量由您自己负责。
+
+<hr>
+<hr>
+<a   id="symmetries"></a><h2>对称性</h2>
+有许多有趣的对称曲面问题。
+处理对称曲面的一种自然方式是
+仅计算对称的一个基本域，并使用特殊的边界条件。
+一些对称性，如镜像对称性，
+可以使用普通的Evolver功能来处理。
+例如，镜像可以实现为平面水平集约束。
+但像平移或旋转对称性这样的对称性需要一些内置功能。
+在任何情况下，基本域的多个副本可以使用
+<a href="datafile.htm#view-transforms">view_transforms</a>命令显示。
+<ul>
+<li><a href="#default-symmetry">无对称性</a>（默认）
+<li><a href="#torus-model">环面模型</a>（平移对称性）
+<li><a href="#symmetry-groups">对称群</a>（一般对称性）
+</ul>
+<hr>
+<a   id="default-symmetry"></a><h2>无对称性</h2>
+
+默认情况下，曲面的域是欧几里得空间。
+如果其基本域由镜像平面限定，则可以以这种方式完成对称曲面。
+每个镜像平面应实现为线性水平集约束。
+<hr>
+<a   id="torus-model"></a> <h2>环面模型</h2>
+
+Evolver可以取一个具有任意平行六面体作为其单位格的
+平坦环面作为其域，
+即域是一个平行六面体，其相对面被识别。
+这由数据文件中的
+<a href="datafile.htm#torus-declaration">TORUS</a>关键字指示。
+定义平行六面体的基向量在数据文件的
+<a href="datafile.htm#torus-periods">TORUS_PERIODS</a>条目中给出。
+参见<a href="twointor.htm">twointor.fe</a>作为示例。
+<p>
+顶点坐标作为单位格内的欧几里得坐标给出，
+而不是作为周期向量的线性组合。
+坐标不必位于平行六面体内，
+因为单位格的精确形状有些任意。
+<p>
+曲面在环面中环绕的方式通过说明边如何穿越单位格的面来给出。
+在数据文件的<a href="datafile.htm#edges-section">边部分</a>中，
+每条边每个维度有一个符号，指示边向量如何穿越每对已识别的面，
+以及端点之间的向量需要如何调整以获得真实的边向量：
+<table>
+<tr> <td> * </td><td> 不穿越面 </td></tr>
+<tr> <td> + </td><td> 与基向量相同方向穿越，
+因此基向量添加到边向量 </td></tr>
+<tr> <td> - </td><td> 相反方向穿越，因此基向量从边向量中减去。 </td></tr>
+</table>
+环绕由各种三角剖分操作自动维护。
+<p>
+<a   id="torus-display"></a>
+有几种显示环面曲面的命令：<br>
+<a href="toggle.htm#raw_cells">raw_cells</a>
+ - 原样绘制面，不进行裁剪。面的第一个顶点用作
+任何其他顶点展开所需的基础点。
+<br>
+<a href="toggle.htm#connected">connected</a> - 每个体的面在环面中展开，
+因此体出现在一个连接的块中。最好的选项，但不会显示不在体上的面。<br>
+<a href="toggle.htm#clipped">clipped</a> - 显示数据文件中指定的单位格。
+面在平行六面体面上裁剪。
+<p>
+环面模型不支持某些功能，
+例如重力和单纯形模型。
+（实际上，您可以加入它们，但它们不会考虑环面模型。）
+<p>
+体积和体积约束是可用的。
+然而，如果环面被完全划分为规定体积的体，
+则体积必须加起来等于单位格的体积，
+并且必须在数据文件中给出TORUS_FILLED关键字。
+或者不要规定一个体的体积。
+<p>
+体积有些模糊。体积计算方法仅精确到一个环面体积，
+因此一个体积为正的体可能被计算为负的。
+Evolver在更改后调整体积，使其尽可能与先前的
+体积连续，或者在可用时与目标体积连续。
+如果您不喜欢Evolver的行为，还可以设置体的volconst属性。
+
+<p>
+<a href="constrnt.htm#level-set-constraints">水平集约束</a>
+可以在环面模型中使用，
+但使用它们作为镜像对称平面与体积时要小心。
+环面体积算法不能很好地应对此类部分曲面。
+如果必须这样做，请使用y=const对称平面而不是x=const，
+并使用<a href="general.htm#options">-q选项</a>或执行
+<a href="commands.htm#convert_to_quantities">
+<b>convert_to_quantities</b></a>。
+仔细检查您的体积是否正确；必要时使用volconst。
+<p>
+<a   id="display_periods"></a>
+<b>display_periods：</b>显示的平行四边形单位格可以与
+实际单位格不同，如果您在数据文件的顶部
+创建一个名为<code>display_periods</code>的数组（除了常规周期之外）。
+对于弦模型示例，
+<pre>   parameter shear = 1
+   torus_filled
+   periods
+   4  0
+   shear  4
+   display_periods
+   4 0
+   0 4 </pre>
+无论实际单位格被剪切多少，这将始终显示正方形。
+此功能对于剪切效果良好；对于其他类型的变形，
+它可能不太好用。
+display_periods对于弦模型比皂膜模型效果更好。
+对于皂膜模型，它似乎最适合水平剪切，
+但无法应对大剪切，因此如果您的剪切变得太大，
+我建议使用<code>unshear.cmd</code>中的
+<code>unshear</code>命令重置基本域为较少剪切。
+<p>
+<b><a   id="display_origin"> display_origin： </a></b>
+对于环面模式曲面，如果裁剪模式生效，
+裁剪框的中心使用<code>display_origin[]</code>数组设置，
+其维度是环境空间的维度。
+此数组默认不存在，必须由用户在数据文件的顶部使用以下语法创建
+<pre>
+  display_origin <em>x y z</em>
+</pre>其中<em>x y z</em>是所需裁剪框中心的坐标。
+在运行时，可以正常更改数组元素：
+<pre>  display_origin[2] := 0.5
+</pre>
+更改display_origin将自动导致图形重新显示。
+
+<hr><a   id="quotient-spaces"></a>
+<a   id="symmetry-groups"></a><h2>对称群和商空间</h2>
+作为<a href="#torus-model">环面模型</a>的推广，
+您可以声明域是R^n关于某个对称群的商空间。
+有几个内置群可用，有抱负的用户可以将C代码编译到Evolver中
+以定义群操作。群元素由附加到边的整数表示
+（类似于运行时环面模型中的环绕规范）。
+您定义群元素的整数表示。
+参见文件quotient.c作为示例。
+参见khyp.c和khyp.fe作为更复杂的示例，
+在克莱因双曲空间中建模八边形识别为亏格2曲面。
+<p>
+数据文件需要关键字
+<a href="datafile.htm#symmetry-decl">SYMMETRY_GROUP</a>
+后跟引号中的群名称。
+环绕的边在数据文件中通过短语"wrap n"指定群元素，
+其中n是群元素的编号。
+环绕值可以在运行时通过边的<code>wrap</code>属性访问。
+群操作可以通过函数
+<code>wrap_inverse(w)</code>和<code>wrap_compose( w1,w2)</code>访问。
+<p>
+使用任何Hessian命令与任何对称群
+（除了内置环面模型）将导致自动转换为命名量
+（使用"<a href="commands.htm#convert_to_quantities">
+convert_to_quantities</a>"命令），
+因为只有命名量Hessian评估程序具有正确编程的Hessian对称变换。
+<p>
+体的体积可能无法使用对称群正确计算。
+体积计算只知道内置环面模型。
+对于其他对称群，如果您声明一个体，
+它将使用欧几里得体积计算。
+由您使用命名量和方法设计替代的体积计算。
+
+<a   id="implemented-symmetries"></a>
+<p> 当前实现的对称群有：
+<ul>
+<li> <a href="#torus-symmetry-group"><code>torus</code></a>
+- <a href="#torus-model">环面模型</a>的底层群。
+<li> <a href="#rotate-symmetry-group"><code>rotate</code></a>
+- x-y平面中的循环旋转群。
+<li> <a href="#flip-rotate-symmetry-group"><code>flip_rotate</code></a>
+- x-y平面中的循环旋转群，z在每次奇数旋转时映射到-z。
+<li> <a href="#cubocta"><code>cubocta</code></a>
+- 立方体的完全点群。
+<li> <a href="#cubelat"><code>cubelat</code></a>
+- 单位立方格的完全点群。
+<li> <a href="#xyz-symmetry-group"><code>xyz</code></a>
+- <a href="#cubocta">cubocta</a>的保定向子群。
+<li> <a href="#genus2-symmetry-group"><code>genus2</code></a>
+- 用于2维亏格2双曲商空间。
+<li> <a href="#dodecahedron-symmetry-group"><code>dodecahedron</code></a>
+- 用于具有十二面体基本域的3D双曲商空间。
+<li> <a href="#central_symmetry"><code>central_symmetry</code></a>
+- 通过原点的反演，X映射到-X。
+<li> <a href="#screw_symmetry"><code>screw_symmetry</code></a>
+- 沿z轴的螺旋运动。
+<li> <a href="#quarter_turn"><code>quarter_turn</code></a>
+</ul>
+
+<hr> <a   id="torus-symmetry-group"></a><h3><code>TORUS</code>对称群</h3>
+这是<a href="#torus-model">环面模型</a>的底层
+<a href="#symmetry-groups">对称性</a>。
+尽管环面模型在Evolver中有许多特殊功能，
+但它也可以通过一般对称群接口访问。
+环面群是n维欧几里得空间上由n个独立向量
+（称为周期向量）生成的群。
+环面群使用数据文件中列出的
+<a href="datafile.htm#torus-periods">torus periods</a>。
+<p>
+<b>数据文件声明：</b><code>symmetry_group "torus"</code>
+<p>
+<b>群元素编码：</b>
+32位代码字被分成6位字段，
+每个维度一个字段，低比特用于第一个维度。
+因此最大空间维度为5。
+在每个位字段内，1编码正环绕，011111编码负环绕。
+编码实际上是2的补码5位整数，
+因此可以表示更高的环绕。
+
+<a   id="generator_power"></a>
+<hr>
+<a   id="rotate-symmetry-group"></a><h3><code>ROTATE</code>对称群</h3>
+这是x-y平面中旋转的循环
+<a href="#symmetry-groups">对称群</a>，
+其中群的阶由内部变量
+<a href="syntax.htm#rotation_order">rotation_order</a>
+（默认值4）给出。
+还有一个内部变量generator_power（默认1），
+使得旋转角度为2*pi*generator_power/rotation_order。
+<b>注意：</b>由于此群有固定点，需要一些特殊的预防措施。
+旋转轴上的顶点必须在数据文件中用
+属性<a href="elements.htm#axial_point">axial_point</a>标记。
+从轴点出发的边必须将轴点放在其尾部，
+并且必须具有零环绕。
+包括轴点的面必须将轴点放在面中第一条边的尾部。
+<p>
+<b>数据文件声明：</b><pre>  symmetry_group "rotate"
+  parameter rotation_order = 6 </pre>
+<p>
+<b>群元素编码：</b>元素编码为群生成器的幂。
+
+<hr> <a   id="flip-rotate-symmetry-group"></a><h3><code>FLIP_ROTATE</code>对称群</h3>
+这是x-y平面中旋转的循环
+<a href="#symmetry-groups">对称群</a>，
+在每次奇数旋转时z映射到-z，其中群的阶由内部变量
+<a href="syntax.htm#rotation_order">rotation_order</a>给出，
+它最好为偶数。
+<b>注意：</b>由于此群有在偶数旋转下固定的点，
+需要一些特殊的预防措施。旋转轴上的顶点必须在数据文件中用
+属性"<code>double_axial_point</code>"标记。
+从轴点出发的边必须将轴点放在其尾部，
+并且必须具有零环绕。
+包括轴点的面必须将轴点放在面中第一条边的尾部。
+<p>
+<b>数据文件声明：</b><pre>  symmetry_group "flip_rotate"
+  parameter rotation_order = 6 </pre>
+<p>
+<b>群元素编码：</b>元素编码为群生成器的幂。
+
+
+<hr>
+<a   id="cubelat"></a>
+ <a   id="cubelat-symmetry-group"></a><h3><code>CUBELAT</code>对称群</h3>
+这是单位立方格的完全
+<a href="#symmetry-groups">对称群</a>。
+<p><b>数据文件声明：</b><code>symmetry_group "cubelat"</code>
+<p><b>群元素编码：</b>
+wrap &amp; {1,2,4}分别给出x,y,z的符号变化；
+(wrap&amp;24)/8是(xyz)置换循环的幂；
+(wrap&amp;32)/32说明是否随后交换x,y。
+因此wrap&amp;63与cubocta对称群相同。
+然后wrap/64是环面对称群中的环面环绕：
+三个6位有符号字段用于每个坐标的平移。
+平移应在其他操作之后应用。
+
+<hr>
+<a   id="cubocta"></a>
+ <a   id="cubocta-symmetry-group"></a><h3><code>CUBOCTA</code>对称群</h3>
+这是立方体的完全
+<a href="#symmetry-groups">对称群</a>。
+它可以被视为(x,y,z)的所有置换和符号变化。
+<p><b>数据文件声明：</b><code>symmetry_group "cubocta"</code>
+<p><b>群元素编码：</b>
+wrap &amp; {1,2,4}分别给出x,y,z的符号变化；
+(wrap&amp;24)/8是(xyz)置换循环的幂；
+(wrap&amp;32)/32说明是否随后交换x,y。
+（由John Sullivan提供；源代码在quotient.c中，名为pgcube）
+
+<hr> <a   id="xyz-symmetry-group"></a><h3><code>XYZ</code>对称群</h3>
+<a href="#cubocta-symmetry-group">cubocta</a>的保定向子群。
+相同的表示。
+
+<hr> <a   id="genus2-symmetry-group"></a><h3><code>GENUS2</code>对称群</h3>
+这是<a href="model.htm#Klein-hyperbolic-metric">克莱因模型</a>
+双曲空间上的对称群，其商群是亏格2双曲流形。
+基本域是八边形。
+<p><b>数据文件声明：</b><pre>
+   Klein_metric
+   symmetry_group "genus2" </pre>
+
+<b>群元素编码：</b>
+有8个平移元素将基本域平移到其一个相邻域。
+围绕顶点平移给出8个元素的循环字符串。
+编码的群元素是8个元素的子字符串，
+空字符串是单位元素。每个元素编码为4位。
+参见khyp.fe作为示例。
+
+<hr> <a   id="dodecahedron-symmetry-group"></a><h3><code>DODECAHEDRON</code>对称群</h3>
+这是由直角十二面体铺砌的双曲3空间的
+<a href="#symmetry-groups">对称群</a>。
+群的元素表示为整数。
+群有32个生成器，因此每个生成器由5位表示。
+在此方案下，任何由最多五个生成器组合而成的元素都可以表示。
+如果您想使用此群，您必须检查dodecgroup.c中的源代码，
+因为其他人编写了此群，我现在不想全部弄清楚。
+<p><b>数据文件声明：</b><pre>
+   Klein_metric
+   symmetry_group "dodecahedron" </pre>
+
+<hr> <a   id="central_symmetry"></a><h3><code>CENTRAL_SYMMETRY</code>对称群</h3>
+这是通过原点反演的2阶
+<a href="#symmetry-groups">对称群</a>，
+X映射到-X。
+<p><b>数据文件声明：</b><pre>
+   symmetry_group "central_symmetry" </pre>
+<b>群元素编码：</b>0为单位元素，1为反演。
+
+<a   id="screw_height"></a><a   id="screw_angle"></a>
+<hr> <a   id="screw_symmetry"></a><h3><code>SCREW_SYMMETRY</code>对称群</h3>
+这是沿z轴的螺旋运动的
+<a href="#symmetry-groups">对称群</a>。
+全局参数<code>screw_height</code>是平移距离（默认为1），
+全局参数<code>screw_angle</code>是旋转角度（度）（默认为0）。
+<p><b>数据文件声明：</b><pre>
+  parameter screw_height = 4.0
+  parameter screw_angle  = 180.0
+  symmetry_group "screw_symmetry"
+</pre>
+<b>群元素编码：</b>整数值是群生成器的幂。
+
+<a   id="quarter_turn_period"></a>
+<a   id="quarter_turn"></a>
+<hr>
+<h3>quarter_turn</h3>
+<a href="#symmetry-groups">对称群</a>
+3维环面，顶部和底部识别时有四分之一转。
+x和y周期取为1。z周期是用户定义的变量quarter_turn_period。
+生成器x,y,z。x和y与常规环面模式中的相同。
+z是具有四分之一转的垂直平移：(x,y,z)->(-y,x,z)。
+<br>
+关系：x z = z y^-1，y z = z x
+<br>
+数值表示：与<a href="#torus-symmetry-group">环面对称群</a>中相同，
+用于x,y,z的幂，生成器按该顺序应用。<hr> <a   id="mobility"></a><h2>移动性</h2>
+
+移动性意味着顶点被移动多少。
+例如，考虑一个部分是管状、部分是板状的曲面。
+由于管状部分具有更高的曲率，它比板状部分
+贡献更多的能量变化。然而，管状部分的面积较小，
+因此对坐标中固定步长移动的面积变化贡献较小。
+因此，管状部分需要比板状部分更高的移动性。
+这有时是可行的。
+<p>
+默认情况下，Evolver使用两种移动性方法之一，
+取决于<a href="single.htm#V">V</a>命令或
+<a href="commands.htm#optimize">OPTIMIZE</a>命令
+是否在使用中：
+<ul>
+<li> <a href="#unit-mobility">单位移动性</a>（V模式）
+<li> <a href="#area-normalization">面积归一化</a>（optimize模式）
+</ul>
+移动性可以使用<a href="toggle.htm#homothety">homothety</a>
+和<a href="toggle.htm#effective_area">effective_area</a>标志修改，
+或通过<a href="#user-defined-mobility">用户定义的移动性</a>函数。
+
+<a   id="homothety"></a><a   id="optimizing_scale"></a>
+<hr> <a   id="unit-mobility"></a><h3>单位移动性</h3>
+这是默认情况，当能量是表面积且<a href="single.htm#V">V命令</a>
+在使用中时。移动性（梯度下降速度）设置为单位向量
+指向下降方向。
+<p>
+优化比例因子不受支持（由homothety操作）
+当能量不是面积时。
+它可以使用<a href="toggle.htm#homothety">homothety</a>
+标志打开，并设置一个假设的单独势能
+函数导致梯度。
+<a   id="unit_mobility"></a>
+有一个未记录的函数<code>unit_mobility</code>
+<a href="constrnt.htm#method-integral">method integral</a>
+可用作命名量，
+在由<code>convert_to_quantities</code>创建的
+基本能量和约束下。
+在移动性中，它的行为就像欧几里得空间中的
+普通<code>edge_area</code>/<code>facet_area</code>
+能量，但在计算目标值和拉格朗日乘子时，
+它使用真正的面积。
+
+<a   id="non-wall-adjustment"></a>
+<hr> <a   id="area-normalization"></a><h3>面积归一化</h3>
+如果<a href="commands.htm#optimize">optimize</a>
+命令生效，或如果一个体的
+<a href="elements.htm#b_volfixed">volfixed</a>为真，
+则移动性通过整个曲面的面积归一化。
+这使得移动性在目标面积/体积不变的变形下
+保持不变。因此，能量最小化者从a=0到
+a=无穷大。
+<p>
+面积归一化调整梯度，使得对于尖锐角落移动，
+角落相对于整个曲面移动。
+
+<a   id="effective_area"></a><a   id="non-wall-adjustment"></a>
+<hr> <a   id="effective-area"></a><h3>有效面积</h3>
+对于固定V约束，如果
+<a href="toggle.htm#effective_area">effective_area</a>
+标志开启，则归一化使用每个顶点处的"有效"面积，
+即实际面积投影到V约束梯度的补空间。
+这抵消了高曲率顶点的移动性
+被V约束梯度减小，因此
+产生更均匀的移动性。
+不幸的是，当高曲率点需要高移动性时，
+这也可能在某些情况下适得其反。
+effective_area标志不适用于无V约束的优化。
+
+<a   id="polyhedral-curvature"></a>
+<hr> <a   id="polyhedral-curvature"></a><h3>多面体曲率</h3>
+命令<a href="toggle.htm#kusner">kusner</a>
+改变了移动性，使得移动性与顶点处的
+多面体曲率成比例，
+定义为2*pi减去所有包含给定边的
+面中该边的角度。目前仅适用于弦模型。
+
+<a   id="effective_area"></a><a   id="user-defined-mobility"></a>
+<hr> <a   id="user-defined-mobility"></a><h3>用户定义的移动性</h3>
+
+可以通过创建具有以下任何一种命名的量来定义自定义移动性函数：
+<table>
+<tr> <td><code>vertex_scalar_mobility</code></td> <td>每个顶点标量</td> </tr>
+<tr> <td><code>vertex_vector_mobility</code></td> <td>每个顶点向量</td> </tr>
+<tr> <td><code>edge_scalar_mobility</code></td> <td>每条边标量（弦模型）</td> </tr>
+<tr> <td><code>edge_vector_mobility</code></td> <td>每条边向量（弦模型）</td> </tr>
+<tr> <td><code>facet_scalar_mobility</code></td> <td>每个面标量（皂膜模型）</td> </tr>
+<tr> <td><code>facet_vector_mobility</code></td> <td>每个面向量（皂膜模型）</td> </tr>
+</table>
+这些被用作乘法因子。
+如果有矢量和标量移动性，则它们相乘。
+标量移动性乘以梯度向量（逐分量）。
+向量移动性被视为对角矩阵；
+其分量乘以梯度向量的对应分量。
+现有的标量移动性（<code>homothety</code>、<code>effective_area</code>、
+<code>kusner</code>、<code>optimize</code>）仍然适用，
+但可能被其他用户定义的移动性乘以。
+参见mobility.fe作为示例。
+<p>
+对于<a href="#Lagrange-model">拉格朗日模型</a>，
+也使用标量和向量移动性，
+但在命名中替换"vertex"或"facet"。
+这是为了与拉格朗日插值方案兼容。
+<hr>
+<b><a href="index.htm#toc">返回目录</a></b>
+<hr>
+<b><a href="index.htm#bigpicture">返回概览</a></b></body>
+</html>

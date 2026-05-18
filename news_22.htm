@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 第 22 期通讯</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-19"></a>
+<h1>Surface Evolver 通讯 第 22 期</h1>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><pre>
+
+                         Surface Evolver 通讯 第 22 期
+                               2013 年 8 月
+                     作者：Ken Brakke, brakke@susqu.edu
+
+Surface Evolver 2.70 版现已发布，可从以下地址下载：
+http://www.susqu.edu/brakke/evolver。
+
+您应该参阅 <a href="http://www.susqu.edu/brakke/evolver/html/news_21.htm">第 21 期通讯</a>
+了解 2.50 版（2012 年 6 月）的众多精彩功能——我想我忘记发送那一期了。
+
+本版本的新功能不算很多，主要是 bug 修复，但有一些值得关注的功能：
+
+ 字符串数组（String arrays）
+   全局数组现在可以使用 "string"（字符串）类型（但元素数组属性不支持）。
+
+ 窗口标题（Window titles）
+   新增 console_title 字符串变量，用于用户控制命令窗口标题。
+   当同时运行同一数据文件的多个实例时非常有用。同样，还提供了
+   graphics_title、graphics_title2 和 graphics_title3，分别用于
+   主图形窗口以及第二和第三图形窗口。
+
+ no_transform（无变换）
+   现在为边和面新增了 "no_transform" 属性，使其免受视图变换的影响。
+   适用于放置一组不被变换的坐标轴等情况。
+
+ no_dump（不转储）
+   为全局变量新增了 "no_dump" 属性；语法：
+      variablename.no_dump on
+      variablename.no_dump off
+   （在命令提示符下使用，不在数据文件顶部使用）
+   此属性阻止变量被包含在 dump 数据文件的顶层部分中；
+   它们会被包含在底层部分中。其目的是使从前一次 dump 数据文件
+   执行 "addload" 时不会覆盖关键变量。
+
+ 约束属性（constraint properties）
+   新增顶点属性 constraint[n].normal，用于获取水平集约束在
+   顶点处的法向量，例如：
+     define cnormal real[3];
+     cnormal = vertex[1].constraint[wallcon].normal;
+   还提供了一些查询水平集约束性质的方法：
+        is_constraint[n].fixed
+        is_constraint[n].nonnegative
+        is_constraint[n].nonpositive
+   如果约束 n 具有相应属性，这些函数返回 1。
+
+ sq_torsion（平方扭转）
+   新增 sq_torsion 命名方法，用于计算边曲线扭转率的平方的积分。
+
+ 预测内存使用量（predicted memory usage）
+   为了加快大型 dump 文件的加载速度，数据文件顶部可以通过 "predicted"
+   （预测）数字告诉 Evolver 为各种数据结构初始分配多少内存，例如：
+      vertices_predicted      2149
+      edges_predicted         7941
+      facets_predicted        5881
+      facetedges_predicted   17641
+      bodies_predicted          89
+      quantities_predicted            0
+      method_instances_predicted      0
+   当您知道您的表面将变得很大时，这也有助于防止内存碎片化。
+
+ float128（128 位浮点数）
+   为了获得更高精度，Linux 用户可以编译 float128 版本的 Evolver，
+   该版本使用 quadmath 库。长期以来存在的 LONGDOUBLE 高精度版本
+   Evolver 在 Intel 芯片上实际上只使用 80 位浮点数，即使它分配了
+   128 位内存。float128 版本提供 33 位有效数字精度，但运行速度
+   慢 10 倍。
+
+ force_edgeswap（强制边交换）
+   新增 force_edgeswap 切换开关，用于覆盖等角化（equiangulation）禁令。
+   使 "u" 或 "equiangulate" 或 "edgeswap" 命令跳过某些测试并强制执行
+   交换。被跳过的测试包括：(1) 翻转边的两个顶点是不同的，(2) 创建
+   具有相同顶点的两个面片。仅适用于您确实清楚自己在做什么的特殊情况。
+
+通讯 22 结束
+
+
+
+</pre>
+</body>
+</html>

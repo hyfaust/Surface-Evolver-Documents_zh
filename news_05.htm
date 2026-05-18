@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 通讯 5</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-5"></a>
+<h1>Surface Evolver 通讯第5期</h1>
+<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
+<hr><pre>
+
+
+		      Surface Evolver 通讯第5期
+			      1993年7月28日
+
+                    编辑: Ken Brakke, brakke@geom.umn.edu
+
+目录:
+  职位空缺
+  版本1.92的新功能
+  并行化Evolver
+  新印刷手册
+
+职位空缺。
+
+两个博士研究助理职位空缺。职位由NSF资助，
+最终将为几个国家实验室/大学/微电子公司之间的联盟做出贡献。
+寻找（1）理论导向的学生，从事弯月面稳定性的综合分析/计算研究。
+具有Surface Evolver经验者优先（2）实验员，
+从事涉及液态金属的反应性润湿研究。
+鼓励具有应用数学、物理学、工程科学背景的候选人
+向纽约州立大学宾汉姆顿分校机械工程系Timothy Singler教授
+提交简历/履历，地址：Binghamton, NY 13902-6000，
+电话 (607)-777-4330，电子邮件 Singler@bingvmb.cc.binghamton.edu。
+
+新功能
+
+  新的命名量语法。参见下文。
+
+  新的命名量方法：
+    边、面标量被积函数。方法名称是"edge_scalar_integrand"
+    和"facet_scalar_integrand"。两者都需要指定标量函数。
+    使用字符串模型模拟旋转曲面的示例：
+
+    quantity rev_area energy global_method edge_scalar_integrand
+    scalar_integrand: 2*pi*x
+
+  "INFO_ONLY"量在需要其值之前不会计算。
+  这应该会加速某些计算。
+
+  "Fix"和"unfix"可以用作动词，如list、delete等。
+  我一直写像这样的命令
+     fix vertices where on_constraint 1
+  而不是
+     set vertices fixed where on_constraint 1
+  所以我让它合法了。
+
+  动词set、unset、list、delete、refine、fix、unfix、dissolve
+  可以在迭代结构内的单个命名元素上使用。示例：
+    foreach edge ee where ee.length &lt; .01 do {
+       printf "Refining edge %g.\",ee.id; refine ee; }
+
+  所有切换命令词（不是单个字母）都可以在表达式中用作布尔变量。
+  示例： 
+    if conj_grad then {g10; u; g10} else {g30; u; g30}
+
+  有更多的内部变量可用作只读值：space_dimension、
+  surface_dimension、torus（布尔）、torus_filled（布尔）、
+  symmetry_group（布尔）、simplex_representation（布尔）、
+  integration_order。
+
+  Mac版本重复命令可通过control-'.'中断。
+
+  Macintosh和Dos版本通过管道输出到文件而不是命令：
+    Enter command: list vertices | "filename"
+
+  对于环面域，可以使用带有参数的表达式指定环面周期，
+  因此可以交互式地更改基本单元。更改此类参数后，
+  请执行"recalc"以更新环面周期。
+
+  gv_binary切换用于向geomview发送二进制/ascii数据。
+  默认为ON（二进制），速度更快。Ascii模式对调试有用。
+
+命名量。
+
+  随着Evolver积累了越来越多的能量类型，
+很明显，将每种能量作为特殊计算添加不是一种好的方法。
+我一直在试验的系统我称之为"命名量"，
+我最近添加的能量都在这个系统中。
+逐渐地，所有能量、体积等将在内部转换，
+但现有的数据文件和命令语法将保持有效（在可能的情况下）。
+自该系统开始以来，它已经发生了一些变化，
+需要稍微改变数据文件语法。该系统有三个组成部分：
+1) 方法：方法是计算标量值的一种方式。
+每个方法都实现为计算其值和梯度的函数。
+方法在手册中有描述，并且有名称。
+2) 方法实例：方法实例是方法的特定应用，
+带有任何特定数据，如标量被积函数或参数。
+方法实例可以显式创建，也可以在量定义内隐式创建。
+显式创建的实例由用户命名。
+3) 量。量是方法实例的总和。
+量由用户命名，并以这种方式引用。
+量可以是总能量的一部分，可以有固定值，
+或者可以仅为了信息而计算。
+通常量只有一个方法实例，但有时可能使用几个。
+例如，在计算壁上自由边界的主体体积时，
+可能组合表面积分和边积分。
+
+有关方法、实例和量的完整详细信息，
+请参阅1.92手册。上述语法更改仅适用于应用于
+单个元素的量，而不是全局的。
+现在方法必须包含在量定义中，
+只需在数据文件中所需元素的行上列出量名称就足够了。
+例如，要对肥皂膜中的三重结线长度求和，
+
+   quantity triple_length energy method edge_length
+
+然后每个三重结边将如下所示
+
+   edges
+   1   1 2  triple_length
+
+在方法和量之间添加方法实例层需要此更改。
+
+
+并行化Evolver。
+
+  每个人都知道并行计算机是未来的浪潮！
+过去几个月，我开始涉足并行化Evolver。
+唯一准备好宣布的功能是用于多处理器Silicon Graphics系统。
+如果在Makefile的CFLAGS中使用-DSGI_MULTI编译，
+那么命名量计算将在处理器之间分配。
+请注意，这只适用于命名量，如edge_length和纽结能量，
+而不适用于普通长度、面积、约束等。对于纽结能量，
+我在4处理器机器上获得了3倍的加速。
+  SGI并行化相当简单，因为所有处理器共享相同的内存。
+在像Connection Machine CM-5这样的更分布式机器上，
+每个处理器都有自己的内存，必须使用消息传递来保持所有节点更新。
+因此，看起来移植到CM-5将必须将表面分成补丁分配给节点，
+每个节点将必须保持其邻居更新。我在并行化方面是个新手，
+我希望听到任何有良好算法的人，用于在节点之间分割Evolver类型的网格，
+也许带有负载平衡以考虑到某些节点（如约束上的节点）
+需要比其他节点更多的处理。
+
+
+新印刷手册。
+
+  版本1.92手册正在印刷为几何中心的研究报告GCG 55。
+上一个硬拷贝版本是1.87。当然，ftp存档中分发的版本始终是当前的。
+
+Surface Evolver 通讯5结束
+
+</pre><hr>
+<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
+</body>
+</html>

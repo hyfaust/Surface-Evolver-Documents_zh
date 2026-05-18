@@ -1,0 +1,1626 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Surface Evolver 几何元素</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<!--NewPage-->
+
+<h1 class="center">
+<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+
+<a   id="attributes"></a>
+<a   id="geometric-elements"></a><h1>几何元素</h1>
+
+      曲面由各个维度的几何元素定义。每个元素都有自己的属性集。有些属性可以由用户设置；其他属性在内部设置，但可以由用户查询。还可以为任何类型的元素动态定义<a href="#extra-attributes">额外属性</a>，这些属性可以是单个值或值向量。属性值可以在<a href="datafile.htm">数据文件</a>中指定，并通过<a href="syntax.htm#attr-values">命令</a>查询。
+<p>元素：
+<ul>
+<li><a href="#vertices">顶点</a>
+<li><a href="#edges">边</a>
+<li><a href="#facets">面</a>
+<li><a href="#bodies">体</a>
+<li><a href="#facetedges">面边</a>
+</ul>
+<hr>
+<a   id="vertices"></a><h2>顶点</h2>
+
+            顶点是空间中的一个点。
+            顶点的坐标是确定曲面位置的参数。
+            当曲面演化时，改变的是坐标。
+            顶点本身不携带默认能量，但可能通过位于
+            <a href="constrnt.htm#level-set-constraints">
+            水平集约束</a>上（在
+            <a href="model.htm#string-model">弦模型</a>中），
+            或者通过应用<a href="quants.htm">命名量</a>
+            能量而具有能量。
+            原始曲面的顶点在数据文件的
+            <a href="datafile.htm#vertices-section">
+            顶点部分</a>中定义。<p>
+
+            顶点属性（按相关性分组）：
+<table><tr><td style="vertical-align:text-top">
+<ul>
+<li>            <a href="#id">id</a>
+<li>            <a href="#original">original</a>
+<li>            <a href="#coordinates">coordinates, x,y,z, __x[]</a>
+<li>            <a href="#vertex-edges">vertex edges</a>
+<li>            <a href="#vertex-facets">vertex facets</a>
+<li>            <a href="#valence,-vertex">valence</a>
+<li>            <a href="#bare,-vertex">bare</a>
+<li>            <a href="#fixed,-vertex">fixed</a>
+<li>            <a href="#constraints,-vertex">constraints</a>
+<li>            <a href="#on_constraint">on_constraint</a>
+<li>            <a href="#hit_constraint">hit_constraint</a>
+<li>            <a href="#value_of_constraint">value_of_constraint</a>
+<li>            <a href="#v_constraint_list">v_constraint_list</a>
+<li>            <a href="#constraint-normal">constraint normal</a>
+<li>            <a href="#boundary,-vertex">boundary</a>
+<li>            <a href="#parameter-values">parameter values, p1,p2, p[]</a>
+<li>            <a href="#on_boundary">on_boundary</a>
+<li>            <a href="#v_boundary">v_boundary</a>
+</ul></td><td style="vertical-align:text-top"><ul>
+<li>            <a href="#extra-attributes">extra attributes</a>
+<li>            <a href="#quantity-attribute">named quantities</a>
+<li>            <a href="#on_quantity">on_quantity</a>
+<li>            <a href="#on_method_instance">on_method_instance</a>
+<li>            <a href="#v_method_list">v_method_list</a>
+<li>            <a href="#vertex_normal">vertex_normal</a>
+<li>            <a href="#dihedral,-vertex">dihedral</a>
+<li>            <a href="#mean_curvature,-vertex">mean_curvature</a>
+<li>            <a href="#sqcurve,-vertex">square mean curvature</a>
+<li>            <a href="#mid_edge">mid_edge</a>
+<li>            <a href="#mid_facet">mid_facet</a>
+<li>            <a href="#axial_point">axial_point</a>
+<li>            <a href="#triple_point">triple_point</a>
+<li>            <a href="#tetra_point">tetra_point</a>
+<li>            <a href="#v_force">v_force</a>
+<li>            <a href="#v_velocity">v_velocity</a>
+<li>            <a href="#raw_velocity">raw_velocity</a>
+<li>            <a href="#v_oldx">v_oldx</a>
+</ul>
+</td></tr></table><a href="#vertex-attributes">顶点属性的完整描述</a>。
+<hr>
+
+<a   id="edges"></a><h2>边</h2>
+
+            边是一维<a href="#geometric-elements">
+几何元素</a>。
+  在<a href="model.htm#linear-model">线性模型</a>中，
+边是尾部<a href="#vertices">顶点</a>和头部顶点之间的有向线段。
+  在<a href="model.htm#quadratic-model">二次模型</a>中，边由两个端点和一个中点的二次插值定义。
+  在<a href="model.htm#Lagrange-model">拉格朗日模型</a>中，边由边顶点的适当阶插值定义。
+在<a href="model.htm#string-model">弦模型</a>中，边携带默认的表面张力能量，与其长度成正比。
+边也可能通过位于
+<a href="constrnt.htm#level-set-constraints">水平集约束</a>上（在
+<a href="model.htm#soapfilm-model">皂膜模型</a>中），
+或者通过应用<a href="quants.htm">
+命名量</a>能量而具有能量。
+原始曲面的边在数据文件的
+<a href="datafile.htm#edges-section">边部分</a>中定义。
+<p>
+            边属性（按相关性分组）：
+<table><tr><td style="vertical-align:text-top">
+<ul>
+<li>            <a href="#id">id</a>
+<li>            <a href="#oid">oid</a>
+<li>            <a href="#original">original</a>
+<li>            <a href="#length">length</a>
+<li>            <a href="#density,-edge">density or tension</a>
+<li>            <a href="#fixed,-edge">fixed</a>
+<li>            <a href="#edge-vertices">vertices</a>
+<li>            <a href="#midv">midv</a>
+<li>            <a href="#edge-facets">facets</a>
+<li>            <a href="#valence,-edge">valence</a>
+<li>            <a href="#bare,-edge">bare</a>
+<li>            <a href="#constraints,-edge">constraints</a>
+<li>            <a href="#on_constraint">on_constraint</a>
+<li>            <a href="#e_constraint_list">e_constraint_list</a>
+<li>            <a href="#boundary,-edge">boundary</a>
+<li>            <a href="#on_boundary">on_boundary</a>
+<li>            <a href="#e_boundary">e_boundary</a>
+</ul></td><td style="vertical-align:text-top"><ul>
+<li>            <a href="#color,-edge">color</a>
+<li>            <a href="#edge-vector">edge_vector, x,y,z</a>
+<li>            <a href="#no_refine,-edge">no_refine</a>
+<li>            <a href="#no_transform,-edge">no_transform</a>
+<li>            <a href="#wrap">wrap</a>
+<li>            <a href="#wrap_list">wrap_list</a>
+<li>            <a href="#show,-edge">show</a>
+<li>            <a href="#orientation,-edge">orientation</a>
+<li>            <a href="#frontbody,-edge">frontbody</a>
+<li>            <a href="#backbody,-edge">backbody</a>
+<li>            <a href="#dihedral,-edge">dihedral</a>
+<li>            <a href="#noncontent,-edge">noncontent</a>
+<li>            <a href="#quantity-attribute">quantities</a>
+<li>            <a href="#on_quantity">on_quantity</a>
+<li>            <a href="#quantity-attribute">method instances</a>
+<li>            <a href="#on_method_instance">on_method_instance</a>
+<li>            <a href="#e_method_list">e_method_list</a>
+<li>            <a href="#extra-attributes">extra attributes</a>
+</ul>
+</td></tr></table>
+<hr>
+<a   id="facets"></a><h2>面</h2>
+  在<a href="model.htm#soapfilm-model">皂膜模型</a>中，
+  面是由三个<a href="#edges">边</a>循环定义的有向三角形。
+  在<a href="model.htm#linear-model">线性模型</a>中，
+  面是一个平面三角形。
+  在<a href="model.htm#quadratic-model">二次
+  模型</a>中，面是由三个面角顶点和三个边中点的二次插值定义的曲面。在<a href="model.htm#Lagrange-model">
+  拉格朗日模型</a>中，
+  <a href="syntax.htm#lagrange_order" class="keyword">lagrange_order</a>
+   插值在
+  (lagrange_order+1)(lagrange_order+2)/2个顶点之间进行。
+  虽然单个面是有向的，但相邻面的方向没有限制。
+  默认情况下，面携带等于其面积的表面张力能量。
+  <p>
+  在<a href="model.htm#string-model">弦模型</a>中，
+  面是任意数量边的链。链不需要闭合。通常，在弦模型中定义面是为了定义体，因此空间维度为2，面是平面的，一个面对应一个体。
+  面本身不携带能量。
+  <p>
+  在<a href="model.htm#simplex-model">单纯形模型</a>中，
+  面是维度为
+   <a href="datafile.htm#surface-dimension-decl" class="keyword">surface_dimension</a>
+   的单纯形，由surface_dimension+1个顶点定义。<code>surface_dimension</code>
+   可以是小于或等于
+   <a href="datafile.htm#space-dimension-decl" class="keyword">space_dimension</a>
+   的任何维度。
+   单纯形根据顶点的顺序定向。
+   默认情况下，单纯形携带与其体积成正比的表面张力能量。
+<p>
+  面可以通过应用
+  <a href="quants.htm">命名量</a>能量
+  携带额外能量。
+  <p>
+  原始曲面的面在数据文件的
+  <a href="datafile.htm#faces-section">面部分</a>中定义。
+  <p>
+            面属性（按相关性分组）：
+<table><tr><td style="vertical-align:text-top">
+<ul>
+<li>            <a href="#id">id</a>
+<li>            <a href="#oid">oid</a>
+<li>            <a href="#original">original</a>
+<li>            <a href="#density,-facet">density or tension</a>
+<li>            <a href="#area,-facet">area</a>
+<li>            <a href="#fixed,-facet">fixed</a>
+<li>            <a href="#facet-vertices">vertices</a>
+<li>            <a href="#facet-edges">edges</a>
+<li>            <a href="#facet-bodies">bodies</a>
+<li>            <a href="#frontbody,-facet">frontbody</a>
+<li>            <a href="#backbody,-facet">backbody</a>
+<li>            <a href="#f_body_list">f_body_list</a>
+<li>            <a href="#valence,-facet">valence</a>
+<li>            <a href="#constraints,-facet">constraints</a>
+<li>            <a href="#on_constraint">on_constraint</a>
+<li>            <a href="#f_constraint_list">f_constraint_list</a>
+<li>            <a href="#boundary,-facet">boundary</a>
+<li>            <a href="#on_boundary">on_boundary</a>
+</ul></td><td style="vertical-align:text-top"><ul>
+<li>            <a href="#f_boundary">f_boundary</a>
+<li>            <a href="#color,-facet">color</a>
+<li>            <a href="#frontcolor">frontcolor</a>
+<li>            <a href="#backcolor">backcolor</a>
+<li>            <a href="#opacity">opacity</a>
+<li>            <a href="#facet_normal">facet_normal, x,y,z</a>
+<li>            <a href="#no_display">no_display</a>
+<li>            <a href="#no_refine,-facet">no_refine</a>
+<li>            <a href="#no_transform,-facet">no_transform</a>
+<li>            <a href="#orientation,-facet">orientation</a>
+<li>            <a href="#noncontent,-facet">noncontent</a>
+<li>            <a href="#phase,-facet">phase</a>
+<li>            <a href="#quantity-attribute">quantities</a>
+<li>            <a href="#on_quantity">on_quantity</a>
+<li>            <a href="#quantity-attribute">method instances</a>
+<li>            <a href="#on_method_instance">on_method_instance</a>
+<li>            <a href="#f_method_list">f_method_list</a>
+<li>            <a href="#extra-attributes">extra attributes</a>
+<li>            <a href="#f_next_vfacet">f_next_vfacet</a>
+<li>            <a href="#f_next_bfacet">f_next_bfacet</a>
+
+</ul>
+</td></tr></table>
+<hr>
+<a   id="bodies"></a><h2>体</h2>
+
+            体是空间的全维区域。体不是三角化的。相反，它们由其边界
+<a href="#facets">面</a>（或在二维中为<a href="#edges">边</a>）确定。
+                 这些面用于计算体体积
+                 和重力能量。只需要给出正确计算所需的那些面。在
+                 <a href="model.htm#string-model">弦
+		 模型</a>中，通常一个体对应一个面。
+		 原始曲面的体在数据文件的
+		 <a href="datafile.htm#bodies-section">体部分</a>
+		 中定义。
+<p>
+            体属性：
+<table><tr><td style="vertical-align:text-top">
+<ul>
+<li>            <a href="#id">id</a>
+<li>            <a href="#original">original</a>
+<li>            <a href="#body-facets">facets</a>
+<li>            <a href="#density,-body">density</a>
+<li>            <a href="#body-volume">volume</a>
+<li>            <a href="#target-volume">target</a>
+<li>            <a href="#volfixed">volfixed</a>
+</ul></td><td style="vertical-align:text-top"><ul>
+<li>            <a href="#body-volconst">volconst</a>
+<li>            <a href="#actual_volume">actual_volume</a>
+<li>            <a href="#pressure,-body">pressure</a>
+<li>            <a href="#phase,-body">phase</a>
+<li>            <a href="#centerofmass">centerofmass</a>
+<li>            <a href="#extra-attributes">extra attributes</a>
+
+</ul>
+</td></tr></table>
+<hr>
+<a   id="facetedges"></a><h2>面边</h2>
+面边是面及其一条边的配对，其方向使得边的方向与面的方向一致。面边在Evolver内部使用，很少对用户感兴趣。它们不携带能量。
+'<a href="single.htm#C" class="keyword">C</a>'
+完整性检查命令有时会引用面边，如果曲面不一致。<code>Facetedge</code> 可以用作元素生成器。
+<p>
+            面边属性：
+<ul>
+<li> <a href="#id">id</a>
+<li> <a href="#facetedge-edge">edge</a>
+<li> <a href="#facetedge-facet">facet</a>
+<li> <a href="#nextedge">nextedge</a>
+<li> <a href="#prevedge">prevedge</a>
+<li> <a href="#nextfacet">nextfacet</a>
+<li> <a href="#prevfacet">prevfacet</a>
+<li> <a href="#extra-attributes">extra attributes</a>
+</ul>
+<hr>
+<hr>
+<a   id="element-attributes"></a>
+<h1>元素属性</h1>
+下面是可能的元素属性列表。前几个适用于所有类型的元素。然后是专门适用于顶点、边、面和体的属性。参见<a href="#geometric-elements">
+几何元素</a>以获取每种类型元素的属性列表。
+<hr>
+
+
+<!--========================== 通用属性 ===========================-->
+
+<h1>所有类型元素的属性</h1>
+<hr>
+
+
+<!--============================== id ============================-->
+
+<a   id="id"></a><h2>id</h2>
+<a href="#geometric-elements">几何元素</a>只读整数属性。
+元素的id是与该元素唯一关联的正整数。Evolver将按照从数据文件读取的顺序为元素分配id，除非数据文件顶部有
+<a href="general.htm#options">-i命令行选项</a>
+ 或 <a href="datafile.htm#keep_originals" class="keyword">keep_originals</a>，
+在这种情况下，数据文件元素编号就是id。
+  无论哪种情况，你都可以使用<a href="#original">
+original</a>属性访问数据文件id。示例：
+<pre>   list vertex where id &lt; 10
+   set edge color red where id == 4 or id == 6 or id == 9
+   foreach facet ff do
+   { printf "%d  %d %d %d\n",ff.id,ff.edge[1].id,ff.edge[2].id,ff.edge[3].id }
+</pre>
+<hr>
+
+<!--============================== oid ============================-->
+
+<a   id="oid"></a><h2>oid</h2>
+<a href="#geometric-elements">几何元素</a>只读整数属性。
+元素的oid是在表达式中使用的"有向id"。它是根据元素的使用方向与存储方向相同还是相反而签名的<a href="#id">id</a>编号。示例：要获取数据文件中面的边列表，使用oid而不是id：
+<pre>
+   foreach facet ff do { printf "%d  %d %d %d\n",ff.id,ff.edge[1].oid,
+      ff.edge[2].oid,ff.edge[3].oid }
+</pre>
+
+<hr>
+
+<!--============================== fixed ============================-->
+
+<a   id="fixed"></a><h2>fixed</h2>
+<a href="#geometric-elements">几何元素</a>可读写布尔属性。
+对于顶点，<code>fixed</code> 意味着它们在各种演化和三角化整理命令期间不会移动。对于边和面，<code>fixed</code>
+意味着通过细化从它们生成的顶点是<code>fixed</code>，尽管声明面或边为fixed不会自动使其顶点为<code>fixed</code>。
+<p>
+对于体，<code>fixed</code> 意味着其体积被约束为其
+<a href="#target">target</a>值。同样，作为<a href="quants.htm#named-quantities">命名量</a>属性的<code>fixed</code>意味着该量值被约束。
+<p>
+固定性可以通过<a href="commands.htm#fix" class="keyword">
+fix</a>和<a href="commands.htm#unfix" class="keyword">unfix</a>命令更改。
+<p>
+示例：
+<pre>
+   fix vertex where z = 0
+   unfix vertex where on_constraint 1
+   list edge where fixed
+   print body[1] fixed
+</pre>
+
+
+
+<hr>
+
+<!--============================== on_constraint ============================-->
+
+<a   id="on_constraint"></a><h2>on_constraint</h2>
+<a href="#vertices">顶点</a>、
+<a href="#edges">边</a>或
+<a href="#facets">面</a>
+只读属性。
+<a href="syntax.htm#boolean-ops">布尔</a>属性，用于判断元素是否在给定
+<a href="constrnt.htm#level-set-constraints">约束</a>上。
+属性的完整语法是"<code>on_constraint</code> <em>n</em>"
+，其中<em>n</em>是约束的编号或名称。示例：
+<pre>
+   list edge where on_constraint 3
+   print vertex[3].on_constraint floorcon
+</pre>
+
+<hr>
+
+<!--============================== on_boundary ============================-->
+
+<a   id="on_boundary"></a>
+<h2>on_boundary</h2>
+<a href="#vertices">顶点</a>、
+<a href="#edges">边</a>或
+<a href="#facets">面</a>
+只读布尔属性。
+
+元素是否在
+<a href="constrnt.htm#parametric-boundaries">参数边界</a>上的状态。
+属性的完整语法是"<code>on_boundary </code><em>n</em>"，其中
+<em>n</em>是边界编号或名称。
+示例：
+<pre>
+  list vertex where on_boundary 1
+  list edge where on_boundary topbdry
+</pre>
+
+
+<hr>
+
+<!--============================== on_quantity ============================-->
+
+<a   id="on_quantity"></a><h2>on_quantity</h2>
+<a href="#vertices">顶点</a>、
+<a href="#edges">边</a>或
+<a href="#facets">面</a>
+只读属性。
+<a href="syntax.htm#boolean-ops">布尔</a>属性，用于判断元素是否对给定
+<a href="quants.htm#named-quantities">命名量</a>有贡献。
+实际上，它测试元素是否在构成该量的任何方法实例上。
+属性的完整语法是
+"<code>on_quantity</code> <em>quantityname</em>"。
+ 示例：
+<pre>
+   list facet where on_quantity  center_of_mass_x
+   print vertex[3].on_quantity blue_area
+</pre>
+
+
+<hr>
+
+<!--============================== on_method_instance ============================-->
+
+<a   id="on_method_instance"></a><h2>on_method_instance</h2>
+<a href="#vertices">顶点</a>、
+<a href="#edges">边</a>或
+<a href="#facets">面</a>
+只读属性。
+<a href="syntax.htm#boolean-ops">布尔</a>属性，用于判断元素是否对给定
+<a href="quants.htm#named-methods">命名方法实例</a>有贡献。
+属性的完整语法是
+"<code>on_method_instance</code> <em>instancename</em>"。
+ 示例：
+<pre>
+   list facet where on_method_instance  center_of_mass_x_edges
+   print vertex[3].on_method_instance blue_area_1
+</pre>
+
+
+
+<hr>
+
+<!--============================== original ============================-->
+
+<a   id="original"></a><h2>original</h2>
+<a href="#geometric-elements">几何元素</a>可读写整数属性。
+对于从数据文件读取的元素，这是数据文件中赋予该元素的编号，可以通过定义元素的数据文件行中的显式original属性值覆盖。该值被细分产生的所有同类型元素继承。
+对于在运行时以其他方式生成的元素，original属性值为-1。
+示例：显示数据文件中哪些面由面1派生：
+<pre>
+   set facet color red where original == 1
+</Pre>
+
+<hr>
+<!--============================== 命名量 ============================-->
+
+<a   id="quantity-attribute"></a><h2>命名量值作为属性</h2>
+
+<a href="quants.htm">命名量</a>和
+<a href="quants.htm">方法实例</a>可以应用于几何
+元素，无论是在<a href="datafile.htm">数据文件</a>中（通过
+在定义元素的行中添加量或方法名称）还是
+使用<a href="commands.htm#set">set</a>命令。
+非全局量
+或方法可以为单个元素<a href="commands.htm#unset">unset</a>。单个元素的值可以使用属性语法访问。
+示例：假设有一个命名量"xmoment"，可以
+为面求值。那么可以给出命令
+<pre>
+   foreach facet do printf "%d %f\n",id,xmoment
+   list facet where xmoment &gt; 4
+</pre>
+
+<hr>
+<!--============================== 额外属性 ============================-->
+
+<a   id="extra-attributes"></a><h2>额外属性</h2>
+
+<a href="#geometric-elements">几何元素</a>可读写属性。
+如果<a href="elements.htm#extra-attributes">额外属性</a>
+已在<a href="datafile.htm#extra-decl">数据文件</a>中或使用
+<a href="commands.htm#define">define</a>命令定义，
+则可以使用属性语法访问。数据文件中的额外属性值可以通过在定义元素的行中添加属性名称和值来为元素初始化。额外属性也可以是数值数组
+（全局数组可以是字符串，但属性还不能），使用标准嵌套括号语法初始化。示例：
+<pre>
+  define vertex attribute newx real
+  define vertex attribute vmat real[3][2]
+  vertices
+  1   2 0 0 newx 3 vmat {{1,2},{3,4},{5,6}}
+</pre>
+命令语言可以使用与内置属性相同的语法使用名称，并且可以在运行时定义额外属性：
+<pre>
+  set vertex newx x
+  define edge attribute vibel real[2]
+  set edge[2] vibel[1] 3; set edge[2] vibel[2] 4
+  print vertex[3].newx
+</pre>
+属性数组大小可以在运行时通过执行属性的另一个定义来更改，但维度数量必须相同。更改大小时，数组条目值会尽可能保留。
+<p>
+额外属性的值也可以由用户提供的代码计算。属性定义后跟关键字"function"，然后是括号中的代码。在代码中，关键字"self"用于引用正在计算属性的元素。
+示例：将面的最低z值实现为属性：
+<pre> define facet attribute minz real function
+	 {self.minz := min(self.vertex,z);}
+</pre><!--============================== Edge attributes ============================-->
+
+<hr>
+<hr>
+<h1>边属性</h1>
+
+<hr>
+<!--============================== Edge id ============================-->
+
+<H2>边id</h2> 参见<a href="#id" class="keyword">id</a>通用元素。
+
+<hr>
+<!--============================== Edge oid ============================-->
+
+<H2>边oid</h2> 参见<a href="#oid" class="keyword">oid</a>通用元素。
+
+<!--============================== Edge original ============================-->
+
+<hr>
+<H2>边original</h2> 参见<a href="#original" class="keyword">original</a>
+通用元素。
+
+
+<hr>
+<!--============================== Edge length ============================-->
+
+<a   id="length"></a>
+<h2>边长度</h2>
+<a href="#edges">边</a>只读实数属性。边的长度。
+示例：
+<pre> histogram(edge where on_constraint 1, length)
+ print edge[3].length
+</pre>
+<hr>
+<!--============================== Edge tension ============================-->
+
+<a   id="density,-edge"></a><a   id="tension,-edge"></a>
+<h2>边密度或张力</h2>
+<a href="#edges">边</a>可读写实数属性。
+"密度"和"张力"是同义词。
+每单位边长的能量。在弦模型中默认为1，在皂膜模型中默认为0。
+可以在<a href="datafile.htm#edges-section">边部分</a>的
+<a href="datafile.htm">数据文件</a>中修改张力，
+方法是在定义边的行中添加"<code>tension</code> <em>value</em>"。
+张力可以通过<a href="commands.htm#set">set</a>命令修改。
+示例：
+<pre>  set edge tension .5 where id &lt; 10
+  loghistogram(edge,density)
+</pre>
+<hr>
+<!--============================== Edge fixed ============================-->
+
+<a   id="fixed,-edge"></a><h2>固定边</h2>
+<a href="#edges">边</a>可读写属性。
+对于"固定"的边，由细化边创建的任何顶点或边将继承"固定"属性。
+在数据文件中声明边为固定不会固定边上的顶点，从命令提示符固定边也不会固定任何顶点。
+可以在<a href="datafile.htm#edges-section">边部分</a>的
+<a href="datafile.htm">数据文件</a>中声明边为固定，
+方法是在定义边的行中添加<code>fixed</code>。
+从命令提示符，可以使用<a href="commands.htm#fix" class="keyword">fix</a>和
+<a href="commands.htm#unfix" class="keyword">unfix</a>命令固定或取消固定边。
+示例：
+<pre>  fix edge where on_constraint 1
+  list edges where fixed
+  set edge color red where fixed
+  unfix edge[3]
+</pre>
+<hr>
+<!--============================== Edge vertices ============================-->
+
+<a   id="edge-vertices"></a><h2>边顶点</h2>
+<a href="#edges">边</a>只读属性。作为边顶点的
+<a href="commands.htm#generators">生成器</a>。
+在<a href="model.htm#linear-model">线性模型</a>中，
+这意味着尾部和头部顶点。在
+<a href="model.htm#quadratic-model">二次</a>模型中，
+这意味着尾部、头部和中间顶点。
+对于<a href="model.htm#Lagrange-model">拉格朗日</a>模型，
+这意味着从尾部到头部的所有顶点，按顺序排列。
+对于<a href="model.htm#simplex-model">单纯形</a>模型，
+这意味着按存储顺序排列的顶点。
+示例：
+<pre>
+   list edge[2].vertices
+   list edge ee where ee.vertex[1].on_constraint 1
+</pre><!--============================== Edge midv ============================-->
+
+<a   id="midv"></a><h2>边midv</h2>
+<a href="#edges">边</a>只读属性。
+在<a href="model.htm#quadratic-model">二次模型</a>中，给出
+边的中点顶点的id。示例：
+<pre>  print edge[23].midv </pre>
+<hr>
+
+<!--============================== Edge facets ============================-->
+<a   id="edge-facets"></a><h2>边面</h2>
+<a href="#edges">边</a>只读属性。
+<a href="commands.htm#generators">生成</a>
+附加到边的面，当有意义时按边周围顺序排列，
+面方向与边方向一致。
+示例：
+<pre>
+   list edge[2].facets
+   foreach edge ee do print max(ee.facets,area)
+</pre>
+<hr>
+<!--============================== Edge valence ============================-->
+
+<a   id="valence,-edge"></a><h2>边价</h2>
+<a href="#edges">边</a>只读整数属性。
+边的价是与其相邻的面的数量。
+示例：
+<pre>  list edges where valence == 1
+  refine edge where valence != 2
+</pre>
+<hr>
+
+<!--============================== Edge bare ============================-->
+
+<a   id="bare,-edge"></a><h2>裸边</h2>
+<a href="#edges">边</a>可读写布尔属性。
+声明边为"裸边"表示边没有相邻的面（皂膜模型）。最好在
+<a href="datafile.htm#edges-section">数据文件</a>中声明，
+方法是在定义边的行中添加关键字<code>bare</code>。
+  有助于避免警告消息。
+裸边可用于在图形中显示线框、框架、轮廓、轴等。示例：
+<pre>
+  list edge where bare
+</pre>
+<hr>
+<!--============================== Edge constraints ============================-->
+
+<a   id="constraints,-edge"></a><h2>边约束</h2>
+<a href="#edges">边</a>可读写属性。
+边可以放在<a href="constrnt.htm#level-set-constraints">
+水平集约束</a>上。
+对于这样的边，
+由细化边生成的任何顶点和边将继承该约束。边可以在
+<a href="datafile.htm#edges-section">边部分</a>的
+<a href="datafile.htm">数据文件</a>中设置约束，
+方法是在定义边的行中列出约束编号，前面加上关键字<code>constraint</code>。
+将边放在约束上不会将其现有顶点放在约束上。
+在命令中，边的状态可以使用
+"<a href="#on_constraint">on_constraint</a>"
+属性读取。状态可以使用
+<a href="commands.htm#set">set</a>或<a href="commands.htm#unset">unset</a>
+命令更改。
+示例：
+<pre>
+  list edge where on_constraint 2
+  set edge constraint 1 where id == 4 or id == 6
+  unset edge constraint 3
+</pre>
+
+<hr>
+<!--==============================Edge on_constraint ============================-->
+
+<a   id="on_constraint,-edge"></a><h2>边on_constraint</h2>
+参见<a href="#on_constraint" class="keyword">on_constraint</a>
+通用元素属性。
+<hr>
+<!--============================== Edge e_constraint_list ============================-->
+
+<a   id="e_constraint_list"></a><h2>边e_constraint_list</h2>
+此只读属性提供边所受约束的列表。e_constraint_list[1]是
+列表中约束的数量，后跟约束的编号。请注意，对于
+命名约束，使用内部指定的编号。
+
+<hr>
+<!--============================== Edge boundary ============================-->
+
+<a   id="boundary,-edge"></a><h2>边边界</h2>
+<a href="#edges">边</a>可读写属性。
+          如果边在
+<a href="constrnt.htm#boundary">参数边界</a>上，
+则从边生成的任何边和顶点
+          将继承该边界。默认情况下，
+          新顶点参数值通过从边的一端外推来计算。
+          这避免了插值参数值会产生的环绕问题。但是，如果
+          interp_bdry_param开关打开，则使用插值。
+边是否在边界上的状态可以使用
+<a href="syntax.htm#boolean-ops">布尔</a>属性<a href="#on_boundary">on_boundary</a>查询。
+  边可以从边界<a href="commands.htm#unset">取消设置</a>，
+也可以设置到边界上（但需要小心正确操作）。
+示例：
+<pre>
+  list edges where on_boundary 1
+  unset edges boundary 2
+</pre>
+
+<hr>
+<!--============================= Edge on_boundary =========================-->
+
+<a   id="edge-on_boundary"></a><h2>边on_boundary</h2>
+参见<a href="#on_boundary" class="keyword">on_boundary</a>通用元素。
+
+<hr>
+<!--============================== Edge e_boundary ============================-->
+
+<a   id="e_boundary"></a> <h2>边e_boundary</h2>
+<a href="#edges">边</a>只读整数属性。
+内部边属性，保存边所在边界的id编号。请注意，命名边界
+有内部id编号，在此使用。
+
+<hr>
+<!--============================== Edge color ============================-->
+
+<a   id="color,-edge"></a><h2>边颜色</h2>
+<a href="#edges">边</a>可读写属性。
+<a href="syntax.htm#colors">颜色</a>用于图形。
+默认颜色是黑色。颜色可以在
+<a href="datafile.htm#edges-section">数据文件</a>中设置，或使用
+<a href="commands.htm#set">set</a>命令设置。
+在<a href="graphics.htm#geomview">geomview</a>中，边颜色
+将仅显示满足
+<a href="commands.htm#show">show</a>边条件的边，然后
+它们将与geomview绘制的边竞争，除非您
+在geomview窗口中使用"ae"关闭geomview的边绘制。
+示例：
+<pre>
+  set edge color red where length &gt; 1
+  show edge where color != black
+</pre><!--============================== Edge edge_vector ============================-->
+
+<a   id="edge_vector"></a><h2>边edge_vector</h2>
+<a href="#edges">边</a>只读属性。
+边向量的分量。edge_vector[1]是第一个分量，
+edge_vector[2]是第二个分量，依此类推。
+示例：
+<pre> print edge[3].edge_vector[1]
+ list edge ee where ee.edge_vector[1] &gt; 0
+ histogram(edge, edge_vector[1])
+</pre>
+
+<hr>
+<!--============================== Edge no_refine ============================-->
+
+<a   id="no_refine,-edge"></a><h2>边no_refine</h2>
+<a href="#edges">边</a>和<a href="#facets">面</a>
+可读写布尔属性。防止在细化操作中对
+边或面进行细化。不影响约束细化。
+示例：
+<pre>  set edge no_refine
+  set edge no_refine on boundary 3
+  refine edge where not no_refine
+</pre>
+<hr>
+<!--============================== Edge no_transform ============================-->
+
+<a   id="no_transform,-edge"></a><h2>边no_transform</h2>
+<a href="#edges">边</a>和<a href="#facets">面</a>
+可读写布尔属性。
+当边或面设置为on_transform时，表示
+在对称群模式下，对称变换不会应用于此边或面。
+对称组以基本域覆盖的外部区域开始。
+边界效应是基本域外没有对称变换。
+参见<a href="torus.htm">环面</a>文档。
+示例：
+<pre>  set edge no_transform on boundary 1
+  set facet no_transform on boundary 1
+</pre>
+<hr>
+<!--============================== Edge wrap ============================-->
+
+<a   id="wrap,-edge"></a><h2>边wrap</h2>
+<a href="#edges">边</a>可读写属性。
+当使用<a href="model.htm#symmetry-groups">对称群</a>时，
+边穿过基本域边界时，
+边被标记为移动边头顶点到相对于尾顶点的正确位置的群元素。
+该群元素的编号存储在边的wrap属性中。
+wrap默认为0（单位元素）。在<a href="datafile.htm#edges-section">边部分</a>的
+<a href="datafile.htm">数据文件</a>中设置wrap，方法是在
+定义边的行中列出群元素的编号，前面加上关键字<code>wrap</code>。
+参见<a href="model.htm#symmetry-groups">对称群</a>。
+在<a href="model.htm#torus-model">环面模型</a>中，
+值从1到2*n，
+其中n是维度，负方向和正方向的穿越各一个。
+请注意，边顶点值和表面外观可能不会立即更新。
+示例：
+<pre>  set edge wrap 3 where id == 1
+  set edge[2] wrap 3
+</pre>
+
+<hr>
+<!--============================== Edge wrap_list ============================-->
+
+<a   id="wrap_list,-edge"></a><h2>边wrap_list</h2>
+<a href="#edges">边</a>可读写整数数组属性。
+当使用<a href="model.htm#symmetry-groups">对称群</a>时，
+此数组保存环绕列表：
+长度为适当群元素编号+1的数组，每个元素是
+边穿过基本域边界时从尾到头的穿越方向的群元素编号。
+对于给定索引i，显示的元素是列表中的第i个元素。
+非零值只有在基本域边缘有多个路径时才相关。
+此属性也可以作为"wrap"访问。
+示例：
+<pre>  set edge[2] wrap_list 3
+  set edge wrap_list 5 where on_constraint 1
+</pre>
+<hr>
+<!--============================== Edge show ============================-->
+
+<a   id="show,-edge"></a><h2>边show</h2>
+<a href="#edges">边</a>和<a href="#facets">面</a>
+只读布尔属性。是否在图形中显示。参见
+<a href="commands.htm#show">show</a>命令。
+<br><a   id="color,-facet"></a>
+示例：
+<pre>  show facet where color == green
+</pre>
+
+<hr>
+<!--============================== Edge orientation ============================-->
+
+<a   id="orientation,-edge"></a><h2>边orientation</h2>
+<a href="#edges">边</a>整数可读写属性。
+反映边的"方向"（或符号），当边作为
+面的边界的一部分时使用。
+值是1或-1。当边在面的正边界上时，值为1；
+在负边界上时，值为-1。
+默认为1。
+示例：
+<pre>  list facet[1].edges
+  set edge orientation -1 where on_boundary 2
+  set edge[3] orientation -1
+</pre>
+<hr>
+<!--============================== Edge frontbody ============================-->
+
+<a   id="frontbody,-edge"></a><h2>边frontbody</h2>
+<a href="#edges">边</a>只读整数属性。
+在<a href="model.htm#string-model">弦模型</a>中，
+这是连接到边"前面"的<a href="#bodies">体</a>的id编号。
+"前面"指的是与边正方向一致的方向。
+通常是一个<a href="#bodies">体</a>的
+<a href="#facets">面</a>生成器的一部分，该面的
+正方向与边方向一致。
+如果该边没有相邻的体，值为0。
+示例：
+<pre> print edge[3].frontbody
+ list edge where frontbody == 1
+</pre>
+
+<hr>
+<!--============================== Edge backbody ============================-->
+
+<a   id="backbody,-edge"></a><h2>边backbody</h2>
+<a href="#edges">边</a>只读整数属性。
+在<a href="model.htm#string-model">弦模型</a>中，
+这是连接到边"后面"的<a href="#bodies">体</a>的id编号。
+"后面"指的是与边负方向一致的方向。
+通常是一个<a href="#bodies">体</a>的
+<a href="#facets">面</a>生成器的一部分，该面的
+负方向与边方向一致。
+如果该边没有相邻的体，值为0。
+示例：
+<pre> print edge[3].backbody
+</pre>
+
+<hr>
+<!--============================== Edge dihedral ============================-->
+
+<a   id="dihedral"></a><h2>边dihedral</h2>
+<a href="#edges">边</a>只读实数属性。
+边两个面法线之间的角度（弧度）。
+对于裸边或只有一个面的边，角度为0。
+示例：
+<pre> histogram(edge where not bare, dihedral)
+ list edge where dihedral > .1
+</pre>
+
+<hr>
+<!--============================== Edge noncontent ============================-->
+
+<a   id="noncontent,-edge"></a><h2>边noncontent</h2>
+<a href="#edges">边</a>可读写布尔属性。
+防止边对体内容（体积）产生贡献。
+在环面模型中，边可能不是封闭体边界的一部分，
+因此它们不应对其产生贡献。
+示例：
+<pre>  set edge noncontent
+  set edge noncontent on constraint 1
+  set edge[2] noncontent
+</pre>
+
+<hr>
+<!--============================== Edge named quantities ============================-->
+
+<a   id="named-quantity,edge"></a>
+<a   id="method-instance,edge"></a>
+<a   id="on_quantity,edge"></a>
+<a   id="on_method_instance,edge"></a><h2>边命名量</h2>
+参见<a href="#named-quantity" class="keyword">命名量</a>
+通用元素属性。
+<h2>边命名方法实例</h2>
+参见<a href="#method-instance" class="keyword">命名方法实例</a>
+通用元素属性。
+<h2>边on_quantity</h2>
+参见<a href="#on_quantity" class="keyword">on_quantity</a>
+通用元素属性。
+<h2>边on_method_instance</h2>
+参见<a href="#on_method_instance" class="keyword">on_method_instance</a>
+通用元素属性。
+<hr>
+<!--============================== Edge e_method_list ============================-->
+
+<a   id="e_method_list"></a><h2>边e_method_list</h2>
+<a href="#edges">边</a>只读整数数组属性。
+边拥有的内部方法实例列表。
+e_method_list[1]是列表中方法实例的数量，后跟
+方法实例的编号。请注意，这是一个内部列表，方法实例
+有内部编号，在此使用。
+
+<hr>
+<!--============================== Edge extra attributes ============================-->
+
+<a   id="extra-attributes,-edge"></a><h2>边额外属性</h2>
+参见<a href="#extra-attributes" class="keyword">额外属性</a>
+通用元素。<!--============================== Facet attributes ============================-->
+
+<hr>
+<hr>
+<h1>面属性</h1>
+
+<hr>
+<!--============================== Facet id ============================-->
+
+<H2>面id</h2> 参见<a href="#id" class="keyword">id</a>通用元素。
+<hr>
+<!--============================== Facet oid ============================-->
+
+<H2>面oid</h2> 参见<a href="#oid" class="keyword">oid</a>通用元素。
+
+<!--============================== Facet original ============================-->
+
+<hr>
+<H2>面original</h2> 参见<a href="#original" class="keyword">original</a>
+通用元素。
+<hr>
+
+<!--============================== Facet tension ============================-->
+
+<a   id="density,-facet"></a><a   id="tension,-facet"></a>
+<h2>面密度或张力</h2>
+<a href="#facets">面</a>可读写实数属性。
+"密度"和"张力"是同义词。
+单位面积的能量密度。在
+<a href="model.htm#soapfilm-model">皂膜模型</a>中默认为1，在
+<a href="model.htm#string-model">弦模型</a>中默认为0。
+可以在<a href="datafile.htm#facets-section">数据文件</a>的
+<a href="datafile.htm#facet-attributes">面属性</a>中修改。
+可以使用<a href="commands.htm#set">set</a>命令修改。
+          张力可以是负的（对面积惩罚），这意味着面积应该最小化。
+但是，如果在任何边或角上负张力面与零张力面相邻，则曲面可能会爆炸，因为
+负张力面为了最大化面积而趋于无穷。
+          在最小曲面问题中，不需要负张力面；
+只需将其他面的张力设置为0，它们就不会有
+面积能量。
+          在<a href="model.htm#string-model">弦模型</a>中，
+面与面之间的边界边张力由
+相的<b>facet_tension</b>确定。在数据文件中给出相之间的张力表。
+<b>注意：</b>在皂膜模型中，密度还用作乘以
+拓扑类型3<a href="volconst.htm">体积约束</a>
+时的常数。
+<br>示例：
+<pre>
+  set facet tension 0
+  set facet tension 1 where color == white
+  set facet tension 0.5 where on_boundary 1
+</pre>
+
+<hr>
+<!--============================== Facet area ============================-->
+
+<a   id="area,-facet"></a><h2>面面积</h2>
+<a href="#facets">面</a>只读实数属性。
+面的当前面积。
+这是<a href="#density,-facet">density</a>乘以几何面积的乘积。
+示例：
+<pre> histogram(facet,area)
+ print sum(facet,area)
+ list facet where area &gt; 1
+</pre>
+<hr>
+<!--============================== Facet fixed ============================-->
+
+<a   id="fixed,-facet"></a><h2>固定面</h2>
+<a href="#facets">面</a>可读写属性。
+对于"固定"的面，由面细化创建的任何边或顶点将继承"固定"属性。
+可以在<a href="datafile.htm#facets-section">面部分</a>的
+<a href="datafile.htm">数据文件</a>中声明面为固定，
+方法是在定义面的行中添加<code>fixed</code>。
+可以从命令提示符使用<a href="commands.htm#fix" class="keyword">fix</a>和
+<a href="commands.htm#unfix" class="keyword">unfix</a>命令固定或取消固定面。
+<br><a   id="facets,-face"></a>
+示例：
+<pre>  fix facet where on_boundary 2
+  list facets where fixed
+</pre>
+<hr>
+<!--============================== Facet vertices ============================-->
+
+<a   id="facet-vertices"></a><h2>面顶点</h2>
+<a href="#facets">面</a>只读属性。
+<a href="commands.htm#generators">生成</a>
+面的顶点，按面周界顺序排列，以给定面方向一致的顺序。
+示例：
+<pre>
+  list facet[2].vertices
+  foreach facet ff where ff.vertex[1].on_constraint 1 do
+    { refine ff; }
+</pre>
+<hr>
+<!--============================== Facet edges ============================-->
+
+<a   id="facet-edges"></a><h2>面边</h2>
+<a href="#facets">面</a>只读属性。
+<a href="commands.htm#generators">生成</a>
+面的边，按面周界顺序排列。边的方向与面方向一致。
+示例：
+<pre>
+  list facet[2].edges
+  list facet ff where sum(ff.edges,length) > 10
+</pre>
+<hr>
+<!--============================== Facet bodies ============================-->
+
+<a   id="facet-bodies"></a><h2>面体</h2>
+<a href="#facets">面</a>只读属性。
+在<a href="model.htm#soapfilm-model">皂膜模型</a>中，
+<a href="commands.htm#generators">生成</a>
+与面相邻的<a href="#bodies">体</a>（最多两个）。
+<b>警告：</b>体的顺序不确定。
+          对于单个相邻体，可能作为body[1]或body[2]出现。
+建议使用frontbody和backbody代替。
+示例：
+<pre>
+  list facet where bodies == 0
+  list facet[2].bodies
+</pre>
+<hr>
+<!--============================== Facet frontbody ============================-->
+
+<a   id="frontbody,-facet"></a><h2>面frontbody</h2>
+<a href="#facets">面</a>只读整数属性。
+在<a href="model.htm#soapfilm-model">皂膜模型</a>中，
+<a href="#bodies">体</a>的id编号，位于面"前面"。
+"前面"是法线的方向。如果该面没有相邻体，
+值为0。
+示例：
+<pre> list facet where frontbody == 1
+ list facet where frontbody == 1 and backbody == 2
+ print facet[3].frontbody
+</pre>
+
+<hr>
+<!--============================== Facet backbody ============================-->
+
+<a   id="backbody,-facet"></a><h2>面backbody</h2>
+<a href="#facets">面</a>只读整数属性。
+在<a href="model.htm#soapfilm-model">皂膜模型</a>中，
+<a href="#bodies">体</a>的id编号，位于面"后面"。
+"后面"是法线的相反方向。
+如果该面没有相邻体，值为0。
+示例：
+<pre> list facet where backbody == 2
+ list facet where frontbody == 1 and backbody == 2
+ print facet[3].backbody
+</pre>
+<hr>
+<!--============================== Facet f_body_list ============================-->
+
+<a   id="f_body_list"></a><h2>面f_body_list</h2>
+<a href="#facets">面</a>只读整数数组属性。
+与面相邻的体的列表，第一个元素是数量。
+示例：
+<pre> print facet[5].f_body_list[1]
+ print facet[5].f_body_list[2]
+</pre>
+
+<hr>
+<!--============================== Facet valence ============================-->
+
+<a   id="valence,-facet"></a><h2>面价</h2>
+<a href="#facets">面</a>只读整数属性。
+面的价是边的数量。
+例：
+<pre> list facets where valence &gt; 3
+ list facet where valence == 2
+</pre>
+
+<hr>
+<!--============================== Facet constraints ============================-->
+
+<a   id="constraints,-facet"></a><h2>面约束</h2>
+<a href="#facets">面</a>可读写属性。
+面可以放在<a href="constrnt.htm#level-set-constraints">
+水平集约束</a>上。
+对于这样的面，细化面生成的任何边和顶点将继承该约束。
+面可以在<a href="datafile.htm#facet-attributes">面属性</a>的
+<a href="datafile.htm">数据文件</a>中设置约束，
+方法是在定义面的行中列出约束编号，前面加上关键字<code>constraint</code>。
+将面放在约束上不会将其现有边和顶点放在约束上。
+在命令中，面的状态可以使用
+"<a href="#on_constraint,-facet">on_constraint</a>"
+属性读取。状态可以使用
+<a href="commands.htm#set">set</a>或<a href="commands.htm#unset">unset</a>
+命令更改。
+示例：
+<pre>
+  list facet where on_constraint 2
+  set facet constraint 1 where id == 4 or id == 6
+  unset facet constraint 3
+</pre>
+<hr>
+<!--============================== Facet on_constraint ============================-->
+
+<a   id="on_constraint,-facet"></a><h2>面on_constraint</h2>
+参见<a href="#on_constraint" class="keyword">on_constraint</a>
+通用元素属性。
+
+<hr>
+<!--============================== Facet f_constraint_list ============================-->
+
+<a   id="f_constraint_list"></a><h2>面f_constraint_list</h2>
+此只读属性提供面所受约束的列表。f_constraint_list[1]是
+列表中约束的数量，后跟约束的编号。请注意，对于
+命名约束，使用内部指定的编号。
+
+<hr>
+<!--============================== Facet boundary ============================-->
+
+<a   id="boundary,-facet"></a><h2>面边界</h2>
+<a href="#facets">面</a>可读写属性。
+如果面在<a href="constrnt.htm#boundary">参数边界</a>上，
+则从面生成的任何面、边和顶点将继承该边界。
+默认情况下，新顶点参数值通过从面的一角外推来计算。
+这避免了插值参数值会产生的环绕问题。但是，如果
+interp_bdry_param开关打开，则使用插值。
+面是否在边界上的状态可以使用
+<a href="syntax.htm#boolean-ops">布尔</a>属性<a href="#on_boundary,-facet">on_boundary</a>
+查询。面可以从边界<a href="commands.htm#unset">取消设置</a>，
+也可以设置到边界上（但需要小心正确操作）。
+示例：
+<pre>
+  list facets where on_boundary 1
+  unset facet boundary 2
+</pre>
+
+<hr>
+<!--============================== Facet on_boundary ============================-->
+
+<a   id="on_boundary,-facet"></a><h2>面on_boundary</h2>
+参见<a href="#on_boundary" class="keyword">on_boundary</a>通用元素。
+
+<hr>
+<!--============================== Facet f_boundary ============================-->
+
+<a   id="f_boundary"></a> <h2>面f_boundary</h2>
+<a href="#facets">面</a>只读整数属性。
+内部面属性，保存面所在边界的id编号。请注意，命名边界
+有内部id编号，在此使用。
+
+<hr>
+<!--============================== Facet color ============================-->
+
+<a   id="density,-facet"></a><a   id="color,-facet"></a>
+<h2>面颜色</h2>
+<a href="#facets">面</a>可读写属性。
+          <a href="syntax.htm#colors">颜色</a>用于图形。
+可以在<a href="datafile.htm">数据文件</a>中设置，或使用
+<a href="commands.htm#set">set</a>命令设置。与
+<a href="syntax.htm#colors">color words</a>兼容的任何字符串都可以用作颜色属性。
+默认颜色是透明的。
+"透明"面不显示，因此需要将其颜色更改为可见的东西。
+显示条件也在
+<a href="commands.htm#show">show</a>命令中可以指定。
+示例：
+<pre>
+  set facet color cyan
+  set facet color red where id &gt; 20
+  show facet where color == cyan
+</pre>
+
+<hr>
+<!--============================== Facet frontcolor ============================-->
+
+<a   id="frontcolor"></a><h2>面frontcolor</h2>
+<a href="#facets">面</a>可读写属性。
+面"前面"的颜色，即法线方向。
+默认使用面的一般颜色。
+可以与backcolor结合使用以获得双面颜色。
+示例：
+<pre>  set facet frontcolor white
+  set facet backcolor red
+</pre>
+<hr>
+<!--============================== Facet backcolor ============================-->
+
+<a   id="backcolor"></a><h2>面backcolor</h2>
+<a href="#facets">面</a>可读写属性。
+面"后面"的颜色，即法线的相反方向。
+默认使用面的一般颜色。
+可以与frontcolor结合使用以获得双面颜色。
+示例：
+<pre>  set facet backcolor blue
+  set facet frontcolor red
+</pre>
+<hr>
+<!--============================== Facet opacity ============================-->
+
+<a   id="opacity"></a><h2>面opacity</h2>
+<a href="#facets">面</a>可读写属性。
+面的不透明度。值为0表示完全透明，1表示完全不透明。
+默认为1。用于部分透明的彩色图形。
+实际上，这是一个值，
+在0到1之间，其中0是完全透明的，1是不透明的。
+示例：
+<pre>  set facet opacity .4
+</pre>
+<hr>
+<!--============================== Facet facet_normal ============================-->
+
+<a   id="facet_normal"></a><h2>面facet_normal</h2>
+<a href="#facets">面</a>只读属性。
+          面法线的分量。facet_normal[1]是第一个分量，
+facet_normal[2]是第二个分量，依此类推。
+在<a href="model.htm#quadratic-model">二次模型</a>中，
+法线基于高斯积分，因此对于低张力面可能不准确。
+          如果您需要准确的法线，可以使用<a href="commands.htm#convert_to_q">convert_to_quadratic</a>
+生成高阶模型中的法线，使用<a href="commands.htm#convert_to_lag">convert_to_lagrange</a>。
+示例：
+<pre>  print facet[3].facet_normal[1]
+</pre>
+<hr>
+<!--============================== Facet no_display ============================-->
+
+<a   id="no_display"></a><h2>面no_display</h2>
+<a href="#facets">面</a>可读写布尔属性。
+防止面在图形中显示。
+与使用<a href="commands.htm#show">show</a>命令不同，
+面在每次显示更新后不会丢失此标志。
+但是，仍然使用<a href="commands.htm#show">show</a>命令来实际显示东西；
+no_display标志只是一个额外的过滤器。
+示例：
+<pre>  set facet no_display
+  set facet no_display on boundary 1
+  unset facet no_display where id &lt; 10
+</pre>
+<hr>
+<!--============================== Facet no_refine ============================-->
+
+<a   id="no_refine,-facet"></a><h2>面no_refine</h2>
+参见<a href="#no_refine,-edge" class="keyword">no_refine</a>边属性。
+
+<hr>
+<!--============================== Facet no_transform ============================-->
+
+<a   id="no_transform,-facet"></a><h2>面no_transform</h2>
+参见<a href="#no_transform,-edge" class="keyword">no_transform</a>
+边属性。
+
+<hr>
+<!--============================== Facet orientation ============================-->
+
+<a   id="orientation,-facet"></a><h2>面orientation</h2>
+<a href="#facets">面</a>整数可读写属性。
+          反映面的"方向"（或符号）。
+值是1或-1。正方向是通常显示的面法线方向。
+示例：
+<pre>  list facet where orientation != 1
+  set facet orientation -1 where id == 3
+</pre>
+
+<hr>
+<!--============================== Facet noncontent ============================-->
+
+<a   id="noncontent,-facet"></a><h2>面noncontent</h2>
+<a href="#facets">面</a>可读写布尔属性。
+防止面对体内容（体积）产生贡献。
+在<a href="model.htm#torus-model">环面模型</a>中，
+面可能不是封闭体边界的一部分，
+因此它们不应对其产生贡献。
+示例：
+<pre>  set facet noncontent
+  set facet noncontent on constraint 1
+  set facet noncontent where id &gt; 10
+  unset facet[5] noncontent
+</pre>
+<hr>
+<!--============================== Facet phase ============================-->
+
+<a   id="phase,-facet"></a><h2>面phase</h2>
+<a href="#facets">面</a>可读写整数属性。
+当有<a href="datafile.htm#phase-decl">phasefile</a>时，
+此属性决定皂膜模型中两个体之间面的张力。
+此属性还有一个<a href="model.htm#string-model">弦模型</a>的
+类比：<a href="#phase,-edge">phase</a>边属性。
+另见<a href="model.htm#string-model">弦模型</a>。
+示例：
+<pre>   list facet where phase == 1
+</pre>
+
+<hr>
+<!--============================== Facet named quantities ============================-->
+
+<a   id="named-quantity,facet"></a>
+<a   id="method-instance,facet"></a>
+<a   id="on_quantity,facet"></a>
+<a   id="on_method_instance,facet"></a><h2>面命名量</h2>
+参见<a href="#named-quantity" class="keyword">命名量</a>
+通用元素属性。
+<h2>面命名方法实例</h2>
+参见<a href="#method-instance" class="keyword">命名方法实例</a>
+通用元素属性。
+<h2>面on_quantity</h2>
+参见<a href="#on_quantity" class="keyword">on_quantity</a>
+通用元素属性。
+<h2>面on_method_instance</h2>
+参见<a href="#on_method_instance" class="keyword">on_method_instance</a>
+通用元素属性。
+<hr>
+<!--============================== Facet extra attributes ============================-->
+
+<a   id="extra-attributes,-facet"></a><h2>面额外属性</h2>
+参见<a href="#extra-attributes" class="keyword">额外属性</a>
+通用元素。
+
+<hr>
+<!--============================== Facet f_method_list ============================-->
+
+<a   id="f_method_list"></a><h2>面f_method_list</h2>
+<a href="#facets">面</a>只读整数数组属性。
+面拥有的内部方法实例列表。
+f_method_list[1]是列表中方法实例的数量，后跟
+方法实例的编号。请注意，这是一个内部列表，方法实例
+有内部编号，在此使用。
+
+<hr>
+<!--============================== Facet f_next_bfacet ============================-->
+
+<a   id="f_next_bfacet"></a><h2>面f_next_bfacet</h2>
+<a href="#facets">面</a>只读整数属性。
+          这是一个用于遍历围绕体的面的内部属性。
+对于<a href="#bodies">体</a>的每个面，
+f_next_bfacet是体的面列表中下一个面的id。
+这对于想要手动遍历体面的用户编写脚本很有用。
+示例：
+<pre>  body[1].facet.f_next_bfacet[1].id
+</pre>
+
+<hr>
+<!--============================== Facet f_next_vfacet ============================-->
+
+<a   id="f_next_vfacet"></a><h2>面f_next_vfacet</h2>
+<a href="#facets">面</a>只读整数属性。
+          这是一个用于遍历围绕顶点的面的内部属性。
+对于<a href="#vertices">顶点</a>的每个面，
+f_next_vfacet是顶点的面列表中下一个面的id。
+这对于想要手动遍历顶点面的用户编写脚本很有用。
+示例：
+<pre>  vertex[1].facet.f_next_vfacet[1].id
+</pre><!--============================== Body attributes ============================-->
+
+<hr>
+<hr>
+<h1>体属性</h1>
+
+<hr>
+<!--============================== Body id ============================-->
+
+<H2>体id</h2> 参见<a href="#id" class="keyword">id</a>通用元素。
+<hr>
+<!--============================== Body oid ============================-->
+
+<H2>体oid</h2> 参见<a href="#oid" class="keyword">oid</a>通用元素。
+<hr>
+<!--============================== Body original ============================-->
+
+<H2>体original</h2> 参见<a href="#original" class="keyword">original</a>
+通用元素。
+
+<hr>
+<!--============================== Body facets ============================-->
+
+<a   id="body-facets"></a><h2>体面</h2>
+<a href="#bodies">体</a>只读属性。
+<a href="commands.htm#generators">生成</a>
+体的面。
+示例：
+<pre>  list body[2].facets
+  list body bb where sum(bb.facets,area) &gt; 10
+</pre>
+<hr>
+<!--============================== Body density ============================-->
+
+<a   id="density,-body"></a><h2>体密度</h2>
+<a href="#bodies">体</a>可读写实数属性。
+每单位体积的能量密度。默认为1。
+可以在<a href="datafile.htm#bodies-section">体部分</a>的
+<a href="datafile.htm">数据文件</a>中设置密度。
+可以使用<a href="commands.htm#set">set</a>命令修改。
+密度是体的自适应能量。对
+<a href="commands.htm#hessian">Hessian</a>迭代没有影响。
+但是，对于<a href="constrnt.htm#vol-noncontent">非内容</a>
+体积约束，密度用作
+体积约束的乘数（必须非负）。
+示例：
+<pre>  set body density 2
+  set body density 0 where id == 1
+</pre>
+
+<hr>
+<!--============================== Body volume ============================-->
+
+<a   id="volume,-body"></a><h2>体体积</h2>
+<a href="#bodies">体</a>只读实数属性。
+          体的当前体积。
+在<a href="model.htm#torus-model">环面模型</a>中，
+此值通过<a href="torus.htm#method">环面方法</a>计算。
+          请注意，在环面模型中，如果体在基本域中有任何
+三角形，则基于解纠缠三角形计算体积，
+          因此体积可能与您从纠缠网格看到的明显不同。
+示例：
+<pre> list body where target &gt; volume
+ list body bb where bb.target &gt; bb.volume
+ histogram(body,volume)
+</pre>
+<hr>
+<!--============================== Body target ============================-->
+
+<a   id="target,-body"></a><h2>体target</h2>
+<a href="#bodies">体</a>可读写实数属性。
+          <a href="constrnt.htm#volume-constraints">体积约束</a>
+的目标体积。可以使用
+<a href="commands.htm#set">set</a>命令设置，也可以在
+<a href="datafile.htm#bodies-section">体部分</a>的
+<a href="datafile.htm">数据文件</a>中设置。
+          在<a href="datafile.htm#bodies-section">数据文件</a>中，target是默认关键字，但如果需要，
+可以使用单词"target"。请参见下面的示例。
+          请注意，target必须与实际体积和
+<b>volconst</b>的符号相同。如果约束的体积为0，则必须
+用正的target和volconst创建，因为实际体积（至少对于自相交的
+<a href="model.htm#torus-model">环面</a>网格）可能在符号上振荡。
+示例：
+<pre>  set body target 10 where id == 1
+  set body target volume
+  set body target 0 where target == 0
+</pre>
+<hr>
+<!--============================== Body volfixed ============================-->
+
+<a   id="volfixed"></a><h2>体volfixed</h2>
+<a href="#bodies">体</a>可读写布尔属性。
+          <a href="commands.htm#fix" class="keyword">固定的</a>
+体不会在<a href="commands.htm#equiangulate">平衡</a>
+或<a href="commands.htm#move">移动</a>操作期间的迭代中
+调整其体积。
+          这可能有用，
+例如，当您想根据对称性约束一个体，但不
+调整其他体时。
+示例：
+<pre>  set body volfixed where id == 1
+  set body volfixed where target == 0
+  unset body volfixed where id == 2
+</pre>
+
+<hr>
+<!--============================== Body volconst ============================-->
+
+<a   id="volconst"></a><h2>体volconst</h2>
+<a href="#bodies">体</a>可读写实数属性。
+          <a href="constrnt.htm#volume-constraints">体积约束</a>
+的体积常数。添加到计算的
+几何体积以获得用于约束的总体积。
+          用于在细化时跟踪约束中丢失的少量体积。
+在<a href="model.htm#torus-model">环面模型</a>中，
+用于跟踪
+<a href="torus.htm#method">环面方法</a>贡献。
+          请注意，volconst使用内部符号约定，
+与target相反。
+示例：
+<pre>  set body volconst 0 where id == 1
+  print body[1].volconst
+  print body[1].target - body[1].volume - body[1].volconst
+</pre>
+<hr>
+<!--============================== Body actual_volume ============================-->
+
+<a   id="actual_volume"></a><h2>体actual_volume</h2>
+<a href="#bodies">体</a>只读实数属性。
+          纯几何体积，不考虑volconst。
+此属性是只读的。
+示例：
+<pre>  print body[1].actual_volume
+  print body[1].actual_volume + body[1].volconst
+</pre>
+
+<hr>
+<!--============================== Body pressure ============================-->
+
+<a   id="pressure,-body"></a><h2>体pressure</h2>
+<a href="#bodies">体</a>只读实数属性。
+          体的当前压力。压力是体积约束的
+拉格朗日乘子。
+在<a href="commands.htm#eigenprobe">eigenprobe</a>和
+<a href="commands.htm#linear">linear</a>命令的输出中报告。
+可以使用<a href="commands.htm#set">set</a>命令显式设置压力。
+参见<a href="syntax.htm#expressions">表达式</a>中的
+"pressure"。
+示例：
+<pre>  set body pressure 0
+  print body[1].pressure
+  print pressure_of_body 1
+</pre>
+<hr>
+<!--============================== Body phase ============================-->
+
+<a   id="phase,-body"></a><h2>体phase</h2>
+<a href="#bodies">体</a>可读写整数属性。
+当有<a href="datafile.htm#phase-decl">phasefile</a>时，
+此属性确定体的相。
+此属性还有一个<a href="model.htm#string-model">弦模型</a>的类比：
+<a href="#phase,-edge">phase</a>边属性。
+另见<a href="model.htm#string-model">弦模型</a>。
+示例：
+<pre>   list body where phase == 1
+</pre>
+
+<hr>
+<!--============================== Body centerofmass ============================-->
+
+<a   id="centerofmass"></a><h2>体centerofmass</h2>
+<a href="#bodies">体</a>可读写布尔属性。
+布尔体属性。适用于<a href="model.htm#torus-model">环面模型</a>
+中图形显示的"连接"体模式。当为此设置一个体时，
+体显示的质心被记住，下次绘制体时，
+其环绕使得其新质心接近其先前质心。
+这防止了靠近基本域边界的体在演化过程中
+轻微移动时来回跳跃。默认开启。
+示例：
+<pre> set bodies centerofmass </pre>
+
+<!--============================== Body quantity ============================-->
+<a   id="named-quantity,body"></a>
+<a   id="method-instance,body"></a>
+<a   id="on_quantity,body"></a>
+<a   id="on_method_instance,body"></a>
+<hr> <a   id="b_method_list"></a><h2>体量</h2>
+目前没有为体实现命名方法，因此命名量和方法不适用。
+
+<!--============================== Facetedge attributes ============================-->
+
+<hr>
+<hr>
+<h1>面边属性</h1>
+
+<!--============================== Facetedge id ============================-->
+
+<hr>
+<H2>面边id</h2> 参见<a href="#id" class="keyword">id</a>通用元素。
+
+<!--============================== Facetedge oid ============================-->
+
+<hr>
+<H2>面边oid</h2> 参见<a href="#oid" class="keyword">oid</a>通用元素。
+
+<!--============================== Facetedge edge ============================-->
+
+<a   id="facetedge-edge"></a><h2>面边edge</h2>
+<a href="#facetedges">面边</a>只读属性。
+<a href="commands.htm#generators">生成</a>
+面边的单个边。
+示例：
+<pre>  print facetedge[1].edge[1].id
+</pre>
+<hr>
+
+<!--============================== Facetedge facet ============================-->
+
+<a   id="facetedge-facet"></a><h2>面边facet</h2>
+<a href="#facetedges">面边</a>只读属性。
+<a href="commands.htm#generators">生成</a>
+面边的单个面。
+示例：
+<pre>  print facetedge[1].facet[1].id
+</pre>
+<hr>
+
+
+<!--============================== Facetedge nextedge ============================-->
+
+
+<a   id="nextedge"></a><h2>面边nextedge</h2>
+<a href="#facetedges">面边</a>内部属性。
+面边循环中下一个面边的定向id编号。在
+弦模型中，对于面的最后一条边可能为0。用户不可用，
+除非在"list facetedges ... "命令的输出中。
+<hr>
+
+<!--============================== Facetedge prevedge ============================-->
+
+<a   id="prevedge"></a><h2>面边prevedge</h2>
+<a href="#facetedges">面边</a>内部属性。
+面边循环中上一个面边的定向id编号。在
+弦模型中，对于面的第一条边可能为0。用户不可用，
+除非在"list facetedges ... "命令的输出中。
+<hr>
+
+<!--============================== Facetedge nextfacet ============================-->
+
+<a   id="nextfacet"></a><h2>面边nextfacet</h2>
+<a href="#facetedges">面边</a>内部属性。
+围绕边的面循环中下一个面边的定向id编号。用户不可用，
+除非在"list facetedges ... "命令的输出中。
+<hr>
+
+<!--============================== Facetedge prevfacet ============================-->
+
+<a   id="prevfacet"></a><h2>面边prevfacet</h2>
+<a href="#facetedges">面边</a>内部属性。
+围绕边的面循环中上一个面边的定向id编号。用户不可用，
+除非在"list facetedges ... "命令的输出中。
+<hr>
+
+
+<hr>
+
+
+<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+</body>
+</html>

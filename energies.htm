@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 能量</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<!--NewPage-->
+
+<h1 class="center">
+    <a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+
+<a   id="energies"></a>
+<a   id="energy"></a>
+<h1>能量</h1>
+
+         Evolver 通常通过最小化曲面的总能量来工作，同时受到约束。
+该能量可以包含多个分量：
+<ul>
+<li> <a href="#surface-tension">表面张力</a>
+<li> <a href="#gravity-energy">重力势能</a>
+<li> <a href="#constraint-energy-integrals">约束能量积分</a>
+<li> <a href="#named-quantity-energy">命名量能量</a>
+<li> <a href="#gap-energy">凸约束间隙能量</a>
+<li> <a href="#pressure-energy">指定压力能量</a>
+<li> <a href="#compressibility-energy">可压缩性能量</a>
+<li> <a href="#crystalline-energy">晶体能量</a>
+</ul>
+<hr>
+
+<a   id="surface-tension"></a><h2>表面张力能量</h2>
+
+
+	  肥皂膜和不同流体之间的界面具有与其面积成正比的能量。
+因此它们会收缩以最小化能量。
+单位面积的能量也可以看作是表面张力，或单位长度的力。
+每个面片都有一个表面张力，除非数据文件另有指定，否则其值为 1
+（参见 <a href="datafile.htm#faces-section">TENSION</a> 属性）。
+不同的面片可以具有不同的表面张力。
+面片张力可以通过 <a href="commands.htm#set"><code>set facet tension ...</code></a> 命令交互式地更改。
+对总能量的贡献是所有面片面积乘以各自表面张力的总和。
+面片的表面张力也可以指定为依赖于它所分隔的体的 <a href="elements.htm#phase,-facet">相</a>。
+在 <a href="model.htm#string-model">弦模型</a> 中，张力存在于边而不是面片上。
+<p> 示例数据文件：<a href="cube.htm">cube.fe</a>
+<hr>
+<a   id="gravity-energy"></a><h2>重力势能</h2>
+          如果一个体具有 <a href="elements.htm#density,-body">密度</a>，
+则该体将其重力势能贡献给总能量。
+重力加速度 <a href="syntax.htm#G-value">G</a> 可以通过 <a href="single.htm#G">G</a> 命令由用户控制。
+设 \rho 为体密度，则能量定义为：
+<pre>
+  E = \int\int\int_{body} G \rho  z  dV 
+</pre>
+         但使用散度定理计算为：
+<pre>
+  E =  \int\int_{body surface} G\rho {z^2\over 2} \vec k \cdot \vec{dS}.  
+</pre> 
+         该积分在包围体的每个面片上进行。
+如果面片包围两个不同密度的体，则使用适当的密度差。
+位于 z = 0 平面上的面片没有贡献，如果其他方面不需要，可以省略。
+位于约束中的面片，如果其对重力势能的贡献包含在 <a href="#constraint-energy-integrals">约束能量积分</a> 中，则可以省略。
+在 <a href="model.htm#string-model">弦模型</a> 中，所有这些都低一维进行。
+<p> 示例数据文件：<a href="mound.htm">mound.fe</a>
+<hr>         
+<a   id="constraint-energy-integrals"></a><h2>约束能量积分</h2>
+         位于 <a href="constrnt.htm#level-set-constraints">水平集约束</a> 上的边可以通过在定向边上积分向量场 <b>F</b> 来获得能量：
+  <pre>
+           E = \int_{edge} <b>F . dl</b>. 
+  </pre>
+被积函数在数据文件的 <a href="datafile.htm#constraint-decl">约束声明</a> 中定义。
+该积分使用边的固有方向，但如果边的方向属性为负，则值取反。
+这对于壁上的指定接触角很有用（代替具有等效张力的壁面片），
+以及对于否则需要约束中面片的重力势能也很有用。
+<a href="mound.htm">mound 示例</a> 说明了这一点。
+
+<hr>
+<a   id="named-quantity-energy"></a><h2>命名量能量</h2>
+ 有大量 <a href="quants.htm">命名方法</a> 可用于计算各种量，它们都遵循相同的语法。
+这些可以通过在 <a href="datafile.htm#named-quantity-decl">数据文件</a> 中定义 <a href="quants.htm#energy-quantity">能量类型</a> 的 <a href="quants.htm#named-quantities">命名量</a> 来用作能量。
+<p> 示例数据文件：<a href="ringblob.htm">ringblob.fe</a>
+<hr>
+<a   id="gap-energy"></a><h2>凸约束间隙能量</h2>
+         考虑一个跨越圆柱体的肥皂膜。
+Evolver 必须用一组面片来近似这个表面。
+这些面片的直线边无法与曲面壁贴合，因此计算出的表面积忽略了外边缘与壁之间的间隙。
+Evolver 自然会通过移动外顶点来最小化面积，从而增加间隙，最终导致表面坍塌成一条线。
+这并不好。因此提供了"间隙能量"来阻止这种情况。
+<a href="constrnt.htm#level-set-constraints">水平集约束</a> 可以在数据文件中声明为 CONVEX。
+对于此类约束上的边，能量计算为：
+ <pre>  E = <i>k</i>\left\Vert \vec S \times \vec Q \right\Vert / 6
+    </pre> 
+         其中 \vec S 是边向量，\vec Q 是边在约束在边尾顶点处的切平面上的投影。
+常数 <i>k</i> 是称为"间隙常数"的全局常数。
+间隙常数为 1 给出实际间隙面积的最佳近似。
+较大的值最小化间隙并使顶点很好地分布在约束上。
+你可以在 <a href="datafile.htm#gap-constant-decl">数据文件</a> 中或通过 <a href="single.htm#k">k</a> 命令设置 <i>k</i> 的值。
+<p>
+         随着表面的细化，间隙能量按二次方衰减。
+即细化一次将间隙能量减少四倍。
+你可以通过更改间隙常数来查看此能量是否对表面有显著影响。
+<p> 注意：间隙能量仅在 <a href="model.htm#linear-model">线性模型</a> 中有效。
+<p> 示例数据文件：tankex.fe
+
+<hr>
+<a   id="pressure-energy"></a><h2>指定压力能量</h2>
+          每个具有指定压力 P 的体贡献能量 E = PV，
+其中 V 是体的实际体积。
+这可用于生成指定平均曲率的表面，因为平均曲率与压力成正比。
+压力可以在数据文件的 <a href="datafile.htm#bodies-section">体部分</a> 中指定，并且可以通过 <a href="single.htm#b">b</a> 命令或通过为体的 <a href="elements.htm#pressure,-body" class="keyword">pressure</a> 属性赋值来更改。
+<hr>
+
+<a   id="compressibility-energy"></a><h2>可压缩性能量</h2>
+如果理想气体模式有效（通过数据文件中的 <a href="toggle.htm#ambient_pressure">PRESSURE</a> 关键字设置），
+则每个体贡献能量：
+<pre>
+         E = P*V_0*ln(V/V_0)  </pre>
+其中 P 是环境压力，V_0 是体的目标体积，V 是实际体积。
+为了考虑对抗环境压力所做的功，每个体还贡献负值：
+<pre> 
+	 E = -P*V. </pre>
+环境压力可以在数据文件中或通过 <a href="single.htm#p">p</a> 命令设置。
+此能量仅针对给定目标体积的体进行计算。
+
+
+<hr>
+<a   id="crystalline-energy"></a><h2>晶体能量</h2>
+         Evolver 可以模拟晶体表面的能量。
+这些能量与面片的面积成正比，但也取决于法线的方向。
+能量由表面法线与一组称为 Wulff 向量的向量的最大点积给出。
+表面积可以看作是一个晶体被积函数，其 Wulff 向量是单位球。
+有关更多信息，请参阅数据文件中关于 Wulff 向量的部分。
+表面具有晶体能量或表面张力，两者不能同时具有。
+不建议使用，因为不光滑性会使 Evolver 工作不佳。
+<p> 示例数据文件：crystal.fe
+
+<hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+</body>
+</html>

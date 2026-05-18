@@ -1,0 +1,1383 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<TITLE>命令语言</TITLE>
+</HEAD>
+<BODY>
+<a id="doc-top"></a>
+<h1>命令语言</h1>
+<p>
+Evolver 有一个用于输入命令的提示符。大多数工作由 <a href="single.htm">交互式图形命令</a>
+和 <a href="command-language">主提示命令</a> 的组合完成。Evolver 提示符为：
+<pre>
+   Enter command:
+</pre>
+命令可以是：
+<ul>
+<li> 单字符图形命令。
+<li> 主提示命令（通常为全大写）。
+<li> 用户定义的命令/过程。
+</ul>
+在命令提示符处可使用许多通用功能。
+<a id="cmd_input"></a>
+<h2>命令输入</h2>
+在 Evolver 运行时，通常可以从键盘输入命令。但在某些情况下（如在读取文件中的命令时），键盘输入不可用。为了在这些情况下也能获取输入，Evolver 使用了 <a href="#read">read</a> 命令。
+
+<p>
+<hr>
+<a id="cmd_separator"></a>
+<h2>命令分隔符</h2>
+命令可以用分号 <code>;</code> 分隔。
+这允许多个命令出现在一行上。
+最后一个命令不需要分号。
+分号后的空格不是必需的，但可以提高可读性。
+例如：
+<pre>
+   g 5; r; g 5
+</pre>
+<a id="compound_commands"></a>
+<h2>复合命令</h2>
+用户可以在大括号内定义复合命令：
+<pre>
+   define name command_body
+   name ::= command_body
+</pre>
+其中 <code>command_body</code> 是用分号分隔的一系列命令。
+<code>define</code> 形式将命令体作为字面字符串，
+而 <code>::=</code> 形式会立即扩展所有变量。
+在 <code>define</code> 中，展开变量要使用 <code>$</code> 前缀。
+例如：
+<pre>
+   define evolve "r;g 5;r;g 5;hessian"
+   height ::= 2.3
+   evolve
+   evolve2 ::= { r; g 5; r; g $height }
+</pre>
+<a id="cmd_repetition"></a>
+<h2>命令重复</h2>
+数字后跟命令将命令重复执行指定次数：
+<pre>
+   5 r
+</pre>
+将执行五次 <code>r</code> 命令。
+<p>
+<hr>
+<a id="assignment_commands"></a>
+<h2>赋值命令</h2>
+有多种类型的赋值命令可用。它们的一般形式是：
+<pre>
+   element attrib expr
+</pre>
+或者
+<pre>
+   element attrib := expr
+</pre>
+例如：
+<pre>
+   vertex[3] x 0.5
+   vertex[3].x := 0.5
+</pre>
+<h2>永久赋值</h2>
+<code>::=</code> 运算符用于"永久"赋值。普通 <code>:=</code> 赋值的值在重新加载数据文件时会丢失，
+而 <code>::=</code> 赋值的值会被保留。这对于保持脚本和过程很有用。
+
+<h2>用户定义的命令/过程/函数</h2>
+用户可以在 Evolver 中定义自己的命令。请参阅 <a href="procs.htm">过程</a>。
+
+<h2>变量赋值</h2>
+数值变量赋值使用 <code>:=</code> 运算符：
+<pre>
+   variable := expr
+</pre>
+例如：
+<pre>
+   total := 0
+   for ( i := 1 ; i <= 10 ; i++ ) do total += i
+</pre>
+<a id="local_scope"></a>
+<h2>局部作用域</h2>
+使用 <code>local</code> 关键字声明局部变量。局部变量仅在其声明的命令或过程块内可见。
+例如：
+<pre>
+   local i,j,x
+   for ( i := 1; i <= 10 ; i++ ) do
+   { x := i*i;
+     printf "%d squared is %d\n",i,x;
+   }
+</pre>
+
+<p>
+<hr>
+<a id="redirection"></a>
+<h2>重定向和管道输出</h2>
+输出可以重定向到文件，类似于 Unix shell 重定向。使用 <code>>></code> 追加到文件，
+使用 <code>>></code> 创建新文件（或覆盖现有文件）。
+语法：
+<pre>
+   command >> filename
+   command >>> filename
+</pre>
+其中 <code>></code> 表示写入（覆盖），<code>>></code> 表示追加。
+例如：
+<pre>
+   list vertex >> "vertices.txt"
+   printf "%f\n",total_energy >>> "energy.log"
+</pre>
+<a id="if"></a>
+<h2>控制结构</h2>
+Evolver 有几种控制结构，语法类似 C 语言。
+
+<p>
+<b>if-then-else 语句</b>
+<pre>
+   if ( condition ) then command
+   if ( condition ) then command else command
+   if ( condition ) then { commands } else { commands }
+</pre>
+注意 <code>then</code> 和 <code>else</code> 是必需的关键字。
+例如：
+<pre>
+   if ( total_area > 10 ) then refine edges where length > 0.1
+   if ( pressure > 0 ) then g 5 else hessian
+</pre>
+
+<p>
+<a id="while"></a>
+<b>while 循环</b>
+<pre>
+   while ( condition ) do command
+   while ( condition ) do { commands }
+</pre>
+当条件为真时重复执行命令。
+例如：
+<pre>
+   while ( max(vertex,abs(z)) > 0.001 ) do { r; g 10; r }
+</pre>
+<a id="do"></a>
+<b>do-while 循环</b>
+<pre>
+   do { commands } while ( condition )
+</pre>
+类似于 while 循环，但至少执行一次命令块。
+例如：
+<pre>
+   do { g 10; r } while ( max(vertex,abs(z)) > 0.001 )
+</pre>
+
+<p>
+<a id="for"></a>
+<b>for 循环</b>
+<pre>
+   for ( init ; condition ; increment ) do command
+   for ( init ; condition ; increment ) do { commands }
+</pre>
+标准的 C 风格 for 循环。循环变量必须在循环外声明。
+例如：
+<pre>
+   for ( i := 1 ; i <= 10 ; i++ ) do
+   { body[i].target := body[i].target + 1;
+     printf "Body %d target: %f\n",i,body[i].target;
+   }
+</pre>
+<a id="foreach"></a>
+<b>FOREACH 循环</b>
+<pre>
+   foreach element_type variable do command
+   foreach element_type variable where condition do command
+</pre>
+遍历指定类型的元素。可选的 <code>where</code> 子句可以过滤元素。
+例如：
+<pre>
+   foreach vertex v do v.x := 2*v.x
+   foreach facet ff where color == red do dissolve ff
+   foreach edge ee where ee.valence == 5 do refine ee
+</pre>
+
+<p>
+<a id="break"></a>
+<b>BREAK</b>
+<pre>
+   break
+</pre>
+跳出当前的 while、for 或 foreach 循环。
+
+<p>
+<a id="continue"></a>
+<b>CONTINUE</b>
+<pre>
+   continue
+</pre>
+跳过当前迭代的剩余部分，继续循环的下一次迭代。
+
+<p>
+<a id="return"></a>
+<b>RETURN</b>
+<pre>
+   return expr
+   return
+</pre>
+从过程中返回一个值。如果没有表达式，则不返回值。
+<p>
+<a id="generators"></a>
+<h2>元素生成器</h2>
+元素生成器用于指定一组元素（顶点、边、面或体）。
+生成器的语法：
+<pre>
+   element_type id
+   element_type id_list
+   element_type [ array ]
+   element_type where condition
+   element_type generator attribute
+</pre>
+例如：
+<pre>
+   vertex 3
+   vertex {1,3,5,7}
+   vertex [some_array]
+   vertex where x > 0
+   edge where color == red
+   facet where not fixed
+   body where target > 0
+</pre>
+
+<p>
+<hr>
+<h2>一般命令</h2>
+以下是按字母顺序列出的 Evolver 主提示命令的简要说明。
+每个命令更详细的说明在下面的部分中。
+<table>
+<tr><td><a href="#abort">ABORT</a></td><td> - 中止数据文件读取</td></tr>
+<tr><td><a href="#addload">ADDLOAD</a></td><td> - 从文件加载额外的表面</td></tr>
+<tr><td><a href="#area">AREA</a></td><td> - 计算并显示当前面积/能量</td></tr>
+<tr><td><a href="#areaweed">AREAWEED</a></td><td> - 删除小面积面</td></tr>
+<tr><td><a href="#binary_printf">BINARY_PRINTF</a></td><td> - 二进制格式输出</td></tr>
+<tr><td><a href="#body_metis">BODY_METIS</a></td><td> - 使用 METIS 分区体</td></tr>
+<tr><td><a href="#breakpoint">BREAKPOINT</a></td><td> - 设置调试断点</td></tr>
+<tr><td><a href="#chdir">CHDIR</a></td><td> - 更改工作目录</td></tr>
+<tr><td><a href="#close_show">CLOSE_SHOW</a></td><td> - 关闭图形显示</td></tr>
+<tr><td><a href="#convert_to_quantities">CONVERT_TO_QUANTITIES</a></td><td> - 转换为量形式</td></tr>
+<tr><td><a href="#define">DEFINE</a></td><td> - 定义属性、数组等</td></tr>
+<tr><td><a href="#delete">DELETE</a></td><td> - 删除元素</td></tr>
+<tr><td><a href="#delete_text">DELETE_TEXT</a></td><td> - 删除显示文本</td></tr>
+<tr><td><a href="#detorus">DETORUS</a></td><td> - 去环面化</td></tr>
+<tr><td><a href="#dirichlet">DIRICHLET</a></td><td> - Dirichlet 能量最小化</td></tr>
+<tr><td><a href="#dirichlet_seek">DIRICHLET_SEEK</a></td><td> - Dirichlet 能量搜索</td></tr>
+<tr><td><a href="#display_text">DISPLAY_TEXT</a></td><td> - 显示文本</td></tr>
+<tr><td><a href="#dissolve">DISSOLVE</a></td><td> - 溶解元素</td></tr>
+<tr><td><a href="#dump">DUMP</a></td><td> - 转储数据文件</td></tr>
+<tr><td><a href="#dump_memlist">DUMP_MEMLIST</a></td><td> - 转储内存列表</td></tr>
+<tr><td><a href="#edge_merge">EDGE_MERGE</a></td><td> - 合并边</td></tr>
+<tr><td><a href="#edgeswap">EDGESWAP</a></td><td> - 边交换</td></tr>
+<tr><td><a href="#edgeweed">EDGEWEED</a></td><td> - 删除短边</td></tr>
+<tr><td><a href="#eigenprobe">EIGENPROBE</a></td><td> - 探测 Hessian 特征值</td></tr>
+<tr><td><a href="#eprint">EPRINT</a></td><td> - 打印边信息</td></tr>
+<tr><td><a href="#equiangulate">EQUIANGULATE</a></td><td> - 等角化三角形</td></tr>
+<tr><td><a href="#errprintf">ERRPRINTF</a></td><td> - 格式化错误输出</td></tr>
+<tr><td><a href="#exec">EXEC</a></td><td> - 执行外部程序</td></tr>
+<tr><td><a href="#exprint">EXPRINT</a></td><td> - 打印表达式</td></tr>
+<tr><td><a href="#facet_crosscut">FACET_CROSSCUT</a></td><td> - 面横切</td></tr>
+<tr><td><a href="#facet_merge">FACET_MERGE</a></td><td> - 合并面</td></tr>
+<tr><td><a href="#fix">FIX</a></td><td> - 固定元素</td></tr>
+<tr><td><a href="#flush_counts">FLUSH_COUNTS</a></td><td> - 刷新计数器</td></tr>
+<tr><td><a href="#free_discards">FREE_DISCARDS</a></td><td> - 释放丢弃的内存</td></tr>
+<tr><td><a href="#geompipe">GEOMPIPE</a></td><td> - 几何管道</td></tr>
+<tr><td><a href="#geomview">GEOMVIEW</a></td><td> - Geomview 图形</td></tr>
+<tr><td><a href="#help">HELP</a></td><td> - 显示帮助</td></tr>
+<tr><td><a href="#hessian-command">HESSIAN</a></td><td> - 执行 Hessian 迭代</td></tr>
+<tr><td><a href="#hessian_menu">HESSIAN_MENU</a></td><td> - Hessian 菜单</td></tr>
+<tr><td><a href="#hessian_seek">HESSIAN_SEEK</a></td><td> - Hessian 搜索</td></tr>
+<tr><td><a href="#histogram">HISTOGRAM</a></td><td> - 直方图统计</td></tr>
+<tr><td><a href="#history">HISTORY</a></td><td> - 显示命令历史</td></tr>
+<tr><td><a href="#lagrange">LAGRANGE</a></td><td> - Lagrange 模型</td></tr>
+<tr><td><a href="#lanczos">LANCZOS</a></td><td> - Lanczos 特征值</td></tr>
+<tr><td><a href="#linear">LINEAR</a></td><td> - 线性模型</td></tr>
+<tr><td><a href="#list">LIST</a></td><td> - 列出元素信息</td></tr>
+<tr><td><a href="#load">LOAD</a></td><td> - 加载新数据文件</td></tr>
+<tr><td><a href="#logfile">LOGFILE</a></td><td> - 日志文件</td></tr>
+<tr><td><a href="#keylogfile">KEYLOGFILE</a></td><td> - 键盘日志文件</td></tr>
+<tr><td><a href="#metis">METIS</a></td><td> - METIS 分区</td></tr>
+</table>
+<table>
+<tr><td><a href="#kmetis">KMETIS</a></td><td> - K-way METIS 分区</td></tr>
+<tr><td><a href="#longj">LONGJ</a></td><td> - 长波长扰动</td></tr>
+<tr><td><a href="#matrix_inverse">MATRIX_INVERSE</a></td><td> - 矩阵求逆</td></tr>
+<tr><td><a href="#matrix_multiply">MATRIX_MULTIPLY</a></td><td> - 矩阵乘法</td></tr>
+<tr><td><a href="#move">MOVE</a></td><td> - 沿运动方向移动</td></tr>
+<tr><td><a href="#new_vertex">NEW_VERTEX</a></td><td> - 创建新顶点</td></tr>
+<tr><td><a href="#new_edge">NEW_EDGE</a></td><td> - 创建新边</td></tr>
+<tr><td><a href="#new_facet">NEW_FACET</a></td><td> - 创建新面</td></tr>
+<tr><td><a href="#new_body">NEW_BODY</a></td><td> - 创建新体</td></tr>
+<tr><td><a href="#notch">NOTCH</a></td><td> - 细分高曲率区域</td></tr>
+<tr><td><a href="#ometis">OMETIS</a></td><td> - METIS 排序</td></tr>
+<tr><td><a href="#ooglfile">OOGLFILE</a></td><td> - 输出 OOGL 文件</td></tr>
+<tr><td><a href="#optimize">OPTIMIZE</a></td><td> - 优化模式</td></tr>
+<tr><td><a href="#pause">PAUSE</a></td><td> - 暂停执行</td></tr>
+<tr><td><a href="#permload">PERMLOAD</a></td><td> - 永久加载</td></tr>
+<tr><td><a href="#pop">POP</a></td><td> - 弹出元素</td></tr>
+<tr><td><a href="#pop_edge_to_tri">POP_EDGE_TO_TRI</a></td><td> - 边转三角形</td></tr>
+<tr><td><a href="#pop_quad_to_quad">POP_QUAD_TO_QUAD</a></td><td> - 四边形转换</td></tr>
+<tr><td><a href="#pop_tri_to_edge">POP_TRI_TO_EDGE</a></td><td> - 三角形转边</td></tr>
+<tr><td><a href="#postscript-command">POSTSCRIPT</a></td><td> - 输出 PostScript</td></tr>
+<tr><td><a href="#print">PRINT</a></td><td> - 打印值</td></tr>
+<tr><td><a href="#printf">PRINTF</a></td><td> - 格式化打印</td></tr>
+<tr><td><a href="#quadratic">QUADRATIC</a></td><td> - 二次模型</td></tr>
+<tr><td><a href="#quit">QUIT</a></td><td> - 退出 Evolver</td></tr>
+<tr><td><a href="#rawestv">RAWESTV</a></td><td> - 原始顶点平均</td></tr>
+<tr><td><a href="#rawv">RAWV</a></td><td> - 原始顶点平均</td></tr>
+<tr><td><a href="#read">READ</a></td><td> - 读取命令文件</td></tr>
+<tr><td><a href="#rebody">REBODY</a></td><td> - 重新计算体</td></tr>
+<tr><td><a href="#recalc">RECALC</a></td><td> - 重新计算</td></tr>
+<tr><td><a href="#refine">REFINE</a></td><td> - 细分元素</td></tr>
+<tr><td><a href="#replace_load">REPLACE_LOAD</a></td><td> - 替换加载</td></tr>
+<tr><td><a href="#reset_counts">RESET_COUNTS</a></td><td> - 重置计数器</td></tr>
+<tr><td><a href="#reverse_orientation">REVERSE_ORIENTATION</a></td><td> - 反转方向</td></tr>
+<tr><td><a href="#ritz">RITZ</a></td><td> - Ritz 特征值</td></tr>
+<tr><td><a href="#renumber_all">RENUMBER_ALL</a></td><td> - 重新编号所有元素</td></tr>
+<tr><td><a href="#reorder_storage">REORDER_STORAGE</a></td><td> - 重新排序存储</td></tr>
+<tr><td><a href="#saddle">SADDLE</a></td><td> - 鞍点搜索</td></tr>
+<tr><td><a href="#set">SET</a></td><td> - 设置属性</td></tr>
+<tr><td><a href="#shell">SHELL</a></td><td> - 系统 Shell</td></tr>
+<tr><td><a href="#show">SHOW</a></td><td> - 显示控制</td></tr>
+<tr><td><a href="#show_expr">SHOW_EXPR</a></td><td> - 显示表达式</td></tr>
+<tr><td><a href="#show_trans">SHOW_TRANS</a></td><td> - 显示变换</td></tr>
+<tr><td><a href="#showq">SHOWQ</a></td><td> - 快速显示</td></tr>
+<tr><td><a href="#simplex_to_fe">SIMPLEX_TO_FE</a></td><td> - 单纯形转换</td></tr>
+<tr><td><a href="#sobolev">SOBOLEV</a></td><td> - Sobolev 迭代</td></tr>
+<tr><td><a href="#sprintf">SPRINTF</a></td><td> - 格式化字符串</td></tr>
+<tr><td><a href="#subcommand">SUBCOMMAND</a></td><td> - 子命令</td></tr>
+<tr><td><a href="#system">SYSTEM</a></td><td> - 系统命令</td></tr>
+<tr><td><a href="#transform_depth">TRANSFORM_DEPTH</a></td><td> - 变换深度</td></tr>
+<tr><td><a href="#transform_expr">TRANSFORM_EXPR</a></td><td> - 变换表达式</td></tr>
+<tr><td><a href="#t1_edgeswap">T1_EDGESWAP</a></td><td> - T1 边交换</td></tr>
+<tr><td><a href="#unfix">UNFIX</a></td><td> - 取消固定</td></tr>
+<tr><td><a href="#unset">UNSET</a></td><td> - 取消设置</td></tr>
+<tr><td><a href="#vertex_average">VERTEX_AVERAGE</a></td><td> - 顶点平均</td></tr>
+<tr><td><a href="#vertex_merge">VERTEX_MERGE</a></td><td> - 顶点合并</td></tr>
+<tr><td><a href="#whereami">WHEREAMI</a></td><td> - 显示位置</td></tr>
+<tr><td><a href="#wrap_vertex">WRAP_VERTEX</a></td><td> - 包装顶点</td></tr>
+<tr><td><a href="#zoom">ZOOM</a></td><td> - 缩放区域</td></tr>
+</table>
+<p>
+<hr>
+<a id="abort"></a><h2 class="kw">ABORT</h2>
+<a href="#command-language">主提示命令</a>。
+中止读取数据文件。
+<pre>
+   ABORT
+</pre>
+中止读取数据文件，但保留当前已加载的表面。通常用于调试数据文件中的错误。
+
+<hr>
+<a id="addload"></a><h2 class="kw">ADDLOAD</h2>
+<a href="#command-language">主提示命令</a>。
+从文件加载额外的表面元素。
+<pre>
+   ADDLOAD <em>filename</em>
+</pre>
+将指定数据文件中的元素添加到当前表面。不执行新数据文件的读取部分。有关完整说明，请参阅 <a href="datafile.htm#read-section">数据文件读取部分</a>。
+
+<hr>
+<a id="area"></a><h2 class="kw">AREA</h2>
+<a href="#command-language">主提示命令</a>。
+计算并显示当前面积/能量。
+<pre>
+   AREA
+</pre>
+显示当前表面的总面积和能量值。
+<hr>
+<a id="areaweed"></a><h2 class="kw">AREAWEED</h2>
+<a href="#command-language">主提示命令</a>。
+删除面积小于给定值的面。
+<pre>
+   AREAWEED <em>expr</em>
+</pre>
+删除所有面积小于 <em>expr</em> 的面及其未使用的边和顶点。
+
+<hr>
+<a id="binary_printf"></a><h2 class="kw">BINARY_PRINTF</h2>
+<a href="#command-language">主提示命令</a>。
+以二进制格式输出。
+<pre>
+   BINARY_PRINTF <em>string,expr,expr,...</em>
+</pre>
+使用标准 C fwrite 函数以二进制格式写入数据。格式字符串指定每个参数的数据类型。
+
+<hr>
+<a id="body_metis"></a><h2 class="kw">BODY_METIS</h2>
+<a href="#command-language">主提示命令</a>。
+使用 METIS 库对体进行分区。
+<pre>
+   BODY_METIS <em>expr</em>
+</pre>
+将体分区为 <em>expr</em> 个部分，使用 METIS 图分区库。
+<hr>
+<a id="breakpoint"></a><h2 class="kw">BREAKPOINT</h2>
+<a href="#command-language">主提示命令</a>。
+设置调试断点。
+<pre>
+   BREAKPOINT <em>expr</em>
+</pre>
+在指定行号设置断点。当执行到达该行时，Evolver 将暂停并显示调试提示符。
+
+<hr>
+<a id="chdir"></a><h2 class="kw">CHDIR</h2>
+<a href="#command-language">主提示命令</a>。
+更改当前工作目录。
+<pre>
+   CHDIR <em>stringexpr</em>
+</pre>
+将当前工作目录更改为指定的路径。类似于 Unix 的 cd 命令。
+
+<hr>
+<a id="close_show"></a><h2 class="kw">CLOSE_SHOW</h2>
+<a href="#command-language">主提示命令</a>。
+关闭图形显示窗口。
+<pre>
+   CLOSE_SHOW
+</pre>
+关闭当前打开的图形显示窗口。
+<hr>
+<a id="convert_to_quantities"></a><h2 class="kw">CONVERT_TO_QUANTITIES</h2>
+<a href="#command-language">主提示命令</a>。
+将旧式能量和体积约束转换为量形式。
+<pre>
+   CONVERT_TO_QUANTITIES
+</pre>
+将数据文件中的旧式能量和体积约束转换为命名量和方法实例。这允许更灵活地使用高级优化技术。
+
+<hr>
+<a id="define"></a><h2 class="kw">DEFINE</h2>
+<a href="#command-language">主提示命令</a>。
+定义属性、数组、命令等。
+<pre>
+   DEFINE element_type attribute type
+   DEFINE array_name type[size]
+   DEFINE command_name "command_string"
+</pre>
+定义新的元素属性、数组或用户命令。例如：
+<pre>
+   define vertex attribute weight real
+   define edge attribute my_attr real[3]
+   define my_array real[10][10]
+   define evolve "r; g 5; r; g 5"
+</pre>
+<hr>
+<a id="delete"></a><h2 class="kw">DELETE</h2>
+<a href="#command-language">主提示命令</a>。
+删除元素。
+<pre>
+   DELETE <em>generator</em>
+</pre>
+删除指定的元素及其依赖元素。例如：
+<pre>
+   delete vertex where x < 0
+   delete edge where color == red
+   delete facet where id > 100
+</pre>
+
+<hr>
+<a id="delete_text"></a><h2 class="kw">DELETE_TEXT</h2>
+<a href="#command-language">主提示命令</a>。
+删除显示的文本。
+<pre>
+   DELETE_TEXT <em>expr</em>
+</pre>
+删除指定编号的显示文本。
+
+<hr>
+<a id="detorus"></a><h2 class="kw">DETORUS</h2>
+<a href="#command-language">主提示命令</a>。
+将环面模型转换为普通模型。
+<pre>
+   DETORUS
+</pre>
+将环面周期性模型中的表面展开为普通表面。用于可视化或进一步分析。
+<hr>
+<a id="dirichlet"></a><h2 class="kw">DIRICHLET</h2>
+<a href="#command-language">主提示命令</a>。
+使用 Dirichlet 能量进行最小化迭代。
+<pre>
+   DIRICHLET
+   DIRICHLET <em>expr</em>
+</pre>
+使用 Dirichlet 能量（梯度的平方积分）进行一步 Newton 迭代。可选参数限制步长大小。适用于具有固定边界的共形映射。
+
+<hr>
+<a id="dirichlet_seek"></a><h2 class="kw">DIRICHLET_SEEK</h2>
+<a href="#command-language">主提示命令</a>。
+沿 Dirichlet 能量的下降方向搜索。
+<pre>
+   DIRICHLET_SEEK
+</pre>
+在 Dirichlet 能量的负梯度方向上进行线搜索以最小化能量。
+
+<hr>
+<a id="display_text"></a><h2 class="kw">DISPLAY_TEXT</h2>
+<a href="#command-language">主提示命令</a>。
+在图形窗口中显示文本。
+<pre>
+   DISPLAY_TEXT <em>stringexpr</em>
+   DISPLAY_TEXT <em>expr,expr,stringexpr</em>
+</pre>
+在图形窗口中显示文本。可以指定位置坐标。
+<hr>
+<a id="dissolve"></a><h2 class="kw">DISSOLVE</h2>
+<a href="#command-language">主提示命令</a>。
+溶解元素。
+<pre>
+   DISSOLVE <em>generator</em>
+</pre>
+溶解指定的顶点、边或面。溶解顶点会删除该顶点及其相邻的边和面。溶解边会删除该边及其相邻的面。溶解面会删除该面。例如：
+<pre>
+   dissolve vertex where valence == 2
+   dissolve edge where length < 0.001
+   dissolve facet where color == red
+</pre>
+
+<hr>
+<a id="dump"></a><h2 class="kw">DUMP</h2>
+<a href="#command-language">主提示命令</a>。
+将当前表面转储到数据文件。
+<pre>
+   DUMP <em>stringexpr</em>
+</pre>
+将当前表面状态保存到指定的数据文件中。文件可以稍后加载以继续演化。
+
+<hr>
+<a id="dump_memlist"></a><h2 class="kw">DUMP_MEMLIST</h2>
+<a href="#command-language">主提示命令</a>。
+转储内存分配列表。
+<pre>
+   DUMP_MEMLIST
+</pre>
+打印所有当前内存分配的列表。用于调试内存问题。
+<hr>
+<a id="edge_merge"></a><h2 class="kw">EDGE_MERGE</h2>
+<a href="#command-language">主提示命令</a>。
+合并两条边。
+<pre>
+   EDGE_MERGE <em>expr,expr</em>
+</pre>
+合并两条指定的边为一条边。用于简化表面拓扑。
+
+<hr>
+<a id="edgeswap"></a><h2 class="kw">EDGESWAP</h2>
+<a href="#command-language">主提示命令</a>。
+交换边的对角线。
+<pre>
+   EDGESWAP <em>generator</em>
+</pre>
+在两个三角形之间交换对角线边。用于改善三角形质量。等同于图形命令 <a href="single.htm#u" class="keyword">u</a>。
+
+<hr>
+<a id="edgeweed"></a><h2 class="kw">EDGEWEED</h2>
+<a href="#command-language">主提示命令</a>。
+删除短边。
+<pre>
+   EDGEWEED <em>expr</em>
+</pre>
+删除长度小于给定值的边及其相邻的面。
+<hr>
+<a id="eigenprobe"></a><h2 class="kw">EIGENPROBE</h2>
+<a href="#command-language">主提示命令</a>。
+探测 Hessian 的特征值。
+<pre>
+   EIGENPROBE <em>expr</em>
+</pre>
+计算 Hessian 矩阵在给定值附近的特征值数量。打印小于、等于和大于给定值的特征值数量。用于检查 Hessian 的正定性。
+
+<hr>
+<a id="eprint"></a><h2 class="kw">EPRINT</h2>
+<a href="#command-language">主提示命令</a>。
+打印边信息。
+<pre>
+   EPRINT <em>generator</em>
+</pre>
+打印指定边的详细信息，包括端点、长度、相邻面等。
+
+<hr>
+<a id="equiangulate"></a><h2 class="kw">EQUIANGULATE</h2>
+<a href="#command-language">主提示命令</a>。
+对三角形进行等角化。
+<pre>
+   EQUIANGULATE
+</pre>
+交换对角线以改善三角形质量。等同于图形命令 <a href="single.htm#u" class="keyword">u</a>。
+<hr>
+<a id="errprintf"></a><h2 class="kw">ERRPRINTF</h2>
+<a href="#command-language">主提示命令</a>。
+格式化错误输出。
+<pre>
+   ERRPRINTF <em>string,expr,expr,...</em>
+</pre>
+类似于 <a href="#printf" class="keyword">printf</a>，但输出到标准错误流。
+
+<hr>
+<a id="exec"></a><h2 class="kw">EXEC</h2>
+<a href="#command-language">主提示命令</a>。
+执行外部程序。
+<pre>
+   EXEC <em>stringexpr</em>
+</pre>
+执行指定的外部程序。类似于 <a href="#system" class="keyword">system</a> 命令。
+
+<hr>
+<a id="exprint"></a><h2 class="kw">EXPRINT</h2>
+<a href="#command-language">主提示命令</a>。
+打印表达式值。
+<pre>
+   EXPRINT <em>expr</em>
+</pre>
+打印表达式的值。类似于 <a href="#print" class="keyword">print</a>，但可以用于复杂表达式。
+<hr>
+<a id="facet_crosscut"></a><h2 class="kw">FACET_CROSSCUT</h2>
+<a href="#command-language">主提示命令</a>。
+在面上进行横切。
+<pre>
+   FACET_CROSSCUT <em>expr,expr,expr</em>
+</pre>
+在指定面上插入一条横切边，将面分成两部分。
+
+<hr>
+<a id="facet_merge"></a><h2 class="kw">FACET_MERGE</h2>
+<a href="#command-language">主提示命令</a>。
+合并两个面。
+<pre>
+   FACET_MERGE <em>expr,expr</em>
+</pre>
+合并两个指定的面为一个面。用于简化表面拓扑。
+
+<hr>
+<a id="fix"></a><h2 class="kw">FIX</h2>
+<a href="#command-language">主提示命令</a>。
+固定元素。
+<pre>
+   FIX <em>generator</em>
+</pre>
+固定指定的顶点、边或面。固定元素在演化过程中不会移动。也可以固定参数或量。例如：
+<pre>
+   fix vertex where on_constraint 1
+   fix edge where color == red
+   fix facet where id < 10
+   fix radius
+   fix my_quantity
+</pre>
+<hr>
+<a id="flush_counts"></a><h2 class="kw">FLUSH_COUNTS</h2>
+<a href="#command-language">主提示命令</a>。
+刷新操作计数器。
+<pre>
+   FLUSH_COUNTS
+</pre>
+重置所有操作计数器（如细化、溶解、弹出等）。用于重新开始计数。
+
+<hr>
+<a id="free_discards"></a><h2 class="kw">FREE_DISCARDS</h2>
+<a href="#command-language">主提示命令</a>。
+释放丢弃的内存。
+<pre>
+   FREE_DISCARDS
+</pre>
+释放被丢弃元素占用的内存。通常 Evolver 会自动管理内存，但此命令可用于强制释放。
+
+<hr>
+<a id="geompipe"></a><h2 class="kw">GEOMPIPE</h2>
+<a href="#command-language">主提示命令</a>。
+通过管道发送几何数据。
+<pre>
+   GEOMPIPE <em>stringexpr</em>
+</pre>
+将几何数据通过管道发送到外部程序。用于与其他可视化工具集成。
+<hr>
+<a id="geomview"></a><h2 class="kw">GEOMVIEW</h2>
+<a href="#command-language">主提示命令</a>。
+启动 Geomview 图形显示。
+<pre>
+   GEOMVIEW
+</pre>
+启动 Geomview 几何查看器显示当前表面。需要系统安装 Geomview。
+
+<hr>
+<a id="help"></a><h2 class="kw">HELP</h2>
+<a href="#command-language">主提示命令</a>。
+显示帮助信息。
+<pre>
+   HELP
+   HELP <em>topic</em>
+</pre>
+显示 Evolver 的帮助信息。可以指定主题获取特定帮助。
+
+<hr>
+<a id="hessian-command"></a><h2 class="kw">HESSIAN</h2>
+<a href="#command-language">主提示命令</a>。
+执行 Hessian 迭代。
+<pre>
+   HESSIAN
+   HESSIAN <em>expr</em>
+</pre>
+使用 Hessian 矩阵进行一步 Newton 迭代以最小化能量。可选参数限制步长大小。对于面积最小化问题，Hessian 迭代通常比梯度下降收敛更快。
+<hr>
+<a id="hessian_menu"></a><h2 class="kw">HESSIAN_MENU</h2>
+<a href="#command-language">主提示命令</a>。
+Hessian 交互式菜单。
+<pre>
+   HESSIAN_MENU
+</pre>
+显示 Hessian 操作的交互式菜单。菜单选项包括：
+<ol>
+<li> 执行 Hessian 迭代
+<li> 显示 Hessian 信息
+<li> 计算特征值
+<li> 沿特征向量移动
+<li> 设置 Hessian 选项
+<li> 退出菜单
+</ol>
+<hr>
+<a id="hessian_seek"></a><h2 class="kw">HESSIAN_SEEK</h2>
+<a href="#command-language">主提示命令</a>。
+沿 Hessian 下降方向搜索。
+<pre>
+   HESSIAN_SEEK
+</pre>
+在 Hessian 的负梯度方向上进行线搜索以最小化能量。类似于 <a href="#saddle" class="keyword">saddle</a> 命令。
+
+<hr>
+<a id="histogram"></a><h2 class="kw">HISTOGRAM</h2>
+<a href="#command-language">主提示命令</a>。
+显示元素属性的直方图。
+<pre>
+   HISTOGRAM <em>element_type attribute</em>
+</pre>
+显示指定元素属性的分布直方图。例如：
+<pre>
+   histogram edge length
+   histogram facet area
+   histogram vertex x
+</pre>
+
+<hr>
+<a id="history"></a><h2 class="kw">HISTORY</h2>
+<a href="#command-language">主提示命令</a>。
+显示命令历史。
+<pre>
+   HISTORY
+</pre>
+显示最近输入的命令历史。
+<hr>
+<a id="lagrange"></a><h2 class="kw">LAGRANGE</h2>
+<a href="#command-language">主提示命令</a>。
+切换到 Lagrange 模型。
+<pre>
+   LAGRANGE
+   LAGRANGE <em>expr</em>
+</pre>
+切换到 Lagrange 有限元模型。可选参数指定多项式的阶数。等同于图形命令 <a href="single.htm#M" class="keyword">M 3</a> 或更高。
+
+<hr>
+<a id="lanczos"></a><h2 class="kw">LANCZOS</h2>
+<a href="#command-language">主提示命令</a>。
+使用 Lanczos 算法计算特征值。
+<pre>
+   LANCZOS <em>expr</em>
+</pre>
+使用 Lanczos 算法计算 Hessian 矩阵的 <em>expr</em> 个最小特征值。用于分析 Hessian 的谱性质。
+
+<hr>
+<a id="linear"></a><h2 class="kw">LINEAR</h2>
+<a href="#command-language">主提示命令</a>。
+切换到线性模型。
+<pre>
+   LINEAR
+</pre>
+切换到线性有限元模型。等同于图形命令 <a href="single.htm#M" class="keyword">M 1</a>。
+<hr>
+<a id="list"></a><h2 class="kw">LIST</h2>
+<a href="#command-language">主提示命令</a>。
+列出元素信息。
+<pre>
+   LIST <em>element_type</em>
+   LIST <em>element_type generator</em>
+   LIST ATTRIBUTES
+   LIST BOTTOMINFO
+   LIST PROCEDURES
+   LIST TOPINFO
+</pre>
+列出指定类型元素的信息。例如：
+<pre>
+   list vertex
+   list edge where length > 0.1
+   list facet where color == red
+   list body
+   list attributes
+   list procedures
+</pre>
+<hr>
+<a id="load"></a><h2 class="kw">LOAD</h2>
+<a href="#command-language">主提示命令</a>。
+加载新数据文件。
+<pre>
+   LOAD <em>stringexpr</em>
+</pre>
+加载新的数据文件，替换当前表面。所有当前状态将丢失。用于开始新的演化。
+
+<hr>
+<a id="logfile"></a><h2 class="kw">LOGFILE</h2>
+<a href="#command-language">主提示命令</a>。
+设置日志文件。
+<pre>
+   LOGFILE <em>stringexpr</em>
+</pre>
+将所有输入和输出记录到指定文件。用于记录会话。
+
+<hr>
+<a id="keylogfile"></a><h2 class="kw">KEYLOGFILE</h2>
+<a href="#command-language">主提示命令</a>。
+设置键盘日志文件。
+<pre>
+   KEYLOGFILE <em>stringexpr</em>
+</pre>
+仅记录键盘输入到指定文件。用于重放会话。
+<hr>
+<a id="metis"></a><h2 class="kw">METIS</h2>
+<a href="#command-language">主提示命令</a>。
+使用 METIS 进行分区。
+<pre>
+   METIS <em>expr</em>
+</pre>
+使用 METIS 图分区库将表面分区为 <em>expr</em> 个部分。用于并行计算或减少 Hessian 填充。
+
+<hr>
+<a id="kmetis"></a><h2 class="kw">KMETIS</h2>
+<a href="#command-language">主提示命令</a>。
+使用 K-way METIS 进行分区。
+<pre>
+   KMETIS <em>expr</em>
+</pre>
+使用 METIS 的 K-way 分区算法将表面分区为 <em>expr</em> 个部分。通常比普通 METIS 产生更好的分区。
+
+<hr>
+<a id="longj"></a><h2 class="kw">LONGJ</h2>
+<a href="#command-language">主提示命令</a>。
+执行长波长扰动。
+<pre>
+   LONGJ
+</pre>
+对表面进行长波长正弦扰动，用于测试表面的稳定性。会提示输入波矢量、相位和振幅。
+<hr>
+<a id="matrix_inverse"></a><h2 class="kw">MATRIX_INVERSE</h2>
+<a href="#command-language">主提示函数</a>。
+计算矩阵的逆。
+<pre>
+   retval := MATRIX_INVERSE(<em>matrix1</em>, <em>matrix2</em>)
+</pre>
+计算 <em>matrix1</em> 的逆矩阵并存储到 <em>matrix2</em>。如果矩阵奇异则返回 0，否则返回 1。
+
+<hr>
+<a id="matrix_multiply"></a><h2 class="kw">MATRIX_MULTIPLY</h2>
+<a href="#command-language">主提示命令</a>。
+计算矩阵乘积。
+<pre>
+   MATRIX_MULTIPLY(<em>matrix1</em>, <em>matrix2</em>, <em>matrix3</em>)
+</pre>
+计算 <em>matrix1</em> 和 <em>matrix2</em> 的乘积并存储到 <em>matrix3</em>。
+
+<hr>
+<a id="move"></a><h2 class="kw">MOVE</h2>
+<a href="#command-language">主提示命令</a>。
+沿当前运动方向移动。
+<pre>
+   MOVE <em>expr</em>
+</pre>
+沿之前的运动方向移动表面，步长由 <em>expr</em> 给定。之前的运动方向可以来自梯度步进（<a href="single.htm#g" class="keyword">g</a> 命令）或 Hessian 步进。
+<hr>
+<a id="new_vertex"></a><h2 class="kw">NEW_VERTEX</h2>
+<a href="#command-language">主提示函数</a>。
+创建新顶点。
+<pre>
+   newid := NEW_VERTEX(<em>expr</em>, <em>expr</em>,...)
+</pre>
+创建一个新顶点，坐标由参数指定。返回新顶点的 ID。新顶点未连接到任何其他元素。
+
+<hr>
+<a id="new_edge"></a><h2 class="kw">NEW_EDGE</h2>
+<a href="#command-language">主提示函数</a>。
+创建新边。
+<pre>
+   newid := NEW_EDGE(<em>expr</em>, <em>expr</em>)
+</pre>
+创建一条新边，连接两个指定的顶点。返回新边的 ID。
+
+<hr>
+<a id="new_facet"></a><h2 class="kw">NEW_FACET</h2>
+<a href="#command-language">主提示函数</a>。
+创建新面。
+<pre>
+   newid := NEW_FACET(<em>expr</em>, <em>expr</em>,...)
+</pre>
+创建一个新面，边界由指定的边定义。返回新面的 ID。
+<hr>
+<a id="new_body"></a><h2 class="kw">NEW_BODY</h2>
+<a href="#command-language">主提示函数</a>。
+创建新体。
+<pre>
+   newid := NEW_BODY
+</pre>
+创建一个新体。返回新体的 ID。体最初没有面，需要使用 <code>set facet frontbody</code> 和 <code>set facet backbody</code> 命令分配面。
+
+<hr>
+<a id="notch"></a><h2 class="kw">NOTCH</h2>
+<a href="#command-language">主提示命令</a>。
+细分高曲率区域。
+<pre>
+   NOTCH <em>expr</em>
+</pre>
+细分所有二面角大于给定值的边。等同于图形命令 <a href="single.htm#n" class="keyword">n</a>。
+
+<hr>
+<a id="ometis"></a><h2 class="kw">OMETIS</h2>
+<a href="#command-language">主提示命令</a>。
+使用 METIS 计算排序。
+<pre>
+   OMETIS <em>expr</em>
+</pre>
+使用 METIS 库计算 Hessian 分解的排序。已过时，建议使用 <a href="toggle.htm#metis_factor" class="keyword">metis_factor</a> 开关。
+<hr>
+<a id="ooglfile"></a><h2 class="kw">OOGLFILE</h2>
+<a href="#command-language">主提示命令</a>。
+输出 OOGL 格式文件。
+<pre>
+   OOGLFILE <em>stringexpr</em>
+</pre>
+将当前表面以 OOGL 格式写入文件。文件名自动添加 <code>.quad</code> 扩展名。
+
+<hr>
+<a id="optimize"></a><h2 class="kw">OPTIMIZE</h2>
+<a href="#command-language">主提示命令</a>。
+设置优化模式。
+<pre>
+   OPTIMIZE <em>expr</em>
+</pre>
+将梯度下降迭代设置为优化模式，并设置比例因子的上限。在优化模式下，Evolver 会自动调整比例因子以最小化能量。
+
+<hr>
+<a id="pause"></a><h2 class="kw">PAUSE</h2>
+<a href="#command-language">主提示命令</a>。
+暂停执行。
+<pre>
+   PAUSE
+</pre>
+暂停脚本执行直到用户按 Enter 键。用于在脚本中给用户查看输出的机会。
+<hr>
+<a id="permload"></a><h2 class="kw">PERMLOAD</h2>
+<a href="#command-language">主提示命令</a>。
+永久加载新数据文件。
+<pre>
+   PERMLOAD <em>stringexpr</em>
+</pre>
+加载新数据文件，但继续执行当前命令。用于在脚本中重复演化不同参数的表面。
+
+<hr>
+<a id="pop"></a><h2 class="kw">POP</h2>
+<a href="#command-language">主提示命令</a>。
+弹出元素。
+<pre>
+   POP <em>generator</em>
+</pre>
+弹出指定的顶点或边。弹出操作会改变表面拓扑以消除非最小配置。例如：
+<pre>
+   pop vertex where valence > 4
+   pop edge where valence > 3
+</pre>
+
+<hr>
+<a id="pop_edge_to_tri"></a><h2 class="kw">POP_EDGE_TO_TRI</h2>
+<a href="#command-language">主提示命令</a>。
+将边转换为三角形。
+<pre>
+   POP_EDGE_TO_TRI <em>generator</em>
+</pre>
+将具有四面体端点的边转换为单个面。用于三维泡沫演化中的拓扑变换。
+<hr>
+<a id="pop_quad_to_quad"></a><h2 class="kw">POP_QUAD_TO_QUAD</h2>
+<a href="#command-language">主提示命令</a>。
+四边形拓扑变换。
+<pre>
+   POP_QUAD_TO_QUAD <em>generator</em>
+</pre>
+将由四条三重边界的四边形转换为方向相反的四边形。用于三维泡沫演化。
+
+<hr>
+<a id="pop_tri_to_edge"></a><h2 class="kw">POP_TRI_TO_EDGE</h2>
+<a href="#command-language">主提示命令</a>。
+将三角形转换为边。
+<pre>
+   POP_TRI_TO_EDGE <em>generator</em>
+</pre>
+将具有三个四面体顶点的面转换为单条边。用于三维泡沫演化中的拓扑变换。
+
+<hr>
+<a id="postscript-command"></a><h2 class="kw">POSTSCRIPT</h2>
+<a href="#command-language">主提示命令</a>。
+输出 PostScript 文件。
+<pre>
+   POSTSCRIPT <em>stringexpr</em>
+</pre>
+将当前表面以 PostScript 格式写入文件。文件名自动添加 <code>.ps</code> 扩展名。用于生成高质量的打印输出。
+<hr>
+<a id="print"></a><h2 class="kw">PRINT</h2>
+<a href="#command-language">主提示命令</a>。
+打印值。
+<pre>
+   PRINT <em>expr</em>
+   PRINT <em>stringexpr</em>
+   PRINT <em>commandname</em>
+   PRINT <em>arrayslice</em>
+   PRINT WARNING_MESSAGES
+</pre>
+打印表达式、字符串、命令、数组或警告消息。例如：
+<pre>
+   print total_energy
+   print "The area is ", total_area
+   print datafilename
+   print max(edge,length)
+</pre>
+
+<hr>
+<a id="printf"></a><h2 class="kw">PRINTF</h2>
+<a href="#command-language">主提示命令</a>。
+格式化打印。
+<pre>
+   PRINTF <em>string,expr,expr,...</em>
+</pre>
+使用标准 C sprintf 函数格式化打印。所有字符串、整数和浮点格式都有效。例如：
+<pre>
+   printf "Energy: %f, Area: %f\n", total_energy, total_area
+</pre>
+<hr>
+<a id="quadratic"></a><h2 class="kw">QUADRATIC</h2>
+<a href="#command-language">主提示命令</a>。
+切换到二次模型。
+<pre>
+   QUADRATIC
+</pre>
+切换到二次有限元模型。等同于图形命令 <a href="single.htm#M" class="keyword">M 2</a>。
+
+<hr>
+<a id="quit"></a><h2 class="kw">QUIT, BYE, EXIT</h2>
+<a href="#command-language">主提示命令</a>。
+退出 Evolver。
+<pre>
+   quit
+   quit <em>expr</em>
+</pre>
+不带参数时，提示输入新数据文件。按 Enter 返回当前表面，输入 'q' 退出 Evolver，输入其他内容作为新数据文件名。带参数时，立即退出并使用该值作为退出代码。
+
+<hr>
+<a id="rawestv"></a><h2 class="kw">RAWESTV</h2>
+<a href="#command-language">主提示命令</a>。
+最原始的顶点平均。
+<pre>
+   RAWESTV
+</pre>
+对所有顶点进行平均，不考虑体积守恒或约束。不移动边界上的顶点。
+<hr>
+<a id="rawv"></a><h2 class="kw">RAWV</h2>
+<a href="#command-language">主提示命令</a>。
+原始顶点平均。
+<pre>
+   RAWV
+</pre>
+对所有顶点进行平均，不考虑体积守恒，但只平均具有相同约束类型的顶点。不移动边界上的顶点。
+
+<hr>
+<a id="read"></a><h2 class="kw">READ</h2>
+<a href="#command-language">主提示命令</a>。
+读取命令文件。
+<pre>
+   READ <em>stringexpr</em>
+</pre>
+从文件读取命令，就像在键盘上输入一样。命令可以嵌套。
+
+<hr>
+<a id="rebody"></a><h2 class="kw">REBODY</h2>
+<a href="#command-language">主提示命令</a>。
+重新计算体。
+<pre>
+   REBODY
+</pre>
+在体被颈部夹断断开后，重新计算连接的体。旧体的面被分成边连接的集合，每个集合定义一个新体。
+<hr>
+<a id="recalc"></a><h2 class="kw">RECALC</h2>
+<a href="#command-language">主提示命令</a>。
+重新计算并重新显示。
+<pre>
+   RECALC
+</pre>
+在更改某些变量或内容后重新计算所有内容。Evolver 尝试在做出重大更改时自动重新计算，但并不总是知道。
+
+<hr>
+<a id="refine"></a><h2 class="kw">REFINE</h2>
+<a href="#command-language">主提示命令</a>。
+细分元素。
+<pre>
+   REFINE <em>generator</em>
+</pre>
+细分指定的边或面。通过在每条边的中点插入顶点来细分边，在肥皂膜模型中将相邻的面分成两部分。等同于长边细分命令 <a href="single.htm#l" class="keyword">l</a>。强烈建议之后进行 <a href="single.htm#u" class="keyword">等角化</a>。
+
+<hr>
+<a id="replace_load"></a><h2 class="kw">REPLACE_LOAD</h2>
+<a href="#command-language">主提示命令</a>。
+替换加载数据文件。
+<pre>
+   REPLACE_LOAD <em>stringexpr</em>
+</pre>
+用新数据文件替换当前表面，而不进行完全重新初始化。用于在不同条件下重复演化表面。
+<hr>
+<a id="reset_counts"></a><h2 class="kw">RESET_COUNTS</h2>
+<a href="#command-language">主提示命令</a>。
+重置计数器。
+<pre>
+   RESET_COUNTS
+</pre>
+将各种内部计数器重置为 0。计数器包括：fix_count、unfix_count、where_count、equi_count、edge_delete_count、facet_delete_count 等。
+
+<hr>
+<a id="reverse_orientation"></a><h2 class="kw">REVERSE_ORIENTATION</h2>
+<a href="#command-language">主提示命令</a>。
+反转方向。
+<pre>
+   REVERSE_ORIENTATION <em>generator</em>
+</pre>
+反转指定边或面的内部方向。用于使边或面与约束对齐。
+
+<hr>
+<a id="ritz"></a><h2 class="kw">RITZ</h2>
+<a href="#command-language">主提示命令</a>。
+Ritz 特征值计算。
+<pre>
+   RITZ(<em>expr</em>,<em>expr</em>)
+</pre>
+计算给定值附近的 Hessian 特征值。第一个参数是移位值，第二个参数是子空间维度（所需特征值数量）。
+<hr>
+<a id="renumber_all"></a><h2 class="kw">RENUMBER_ALL</h2>
+<a href="#command-language">主提示命令</a>。
+重新编号所有元素。
+<pre>
+   RENUMBER_ALL
+</pre>
+根据存储顺序重新分配所有类型元素的 ID 编号。不要在元素生成器循环内使用此命令！
+
+<hr>
+<a id="reorder_storage"></a><h2 class="kw">REORDER_STORAGE</h2>
+<a href="#command-language">主提示命令</a>。
+重新排序存储。
+<pre>
+   REORDER_STORAGE
+</pre>
+根据额外属性（如 vertex_order_key、edge_order_key 等）重新排序元素数据结构的存储。用于测试执行速度对存储顺序的依赖性。
+
+<hr>
+<a id="saddle"></a><h2 class="kw">SADDLE</h2>
+<a href="#command-language">主提示命令</a>。
+鞍点搜索。
+<pre>
+   SADDLE
+   SADDLE <em>expr</em>
+</pre>
+沿 Hessian 最低负特征值的特征向量寻找最小能量。如果没有负特征值，则表面不变。可选参数限制步长大小。
+<hr>
+<a id="set"></a><h2 class="kw">SET</h2>
+<a href="#command-language">主提示命令</a>。
+设置属性。
+<pre>
+   SET <em>target</em> <em>attribute</em> <em>expr</em>
+</pre>
+设置指定元素的属性。目标必须是单个元素或元素编号。属性包括：
+</p>
+<ul>
+<li><b>EDGE 属性：</b>color、length、no_display、no_dump、noncontent、wrap、bare、fixed</li>
+<li><b>FACET 属性：</b>color、opacity、no_display、no_dump、noncontent、frontbody、backbody、positive_var、negative_var、orientation、boundaries、constraints</li>
+<li><b>VERTEX 属性：</b>color、no_display、no_dump、no_transform、fixed、constraints</li>
+<li><b>BODY 属性：</b>color、no_dump、noncontent、fixed</li>
+</ul>
+
+<hr>
+<a id="shell"></a><h2 class="kw">SHELL</h2>
+<a href="#command-language">主提示命令</a>。
+执行系统命令。
+<pre>
+   SHELL <em>stringexpr</em>
+</pre>
+将命令发送到操作系统命令处理器。无参数时启动交互式 shell。
+<hr>
+<a id="show"></a><h2 class="kw">SHOW</h2>
+<a href="#command-language">主提示命令</a>。
+显示元素信息。
+<pre>
+   SHOW <em>target</em>
+</pre>
+显示指定元素的详细信息。目标可以是单个元素或元素编号。显示的信息包括坐标、拓扑关系、约束、边界等。
+
+<hr>
+<a id="show_expr"></a><h2 class="kw">SHOW_EXPR</h2>
+<a href="#command-language">主提示命令</a>。
+显示表达式。
+<pre>
+   SHOW_EXPR <em>expr</em>
+</pre>
+显示表达式的值和类型。
+
+<hr>
+<a id="show_trans"></a><h2 class="kw">SHOW_TRANS</h2>
+<a href="#command-language">主提示命令</a>。
+显示变换。
+<pre>
+   SHOW_TRANS <em>body_id</em>
+</pre>
+显示指定 body 的变换信息。
+
+<hr>
+<a id="showq"></a><h2 class="kw">SHOWQ</h2>
+<a href="#command-language">主提示命令</a>。
+显示量化量信息。
+<pre>
+   SHOWQ <em>quantity_name</em>
+</pre>
+显示指定量化量的详细信息，包括方法实例、值、梯度等。
+<hr>
+<a id="simplex_to_fe"></a><h2 class="kw">SIMPLEX_TO_FE</h2>
+<a href="#command-language">主提示命令</a>。
+转换单纯形到有限元。
+<pre>
+   SIMPLEX_TO_FE
+</pre>
+将表面从单纯形表示转换为有限元表示。用于将从复杂数据文件导入的简单三角形表面转换为标准 Evolver 格式。
+
+<hr>
+<a id="sobolev"></a><h2 class="kw">SOBOLEV</h2>
+<a href="#command-language">主提示命令</a>。
+Sobolev 梯度。
+<pre>
+   SOBOLEV <em>element_type</em>
+</pre>
+计算 Sobolev 梯度并存储在速度属性中。比单纯梯度更适合优化问题。
+
+<hr>
+<a id="sprintf"></a><h2 class="kw">SPRINTF</h2>
+<a href="#command-language">主提示命令</a>。
+格式化字符串。
+<pre>
+   SPRINTF(<em>string</em>,<em>args...</em>)
+</pre>
+创建格式化字符串。语法与 C 的 sprintf 完全相同。
+<hr>
+<a id="subcommand"></a><h2 class="kw">SUBCOMMAND</h2>
+<a href="#command-language">主提示命令</a>。
+子命令。
+<pre>
+   SUBCOMMAND <em>stringexpr</em>
+</pre>
+将命令字符串发送到 graphics 子进程。如需要返回信息，使用 <a href="single.htm#send" class="keyword">send</a>。
+
+<hr>
+<a id="system"></a><h2 class="kw">SYSTEM</h2>
+<a href="#command-language">主提示命令</a>。
+执行系统命令。
+<pre>
+   SYSTEM <em>stringexpr</em>
+</pre>
+将命令发送到操作系统命令处理器。无参数时启动交互式 shell。
+
+<hr>
+<a id="transform_depth"></a><h2 class="kw">TRANSFORM_DEPTH</h2>
+<a href="#command-language">主提示命令</a>。
+变换深度。
+<pre>
+   TRANSFORM_DEPTH <em>expr</em>
+</pre>
+设置变换链的深度限制。
+
+<hr>
+<a id="transform_expr"></a><h2 class="kw">TRANSFORM_EXPR</h2>
+<a href="#command-language">主提示命令</a>。
+变换表达式。
+<pre>
+   TRANSFORM_EXPR <em>stringexpr</em>
+</pre>
+设置变换表达式。用于定义非线性变换。
+<hr>
+<a id="t1_edgeswap"></a><h2 class="kw">T1_EDGESWAP</h2>
+<a href="#command-language">主提示命令</a>。
+T1 边交换。
+<pre>
+   T1_EDGESWAP <em>generator</em>
+</pre>
+执行 T1 边交换操作。用于泡沫演化中的拓扑变换。
+
+<hr>
+<a id="unfix"></a><h2 class="kw">UNFIX</h2>
+<a href="#command-language">主提示命令</a>。
+取消固定。
+<pre>
+   UNFIX <em>element_gen</em>
+</pre>
+取消指定元素的固定状态。等同于 <a href="#set">SET ... fixed 0</a>。
+
+<hr>
+<a id="unset"></a><h2 class="kw">UNSET</h2>
+<a href="#command-language">主提示命令</a>。
+取消设置。
+<pre>
+   UNSET <em>target</em> <em>attribute</em>
+</pre>
+取消指定元素的属性设置。
+
+<hr>
+<a id="vertex_average"></a><h2 class="kw">VERTEX_AVERAGE</h2>
+<a href="#command-language">主提示命令</a>。
+顶点平均。
+<pre>
+   VERTEX_AVERAGE
+</pre>
+将每个自由顶点移动到其相邻顶点的平均位置。用于平滑表面。
+<hr>
+<a id="vertex_merge"></a><h2 class="kw">VERTEX_MERGE</h2>
+<a href="#command-language">主提示命令</a>。
+顶点合并。
+<pre>
+   VERTEX_MERGE <em>vertex_gen</em>
+</pre>
+将指定的顶点合并到一个顶点中。用于简化表面拓扑。
+
+<hr>
+<a id="whereami"></a><h2 class="kw">WHEREAMI</h2>
+<a href="#command-language">主提示命令</a>。
+当前位置。
+<pre>
+   WHEREAMI
+</pre>
+显示当前执行位置，包括文件名和行号。用于调试。
+
+<hr>
+<a id="wrap_vertex"></a><h2 class="kw">WRAP_VERTEX</h2>
+<a href="#command-language">主提示命令</a>。
+环绕顶点。
+<pre>
+   WRAP_VERTEX <em>vertex_expr</em> <em>wrap_expr</em>
+</pre>
+应用环绕因子到顶点。环绕必须是当前活动组之一。
+
+<hr>
+<a id="zoom"></a><h2 class="kw">ZOOM</h2>
+<a href="#command-language">主提示命令</a>。
+缩放。
+<pre>
+   ZOOM <em>expr</em>
+   ZOOM <em>expr</em>,<em>expr</em>,<em>expr</em>,<em>expr</em>,<em>expr</em>,<em>expr</em>
+</pre>
+设置图形子进程的观察中心和视图范围。一个参数时，视图缩小并增加额外空间；六个参数时指定 x、y、z 范围。
+<br><br>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a><br>
+<a href="index.htm">索引。</a>
+</body>
+</html>

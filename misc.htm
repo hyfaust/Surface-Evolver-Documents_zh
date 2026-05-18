@@ -1,0 +1,448 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档：杂项术语</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+
+<h1 class="center">
+<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+<h1> 杂项术语</h1>
+本文件提供了一些关键词的条目，这些关键词由于歧义、极其晦涩或其他原因，在其他地方不作为名称指针使用。
+<hr>
+<a   id="alice"></a>   <h3>Alice</h3>
+一个未记录文档的特殊用途命令的关键字。
+<hr>
+
+<a   id="area"></a><h3>Area（面积）</h3>
+作为关键字，area 是面（facet）的只读属性。
+<hr>
+
+<a   id="area_fixed"></a><a   id="fixed_area"></a><h3>Area_fixed（固定面积）</h3>
+在数据文件中声明固定表面总面积的过时方法。同义词：fixed_area。现在推荐的方式是在数据文件中定义一个固定的
+<a href="quants.htm#named-quantities">命名量</a>，例如：<br>
+<code>quantity the_area fixed = 2.3 global_method facet_area</code><br>
+这样可以使用所有命名量的功能。
+
+<hr>
+
+<a   id="attribute"></a><h3>Attribute（属性）</h3>
+作为关键字，"attribute" 用于 <a href="commands.htm#define">
+define</a> 命令中定义元素的
+<a href="elements.htm#extra-attributes">额外属性</a>。
+<hr>
+
+<a   id="bare"></a><h3>Bare（裸露）</h3>
+作为关键字，"bare" 是一种
+<a href="elements.htm#bare,-vertex">顶点属性</a>或
+<a href="elements.htm#bare,-edge">边属性</a>，由用户设置，用于告知 Evolver 不期望该顶点或边与面相连。
+<hr>
+
+<a   id="body"></a><h3>Body（体）</h3>
+<a href="elements.htm#bodies">体</a>是一种三维几何元素。
+作为命令关键字，"body" 是
+<a href="commands.htm#generators">元素生成器</a>中的元素名称，既可以作为主元素类型，也可以作为面的子元素。
+
+
+<hr>
+<a   id="burchard"></a><h3>Burchard</h3>
+一个未记录文档的特殊用途命令的关键字。
+
+<hr>
+
+<a   id="color"></a><h3>Color（颜色）</h3>
+作为关键字，"color" 是边和面的属性。
+有关允许的值，请参见 <a href="syntax.htm#colors">颜色</a>。
+<hr>
+
+<a   id="conducting_knot_energy"></a><h3>Conducting_knot_energy（导电结能量）</h3>
+数据文件关键字，自动创建一个使用
+<a href="quants.htm#knot_energy">knot_energy</a> 方法作为全局方法的命名能量量。
+在数据文件中可以后跟一个模量值。
+<hr>
+
+<a   id="insulating_knot_energy"></a><h3>Insulating_knot_energy（绝缘结能量）</h3>
+数据文件关键字，自动创建一个使用
+<a href="quants.htm#uniform_knot_energy">uniform_knot_energy</a> 方法作为全局方法的命名能量量。
+在数据文件中可以后跟一个模量值。
+<hr>
+
+<a   id="constraint"></a>
+<a   id="constraints"></a><h3>Constraint（约束）</h3>
+"Constraint" 可以在
+<a href="constrnt.htm#general-constraints">一般</a>意义上使用，但作为关键字，它指的是
+<a href="constrnt.htm#level-set-constraints">水平集约束</a>。
+"Constraint" 和 "constraints" 可以互换使用。
+<hr>
+
+<a   id="content"></a> <h3>Content（含量）</h3>
+"Content" 用于表示体积（或在弦模型中为面积），见于
+<a href="datafile.htm#constraint-decl">约束积分</a>中。
+<hr>
+
+<a   id="convex"></a><h3>Convex（凸）</h3>
+在数据文件中声明
+<a href="datafile.htm#constraint-decl">约束</a>时使用的关键字，会包含
+<a href="energies.htm#gap-energy">间隙能量</a>。
+其目的是防止直线边和面以大间隙绕过弯曲约束。
+<hr>
+
+<a   id="density"></a><h3>Density（密度）</h3>
+关键字，指体的重力密度、面的表面张力或边的线性张力。
+在后两种情况下，"density" 与 "tension" 同义。
+<hr>
+
+<a   id="edge"></a><h3>Edge（边）</h3>
+一般来说，是基本几何元素之一。作为关键字，它用于
+<a href="commands.htm#generators">元素生成器</a>中。
+同义词：edges。
+<hr>
+
+<a   id="efixed"></a><h3>Efixed</h3>
+过时的数据文件属性，用于在不固定端点的情况下固定边。
+保留该关键字仅为与旧转储文件兼容。
+<hr>
+
+<a   id="eprint"></a><h3>Eprint</h3>
+打印表达式并返回值的函数。语法：eprint expr。
+用于调试；可能是命令语言尚未完善时的遗留产物。
+示例：<code>print sum(facet, eprint area)</code> 将打印所有面的面积，然后打印总和。
+<hr>
+
+<a   id="facet"></a><h3>Facet（面）</h3>
+一般来说，是基本几何元素之一。在肥皂膜模型中，它是由三条有向边定义的三角形。在弦模型中，它是任意数量边的连接序列。在单纯形模型中，它是由数据文件顶部的 surface_dimension 项指定维度的单纯形，并由其顶点定义。
+
+<a   id="fixed"></a><h3>Fixed（固定）</h3>
+可应用于
+<a href="elements.htm#fixed,-vertex">顶点</a>、
+<a href="elements.htm#fixed,-edge">边</a>、
+<a href="elements.htm#fixed,-facet">面</a>或
+<a href="quants.htm#fixed-quantity">命名量</a>的属性。
+<hr>
+
+<a   id="function"></a>
+<a   id="formula"></a><h3>Formula（公式）</h3>
+数据文件关键字，用于
+<a href="datafile.htm#constraint-decl">水平集约束</a>中引入函数公式。同义词：function
+<hr>
+
+
+<a   id="gauss_curvature"></a><h3>Gauss_curvature（高斯曲率）</h3>
+数据文件关键字，自动创建一个使用
+<a href="quants.htm#gauss_curvature_integral">gauss_curvature_integral</a>
+方法作为全局方法的命名能量量。
+在数据文件中可以后跟一个模量值。
+<hr>
+
+<a   id="tolerance"></a><h3>Tolerance（容差）</h3>
+作为关键字，"tolerance" 指的是
+<a href="quants.htm#quantity-tolerance">固定量属性</a>，
+用作收敛的判据。默认值使用
+<a href="syntax.htm#target_tolerance">target_tolerance</a>。
+
+<hr>
+<a   id="div_normal_curvature"></a><h3>Div_normal_curvature（散度法向曲率）</h3>
+切换开关，使 sq_mean_curvature 能量通过面顶点处法向量的散度来计算平均曲率。
+
+<hr>
+<a   id="force_pos_def"></a><h3>Force_pos_def（强制正定）</h3>
+切换开关。如果在 Hessian 矩阵的 YSMP 分解期间开启此项，且 Hessian 矩阵变为不定，则会在对角元素上添加某些值以使其正定。可能是某次实验的遗留。
+
+<hr>
+<a   id="h_inverse_metric"></a><h3>H_inverse_metric（H 逆度量）</h3>
+切换开关。用力的拉普拉斯算子替代力。用于进行平均曲率的拉普拉斯运动。
+
+<hr>
+<a   id="modulus"></a><h3>Modulus（模量）</h3>
+关键字，是
+<a href="quants.htm#named-quantities">命名量</a>或
+<a href="quants.htm#method-instances">方法实例</a>的属性，作为计算值的乘数。
+
+<hr>
+<a   id="opacity"></a><h3>Opacity（不透明度）</h3>
+在某些 geomview 系统上用于透明度的面属性。
+语法：<code>set facet opacity </code><i> value</i>，其中 value 在 0 和 1 之间。实际上，这只是为所有面同时设置一个全局变量。该值在颜色的 alpha 通道中传递给 geomview。
+<hr>
+<a   id="parameters"></a>
+<a   id="parameter"></a><h3>Parameter（参数）</h3>
+指
+<a href="constrnt.htm#parametric-boundaries">参数化边界</a>参数，或用户定义的 <a href="syntax.htm#variables">变量</a>。
+
+<hr>
+<a   id="parameter_file"></a><h3>Parameter_file（参数文件）</h3>
+在数据文件的顶部区域，可以用文件中的一组值初始化变量，语法为
+<pre>
+PARAMETER name PARAMETER_FILE string
+</pre>
+我忘记了具体的工作方式。
+<hr>
+
+<a   id="pressure"></a>
+<h3>Pressure（压力）</h3>
+通常指
+<a href="elements.htm#pressure,-body">固定体积体</a>或
+<a href="quants.htm#quantity-pressure">固定命名量</a>的属性，实际上是约束的拉格朗日乘子。
+作为数据文件中的体属性，为体建立
+<a href="energies.htm#pressure-energy">固定压力</a>。
+也偶尔用于数据文件的顶部区域以建立
+<a href="toggle.htm#ambient_pressure">理想气体模型</a>。
+
+<hr>
+<a   id="surface_energy"></a><h3>Surface_energy（表面能量）</h3>
+在数据文件中包含矢量表面能量积分的过时方法。当前方法是使用带有
+<a href="quants.htm#facet_vector_integral">facet_vector_integral</a>
+方法的 <a href="quants.htm#named-quantities">命名量</a>。
+<hr>
+
+<a   id="total"></a><h3>Total（总计）</h3>
+命名量值（例如 my_quant）的过时语法是 "total my_quant"。当前语法是 "my_quant.value"。
+<hr>
+
+<a   id="valence"></a><h3>Valence（价）</h3>
+顶点的属性，即关联边的数量；或边的属性，即关联面的数量；或面的属性，即面上边的数量。
+<hr>
+
+<a   id="vertex"></a><h3>Vertex（顶点）</h3>
+基本 <a href="elements.htm#vertices">几何元素</a>之一。
+作为关键字，用于
+<a href="commands.htm#generators">元素生成器</a>中。
+
+<hr>
+<a   id="utest"></a><h3>Utest</h3>
+运行测试以查看三角剖分是否为 Delaunay 三角剖分。用于高维和单纯形模型。
+<hr>
+<a   id="stability_test"></a><h3>Stability_test（稳定性测试）</h3>
+用于查找
+<a href="model.htm#mobility">迁移率</a>矩阵最大特征值的命令。不太记得其用途。
+<hr>
+<a   id="tag"></a><h3>Tag（标签）</h3>
+过时的面属性，曾经用于将任意值与面关联。现已被
+<a href="elements.htm#extra-attributes">额外属性</a>取代。
+
+
+<hr>
+<a   id="dynamic-load-library"></a><h2>动态加载库</h2>
+
+此功能使用不多，但为完整起见在此提供文档。
+
+许多 Evolver 功能，如 <a href="constrnt.htm#level-set-constraints">
+水平集约束</a>、<a href="constrnt.htm#parametric-boundaries">
+参数化边界</a>、<a href="quants.htm#named-methods">
+命名方法</a>被积函数和 <a href="model.htm#metric">黎曼
+度量</a>，都需要一组参数的用户定义函数。这些函数的表达式通常存储为解析树，并在每次需要时解释执行，这比求值编译后的表达式要慢得多。有一种方法可以通过称为动态加载的机制使用特定于数据文件的编译函数集。这里，数据文件的函数库被单独编译，然后在运行时加载数据文件时加载。目前，Evolver 只实现了许多 Unix 系统上存在的动态加载机制，可以通过检查文件 /usr/include/dlfcn.h 是否存在来测试。如果存在，可以通过在 Makefile 的 CFLAGS 行中包含 -DENABLE_DLL 来启用动态加载。在某些系统上，可能还需要在 GRAPHLIB 行中包含 -ldl，以便将 Evolver 与 dlopen() 等函数链接。
+
+要为数据文件创建库，请编写一个包含所需函数的 C 源代码源文件，编译并将其链接为共享库。该函数应能够计算函数的值和偏导数，如果要使用任何 <a href="eigentut.htm">Hessian</a> 功能，还应计算二阶偏导数。一个二维数据文件的示例源文件：
+<pre>
+
+#define FUNC_VALUE  1
+#define FUNC_DERIV  2
+#define FUNC_SECOND 3
+#define MAXCOORD 4   /* must be same as in Evolver!! */
+#define REAL double  /* long double if Evolver compiled with -DLONGDOUBLE */
+struct dstack { REAL value;
+		REAL deriv[2*MAXCOORD];
+                REAL second[2*MAXCOORD][2*MAXCOORD]; };
+
+
+void func1 ( mode, x, s )
+int mode; /* FUNC_VALUE, FUNC_DERIV, FUNC_SECOND */
+REAL *x;  /* pointer to list of arguments */
+struct dstack *s;  /* for return values */
+{ REAL value;
+
+  s-&gt;value = x[0] + x[1]*x[1];
+
+  if ( mode == FUNC_VALUE ) return;
+
+  /* first partials */
+  s-&gt;deriv[0] = 1.0;
+  s-&gt;deriv[1] = 2*x[1];
+
+  if ( mode == FUNC_DERIV ) return;
+
+  /* second partials */
+  s-&gt;second[0][0] = 0.0;
+  s-&gt;second[0][1] = 0.0;
+  s-&gt;second[1][0] = 0.0;
+  s-&gt;second[1][1] = 2.0;
+
+  return;
+}
+</pre>
+
+假设源文件名为 foo.c，
+在 SGI 系统上（IRIX 5.0.1 或更高版本）编译和链接：
+<pre>
+cc -c foo.c
+ld -shared foo.o -o foo.so
+</pre>
+Sun 系统相同，但用 -s 替代 -shared。对于其他系统，请查阅 ld 文档以获取创建共享库或动态加载库的选项。
+<p>
+要在数据文件中使用这些函数，在数据文件顶部在使用任何函数之前包含一行：
+<pre>
+load_library "foo.so"
+</pre>
+将在当前目录和 <a href="install.htm#EVOLVERPATH">EVOLVERPATH</a> 中搜索该库。
+最多可以加载 10 个库。
+之后，可以通过仅使用函数名来调用任何函数，无需显式参数列表，因为在这些函数合法使用的地方参数列表始终是隐式的。示例，假设 func2 也定义了一个参数：
+<pre>
+constraint 1
+formula: func1
+
+boundary 1 parameters 2
+x1: func2
+x2: 3*func2 + sin(p1)
+</pre>
+您需要确保函数期望的参数数量与函数使用中隐含的数量相同。
+无需在数据文件中显式声明函数。任何未定义的标识符都会被检查是否为动态加载的函数。
+<p>
+注意：此动态加载实现是实验性的，此处描述的接口将来可能会更改。
+
+<hr>
+<a   id="__bhead_index"></a><h3>__bhead_index</h3>
+Hessian 例程内部使用的体属性。
+
+<hr>
+<a   id="__vhead_index"></a><h3>__vhead_index</h3>
+Hessian 例程内部使用的顶点属性。
+
+<hr>
+<a   id="form_factors"></a><h3>form_factors（形态因子）</h3>
+多种弹性能量命名方法使用的面额外属性向量：
+<a href="quants.htm#linear_elastic">linear_elastic</a>、
+<a href="quants.htm#neo_hookean">neo_hookean</a>、
+<a href="quants.htm#relaxed_elastic">relaxed_elastic</a>、
+<a href="quants.htm#relaxed_elastic_A">relaxed_elastic_A</a>、
+<a href="quants.htm#SVK_elastic">SVK_elastic</a> 和
+<a href="quants.htm#dirichlet_elastic">dirichlet_elastic</a>。
+各分量是松弛面各边的点积。由于对称性，只有三个不同的点积，因此 form_factors 的长度仅为 3。各分量为 {s11,s12,s22}，其中 s11 = dot(v2-v1,v2-v1)，s12 = dot(v2-v1,v3-v1)，s22 = dot(v3-v1,v3-v1)。如果用户未定义 form_factor，Evolver 将创建它，并假设初始面形状为无应变状态。
+
+<hr>
+<a   id="poisson_ratio"></a><h3>poisson_ratio（泊松比）</h3>
+各种弹性命名方法使用的面额外属性：
+<a href="quants.htm#linear_elastic">linear_elastic</a>、
+<a href="quants.htm#linear_elastic_B">linear_elastic_B</a>、
+<a href="quants.htm#neo_hookean">neo_hookean</a>、
+<a href="quants.htm#relaxed_elastic">relaxed_elastic</a>、
+<a href="quants.htm#relaxed_elastic_A">relaxed_elastic_A</a>、
+<a href="quants.htm#SVK_elastic">SVK_elastic</a> 和
+<a href="quants.htm#dirichlet_elastic">dirichlet_elastic</a>。
+
+这是二维各向同性泊松比。
+
+
+<a   id="h_zero"></a>
+<hr>
+某些物理表面在平均曲率为某个非零值时处于最低能量状态。一个例子是由平行堆叠分子制成的膜，这些分子的一端比另一端大。因此，其曲率能量与 (h-h0)^2 成正比，其中 h 是实际平均曲率，h0 是平衡或固有平均曲率。几种平方平均曲率命名方法可以使用 h0，形式为变量 h_zero 或实值顶点属性 h_zero。如果顶点属性存在，则优先使用。
+
+使用 h_zero 的方法：
+<ul>
+<li><a href="quants.htm#sq_mean_curv_cyl">
+  sq_mean_curv_cyl</a>
+<li><a href="quants.htm#sq_mean_curvature">
+  sq_mean_curvature</a>
+<li><a href="quants.htm#eff_area_sq_mean_curvature">
+  eff_area_sq_mean_curvature</a>
+<li><a href="quants.htm#normal_sq_mean_curvature">
+  normal_sq_mean_curvature</a>
+<li><a href="quants.htm#star_normal_sq_mean_curvature">
+  star_normal_sq_mean_curvature</a>
+<li><a href="quants.htm#star_perp_sq_mean_curvature">
+  star_perp_sq_mean_curvature</a>
+<li><a href="quants.htm#sqcurve2_string">
+  sqcurve2_string</a>
+</ul>
+
+不使用 h_zero 的方法：
+<ul>
+<li><a href="quants.htm#star_sq_mean_curvature">
+  star_sq_mean_curvature</a>
+<li><a href="quants.htm#star_eff_area_sq_mean_curvature">
+  star_eff_area_sq_mean_curvature</a>
+<li><a href="quants.htm#sqcurve_string">
+  sqcurve_string</a>
+<li><a href="quants.htm#sqcurve_string_marked">
+  sqcurve_string_marked</a>
+<li><a href="quants.htm#sqcurve3_string">
+  sqcurve3_string</a>
+<li><a href="quants.htm#circle_willmore">
+  circle_willmore</a>
+</ul>
+
+
+<a   id="knot_power"></a>
+<hr>
+<h3>knot_power（结幂次）</h3>
+内部读写变量，用作各种结能量中某些项的指数。使用 knot_power 的命名方法有：
+
+<ul>
+<li><a href="quants.htm#buck_knot_energy">
+buck_knot_energy</a>
+<li><a href="quants.htm#charge_gradient">
+charge_gradient</a>
+<li><a href="quants.htm#facet_knot_energy">
+facet_knot_energy</a>
+<li><a href="quants.htm#facet_knot_energy_fix">
+facet_knot_energy_fix</a>
+<li><a href="quants.htm#knot_energy">
+knot_energy</a>
+<li><a href="quants.htm#knot_thickness_0">
+knot_thickness_0</a>
+<li><a href="quants.htm#knot_thickness_p">
+knot_thickness_p</a>
+<li><a href="quants.htm#knot_thickness_p2">
+knot_thickness_p2</a>
+<li><a href="quants.htm#proj_knot_energy">
+proj_knot_energy</a>
+<li><a href="quants.htm#sphere_knot_energy">
+sphere_knot_energy</a>
+<li><a href="quants.htm#uniform_knot_energy">
+uniform_knot_energy</a>
+<li><a href="quants.htm#uniform_knot_energy_normalizer">
+uniform_knot_energy_normalizer</a>
+<li><a href="quants.htm#uniform_knot_normalizer1">
+uniform_knot_normalizer1</a>
+<li><a href="quants.htm#uniform_knot_normalizer2">
+uniform_knot_normalizer2</a>
+</ul>
+
+
+<a   id="surface_knot_power"></a>
+<hr>
+<h3>surface_knot_power（表面结幂次）</h3>
+
+内部读写变量，用于
+<a href="quants.htm#facet_knot_energy">facet_knot_energy</a> 和
+<a href="quants.htm#sphere_knot_energy">sphere_knot_energy</a>
+命名方法中，作为分母的指数。
+
+<hr>
+<a   id="LEBweight"></a>
+<h3>LEBweight</h3>
+面额外属性，用于在命名方法
+<a href="quants.htm#linear_elastic_B">linear_elastic_B</a>、
+<a href="quants.htm#relaxed_elastic">relaxed_elastic</a>、
+<a href="quants.htm#relaxed_elastic_A">relaxed_elastic_A</a> 中对单个面进行加权。
+
+<hr>
+<a   id="old_force_ribiere"></a>
+<h3>old_force_ribiere</h3>
+共轭梯度模式内部使用的顶点额外属性。
+
+<hr>
+<a   id="parameter_1"></a><h3>parameter_1（参数_1）</h3>
+几种命名方法使用的通用参数。
+<hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 第 21 期通讯</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-19"></a>
+<h1>Surface Evolver 通讯 第 21 期</h1>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><pre>
+
+                         Surface Evolver 通讯 第 21 期
+                               2012 年 5 月
+                     作者：Ken Brakke, brakke@susqu.edu
+
+目录：
+  新版 Surface Evolver 2.50 发布。
+  Windows 自动安装程序。
+  64 位 Windows 版本。
+  新书出版。
+  使用 Evolver 进行 3D 打印。
+  致 Evolver display_text 用户的警告。
+  Surface Evolver 新功能。
+
+
+新版 Surface Evolver 2.50 发布。
+   Surface Evolver 2.50 版现已可供下载，地址：
+   http://www.susqu.edu/brakke/evolver。
+   这是自 2008 年 1 月 2.30c 版以来的首次正式发布。
+   对于自行编译 Evolver 的用户，可以继续使用相同的 makefile。
+
+Windows 自动安装程序。
+   除了通常的 Evolver 发行包压缩文件外，我还制作了一个使用
+   Microsoft Software Installer（微软软件安装程序）的安装包，
+   它提供了许多软件所使用的熟悉半自动安装流程。安装程序将
+   依次询问您要安装到哪个目录、设置 Evolver 环境变量，
+   以及将 .fe 文件与 Evolver 进行关联。
+
+64 位 Windows 版本。
+   Windows 发行包中包含 32 位版本的 Evolver（名为 evolver.exe）
+   和 64 位版本（名为 evolver64.exe）。64 位版本适用于非常大的
+   表面，即数十万面片及以上的情况。即使您使用的是 64 位系统，
+   除非您有非常大的表面，否则仍应使用 32 位版本，因为在 64 位
+   系统上 32 位版本的速度要快 10% 到 20%，因为它需要移动的
+   数据量更少。
+
+新书出版。
+   我协助 Jean Berthier 出版了一本名为 "The Physics of Microdroplets"
+   （微液滴物理学）的书籍，该书现已出版：
+   http://www.wiley.com/WileyCDA/WileyTitle/productCd-0470938803.html
+   书中涉及数百个 Evolver 模型，这些模型在书籍的网页上可以获取
+   （如果您购买了该书的话）。
+
+使用 Evolver 进行 3D 打印。
+   在过去一年中，我一直在使用 Shapeways.com 网站进行 3D 打印实验。
+   我制作了各种极小曲面（使用网格技术来降低成本并使其具有艺术感），
+   以及其他数学形状。我已将所有模型公开提供购买，并建立了一个
+   网页展示图片和链接：http://www.susqu.edu/brakke/models/models.html。
+   此外，我还建立了一个网页，详细说明了我如何使用 Evolver 生成
+   发送到 Shapeways.com 的文件。
+
+致 Evolver display_text 用户的警告。
+   如果您使用的是近期的 Evolver 开发版本，并且一直在使用 display_text
+   功能在图形窗口中显示文本，请注意我已添加了字体大小参数，因此您
+   需要修改任何使用该功能的现有数据文件，并在五个参数中的第三个位置
+   插入一个相对字体大小值（通常为 0.03）。
+
+Surface Evolver 新功能。
+
+  将环面模型转换为欧几里得模型。
+    "detorus"（去环面）命令可将环面模型（torus model）的表面转换为
+    非环面版本。它执行与图形显示相同的展开过程，因此您在图形窗口中
+    看到的内容（裁剪后的、连接的体、原始面片）就是 detorus 之后
+    得到的结果。在将表面导出为外部 3D CAD 文件之前非常有用。
+
+  弦模型中的面片绘图。
+    在弦模型（string model）中执行 "show facet where ..." 现在将显示
+    以颜色填充的指定面片。默认情况下不显示任何面片。
+    "show facet where 1" 将显示所有面片。默认颜色为白色。
+    非凸面片也能正确显示。
+
+  叠加模型。
+    "addload"（追加加载）命令可以在不删除当前表面的情况下读入数据文件。
+    语法：
+       addload stringexpr
+    其中 stringexpr 可以是双引号括起的文件名或字符串变量。
+    新数据文件的 "read" 部分不会被读取，以防止命令和变量的重新定义，
+    以及防止对原始表面产生不良影响的初始化操作。但顶层部分会被读取，
+    因此在那里定义的所有约束、边界和变量应与现有表面兼容。
+
+  替换现有表面。
+    "replace_load"（替换加载）命令将删除当前表面并从数据文件加载新表面。
+    语法：
+       replace_load stringexpr
+    其中 stringexpr 可以是双引号括起的文件名或字符串变量。
+    新数据文件的 "read" 部分不会被读取。Evolver 脚本有时需要从头开始
+    重新演化表面，而旧的 permload 命令已变得过于混乱以至于无法使用，
+    因此我创建了 replace_load 命令，它会删除所有当前表面元素，然后对
+    新数据文件执行 addload 操作。因此所有变量都会被记住，
+    replace_load 可以安全地在脚本的循环中使用。
+
+  permload 已弃用。
+    请不要使用 permload。它已经混乱到无法修复的程度。
+    请改用 replace_load。
+
+  在图形窗口中显示文本。
+    display_text 函数将在图形窗口中显示文本字符串。语法：
+      text_id := display_text(x,y,height,string)
+    其中 x,y 是窗口相对坐标（从 0 到 1），height 是窗口相对字体大小
+    （通常为 0.03）。可以显示多个字符串，text_id 值使您可以在绘制新
+    字符串之前使用 delete_text(text_id) 删除旧字符串。
+
+  命令中的数组初始化器语法。
+    现在可以使用数组初始化器作为数组赋值命令的右侧。
+
+  自增和自减运算符。
+    C 语言风格的 ++ 和 -- 运算符可用作变量、属性和数组元素的自增和
+    自减运算符。示例：
+       for ( inx := 1; inx &lt;= 10 ; inx++ ) ...
+       framenumber++;
+    这些运算符仅作为独立命令使用，不能在表达式内部使用，
+    因此不能写 "xx := yy++"。
+
+  透明度（Opacity）。
+    Evolver 屏幕图形现在可以显示透明表面。如果您将面片的 opacity
+    （透明度）属性设置为 0（透明）到 1（不透明）之间的值，屏幕图形
+    将显示透明效果。为任何面片赋值透明度将激活图形中的透明功能；
+    在图形窗口中按 'O' 键可以切换透明度的开关。正确显示透明效果
+    需要对面片进行从前到后的排序，因此面片较多时图形显示会变慢。
+    PostScript 输出不会显示透明效果。
+
+  命令行脚本执行。
+    -r 命令行选项允许您在 Evolver 命令行上提供一个命令字符串，
+    该字符串将在整个数据文件读入并执行 "read" 部分后自动执行。
+    命令执行完毕后，输入将恢复到通常的交互式提示符。
+    这在 Evolver 的批量运行中非常有用。例如，您可以在数据文件中
+    设置一个 "run" 命令，然后从 shell 脚本中启动 Evolver：
+             evolver -r "run; exit 0;"
+    以执行 run 命令，然后以退出码 0 退出。
+
+  求值水平集约束函数。
+    顶点的 value_of_constraint（约束值）属性将返回指定约束在
+    顶点位置处的函数值。语法与 on_constraint 属性相同。示例：
+       list vertex where on_constraint con1 and
+                                 value_of_constraint con1 &lt; 1e-5
+    注意：即使变量不在约束上，value_of_constraint 也会求值到该函数。
+
+  警告时中断。
+    break_on_warning（警告时中断）切换开关使执行在发生警告时立即停止
+    并返回命令提示符。现有的 break_after_warning（警告后中断）切换开关
+    则允许当前命令或脚本完成后再中断。
+
+  逐顶点控制 hessian_normal
+    顶点的 no_hessian_normal 属性在设置为非零值时将使该顶点免受
+    hessian_normal 模式的影响。
+
+  错误消息重定向
+    ">>2" 和 ">>>2" 符号将错误消息和 errprintf 输出重定向到文件，
+    与 ">>" 和 ">>>" 重定向普通输出的方式相同。
+
+  点积记法：
+    两个向量之间的乘法符号 * 现在表示点积。无需再使用旧的 dot_product
+    关键字。
+
+  包围盒（Bounding box）。
+    show_bounding_box 切换命令切换图形中包围盒的显示，与在图形窗口中
+    按 "o" 键效果相同。包围盒的颜色可以通过 bounding_box_color 内部
+    变量来设置。
+
+  view_transforms_use_unique_point
+    当使用 transform_expr 生成视图变换时，Evolver 会剔除重复的变换。
+    默认情况下，"重复" 意味着相同的变换矩阵，但在某些情况下不同的
+    变换矩阵会将表面传送到同一位置。view_transforms_use_unique_point
+    切换开关启用一种模式，在该模式下，如果两个变换矩阵将
+    view_transforms_unique_point[] 向量给出的点变换到相同的像点，
+    则认为这两个矩阵是相同的。
+
+  septum_flag
+    Evolver 切换命令。在某些情况下，弹出一个顶点可能会留下两个通过
+    隧道连接的区域；如果 septum_flag（隔膜标志）切换开关开启，它将
+    强制在隧道上放置一个表面。
+
+  centerofmass（质心）
+    布尔体属性。适用于环面模型中图形显示的 "connected"（连接）体模式。
+    当为某个体设置此属性时，该体显示时的质心会被记住，下次绘制该体时，
+    其包裹方式将使其新质心接近之前的质心。这防止了靠近基本区域边界的
+    体在演化过程中因轻微移动而来回跳动。默认开启。示例：
+       set bodies centerofmass
+
+  划分弦模型面片。
+    facet_crosscut 函数通过在给定顶点之间构造对角边来细分面片。
+    返回值是新边的 id 编号。新面片将与原面片位于同一个体上。语法：
+      newedge := facet_crosscut(facet_id,tail_id,head_id)
+
+  随机数种子。
+    新增 -sN 命令行选项用于设置随机数种子。
+
+通讯 21 结束。
+
+</pre>
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档：单字母主命令
+</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+
+<h1 class="center">
+<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+<hr><a   id="single-letter"> </a>
+<h2>单字母主命令</h2>
+
+最古老且最常用的 Surface Evolver 命令就是单个字母。
+大小写对这些命令很重要。单字母总是被解释为命令，因此不能将单字母用作变量名。
+单字母命令可以被<a href="#redefinition">重新定义</a>。<p>
+
+单字母命令可以归纳为五组：
+<ul><li>             报告：
+<ul>  <li><a href="#C"> C</a> 运行一致性检查。
+  <li><a href="#c"> c</a> 报告元素计数。
+  <li><a href="#e"> e</a> 外推。
+  <li><a href="#i"> i</a> 状态信息。
+  <li><a href="#v"> v</a> 报告体积。
+  <li><a href="#X"> v</a> 列出额外属性。
+  <li><a href="#z"> z</a> 执行曲率测试。
+</ul><li>             模型特性：
+<ul>  <li><a href="#A"> A</a> 显示和设置变量及各种参数。
+  <li><a href="#a"> a</a> 切换面积归一化。
+  <li><a href="#b"> b</a> 设置物体压力。
+  <li><a href="#f"> f</a> 设置扩散常数。
+  <li><a href="#G"> G</a> 设置重力。
+  <li><a href="#J"> J</a> 切换每次移动时的抖动。
+  <li><a href="#k"> k</a> 设置边界间隙常数。
+  <li><a href="#M"> M</a> 切换线性/二次模型。
+  <li><a href="#m"> m</a> 切换固定运动比例因子。
+  <li><a href="#p"> p</a> 设置环境压力。
+  <li><a href="#Q"> Q</a> 报告或设置量。
+ <li><a href="#U"> U</a>  切换共轭梯度法。
+  <li><a href="#W"> W</a> 位似变换切换。
+</ul><li>               表面修改
+<ul>  <li><a href="#g"> g</a> 执行一次迭代步。通常后跟重复次数。
+  <li><a href="#j"> j</a> 抖动一次。
+  <li><a href="#K"> K</a> 瘦长三角形长边细分。
+  <li><a href="#l"> l</a> 细分长边。
+  <li><a href="#N"> N</a> 将目标体积设为实际体积。
+  <li><a href="#n"> n</a> 切割山脊和山谷。
+  <li><a href="#O"> O</a> 弹出非最小边。
+  <li><a href="#o"> o</a> 弹出非最小顶点。
+  <li><a href="#r"> r</a> 细化三角剖分。
+  <li><a href="#t"> t</a> 移除微小边。
+  <li><a href="#u"> u</a> 等角化。
+  <li><a href="#V"> V</a> 顶点平均。
+  <li><a href="#w"> w</a> 清除小三角形。
+  <li><a href="#y"> y</a> 环面复制。
+  <li><a href="#Z"> Z</a> 放大顶点。
+</ul><li>            输出：
+<ul><li><a href="#D"> D</a>  切换每次迭代的显示。
+  <li><a href="#d"> d</a> 将表面转储到数据文件。
+  <li><a href="#P"> P</a> 图形输出（geomview、Postscript 等）。
+  <li><a href="#s"> s</a> 屏幕显示（原生图形）。
+</ul><li>               杂项：
+<ul>  <li><a href="#F"> F</a>  切换命令日志记录。
+  <li><a href="#H"> H,h,?</a> 帮助屏幕。
+  <li><a href="#q"> q,x</a>   退出。
+</ul></ul><P>
+
+<hr><a   id="redefinition"></a><h2>单字母重新定义</h2>
+可以通过以下语法将单字母重新分配为您自己的命令
+<pre> <i>letter</i> :::= <i>command</i>
+</pre>
+但仅应在特殊情况下使用，例如
+将 'r' 重新定义为在细化的同时执行额外操作。
+可以通过空赋值恢复标准含义：
+<pre> <i>letter</i> :::=
+</pre>
+使用单引号包围字母可获取标准含义，即当 r 已被重新定义时，'r'
+将执行标准细化。
+加载新表面时，重新定义会被清除。在定义其他命令时使用重新定义的命令时要小心。
+重新定义在执行重新定义命令时生效，而不是在解析时生效。重新定义不会追溯到先前定义的命令中的使用，但恢复标准含义是追溯性的。
+示例：
+<pre>
+   V :::= { fix vertex[5]; 'V'; unfix vertex[5] }
+   r :::= { divisions := divisions * 2;
+            hooke_length := hooke_length/2; 'r' }
+</pre>
+<hr><a   id="A"> </a>
+<h2>A</h2>
+<a href="#single-letter">单字母</a>主命令。
+  列出
+<a href="syntax.htm#variables">变量</a>和
+<a href="quants.htm#named-quantities">命名量</a>值、模量
+和目标的当前值。除非<a href="toggle.htm#show_all_quantities">
+show_all_quantities</a>被切换为开，否则仅显示用户明确定义的命名量。
+  允许您输入新值（量值除外）。
+新值以变量编号（来自列表）和新值的形式输入。
+   在空行上按 RETURN 退出。所有可以在此处进行的更改也可以通过
+  <a href="commands.htm#assignment">赋值</a>
+  命令完成。
+
+<hr><a   id="a"> </a>
+<h2>a</h2>
+<a href="#single-letter">单字母</a>主命令。
+  切换顶点力和其他梯度的<a href="model.htm#area-normalization">面积归一化</a>，以通过平均曲率模拟运动。旨在与固定的
+   <a href="iterate.htm#scale-factor">比例因子</a>一起使用。
+    确保比例因子足够小，否则容易发散。细化后临时减小比例因子，因为
+三角形面积缩小了 4 倍，但旧的折痕仍然存在。
+  当此选项为 ON 时，可以对移动过多的面片进行可选检查。通过计算法线变化长度与旧法线长度的比值来完成。
+  如果超过用户指定的值，则所有顶点将恢复到先前的位置。用户应减小运动比例因子并再次迭代。<P>
+
+<hr><a   id="b"> </a>
+<h2>b</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 允许用户交互式更改物体的
+ <a href="elements.htm#target-volume">规定体积</a>或
+ <a href="elements.htm#pressure,-body">压力</a>。
+ 打印每个物体的旧值并提示输入新值。<P>
+
+<hr><a   id="C"> </a>
+<a   id="check"></a>
+<a   id="bad_next_prev_count"></a>
+<a   id="inconsistent_bodies_count"></a>
+<a   id="edge_loop_count"></a>
+<a   id="edges_same_vertices_count"></a>
+<a   id="facets_same_vertices_count"></a>
+<a   id="bad_error_count"></a>
+<h2>C</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 运行各种内部一致性检查。同义词：check。
+ 如果没有问题，仅打印 "Checks completed."
+ 发现的错误数量存储在变量 check_count 中。
+ 检查内容包括：<ul>
+ <li>  元素列表完整性 - 检查数据结构是否完好。
+       此类错误可能是 Evolver 的错误，应报告。
+ <li>  面片-边检查 - 如果面片与某条边相邻，则该边应与面片相邻，并且围绕面片的三条边应相互连接。
+       此类错误可能是 Evolver 的错误，应报告。
+ <li>  面片-物体检查 - 相邻面片是否在同一侧具有相同的物体。
+       可能是由于数据文件中物体定义中面片方向错误，或由于表面在三重线处扭曲而导致的用户问题。
+ <li>  坍缩元素 - 检查边的端点是否相同，以及相邻面片是否共享多于一条边和两个顶点。
+       不是非法的，但您可能希望避免。
+</ul>
+在 "C" 或 "check" 命令完成后，有一些变量保存了发现的各种类型错误的数量：
+<ul>
+<li>  bad_next_prev_count - 元素链表中的错误链接。
+<li>  inconsistent_bodies_count - 违反相邻面片具有相同物体的规则。
+<li>  edge_loop_count - 在单个顶点上形成环的边。
+<li>  edges_same_vertices_count - 具有相同端点的边对。
+<li>  facets_same_vertices_count - 具有相同端点的面片对。
+<li>  bad_error_count - 我认为足够严重、您应该修改演化以避免的各种错误类型的总和。元素列表内的错误链接以及元素之间的错误链接。
+</ul>
+<hr><a   id="c"> </a> <a id="counts"></a>
+<h2>c</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 打印元素计数和内存使用量。
+ 内存仅是元素结构的总量。
+ 在某些系统上，启用 "<a href="toggle.htm#memdebug">memdebug</a>" 将打印更完整的总内存使用统计信息。同义词：counts。
+
+<hr><a   id="D"> </a>
+<h2>D</h2>
+<a href="#single-letter">单字母</a>主命令。
+   切换每次迭代或其他表面变化时的图形更新。
+    默认为显示。状态也可以通过 <a href="toggle.htm#autodisplay">autodisplay</a> 切换进行更改或查询。
+
+<hr><a   id="d"> </a>
+<h2>d</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 将数据转储为与初始数据文件相同格式的 ASCII 文件。将提示您输入文件名。空响应将使用默认转储名称，即数据文件名加 ".dmp" 扩展名。与 <a href="commands.htm#dump">dump</a> 命令相同，只是 dump 命令需要文件名作为命令的一部分。用于检查输入是否正确读取、保存当前配置以及调试。<P>
+
+<hr><a   id="e"> </a> <a id="extrapolate"></a>
+<h2>e</h2>
+<a href="#single-letter">单字母</a>主命令。
+   如果至少执行了两次 <a href="single.htm#r">r</a> 命令，则外推总能量到无限细化。
+   使用三个连续细化级别的最后能量值，并使用幂律拟合误差。
+  为获得最佳结果，仅使用 r 命令进行细化，并在每个细化级别迭代到完全收敛。同义词：extrapolate。
+
+<hr><a   id="F"> </a>
+<h2>F</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 切换命令日志记录到文件。如果开始记录，将提示您输入日志文件名。任何同名的现有文件将被追加。当表面退出时，日志记录自动停止。仅记录正确解析的命令。命令产生的输出不记录。交互式单字母命令的响应会被记录，但其他交互式命令的响应不会被记录。
+
+<hr><a   id="f"> </a>
+<h2>f</h2>
+<a href="#single-letter">单字母</a>主命令。
+设置<a href="iterate.htm#diffusion">扩散常数</a>。
+打印旧值并提示输入新值。<P>
+
+<hr><a   id="G"> </a>
+<h2>G</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 切换<a href="energies.htm#gravity-energy">重力</a>开或关。如果任何物体具有非零密度，则重力开始为 ON；否则为 OFF。如果后跟一个值，则将重力设置为该值。否则打印重力常数的旧值并提示输入新值。
+
+<hr><a   id="go"></a>
+<a   id="g"> </a>
+<h2>g</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 执行一次<a href="iterate.htm#iteration-step">迭代步</a>。
+ 输出包括剩余迭代次数（供想知道 1000 次迭代还剩多少的人参考）、面积和能量，以及<a href="iterate.htm#scale-factor">比例因子</a>。
+<code>g</code> 通常与迭代次数一起使用，如 "<code>g 100</code>"。
+用户可以通过向进程发送中断（准确地说是 SIGINT；CTRL-C 或键盘上的相应键）来中止重复迭代。
+  作为对懒惰用户的特别照顾，语法 "<code>g</code><i>n</i>" 等价于 "<code>g</code> <i>n</i>"。
+同义词：go
+
+<hr><a   id="H"> </a>
+<h2>H,h,?</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 打印一个非常原始的帮助消息，列出常用命令。
+ <a href="commands.htm#help">help</a> 更好，因为它可以访问完整的 HTML 文档。或者最好使用单独的 HTML 浏览器查看此文档。<P>
+
+<hr><a   id="i"> </a>
+<h2>i</h2>
+<a href="#single-letter">单字母</a>主命令。
+  打印各种信息：
+<ul>
+<li>  数据文件名
+<li>  总能量
+<li>  面片总面积
+<li>  元素计数和内存使用量
+<li>  面积归一化（如果开启）
+<li>  线性或二次模型
+<li>  共轭梯度是否开启
+<li>  数值积分阶数
+<li>  比例因子值和选项（固定或优化）
+<li>  扩散选项和扩散常数值
+<li>  重力选项和重力常数值
+<li>  抖动状态和温度
+<li>  间隙常数（用于间隙能量，如果激活）
+<li>  环境压力（如果理想气体模型生效）
+</ul><P>
+
+<hr><a   id="J"> </a>
+<h2>J</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 切换 <a href="single.htm#g">g</a> 命令每次迭代时的<a href="#j">抖动</a>。如果抖动被开启，
+ 将提示输入温度值。
+默认温度为 <a href="syntax.htm#jiggle_temperature">temperature</a> 内部变量的值。<P>
+
+<hr><a   id="j"> </a>
+<h2>j</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 抖动所有顶点一次。用于模拟退火。
+ 适用于振荡陷入凹槽的表面，特别是晶体积分。如果未在命令中给出温度，将提示您输入 "temperature" 作为缩放因子。
+默认温度为 <a href="syntax.htm#jiggle_temperature">jiggle_temperature</a> 内部变量的值，初始值为 0.05。
+实际抖动是每个顶点独立的随机位移，服从高斯分布，偏差为温度乘以平均边长。有关用户可定义的扰动，请参见
+<a href="commands.htm#longj">longj</a> 命令。<P>
+
+<hr><a   id="K"> </a>
+<h2>K</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 查找最小角度小于指定截断值的瘦长三角形。如果未在命令行中给出值，将提示您输入。此类三角形的最长边将被细分。
+ 应随后执行微小边移除 (<a href="single.htm#t">t</a>) 和等角化 (<a href="single.htm#u">u</a>)。
+默认情况下，长边在其中点处细分，但如果执行 "k_altitude_mode on"，则将在对顶点的垂足处细分。
+<P>
+
+<hr><a   id="k"> </a>
+<h2>k</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 为 <a href="constrnt.htm#convex-constraint">凸约束</a>的 <a href="energies.htm#gap-energy">间隙能量</a>设置 "间隙常数"。添加大致与边和边界之间面积成比例的能量。如果未在命令行中给出值，将提示您输入。正常值大约为 1 的数量级。值 k = 1 最接近真实面积。使用 0 可消除该能量。<P>
+
+<hr><a   id="l"> </a>
+<a   id="edge_divide"></a>
+<h2>l  (小写 L)</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 细分长边，必要时创建新面片。如果未在命令中给出值，将提示您输入截断边长。现有长于截断值的边将仅被细分一次。新创建的边不会被细分。因此之后可能仍有一些长边。如果输入 h，将获得边长直方图。如果在没有值的情况下按 RETURN，则不会执行任何操作。使用细化命令 <a href="single.htm#r">r</a> 比细分所有边要好得多。"<code>l</code> <i>value</i>" 的同义词是 "<code>edge_divide</code> <i>value</i>"。
+ 此命令不考虑 <a href="elements.htm#no_refine,-edge">no_refine</a> 属性。
+ <P>
+
+<hr><a   id="M"> </a>
+<h2>M</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 设置模型类型为
+ <a href="model.htm#linear-model">线性</a>、
+ <a href="model.htm#quadratic-model">二次</a>或
+<a href="model.htm#Lagrange-model">拉格朗日</a>。从线性切换到二次会在每条边的中点添加顶点。从二次切换到线性会删除中点。可选地在命令行中接受新模型类型（1 为线性，2 为二次，&gt; 2 为拉格朗日）。否则将提示您。<P>
+
+<hr><a   id="m"> </a>
+<h2>m</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 切换对<a href="iterate.htm#optimizing-scale">最优</a>全局运动 <a href="#g">比例因子</a>的二次搜索。如果搜索被切换为 OFF，将提示您输入固定比例因子。如果在命令中给出值，则设置固定比例因子。
+
+<hr><a   id="N"> </a>
+<h2>N</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 将物体<a href="elements.htm#target-volume">目标体积</a>设置为当前实际<a href="elements.htm#body-volume">体积</a>。<P>
+
+<hr><a   id="n"> </a>
+<h2>n</h2>
+<a href="#single-letter">单字母</a>主命令。
+  切割山脊和山谷。查找具有两个相邻面片且这些面片的法线夹角大于某个截断角的边。如果未在命令中给出值，将提示您输入截断角（弧度）。符合条件的边的相邻面片将通过在中心放置新顶点进行细分。应随后执行<a href="#u">等角化</a>。在<a href="model.htm#string-model">弦模型</a>中，它将细化边之间角度（平行方向）超过给定值的顶点旁边的边。可选地在命令行中接受截断角。<P>
+
+<hr><a   id="O"> </a>
+<h2>O</h2>
+<a href="#single-letter">单字母</a>主命令。
+
+  弹出非最小边。扫描附着多于三个面片的边。将此类边拆分为三面片边。拆分沿多条边传播直到遇到某些障碍。此命令适用于所有面片具有相等张力的表面。也尝试适当地弹出墙上的边。有关尝试哪些边的更精细控制，请使用 <a href="commands.htm#pop">pop</a> 命令。
+  尝试 octa.fe 作为示例。<P>
+
+<hr><a   id="o"> </a>
+<h2>o</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 弹出非最小顶点。此命令扫描表面，查找不具备肥皂膜中合法的三种最小切锥之一拓扑结构的顶点（平面、三重边、四面体点）。
+  这些顶点被 "弹出" 到适当的局部拓扑。
+算法是用一个球体替换顶点。进入原始顶点的面片在球体表面处被截断。球体被那些面片划分为单元格，最大的单元格被删除，这保留了表面补集的拓扑。
+一个特殊情况是两个锥体在顶点处相遇；如果锥体足够宽，它们将被合并，否则将被拆分。在合并锥体的情况下，如果两个锥体内部被定义为同一物体的一部分，则不会在合并产生的颈部放置面片；如果它们是不同的物体或没有物体，则会在颈部放置面片。
+仅测试表面内部的顶点，不测试固定或在约束或边界上的顶点。
+   尝试 popstr.fe 和 octa.fe 作为示例。<P>
+
+<hr><a   id="P"> </a>
+<h2>P</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 生成图形输出文件。"P" 代表 "picture"（图片）。
+  除非在命令行中给出菜单选项，否则将显示一个菜单。
+ 对于 2D 图形选项，视图与 <a href="#s">s</a> 命令显示的视图相同。
+ 对于输出到文件的选项，将提示您输入文件名。
+ 可能会询问您一些其他可能的选项：
+<dl>
+<dt><code>Display raw cells, connected bodies or clipped cells? (0,1,2)</code></dt>
+<dd>  如果您正在进行<a href="model.htm#torus-model">环面模型</a>，除非您已经设置了一个显示选项，否则将要求您选择<a href="model.htm#torus-display">显示选项</a>。 </dd>
+<dt><code>Do normal interpolation?</code></dt>
+<dd>
+  某些格式能够在顶点法线之间进行插值以实现更平滑的着色，将询问您是否要执行此操作。</dd>
+<dt><code>Do inner, outer, or all surfaces? (i,o,a)</code></dt>
+<dd> 当存在物体时，可以选择绘制内表面（与两个物体相邻）、外表面（与 0 或 1 个物体相邻）或所有表面。</dd>
+<dt><code>Do body colors?</code> </dt>
+<dd> 这给您机会为不同物体着色。如果选择是，将使用当前颜色映射文件根据 ID 号为物体着色。
+  此方案是 Evolver 早期的遗留物，建议您改用
+<a href="elements.htm#color,-facet">color</a>、
+<a href="elements.htm#frontcolor">frontcolor</a>
+ 和 <a href="elements.htm#backcolor">backcolor</a> 面片属性。 </dd>
+<dt><code>Enter name of colormap file: </code></dt>
+<dd>  如果没有当前颜色映射文件，将提示您输入。
+ 颜色映射文件的格式为每行一组 RGB 值，值在 0 和 1 之间。（此映射可能并非在所有设备上都有效。）</dd>
+<dt><code> Thicken? (n | y [thickness(0.001)])</code></dt>
+<dd>
+ 可能还会询问您是否要加厚。如果选择是，每个面片将被记录两次，方向相反，顶点从原始位置沿法线方向移动加厚距离（该选项允许您输入）。每个顶点使用的法线与法线插值使用的法线相同，因此平面顶点周围的所有面片将使该顶点移动相同的量。三重结将被分离。加厚适用于坚持表面方向一致的渲染程序，或存在表面背面透视问题的程序。
+选择 'y' 或 'n' 将重置加厚切换。如果回答 'y'，可以可选地指定厚度，默认值为 <a href="syntax.htm#thickness">thickness</a> 内部变量的值。</dd>
+
+</dl>
+输出类型的菜单选项为：
+<dl>
+<dt><code>1. Pixar file</code></dt>
+<dd>  Pixar 格式。实际上与选项 2 格式相同。</dd>
+<dt><code>2. OOGL file</code></dt>
+<dd>这是 <a href="graphics.htm#geomview">geomview</a> 使用的文件格式，即面向对象图形语言。适合直接输入到 geomview。</dd>
+<dt><code>3. PostScript file</code></dt>
+<dd> 生成 <a href="graphics.htm#postscript">PostScript 文件</a>。</dd>
+<dt><code>4. Triangle file</code></dt>
+<dd>私有格式文件，仅列出数据。现在不太有用了。</dd>
+<dt><code>5. Softimage file</code></dt>
+<dd>以 Softimage 格式输出文件。</dd>
+<dt><code>8. Start simultaneous geomview</code></dt>
+<dd>如果安装了 <a href="graphics.htm#geomview">geomview</a> 软件包，此命令将启动 geomview 并显示当前表面。
+除非 <a href="toggle.htm#autodisplay">autodisplay</a> 被切换为关闭，否则对表面的更改会自动显示。</dd>
+<dt><code>9. End simultaneous geomview</code></dt>
+<dd>终止任何 <a href="graphics.htm#geomview">geomview</a> 程序或管道。</dd>
+<dt><code>A. Start OOGL pipe.</code></dt>
+<dd> Geomview 当前使用管道接口。
+ 这将启动一个具有 geomview 输出的命名管道，但不调用 geomview。将告知您管道的名称，由您启动管道读取器。Evolver 阻塞直到启动管道读取器。这对于让第二个 Evolver 实例通过让 geomview 加载管道来向 geomview 提供第二个表面很有用。也适用于检查 Evolver 正在向 geomview 发送什么。<a href="commands.htm#geompipe">geompipe</a> 命令执行相同的操作。
+使用 "P 9" 终止管道。
+注意一次只能有一个 geomview 输出，因此不能同时拥有 geomview 显示和单独的管道。</dd>
+<dt><code>B. End OOGL pipe.</code></dt>
+<dd>与选项 9 相同。</dd>
+</dl>
+<hr><a   id="p"> </a>
+<h2>p</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 在<a href="datafile.htm#ideal-gas-decl">理想气体模型</a>中设置环境压力。
+如果未在命令中给出值，将提示您输入。较大的值使物体更不可压缩。<P>
+
+<hr><a   id="Q"> </a>
+<h2>Q</h2>
+<a href="#single-letter">单字母</a>主命令。
+报告用户定义的方法实例和命名量的当前值。如果 show_all_quantities 切换为开，则也会显示内部量。
+当使用 convert_to_quantities（与 -q 命令行选项相同）时，此命令特别有用，因为此时约束积分等内部值以方法实例的形式呈现。
+  <P>
+
+<hr><a   id="q"> </a>
+<h2>q</h2>
+<a href="#single-letter">单字母</a>主命令。语法：
+<pre>    q
+    q <em>expr</em>
+</pre>
+单独使用时，"q" 会弹出提示让您输入新的数据文件名。在此提示下，按 Enter 键将返回当前表面，再按一个 "q" 将退出 Evolver，其他任何内容将被视为新数据文件的名称。
+当 "quit" 后跟一个值时，Evolver 立即退出，并使用该值作为退出代码，这在脚本中或从其他程序运行 Evolver 时很有用。退出 Evolver 会自动关闭任何图形窗口，且不保存任何内容。与 "quit" 命令相同。
+"quit"、"bye" 和 "exit" 是同义词。
+ <P>
+
+<hr><a   id="r"> </a>
+<h2>r</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 细化三角剖分。边被一分为二，面片被分为四个具有继承属性的面片。
+设置了 no_refine 属性的边和面片不会被细化。
+  报告元素结构的数量和这些结构使用的内存量。<P>
+
+<hr><a   id="s"> </a>
+<h2>s</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 使用<a href="graphics.htm#screen-graphics">屏幕图形</a>显示表面。进入图形命令模式。
+  <a href="model.htm#torus-model">环面模型</a>表面具有您第一次时会被询问的<a href="model.htm#torus-display">显示选项</a>。
+  图形窗口可以通过 <a href="commands.htm#close_show">close_show</a> 命令关闭。<P>
+
+<hr><a   id="t"> </a>
+<h2>t</h2>
+<a href="#single-letter">单字母</a>主命令。
+  消除微小边及其相邻面片。如果未在命令中给出值，将提示您输入截断边长。如果输入 h，将获得边长直方图。如果在没有值的情况下按 RETURN，则不会执行任何操作。某些边可能由于被固定或端点具有与边不同的属性而无法消除。<P>
+
+<hr><a   id="U"> </a>
+<h2>U</h2>
+<a href="#single-letter">单字母</a>主命令。
+  切换<a href="iterate.htm#conjugate-gradient">共轭梯度</a>模式，与默认梯度下降模式相比，通常能更快收敛到最小能量。唯一的区别是运动沿共轭梯度方向进行。
+<a href="iterate.htm#scale-factor">比例因子</a>应处于优化模式。
+  共轭梯度历史向量在每次表面修改（如细化或等角化）后都会重置。在大的更改（例如体积更改）之后，运行几次不带共轭梯度的步骤以恢复稳定性。<P>
+
+<hr><a   id="u"> </a>
+<a   id="equiangulation"></a>
+<h2>u</h2>
+<a href="#single-letter">单字母</a>主命令。
+  此命令称为 "等角化"，尝试优化三角剖分。在<a href="model.htm#soapfilm-model">肥皂膜模型</a>中，每条具有两个相邻面片（因此是四边形的对角线）的边都会被测试，看切换四边形对角线是否会使三角形更等角。
+  对于平面三角剖分，完全等角化的三角剖分是 Delaunay 三角剖分，但该测试对于 3 空间中的偏斜四边形也有意义。可能需要重复该命令几次才能获得完全的等角化。
+  <a href="commands.htm#edgeswap">edgeswap</a> 命令可以强制翻转指定的边。<P>
+   在<a href="model.htm#simplex-model">单纯形模型</a>中，等角化仅适用于表面维度 3。在那里，当四面体的一个面违反 Delaunay 空洞条件时，可以执行两种类型的移动：将具有公共面的两个四面体替换为三个，或者反向操作，将围绕公共边的三个四面体替换为两个，具体取决于条件如何被违反。
+  此命令在弦模型中无效。
+<hr><a   id="V"> </a>
+<h2>V</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 顶点平均。对于每个顶点，计算新位置作为相邻面片质心的面积加权平均值。仅使用具有相同约束和边界的相邻面片。至少在一阶上保持体积。有关不保持体积的顶点平均，请参见 <a href="commands.htm#rawv">rawv</a> 命令；有关忽略约束相似性的，请参见 <a href="commands.htm#rawestv">rawestv</a>。三重边上的顶点仅与三重边上的相邻顶点进行平均，并且仅当恰好有两个相邻三重边顶点时才进行平均。
+ 固定顶点不移动。
+ 约束上的顶点会投影回其约束上。新顶点位置的计算在任何顶点移动之前全部完成。有关应用于顶点子集的顺序移动，请参见
+<a href="commands.htm#vertex_average">vertex_average</a> 命令。<P>
+
+<hr><a   id="v"></a>
+<a   id="show_vol"></a>
+<h2>v</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 显示每个物体的目标体积、实际体积和压力。
+ 也显示命名量。压力实际上是拉格朗日乘子。压力在迭代之前计算，因此报告的值本质上落后一次迭代。
+ 同义词：show_vol <P>
+
+<hr><a   id="W"> </a>
+<h2>W</h2>
+<a href="#single-letter">单字母</a>主命令。
+  切换位似变换。如果位似变换为 ON，则每次迭代后，表面被放大，使得所有物体的总体积为 1。
+  适用于没有任何放大约束的表面，以查看表面坍缩到一点时的极限形状。<P>
+
+<hr><a   id="w"> </a>
+<h2>w</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 尝试清除小三角形。如果未在命令中给出值，将提示您输入截断面积值。如果输入 h，将获得面积直方图以供参考。如果在没有值的情况下按 RETURN，则不会执行任何操作。某些小三角形可能由于约束或其他障碍而无法消除。
+  操作是消除三角形上的一条边，在此过程中消除多个面片。边将按从最短到最长的顺序尝试消除。警告：虽然会检查消除边是否合理，但前提是面片相对较小。如果您告诉它消除所有面积低于 5 的三角形，Evolver 可能会毫不犹豫地消除您的整个表面。<P>
+
+<hr><a   id="X"> </a>
+<h2>X</h2>
+<a href="#single-letter">单字母</a>主命令。
+列出当前的<a href="elements.htm#extra-attributes">额外属性</a>，包括名称、维度、类型、字节大小以及在元素结构中的偏移量。也会列出一些内部属性，其名称以双下划线开头。
+
+<hr><a   id="x"> </a>
+<h2>x</h2>
+<a href="#single-letter">单字母</a>主命令。
+与 q 相同。退出 Evolver 或启动新表面。<P>
+
+<hr><a   id="y"> </a>
+<h2>y</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 环面复制。在<a href="model.htm#torus-model">环面模型</a>中，提示输入周期编号（1、2 或 3），然后在该方向上将环面单元胞加倍。用于将简单配置扩展为更广泛的配置。<P>
+
+<hr><a   id="Z"> </a>
+<h2>Z</h2>
+<a href="#single-letter">单字母</a>主命令。
+  放大顶点。询问顶点编号和半径。编号为数据文件顶点列表中给出的编号。请注意，转储时顶点编号会更改（但正确的当前放大顶点编号将记录在转储中）。消除距离顶点 1 半径距离之外的所有元素。半径处的新边被设为固定。用于研究切锥和复杂行为，例如线穿过表面的位置。缩放仅对没有物体的表面实现。<P>
+
+<hr><a   id="z"> </a>
+<h2>z</h2>
+<a href="#single-letter">单字母</a>主命令。
+ 对二次模型执行曲率测试。如果您正在寻找具有单调平均曲率的表面，应该很有用。目前检查沿边的折痕角度并在面片内部采样曲率。方向相对于面片最初定义的方式。已弃用。<P>
+
+<hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+</body>
+</html>

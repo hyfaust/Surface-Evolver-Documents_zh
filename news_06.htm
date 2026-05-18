@@ -1,0 +1,101 @@
+<!DOCTYPE HTML >
+<HEAD><TITLE>Surface Evolver 文档 - 通讯 6</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-6"></a>
+<h1>Surface Evolver 通讯第6期</h1>
+<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
+<hr><pre>
+
+
+                      Surface Evolver 通讯第6期
+                              1993年12月16日
+
+                    编辑: Ken Brakke, brakke@geom.umn.edu
+
+目录:
+  Kelvin的分割被超越
+  Ftp目录更改
+  版本1.93的新功能
+  参考文献
+
+
+
+Kelvin的分割被超越：
+1887年，Lord Kelvin提出了将空间分割成等体积单元以最小化界面面积的问题。
+他建议了twointor.fe中所示的单元，这基本上是bcc晶格的Voronoi单元。
+现在，都柏林三一学院的Robert Phelan和Denis Weaire发现了一种使用两种类型单元的结构，
+其面积比Kelvin的少0.3%。他们的Evolver数据文件phelan.fe现在包含在Evolver包中。
+
+Ftp目录更改：
+
+版本1.93现在可以通过ftp获取。由于几何中心ftp目录的重新安排，
+路径现在是pub/software/evolver/evolver.tar.Z。
+没有Mac版本的1.93，因为我目前无法访问Mac。
+
+下载时，请检查文件上的日期，确保是12月16日或更晚。
+由于我的旅行计划，我在文件实际进入ftp目录之前发送此通讯。
+
+此外，存档现在解压为三个子目录：src（源代码）、doc（手册）和fe（示例数据文件）。
+
+新功能：
+
+ 添加了"history"命令以打印命令历史。为方便起见，
+  单字母命令现在包含在历史中。但历史不会记录命令可能发出的提示响应。
+
+  添加了用于边和面上标量和向量被积函数的命名量。
+  方法名称是edge_scalar_integral、facet_scalar_integral、
+  edge_vector_integral和facet_vector_integral。
+  数据文件中的示例用法：
+
+     quantity zweight info_only method facet_scalar_integral global
+     scalar_integrand z^2
+
+     quantity fvec energy method facet_vector_integral global
+     vector_integrand
+     q1: y^2
+     q2: x*z 
+     q3: y^4
+
+  量名称现在可以用作元素属性。
+  总量的值必须引用为"total quantityname"。
+
+  命令重复次数现在可以是表达式。
+
+  更多用于命令事件计数器的内部变量：
+  equi_count、delete_count、notch_count、dissolve_count、pop_count、
+  where_count。这些可以在查询中使用，以使操作依赖于先前等角化、
+  删除、刻痕、溶解或弹出命令的结果，或使用满足命令最后一个
+  where子句的项目数量。这些变量保持其值直到下一个适当类型的命令。
+
+  1.92中的手册索引在页码上略有偏差。在当前手册中已修复。
+
+  DOS版本改进了图形。识别更高的分辨率和更多的颜色。
+  参见evolver.zip中的evolver.doc。
+
+  可以使用SET命令将命名量应用于元素。例如，
+  如果您已经为面定义了一个命名量，比如pogo，您可以执行
+     set facet quantity pogo where color == red
+  Unset也可以。当然，这些命令不适用于声明为全局的量。
+
+
+参考文献
+
+  D. Weaire and R. Phelan, "A counter-example to Kelvin's conjecture
+  on minimal surfaces", preprint.
+
+  X. Michalet, D. Bensimon, and B. Fourcade, "Fluctuating vesicles
+  of high topology", to appear in Physical Review Letters.
+  使用Evolver和平均曲率平方能量来模拟弹性细胞膜。
+
+
+祝您冬至快乐，近日点愉快！
+
+Surface Evolver 通讯6结束
+</pre><hr>
+<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
+</body>
+</html>

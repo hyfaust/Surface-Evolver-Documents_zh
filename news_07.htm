@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 简报 7</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-7"></a>
+<h1>Surface Evolver 简报 第7期</h1>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><pre>
+
+
+                      Surface Evolver 简报 第7期
+                              1994年1月24日
+
+                    编辑: Ken Brakke, brakke@geom.umn.edu
+
+目录:
+版本 1.94.
+通过 Hessian 矩阵最小化.
+新功能.
+参考文献更新.
+
+版本 1.94:
+
+版本 1.94 现已可通过 ftp 获取。仍然没有新的 Mac 版本。
+请注意 NeXT 版本，因为我做了一些可能影响 NeXT 界面行为的更改，
+而我目前无法访问 NeXT 进行测试。
+
+未压缩版本的 evolver.tar 已从 ftp 目录中删除。
+如果这给任何人带来问题，请告诉我。
+
+
+通过 Hessian 矩阵最小化:
+
+  Evolver 通常使用的梯度下降法是一阶方法，只使用能量的一阶导数。
+二阶方法可能提供更快的收敛速度，并且还能判断临界点的稳定性。
+通过使用 Hessian 矩阵（二阶导数矩阵）与梯度相结合，可以得到能量的
+二次近似，从而求解最小值（或其他临界点）。Evolver 已经具备了
+初步的这种能力，但由于其非常有限，我之前没有公开宣传。
+现在它已经改进到可能有用的程度。
+
+  执行一次迭代的命令是 "hessian"。其使用有一些限制。
+它适用的能量类型包括：面积、约束边积分、单纯形模型面片面积，
+以及以下命名量方法：edge_tension、edge_length、facet_tension、
+facet_area、vertex_scalar_integral、edge_scalar_integral、
+edge_vector_integral、facet_scalar_integral、facet_vector_integral、
+facet_2form_integral 和 gravity_method。特别注意它不适用于
+弦模型或普通重力。可以在肥皂膜模型中用 edge_length 量模拟弦，
+用 gravity_method 代替普通重力。处理的约束包括：物体体积、
+水平集约束和涉及上述方法的固定命名量。参数化边界上的
+非固定顶点无法处理。这些限制中的一部分将在未来版本中移除。
+
+  Hessian 方法应仅在表面非常接近最小值（或某个临界点）时尝试。
+我建议使用其他方法（如共轭梯度法）演化，直到能量收敛到大约8位精度。
+如果你从太远的地方尝试 Hessian 方法，它可能会使你的表面爆炸。
+但如果你执行 "check_increase ON"，当 Hessian 方法会增加能量时，
+表面将恢复到之前的状态。
+
+  运行 Hessian 方法时，当矩阵不是正定的时，可能会产生许多警告消息。
+当存在约束（如体积）或退化临界点（例如，由于平移自由度）时，这是正常的。
+类似这样的消息：
+  WARNING: sdrv: Not positive definite. Diag[25] = -3.84845;
+表示原始能量 Hessian 矩阵是不定的。如果约束不能使净 Hessian 矩阵
+成为半正定的，那么你会得到类似这样的消息：
+  WARNING: Constrained Hessian not positive definite. Index 3
+其中索引是负特征值的数量。这可能在前几次迭代中出现。
+不用担心，除非它在 Hessian 方法完全收敛时出现。
+
+  对于退化临界点，零空间方向会产生类似这样的消息：
+    WARNING: sdrv: Diag[39] = 3.28904e-15; max in row: 3.1778e-15; adding 1
+只要行中的最大值也很小，一切都没问题。"adding 1" 只是一个内部技巧，
+用于获得非零主元。
+
+  在求解 Hessian 时，将值视为零的准则由变量 "hessian_epsilon" 设置。
+其默认值为 1e-8。
+
+  要了解 Hessian 方法的感觉，请用 cube.fe 试一试。
+更多详细信息，请参阅手册技术参考章节中的 Hessian 部分。
+
+
+新功能:
+
+  新的命名量方法：vertex_scalar_integrand、facet_2form_integral。
+
+  命名量方法的 Hessian 矩阵：edge_length、facet_area、
+  vertex_scalar_integral、edge_scalar_integral、edge_vector_integral、
+  facet_scalar_integral、facet_vector_integral、facet_2form_integral、
+  gravity_method。
+
+  添加了 edge wrap 作为可读属性。
+
+  添加了边和面片的坐标属性。解释为
+  边向量分量和面片法向量分量。
+
+  命令在成功解析后添加到历史列表，而不是在成功执行后。
+
+  未找到的文件被视为错误，而不是提示输入新名称（数据文件除外）。
+
+  新的算术运算符：mod（% 的同义词）、imod、idiv。
+  新的算术函数：atan2(y,x)。
+
+  边和面片的 "Show" 条件保存在转储文件的 "read" 部分。
+
+  总能量在转储文件顶部的注释中。
+
+  3D 弦模型的 PostScript 输出有选项可以进行带边界的交叉。
+
+  w 是坐标 x4 的同义词。
+
+
+
+参考文献更新:
+
+X. Michalet, B. Fourcade and D. Bensimon, "Fluctuating vesicles of
+nonspherical topology," Phys. Rev. Lett. 72, 168, 1994.
+
+简报 7 结束。
+
+</pre><hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+</body>
+</html>

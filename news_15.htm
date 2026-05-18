@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 简报 15</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-15"></a>
+<h1>Surface Evolver 简报 第 15 期</h1>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><pre>
+
+
+                    Surface Evolver 简报 第 15 期
+                              1998年8月10日
+
+                   编辑：Ken Brakke, brakke@susqu.edu
+
+目录
+  版本 2.10b
+  新功能和更改
+  几何中心关闭
+  Evolver 网页
+  Geomview 错误
+
+
+版本 2.10b
+  Surface Evolver 版本 2.10 现已可用。自从上一个版本 2.01 发布以来
+已经过了一段时间，因此我将版本号提升到了 2.10；实际上最近一个月
+又有一些更改使版本号变为 2.10b。没有重大更改，只是错误修复和一些
+小的新功能。Windows NT/95/98 版本的 OpenGL 图形有了很大改进。
+Mac 版本仍然是 2.01，因为我无法使用带编译器的 Mac。
+
+新功能和更改
+
+   大部分更改都是错误修复、调整以及为各种用户提供的特殊功能。
+   以下是具有普遍意义的更新：
+
+   在数据文件中，将边设为 FIXED（固定）不再固定其端点。这与
+   固定面和运行时固定边的工作方式一致。如果您在任何数据文件中
+   依赖固定边使其端点固定，且没有显式固定端点，您应该修改数据文件。
+   一种简便的方法是在数据文件末尾的 READ 部分中加入命令
+   "foreach edge ee where fixed do fix ee.vertex"。转储文件不需要修复。
+
+   "load"（加载）命令现在会终止包含它的命令，因为从技术上讲，
+   该命令与旧曲面一起被清除了。"Load" 适合用作脚本中的最后一个命令，
+   或在通过重定向用作 stdin 的脚本中使用。
+
+   Windows NT/95/98 版本使用 OpenGL 后图形效果大幅改善。可以使用
+   鼠标左键旋转、平移或缩放，右键拾取元素，甚至可以进行交叉立体
+   显示。在图形窗口中输入 'h' 可查看命令摘要。还制作了程序的
+   悬链面（catenoid）图标。
+
+   C 风格赋值运算符 +=、-=、*=、/= 在合理的地方可用。
+
+   水平集约束公式和参数化边界公式可以包含顶点额外属性，这在
+   将公式定制到各顶点时非常有用，例如使每个顶点保持在自己的
+   z 水平面上。
+
+   参数化边界可以有能量和内容积分，与水平集约束的方式相同。
+
+   命令输出重定向到文件，使用 &gt;&gt; 追加，使用 &gt;&gt;&gt; 覆盖。
+
+   变量可以在运行时通过 "unfix varname" 和 "fix varname"
+   分别在优化或非优化状态之间切换。
+
+   数据文件头中的 "keep_macros" 使宏在数据文件加载后仍然有效。
+
+   命令行选项 -i 将保持元素 ID 与数据文件中的一致，而不是按
+   默认方式重新连续编号。
+
+   如果您想重新排列内部列表中元素的顺序（即 'list vertices' 等命令
+   列出元素的方式），可以定义额外属性 vertex_order_key、edge_order_key、
+   facet_order_key、body_order_key、facetedge_order_key，赋予它们适当的值，
+   然后给出命令 reorder_storage。请参阅发行版 fe 目录中的
+   reorder.cmd。
+
+   'renumber_all' 按内部列表顺序重新编号元素。
+
+   只读内部变量 'random' 用于生成 0 到 1 之间均匀分布的随机数。
+
+   增加了关于在数据文件中使用关键字作为标识符的警告。数据文件
+   仍会运行，但您的命令会错误解释这些标识符。
+
+   所有关键字都在在线帮助中。如果想检查一个潜在的关键字，可以
+   使用 'help "keyword"'。'help' 还能识别用户在当前曲面中定义的
+   标识符。在脚本中进行测试时，有一个函数 is_defined(stringexpr)，
+   如果名称已被使用则返回 1，否则返回 0。
+
+   在数据文件中，将边设为 FIXED 不再固定其端点。这与固定面和
+   运行时固定边的工作方式一致。
+
+   对于逻辑上依赖于元素方向的命名方法（如 facet_vector_integral 等），
+   当应用方法时会记录元素的相对方向。默认在数据文件中为正方向，
+   除非在应用于单个元素的方法或量的名称后添加了 '-'。
+
+
+几何中心关闭
+  赞助了我大量 Surface Evolver 工作的几何中心（Geometry Center）
+将于八月关闭。几何中心的网站和 ftp 站点应至少继续存在一年。
+我的电子邮件地址 brakke@geom.umn.edu 应继续有效。但是，我首选的
+电子邮件地址现在是 brakke@susqu.edu，Evolver 主页网站是
+http://www.susqu.edu/facstaff/b/brakke/evolver。
+
+Evolver 网页
+  我的 Evolver 主页 http://www.susqu.edu/facstaff/b/brakke/evolver
+提供下载、论文和许多示例数据文件。这些示例有不同程度的注释，
+但通常至少包含一个示例演化脚本。
+
+Geomview 错误
+  Geomview 版本 1.6 在拾取操作中有一个错误，阻止其向 Evolver
+报告正确的元素。此错误已在 geomview 补丁 1.6p7 中修复，但不幸
+的是该补丁尚未发布到 geomview 网站。更多信息请参见 Evolver 主页
+http://www.susqu.edu/facstaff/b/brakke/evolver。
+
+</pre><hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+</body>
+</html>

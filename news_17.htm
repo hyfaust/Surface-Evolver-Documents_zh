@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 简报 17</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-17"></a>
+<h1>Surface Evolver 简报 第 17 期</h1>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><pre>
+
+                         Surface Evolver 简报 第 17 期
+                              2003年8月20日
+
+                     作者：Ken Brakke, brakke@susqu.edu
+
+
+  Surface Evolver 版本 2.20 现已在以下地址可用：
+  http://www.susqu.edu/facstaff/b/brakke/evolver/evolver.htm。
+  这是自 1999 年版本 2.14 以来首次完整的新版本发布。
+
+  由于内部算法有各种修改和调整，建议您在完全信任新版本之前，
+  先在现有的数据文件上进行测试。如果发现任何显著异常，
+  请告知我。
+
+
+新功能和更改：
+
+  提供适用于 Mac OS 9 和 Mac OSX 的 Macintosh 版本。
+  除非收到用户的反馈要求，这将是最后一个 Mac OS 9 版本。
+
+  变量和元素额外属性可以是多维数组。"print" 命令可以打印
+  整个数组或数组的切片。
+
+  添加了带参数和返回值的函数以及带参数的过程。
+
+  变量名可以在命令块中声明为局部变量（local），以将其作用域
+  限制在该块内。防止全局命名空间污染。
+
+  变量和过程可以设为 "permanent"（永久），在加载下一个数据文件
+  时仍然保留。
+
+  有一个适用于 Unix 系统的简单手册页 evolver.1，仅描述命令行选项。
+
+  所有版本都可以使用 OpenGL/GLUT 图形。可以有图形窗口命令的
+  下拉菜单，以及具有不同视角的多个图形窗口。
+
+  "exec" 命令将解释并执行一段 Evolver 命令文本字符串。适用于
+  在脚本中生成命令。
+
+  有一个类似 C 语言的 FOR 循环结构，但不完全相同。
+  示例：for ( {inx:=1;rsum:=0;} ; inx &lt; 10 ; inx += 1 ) rsum += inx^2;
+
+  在加载数据文件早期生成的警告消息可能会滚出屏幕，因此如果
+  有消息，加载完成后会打印一条提示，用户可以使用
+  "print warning_messages" 重新打印消息。
+
+  在命令行和响应各种 Evolver 提示时，文件名中允许使用通配符。
+  但要非常小心不要得到意外的匹配。当文件名又长又具有描述性
+  而您输入疲劳时很有用。
+
+  约束和边界可以通过名称或编号来指定，即 "constraint topwall"
+  而不是 "constraint 1"。
+
+  "errprintf" 命令类似于 "printf"，只是它将输出发送到 stderr；
+  适用于脚本中标准输出被重定向到文件时的控制台输出。
+
+  "sparse_constraints"（稀疏约束）切换一种向约束投影的模式，
+  利用约束的稀疏性。使得在合理时间内处理 100,000 个及更多的体
+  成为可能。默认开启。
+
+  "augmented_hessian"（增广 Hessian）切换一种求解 Hessian 方程
+  的模式，利用约束的稀疏性。现在可以在合理时间内对 100,000 个
+  及更多的体执行 hessian 命令。默认开启。
+
+  为了精细控制面的颜色，如果定义了额外属性 frgb，则简单的颜色
+  编号将被覆盖："define facet attribute frgb real[3]"。颜色分量值
+  应在 0 到 1 的范围内。
+
+  "pop"（弹出）命令可以弹出选定的顶点集或边集。比通用的 "o"
+  和 "O" 弹出命令提供更多的控制。
+
+  特殊弹出命令 pop_edge_to_tri、pop_tri_to_edge、pop_quad_to_quad
+  执行泡沫演化中常见的拓扑变化。
+
+  可以在表达式的开头执行命令序列，方法是将命令放在反引号中，
+  后跟逗号。在约束和边界公式以及被积函数中很有用。
+
+  在 PostScript 输出中，可以通过定义边额外属性 ps_linewidth
+  来控制单个边的宽度。
+
+  "equiangulate"（等角化）命令对选定的边应用等角化测试和边交换，
+  与通用的 "u" 命令或非测试的 "edgeswap" 命令不同。
+
+  如果定义了 h_zero 顶点属性，它在各种平均曲率平方计算中优先于
+  全局变量 h_zero。
+
+  删除边和面时，在有选择的情况下优先保留三重边（及更高价边）。
+
+  默认的长度、面积和体积定义可以被其他命名方法替代。请参阅
+  文档中的 length_method_name、area_method_name 和
+  volume_method_name。
+
+</pre><hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+</body>
+</html>

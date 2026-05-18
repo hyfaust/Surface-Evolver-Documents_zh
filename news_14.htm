@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 简报 14</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+</head>
+
+<BODY>
+<a   id="newsletter-14"></a>
+<h1>Surface Evolver 简报 第 14 期</h1>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><pre>
+
+
+
+
+                    Surface Evolver 简报 第 14 期
+                              1996年8月15日
+
+                   编辑：Ken Brakke, brakke@geom.umn.edu
+
+目录
+  版本 2.01
+  新功能和更改
+  四面体网格化
+  招聘研究生/博士后——需要 Evolver 经验
+
+版本 2.01
+  Surface Evolver 版本 2.01 现已可在以下地址获取：
+  http://www.geom.umn.edu/locate/evolver
+  或通过匿名 ftp 从 geom.umn.edu 的 /pub/software/evolver 目录下载。
+  此版本主要是错误修复，但也有几个新功能，如下所列。
+
+  新增了 Mac 68K 和 Power PC 版本，分别为 Evolver68K.sea.Hqx
+  和 EvolverPPC.sea.Hqx。这是第一个原生 Power PC 版本，
+  也是 68K 版本一年来的首次更新。
+
+新功能和更改
+
+  为边和面新增了 no_refine（不细分）属性。它可以防止边被
+  'r' 命令细分。对于大型平坦的固定表面或轮廓线很有用。
+
+  您可以使用 new_vertex、new_edge、new_face 和 new_body
+  动态创建新元素。
+
+  V 命令已改进，在约束顶点上效果更好。此外，新增了
+  vertex_average（顶点平均）命令，可以对您选择的顶点进行
+  单独的顶点平均操作。
+
+  命令输出可以使用 &gt;&gt; 重定向符号追加到文件，例如：
+  { g 100; u; g 20 } &gt;&gt; "logfile"
+
+  对由三维单纯形（3D simplex）构成的曲面实现了等角化
+  （equiangulation）操作。
+
+  knot_energy 方法现在使用 "node_charge"（节点电荷）顶点属性
+  来计算其静电型能量。适用于在三维空间中展开网络图。
+
+  有一个实验性的动态链接库实现，用于约束、边界、被积函数等
+  中使用的函数。这可以用编译函数替代解释函数，以提高速度。
+
+  DOS 和 Windows 版本在带引号的字符串中保留字母数字转义序列，
+  使路径名不会被错误处理。
+
+  变量 transform_expr 和 transform_count 可以被打印，因此
+  如果您使用多重图像变换，可以查看当前状态。
+
+四面体网格化
+
+  一些用户对构建 Evolver 曲面内部的四面体网格感兴趣，
+  例如用于对固化的焊料进行应力分析。我整理了一套程序
+  来完成此工作，有需要的人可以通过匿名 ftp 从
+  geom.umn.edu 获取，路径为 /priv/brakke/tetra.tar。
+
+研究机会——需要 Evolver 经验：
+
+
+	项目：柔性聚氨酯泡沫的三维成像
+
+	   -  指导教师：Xiaodaong Zhang 和 Chris Macosko 教授
+		         （化学工程与材料科学系）
+
+	   -  目标：使用激光共聚焦显微镜和其他方法对泡沫进行
+	 	       成像，并使用现有软件（如 Koros、Surface Evolver）
+			或创建算法来测量泡沫气泡的尺寸
+
+	*  研究生助理或博士后薪资水平
+
+	*  有与工业界合作的机会
+
+	*  期望资质：
+	   -  较强的数学能力（尤其是几何学）
+	   -  熟练使用计算机（不需要编程经验）
+	   -  有图像处理和 UNIX 经验者优先（非必需）
+
+	*  如需更多信息，请联系 Xiaodong Zhang（发送简历申请）：
+	     Dept. of Chemical Engineering and Materials Science
+	     University of Minnesota
+	     151 Admundson Hall
+	     421 Washington Avenue SE
+	     Minneapolis, MN 55455
+	     电话：625-8573
+	     电子邮件：zhan0063@maroon.tc.umn.edu
+
+
+</pre><hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 简报 8</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-8"></a>
+<h1>Surface Evolver 简报 第8期</h1>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><pre>
+
+
+                      Surface Evolver 简报 第8期
+                              1994年6月23日
+
+                    编辑: Ken Brakke, brakke@geom.umn.edu
+
+目录:
+
+X-geomview
+版本 1.95
+参考文献
+
+X-geomview:
+
+几何中心创建了一个 X-windows 版本的 geomview，Evolver 长期以来
+一直在 Silicon Graphics 系统上使用它作为显示程序。但请注意，
+X-geomview 必须在软件中模拟所有 3D 图形，因为 X-windows 是一个
+2D 系统。因此 X-geomview 较慢，并且不使用机器可能拥有的任何
+内置 3D 图形硬件。它仍在开发中，可能有一些错误和移植问题。
+X-geomview 可通过匿名 ftp 从 geom.umn.edu 的 /pub/software/geomview
+获取。有预编译的二进制文件在 geomview-next.tar 和
+geomview-sun.x11-beta.tar.Z 中，其他系统的源代码在
+geomview-src.x11-beta.tar.Z 中。
+
+版本 1.95 现已可通过 ftp 获取。仍然无法更新 Macintosh 版本，
+从去年夏天起就这样了。任何急需的 Mac 用户如果认为我应该
+花时间尝试更新，请告诉我。
+
+版本 1.95 特性：
+
+手册的教程章节有两个新示例：旋转杆上的环形液体环，
+以及两个偏移焊盘之间的液态焊锡柱。数据文件是 ringblob.fe 和 column.fe。
+
+共轭梯度选项：添加了一个切换命令 "ribiere"，使共轭梯度方法
+使用 Polak-Ribiere 版本而不是 Fletcher-Reeves 版本。
+（该切换不会开启共轭梯度法。）Polak-Ribiere 似乎从停滞中恢复得更好。
+如果你经常需要停止并重启共轭梯度法，请尝试 "ribiere"。
+它很好地处理了手册中的悬链线示例。在获得进一步经验之前，
+我将在未来版本中将 Polak-Ribiere 设为默认。如果你遇到任何问题，
+请告诉我。
+
+共轭梯度爆炸：有时共轭梯度法想要移动得太远太快，以至于失去
+与体积约束的联系。以前，Evolver 每次迭代只做一两次牛顿法投影
+回到体积约束；现在它会做最多 10 次。普通迭代仍然只做一次投影，
+但你可以通过 "post_project" 切换获得额外的投影。如果 10 次迭代后
+收敛失败，你将收到警告消息，重复迭代将停止，并且变量
+"iteration_counter" 将为负数。
+
+额外属性：现在可以动态定义元素的额外属性，可以是单个值或向量。
+定义语法为：
+ DEFINE elementtype ATTRIBUTE name REAL|INTEGER [dim]
+其中 elementtype 是 vertex、edge、facet 或 body，name 是你选择的
+标识符，dim 是向量维度的可选表达式。目前实数和整数类型之间
+没有实际区别，因为所有内容都存储为实数。但未来可能会添加更多数据类型。
+示例：
+  define edge attribute charlie real
+  define vertex attribute newx real[3]
+相同的定义语法在数据文件的顶部部分和命令提示符下都有效。
+使用方式与内置属性（如 color）相同。命名量方法 hooke2_energy
+使用额外属性 hooke_size 作为每条边的平衡长度。
+
+通用量：现在提供了用于基本几何积分的命名量，适用于线性模型和二次模型，
+以及用于优化的 hessian 命令。基本方法包括：
+vertex_scalar_integral：顶点处的函数值。
+edge_tension 或 edge_length：边的长度。
+edge_scalar_integral：标量函数沿弧长的积分。
+edge_vector_integral：向量场沿边的积分。
+edge_general_integral：位置和切向量的标量函数沿边的积分。
+facet_tension 或 facet_area：面片的面积。
+facet_scalar_integral：标量函数在面片面积上的积分。
+facet_vector_integral：向量场在面片上的积分。
+facet_general_integral：位置和法向量的标量函数在面片上的积分。
+有关完整列表和更多详细信息，请参阅手册。
+
+二次模型：二次模型增加了更多内容，特别是各种命名量方法（见上文）。
+此外，边的 midv 属性在二次模型中获取边的中点。请注意，
+一些旧式功能在二次模型中不起作用，因为它们最终将在内部
+被命名量方法取代。其中包括弦长度（使用 edge_length 量）
+和环面模型中的体积（使用 facet_volume 量）。此外，边的中点
+在转储文件中记录为边的第三个顶点，因此可以重新加载二次模型。
+
+PostScript 标签：PostScript 输出现在有一个选项可以打印元素编号，
+以便于与数据文件交叉引用。边的方向通过标签稍微向边头偏移来指示，
+面标签根据你看到的那一侧带有符号。通过在标签提示时输入 'i' 或 'o'，
+你可以获得当前 ID 编号或原始 ID 编号。
+
+平方平均曲率：一些极端形状在检测表面的连贯局部方向时，
+对 effective_area 和 normal_curvature 版本的平方平均曲率造成了问题。
+现在有一个 "assume_oriented" 切换，允许 Evolver 假设面片定义具有
+一致的局部方向，因此它不必自己去判断。
+
+PostScript 输出框的大小已更正为 8x8 英寸，如 PS 文件头中所述。
+之前是 7.6x7.6 英寸。
+
+移除 Minneview：Minneview 是 geomview 的前身，已被移除。
+Makefile 不再需要 -DNO_MV。
+
+"quietgo" 切换将抑制 'g' 命令的正常输出。
+
+新的数学函数：tanh、asinh、acosh、atanh。
+
+新的只读变量："iteration_counter" 是当前迭代循环的索引
+（在 'g' 输出的第一列中打印）。
+
+平方曲率的命名量方法：sq_mean_curvature、
+  eff_area_sq_mean_curvature、normal_sq_mean_curvature。
+  所有方法都适用于预设曲率 h_zero。
+
+欠松弛：优化比例迭代在运动方向上找到能量最小值。
+你可以设置变量 "scale_scale"，它乘以最优比例因子以获得实际运动，
+从而探索欠松弛或过松弛的效果。欠松弛可能有助于减少短波长振荡。
+
+
+参考文献。
+
+S.J. Townsend and C.S. Nichols, "The Geometry of Grain Disappearance in Thin
+Polycrystalline Films" to appear in volume 343 of the Materials Research
+Society Symposium Proceedings Series, 1994.
+
+
+</pre><hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+</body>
+</html>

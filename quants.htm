@@ -1,0 +1,607 @@
+   quantity nsq energy method normal_sq_mean_curvature global
+</pre>
+
+<hr>
+<a   id="sq_mean_mix"></a><a   id="mix_sq_mean_curvature"></a><h3>mix_sq_mean_curvature </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：表面平方平均曲率的积分，结合了平均曲率的近似公式。
+<blockquote><code> h = ((F&middot;F/N&middot;F)*sq_mean_mix + (F&middot;N/N&middot;N))/2  <br>
+
+  E = h<sup>2</sup>A/3. </code></blockquote>
+其中 F 是顶点处的力或面积梯度，N 是由体积梯度确定的单位法向量，
+A 是相邻面的面积。sq_mean_mix 是用户定义的变量，控制组合；
+其默认版本为 0。
+警告：对于某些极端形状，Evolver 可能难以检测一致的局部表面方向。
+assume_oriented 开关允许 Evolver 假设面已定义为一致的局部方向。
+<br>
+如果定义了参数或顶点属性 <code>h_zero</code>，则每个顶点的值为
+<blockquote><code>  E = (h-h<sub>0</sub>)<sup>2</sup> A/3  </code></blockquote>
+
+  如果顶点在一个或多个约束上，F 和 N 将投影到约束上，
+  本质上使约束充当镜像对称平面。
+<br>
+<br>元素：顶点。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+  parameter sq_mean_mix = 0.5
+  quantity mixsq energy method mix_sq_mean_curvature global
+</pre>
+
+<hr> <a   id="star_sq_mean_curvature"></a><h3>star_sq_mean_curvature </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：表面平方平均曲率的积分。
+这是 <a href="#sq_mean_curvature">sq_mean_curvature</a> 的不同实现，
+它具有海森矩阵。
+此方法不再需要顶点周围的完整顶点圆；边界边被视为在镜像对称平面上，
+这通常是正确的。
+  表面的正方向由顶点内部面列表的第一个面的正方向确定。
+此方法不使用 <code>h_zero</code> 参数进行规定平均曲率。
+<p>
+曲率计算在任何维度空间中工作。如果由于某种原因空间环境维度大于 3，
+并且您希望将曲率计算限制在前三个坐标，
+<a href="toggle.htm#calculate_in_3d">calculate_in_3d</a> 开关将执行此操作。
+<br>
+<br>元素：顶点。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：是。
+<br>示例数据文件声明：
+<pre>
+   quantity starsq energy method star_sq_mean_curvature global
+</pre>
+
+<hr> <a   id="star_eff_area_sq_mean_curvature"></a><h3>star_eff_area_sq_mean_curvature </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：表面平方平均曲率的积分。
+这是 <a href="#eff_area_sq_mean_curvature">eff_area_sq_mean_curvature</a>
+的不同实现，它具有海森矩阵。
+此方法不再需要顶点周围的完整顶点圆；边界边被视为在镜像对称平面上，
+这通常是正确的。
+  表面的正方向由顶点内部面列表的第一个面的正方向确定。
+此方法不使用 <code>h_zero</code> 参数。
+<p>
+曲率计算在任何维度空间中工作。如果由于某种原因空间环境维度大于 3，
+并且您希望将曲率计算限制在前三个坐标，
+<a href="toggle.htm#calculate_in_3d">calculate_in_3d</a> 开关将执行此操作。
+<br>
+<br>元素：顶点。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：是。
+<br>示例数据文件声明：
+<pre>
+   quantity seffsq energy method star_eff_area_sq_mean_curvature global
+</pre>
+
+<hr> <a   id="star_normal_sq_mean_curvature"></a><h3>star_normal_sq_mean_curvature </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：表面平方平均曲率的积分。
+这是 <a href="#normal_sq_mean_curvature">normal_sq_mean_curvature</a>
+的不同实现，更适合并行计算且具有海森矩阵。
+此方法不再需要顶点周围的完整顶点圆；边界边被视为在镜像对称平面上，
+这通常是正确的。
+  表面的正方向由顶点内部面列表的第一个面的正方向确定。
+此方法可以使用 <code>h_zero</code> 参数或顶点属性进行规定平均曲率。
+<p>
+曲率计算在任何维度空间中工作。如果由于某种原因空间环境维度大于 3，
+并且您希望将曲率计算限制在前三个坐标，
+<a href="toggle.htm#calculate_in_3d">calculate_in_3d</a> 开关将执行此操作。
+<br>
+<br>元素：顶点。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：是。
+<br>示例数据文件声明：
+<pre>
+   quantity stnsq energy method star_normal_sq_mean_curvature global
+</pre>
+
+警告：除以 F.N 有时会引起问题。通常 F 和 N 接近平行，
+但我见过它们接近平行且出现问题的情况。
+我建议使用 star_perp_sq_mean_curvature 代替。
+
+
+<hr> <a   id="star_perp_sq_mean_curvature"></a><h3>star_perp_sq_mean_curvature </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：表面平方平均曲率的积分。
+这是我目前最喜欢的平方平均曲率实现。
+它是专门设计为与作为面积梯度的平均曲率计算一致的实现，
+当法向运动开启时（用于 'g' 迭代的 <a href="toggle.htm#normal_motion">
+normal_motion</a> 开关，或具有 <a href="toggle.htm#hessian_normal">hessian_normal</a>
+的海森矩阵）。因此，如果使用此方法获得零平方平均曲率，
+然后切换到面积能量，海森矩阵将报告精确收敛。
+同样，如果您进行规定曲率，然后转换为具有体积约束的面积最小化。
+此方法具有海森矩阵。
+此方法不需要顶点周围的完整顶点圆；边界边被视为在镜像对称平面上，
+这通常是正确的。
+此方法可以使用 <code>h_zero</code> 参数或顶点属性进行规定平均曲率。
+顶点处能量的实际公式为
+<blockquote><code>  h = (1/2)(F&middot;N/N&middot;N) <br>
+  E = (h-h<sub>0</sub>)<sup>2</sup> A/3 = (3/4)(F&middot;N/N&middot;N - 2h<sub>0</sub>)<sup>2</sup>A </code></blockquote>
+其中 F 是顶点处的面积梯度，N 是体积梯度，A 是相邻面的面积。
+  如果顶点在一个或多个约束上，F 和 N 将投影到约束上，
+  本质上使约束充当镜像对称平面。
+  表面的正方向由顶点内部面列表的第一个面的正方向确定。
+<p>
+曲率计算在任何维度空间中工作。如果由于某种原因空间环境维度大于 3，
+并且您希望将曲率计算限制在前三个坐标，
+<a href="toggle.htm#calculate_in_3d">calculate_in_3d</a> 开关将执行此操作。
+<br>
+<br>元素：顶点。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：是。
+<br>示例数据文件声明：
+<pre>
+   quantity stnsq energy method star_perp_sq_mean_curvature global
+</pre>
+
+<hr>
+<a   id="gauss_bdry_v"></a>
+<a   id="gauss_bdry_e"></a>
+ <a   id="gauss_curvature_integral"></a><h3>gauss_curvature_integral </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：
+这计算具有边界的表面的总高斯曲率。
+多面体表面的高斯曲率可以在内部顶点处定义为相邻角度的角度亏损。
+但众所周知，总高斯曲率可以简单地用边界顶点来计算，
+这就是这里所做的。
+总高斯曲率实现为沿表面边界的总测地曲率。
+边界顶点的贡献为
+<pre>E =  (\sum_i \theta_i) - pi.</pre>
+由于 Evolver 内部架构的原因，求和实际上被分解为面的求和，
+添加边界上每个面顶点的顶点角度，并为每个边界边减去 pi。
+所有边界顶点的总和恰好等于所有内部顶点的总角度亏损加上 2*pi*chi，
+其中 chi 是表面的欧拉特征数。
+边界顶点被认为是固定或参数边界的顶点。
+或者，可以定义顶点额外属性 <code>gauss_bdry_v</code> 和
+边额外属性 <code>gauss_bdry_e</code>，并在相关顶点和边上将它们设置为非零；
+这会覆盖固定/边界标准。
+<br>元素：面。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   quantity gint energy method gauss_curvature_integral global
+</pre>
+
+<hr> <a   id="star_gauss_curvature"></a><h3>star_gauss_curvature </h3>
+<a href="#quantity-top">命名方法。</a>
+计算应用此方法的顶点周围的角度亏损。
+角度亏损是 2*pi 减去所有相邻面的角度之和。
+对于表面边界上的顶点不进行补偿；您只会得到大的亏损。
+亏损被计为正数，遵循高斯曲率的惯例。
+<br>元素：顶点。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   quantity total_deficit energy method star_gauss_curvature global
+</pre>
+
+<hr> <a   id="sq_gauss_curvature"></a><h3>sq_gauss_curvature </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：
+计算平方高斯曲率的积分。在每个顶点处，高斯曲率计算为
+角度缺陷除以相邻面总面积的三分之一。然后平方并用相邻面面积的
+三分之一加权。此方法仅适用于没有奇异性的闭合表面。
+<br>元素：顶点。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   quantity sqg energy method sq_gauss_curvature global
+</pre>
+
+<hr>
+<H2>单纯形模型方法</h2>
+
+<hr> <a   id="simplex_vector_integral"></a><h3>simplex_vector_integral </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：n 维空间中 (n-1) 维单纯形面上向量场的积分。
+向量场与面的法向量点积；实际上，单纯形的边向量和被积函数向量
+形成一个行列式。
+<br>元素：面。
+<br>参数：vector_integrand。
+<br>模型：单纯形。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>可定向：是。
+示例数据文件声明，用于 4D 中 3D 表面下的 4-体积：
+<pre>
+   quantity xvint energy method simplex_vector_integral
+   vector_integrand:
+   q1: 0
+   q2: 0
+   q3: 0
+   q4: x4
+</pre>
+
+
+
+<hr>
+<a   id="k_vector_order"></a>
+ <a   id="simplex_k_vector_integral"></a><h3>simplex_k_vector_integral </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：n 维空间中定向 k 维单纯形面上简单 (n-k)-向量的积分。
+  向量被积函数按顺序列出每个 k 向量的分量。
+  通过形成一个行列式来计算，其前 k 行是跨越面的 k 向量，
+  最后 (n-k) 行是被积函数的向量。
+<br>元素：面。
+<br>参数：k_vector_order, vector_integrand。
+<br>模型：单纯形。
+<br>环境维度：任意。
+<br>海森矩阵：是。
+<br>可定向：是。
+示例数据文件声明，用于 5D 中的 3D 表面：
+<pre>
+   quantity kvec energy method simplex_k_vector_integral
+   k_vector_order 3
+   vector_integrand:
+   q1: 0   // 第一个向量
+   q2: 0
+   q3: 0
+   q4: 0
+   q5: x4
+   q6: 0   // 第二个向量
+   q7: 0
+   q8: 0
+   q9: x3
+   q10: 0
+</pre>
+
+<hr> <a   id="edge_k_vector_integral"></a><h3>edge_k_vector_integral </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：n 维空间中定向 k 维单纯形边上简单 (n-k)-向量的积分。
+向量被积函数按顺序列出每个 k 向量的分量。
+通过形成一个行列式来计算，其前 k 行是跨越边的 k 向量，
+最后 (n-k) 行是被积函数的向量。
+<br>元素：边。
+<br>参数：k_vector_order, vector_integrand。
+<br>模型：线性、二次、单纯形。
+<br>环境维度：任意。
+<br>海森矩阵：是。
+<br>可定向：是。
+示例数据文件声明，用于 5D 中 4D 表面的 3D 边：
+<pre>
+   quantity kvec energy method edge_k_vector_integral
+   k_vector_order 3
+   vector_integrand:
+   q1: 0   // 第一个向量
+   q2: 0
+   q3: 0
+   q4: 0
+   q5: x4
+   q6: 0   // 第二个向量
+   q7: 0
+   q8: 0
+   q9: x3
+   q10: 0
+</pre>
+
+
+<hr>>
+<a   id="node_charge"></a>
+<a   id="knot_energy"></a><h3>knot_energy </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：
+一种 "静电" 能量，其中顶点被赋予相等的电荷。
+势能的逆幂定律可通过全局参数 `knot_power' 调整，默认值为 2
+（这不是静电的，但纽结理论家喜欢它）。
+如果为顶点定义了 <a href="elements.htm#extra-attributes">额外属性</a>
+`node_charge'，则使用该值作为顶点电荷。
+此能量的使用不限于纽结；它已被用于在空间中嵌入复杂的网络图。
+<br>元素：顶点。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：是。
+<br>示例数据文件声明：
+<pre>
+   parameter knot_power  2     // 默认值
+   quantity knotten energy method knot_energy global
+</pre>
+
+<hr> <a   id="uniform_knot_energy"></a><h3>
+uniform_knot_energy 或 edge_knot_energy </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：一种纽结能量，其中顶点电荷与相邻边长度成正比。
+这模拟了沿导线均匀分布的静电荷。
+势能的逆幂定律可通过全局参数 `knot_power' 调整（默认为 2）。
+<br>元素：顶点。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   parameter knot_power  2     // 默认值
+   quantity knotten energy method uniform_knot_energy global
+</pre>
+
+<hr> <a   id="uniform_knot_energy_normalizer"></a><h3>uniform_knot_energy_normalizer </h3>
+<a href="#quantity-top">命名方法。</a>
+描述： 旨在近似 <a href="#uniform_knot_energy">uniform_knot_energy</a>
+中在连续极限下奇异的部分。
+<br>元素：顶点。
+<br>参数：
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   parameter knot_power  2     // 默认值
+   quantity knottenorm energy method uniform_knot_energy global
+			   method uniform_knot_energy_normalizer global
+</pre>
+
+<hr> <a   id="uniform_knot_normalizer1"></a><h3>uniform_knot_normalizer1</h3>
+<a href="#quantity-top">命名方法。</a>
+描述：计算内部纽结能量以归一化
+<a href="quants.htm#uniform_knot_energy">uniform_knot_energy</a>
+积分的奇异发散。
+实际上是 <a href="quants.htm#uniform_knot_energy_normalizer">uniform_knot_energy_normalizer</a>
+的同义词。
+无梯度。
+<br>元素：顶点。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：3。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   parameter knot_power  2     // 默认值
+   quantity knottenorm energy method uniform_knot_energy global
+			   method uniform_knot_energy_normalizer1 global
+</pre>
+
+<hr> <a   id="uniform_knot_normalizer2"></a><h3>uniform_knot_normalizer2</h3>
+<a href="#quantity-top">命名方法。</a>
+描述：计算内部纽结能量以归一化
+<a href="quants.htm#uniform_knot_energy">uniform_knot_energy</a>
+积分的奇异发散，方式与
+<a href="quants.htm#uniform_knot_energy_normalizer">uniform_knot_energy_normalizer</a>
+不同。
+<br>元素：边。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：3。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   parameter knot_power  2     // 默认值
+   quantity knottenorm energy method uniform_knot_energy global
+			   method uniform_knot_energy_normalizer2 global
+</pre>
+
+<hr>>
+<a   id="edge_knot_energy"></a>
+ <a   id="edge_edge_knot_energy"></a><h3>edge_edge_knot_energy </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：
+在边对之间，能量是边中点之间距离的平方反比。
+也可以简称为 edge_knot_energy。另见
+<a href="#edge_knot_energy_normalizer">edge_knot_energy_normalizer</a>。
+  （由 John Sullivan 提供）
+<br>元素：边。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   quantity knotten energy method edge_edge_knot_energy global
+</pre>
+
+<hr> <a   id="edge_knot_energy_normalizer"></a><h3>edge_knot_energy_normalizer</h3>
+<a href="#quantity-top">命名方法。</a>
+描述：  计算内部纽结能量以归一化
+<a href="#edge_edge_knot_energy">edge_edge_knot_energy</a>
+积分的奇异发散。
+<br>元素：边。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：3。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   quantity knotten energy method edge_edge_knot_energy global
+                        method edge_knot_energy_normalizer global
+</pre>
+
+<hr> <a   id="simon_knot_energy_normalizer"></a><h3>simon_knot_energy_normalizer</h3>
+<a href="#quantity-top">命名方法。</a>
+描述：  edge_knot_energy 的另一种归一化，我现在不想解读它。
+<br>元素：边。
+<br>参数：无。
+<br>模型：字符串线性。
+<br>环境维度：3。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   quantity kenergy energy method edge_knotenergy global
+                   method simon_knot_energy_normalizer global
+</pre>
+
+
+<hr> <a   id="facet_knot_energy"></a><h3>facet_knot_energy </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：  顶点上的电荷与相邻面的面积成正比。
+用于 4D 中的纽结表面。
+势能的幂定律可通过全局参数 `knot_power' 调整。
+另见 <a href="#facet_knot_energy_fix">facet_knot_energy_fix</a>。
+<br>元素：顶点。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+parameter knot_power  2     // 默认值
+   quantity knotten energy method facet_knot_energy global
+</pre>
+
+<hr> <a   id="facet_knot_energy_fix"></a><h3>facet_knot_energy_fix</h3>
+<a href="#quantity-top">命名方法。</a>
+描述：  为 <a href="#facet_knot_energy_fix">facet_knot_energy</a>
+提供相邻顶点校正。
+<br>元素：顶点。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   parameter knot_power  2     // 默认值
+   quantity knotten energy method facet_knot_energy global
+                        method facet_knot_energy_fix global
+</pre>
+
+<hr> <a   id="bi_surface"></a><h3>bi_surface</h3>
+<a href="#quantity-top">命名方法。</a>
+纽结能量族的命名方法。表面上的双重积分，即所有顶点对
+用相邻面面积加权。改编自 facet_knot_energy。
+使用任意公式计算能量，它是顶点之间向量的函数，
+而不仅仅是幂规则。公式由数据文件定义中的 scalar_integrand 给出。
+可以控制对其进行计算的顶点对。如果定义了顶点整数属性
+bi_surface_attr，则只包含 bi_surface_attr 值不同的那些；
+否则包含所有对。
+<br>元素：顶点。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   quantity qqqq energy method bi_surface
+   scalar_integrand  x^2 + y^2 + z^2
+</pre>
+
+<hr> <a   id="buck_knot_energy"></a><h3>buck_knot_energy </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：  边对之间的能量，由 Greg Buck 建议的公式给出。
+势能的幂定律可通过全局参数 `knot_power' 调整。
+<br>元素：边。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+parameter knot_power  2     // 默认值
+   quantity knotten energy method buck_knot_energy global
+</pre>
+
+<hr> <a   id="proj_knot_energy"></a><h3>proj_knot_energy </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：
+这种能量由 Gregory Buck 提出。它试图通过将能量投影到曲线的法线
+来消除归一化项的需要。其形式为
+<pre>
+   E_{e_1e_2} = {L_1L_2 \cos^p\theta\over |x_1 - x_2|^p}
+</pre>
+其中 x_1,x_2 是边的中点，θ 是边 e_1 的法平面与向量 x_1 - x_2
+之间的角度。默认幂为 2。
+势能的幂定律可通过全局参数 `knot_power' 调整。
+<br>元素：边。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   parameter knot_power  2     // 默认值
+   quantity knotten energy method proj_knot_energy global
+</pre>
+
+<hr> <a   id="circle_knot_energy"></a><h3>circle_knot_energy </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：这种能量由 Peter Doyle 提出，他说在连续情况下
+它等效于幂为 2 的绝缘导线。其形式为
+<pre>
+  E_{e_1e_2} = {L_1L_2 (1 - \cos\alpha)^2 \over |x_1 - x_2|^2},
+</pre>
+其中 x_1,x_2 是边的中点，α 是边 1 与通过 x_1 且在 x_2 处
+与边 2 相切的圆之间的角度。仅实现了幂 2。
+<br>元素：边。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   quantity knotten energy method circle_knot_energy global
+</pre>
+
+<a   id="surface_cos_power"></a>
+<hr> <a   id="sphere_knot_energy"></a><h3>sphere_knot_energy </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：
+这是圆能量的 2D 表面版本。
+其最一般形式为
+<pre>
+  E_{f_1f_2} = { A_1A_2(1 - \cos\alpha)^p \over |x_1 - x_2|^q},
+</pre>
+其中 A_1,A_2 是面的面积，x_1,x_2 是面的重心，
+α 是 f_1 与通过 x_1 且在 x_2 处与 f2 相切的球面之间的角度。
+对于 p = 1 和 q = 4，能量是共形不变的。
+对于 p=0 和 q=1，得到均匀电荷密度的静电能量。
+请注意，面的自能量不包括在内。对于静电能量，
+每个面大约为 2.8A^{3/2}。
+
+幂 p 和 q 分别是 Evolver 变量 surface_knot_power 和
+surface_cos_power。
+默认值为 p=1 和 q=4。
+<br>元素：面。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   parameter surface_knot_power  1     // 默认值
+   parameter surface_cos_power  4     // 默认值
+   quantity knotten energy method sphere_knot_energy global
+</pre>
+
+<hr> <a   id="sin_knot_energy"></a><h3>sin_knot_energy </h3>
+<a href="#quantity-top">命名方法。</a>
+描述：  另一种计算边对中点之间非奇异能量的奇怪方法。
+（由 John Sullivan 提供）
+<br>元素：边。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：任意。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   quantity knotten energy method sin_knot_energy global
+</pre>
+
+<hr> <a   id="curvature_binormal"></a><h3>curvature_binormal</h3>
+<a href="#quantity-top">命名方法。</a>
+描述：用于字符串模型。能量计算为零，但计算的力是
+平均曲率向量旋转到副法线方向。
+<br>元素：顶点。
+<br>参数：无。
+<br>模型：线性。
+<br>环境维度：3。
+<br>海森矩阵：否。
+<br>示例数据文件声明：
+<pre>
+   quantity curbi energy method curvature_binormal global
+</pre>

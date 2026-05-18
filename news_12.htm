@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 简报 12</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-12"></a>
+<h1>Surface Evolver 简报 第12期</h1>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><pre>
+
+
+
+
+                    Surface Evolver 简报 第12期
+                              1995年7月19日
+
+                   编辑: Ken Brakke, brakke@geom.umn.edu
+
+目录
+  版本 1.99 就绪
+  新功能
+
+版本 1.99 就绪。
+  Surface Evolver 版本 1.99 现可从 geom.umn.edu 的
+  /pub/software/evolver/evolver.tar.Z 获取。还有新的 DOS 和 Mac 版本。
+  DOS 版本在 evolver.zip 中。
+  Mac 版本在 Evolver.sea.Hqx 中。这是为使用数学协处理器编译的，
+  不能在 Power Mac 上运行。
+  非协处理器版本在 Evolver.no68881.sea.Hqx 中，它可以在我能访问的
+  Power Mac 上运行，尽管有报告称会在其他 Mac 上崩溃。
+  欢迎任何有雄心壮志的志愿者来解决这个问题。
+
+  对于那些研究 Hessian 矩阵和特征值的人，eigentut.txt 中有一个
+  小教程。这是一个纯文本文件，大约 10 页。
+
+
+新功能。
+
+  元素结构使用的存储已减少，只分配实际使用的功能所需的存储。
+
+  约束数量的限制已提高到 128，如果有人需要，可以轻松地更高。
+
+  物体 "volume" 从技术上讲应该是只读值，即实际计算的体积。
+  "target" 应用于设置体积约束，如 "set body[1] target 2.34"，
+  尽管 "set body[1] volume 2.34" 仍然有效，但会有警告。
+
+  "volconst" 已添加为可读写的物体属性。
+  这是添加到计算体积的常数。也适用于命名量。
+
+  命令 "convert_to_quantities" 将自动将旧式能量转换为新式命名量。
+  这与 -q 命令行选项具有相同效果，但可以从 Evolver 命令提示符执行。
+  当 "hessian" 抱怨无法处理某种能量类型时很有用。
+  少数能量尚未转换。我的意图是在不久的将来使其成为默认选项，
+  可能在版本 2.00 中。
+
+  "edgeswap" 命令将强制对指定边执行等角化类型切换，
+  如 "edgeswap edge[23]" 或 "edgeswap edge where color == red"。
+  "edgeswap edge" 将交换所有边，如果你喜欢看奇怪的表面。
+
+  "variable_parameter" 是一个参数，其值将在优化过程中变化。
+  只需在数据文件顶部使用 "variable_parameter" 代替 "parameter"。
+  请注意，关于可变参数的能量导数是数值计算的，而不是符号计算的。
+  尚不能与 Hessian 一起使用。
+
+  对于环面模式，环面平移已自动添加为 view_transform_generators，
+  在数据文件中出现的任何内容之后。因此，可以使用以下方式查看
+  基本域的多个副本：
+      transform_expr "abc"
+
+  命令 P 现在可以在其后接受数字，因此 "P 8" 无需弹出 "P" 菜单
+  即可启动 geomview。
+
+  "saddle" 和 "hessian_seek" 命令接受最大步长，
+  例如 "saddle 0.5"。
+
+  "move" 命令将继续前一个运动的方向，无论是来自梯度还是 hessian。
+  接受步长，例如 "move 0.5"。负移动不是完美的撤销。
+
+  切换在显示新值时同时显示先前的值。
+
+  现在可以使 saddle 或 hessian_seek 最小化平方梯度而不是能量。
+  使用 hessian_menu 切换 G。
+
+  现在有一个 "bottominfo" 命令，打印转储文件的底部部分。
+  对于从旧数据文件生成新数据文件很有用。
+
+  你可以使用 " x :::= command" 重新定义单字母命令。
+  使用 "x :::= " 恢复。重新定义在表面启动时撤销。
+  重新定义不会追溯到命令定义中使用的单字母命令。
+  字母在执行时重新定义，而不是在解析时。
+  在命令中使用的重新定义字母在字母取消重新定义时将恢复为标准含义。
+  用于类似替换，如特殊的 r。
+  "r :::= { hooke_length := hooke_length/2; r}"
+  第一次会正常工作，但第二次不会。在字母周围使用单引号获取旧含义，
+  即 'r'。应该只用于禁用命令。
+
+  hessian_menu 有选项 Z 用于对多个特征向量执行子空间迭代
+  （与 "ritz" 命令相同），你可以使用选项 X 选择特征向量进行运动。
+
+  只读变量 "last_eigenvalue" 存储在 saddle 命令中找到的特征值，
+  或 ritz 找到的第一个特征值。
+  只读变量 "last_hessian_scale" 存储最近 saddle 或 hessian_seek
+  命令使用的步长。
+
+  编译选项 -DSDIM=3 将空间维度 3 硬编码到代码中，允许更多的
+  编译器优化。但这样的 Evolver 不能处理任何其他空间维度。
+
+  eigenprobe 命令有替代形式 eigenprobe(value,iters)，它将执行
+  移位逆幂迭代以找到最接近给定值的特征值。iters 是迭代次数限制。
+  特征值存储在 last_eigenvalue 中，特征向量可以通过 "move" 命令使用。
+
+</pre><hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+</body>
+</html>

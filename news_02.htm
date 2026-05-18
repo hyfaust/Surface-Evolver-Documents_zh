@@ -1,0 +1,205 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 通讯 2</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-2"></a>
+<h1>Surface Evolver 通讯第2期</h1>
+<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+<hr><pre>
+
+
+		      Surface Evolver 通讯第2期
+			      1993年2月26日
+
+                    编辑: Ken Brakke, brakke@geom.umn.edu
+
+目录:
+  公告
+  版本1.89功能
+  一个学生项目
+  参考文献
+
+公告:
+
+  本通讯的订阅者数量已超过100。
+  我非常感谢大家的兴趣。
+
+  Evolver 1.89版现在可以通过ftp获取。
+
+  现在有了Macintosh版本的Evolver。二进制文件可以通过匿名ftp从geom.umn.edu获取，
+  位于pub/evolver.sit.hqx。这是一个binhexed Stuffit 1.5.1归档文件。
+  它包含一个带有Mac特定信息的README文件和Mac格式的数据文件。
+  感谢Jeff Weeks提供了一个示例程序，用于设置文本和图形窗口以及处理事件循环。
+
+版本1.89功能:
+
+  新的算术函数包括floor()、ceil()和模运算。
+  模运算符是'%'，与C语言一样。它执行实数模运算：
+    x % y = x - floor(x/y)*y, 
+  但它在整数值上也能很好地工作。对于使用 `set facet color id % 15' 
+  获得多色表面很有用。
+
+  为了更完整地捕获转储文件中的当前状态，增加了几项：
+  内部视图矩阵（用于Xwindows图形和Postscript输出）现在包含在转储文件中，
+  并且可以从数据文件中读取。
+  用户定义的命令包含在转储文件末尾的 `read' 部分中。
+
+  添加了 `rebody' 命令，用于重新计算连接的主体。
+  当颈部收缩时很有用。如果原始主体体积是固定的，
+  新主体的体积将设置为它们当前的体积。
+
+  一些内部Evolver变量现在可以在命令表达式中使用：
+	vertex_count, edge_count, facet_count, body_count,
+	total_energy, total_area, total_length, scale.
+
+  添加了纽结能量。使纽结看起来漂亮的一种方法是赋予它"电荷"，
+  让它自我排斥形成形状。势能是距离的某种反幂次，
+  并在所有点对之间积分。实现了两种变体，
+  对应于导线或绝缘线。
+  
+ 添加了 `dissolve' 命令来擦除元素并在表面留下间隙，
+  这与删除命令不同，删除命令会关闭间隙。只能溶解
+  不被高维元素需要的元素。
+
+  命令重复次数已限制为仅三种类型的命令：
+      1.  没有可选参数的单字母命令
+	  （l,t,j,m,n,w 有可选参数）
+      2.  花括号中的命令列表
+      3.  用户定义的过程名称
+  这是为了防止像
+	 list vertex 1293
+  这样的灾难，在之前会产生1293个所有顶点的列表。而
+  'l 2' 现在细分长度大于2的边，而不是执行2次l命令。
+
+  不带参数的 "dump" 将转储到默认文件名，
+  即数据文件名加上.dmp扩展名。
+
+  SIGTERM被捕获并导致转储到默认转储文件然后退出。
+  这样在后台运行的脚本可以通过kill -TERM停止。
+  SIGHUP的行为方式相同，因此丢失调制解调器连接会保存表面。
+
+  修复了导致在Decstations上崩溃的错误。该错误已存在很长时间，
+  但只是因为Dec处理内存重新分配的方式与其他人略有不同才显现出来。
+
+一个学生项目。
+来自: "John Oprea" &lt;OPREA@csvaxe.csuohio.edu&gt;
+
+我让两个研究生使用Evolver比较了跨越给定曲线的极小曲面与调和曲面？
+这一切都源于我们的一位教授告诉学生，最小面积曲面是z=f(x,y)且f是调和的。
+他做了两件事：(1) 阅读Courant-Hilbert，他们使用标准扰动论证来表明
+当曲线不是太非平面时（即我认为四阶偏导数应该可忽略），
+最小面积曲面由调和函数给出；(2) 阅读到极小曲面的参数化具有
+调和坐标函数，但没有注意到等温坐标条件。
+无论如何，这些学生取了作为解析函数实部或虚部的调和函数，
+将圆提升到结果曲面上作为曲面上的曲线，并用这个作为边界曲线。
+他们可以手工计算以该曲线为边界的调和曲面的面积。
+然后他们使用Evolver将曲面演化为极小曲面（当然曲线固定），
+并观察面积如何减少，测量百分比变化。
+当然，正如Courant-Hilbert所说，对于小半径的圆，调和曲面接近极小。
+实际上，如果半径太小，似乎比较进行得不太好 ---
+但我们认为存在截断错误或者我们需要增加固定顶点的数量之类的情况。
+一个不太可能的情况是我们以某种方式跳到了面积泛函的一个新临界点，
+但我不这么认为。此外，他们还看了像Enneper曲面这样的例子，
+其中Enneper曲面上边界曲线（1 &lt; r &lt; sqrt(3)）的最小面积曲面
+不是Enneper曲面本身 --- 即Enneper是极小的，但不是某些曲线的最小面积。
+总之，Evolver提供了这些原理的非常漂亮的说明。就说这么多。再见。
+                                                         John
+
+
+参考文献:
+
+Frank Morgan and Jean E. Taylor, Destabilization of the
+Tetrahedral Point Junction by Positive Triple Junction Line energy,
+Scripta Metall. Mater. {\bf 25} (1991) 1907-1910.
+
+Livia Racz (racz@navier.mit.edu) 发来以下内容:
+
+L.M. Racz, J. Szekely, "Solder Volume Estimation" in Handbook of Fine
+Pitch Surface Mount Technology, J.H. Lau, ed., Van Nostrand Reinhold
+Publishing Co., NY (in press).
+
+ ==> 这是一本书的章节，我们被要求撰写，其中包括我们开发的一种算法，
+ 用于估算表面安装集成电路中特定引线和基板几何形状的"最佳"焊料体积。
+ 我们使用Evolver计算了我们提出的不同体积的焊料圆角形状。
+
+
+L.M. Racz, J. Szekely, K.A. Brakke, "A General Statement of the Problem
+and Description of a Proposed Method of Calculation for Some Meniscus
+Problems in Materials Processing", ISIJ International, Vol. 33, No. 2,
+(February 1993).
+
+   通讯1中的修订参考文献。
+
+L.M. Racz, J. Szekely, "Determination of Equilibrium Shapes and Optimal
+Volume of Solder Droplets in the Assembly of Surface Mounted Integrated
+Circuits", ISIJ International, Vol. 33, No. 2, (February, 1993).
+
+ ==> 这是基于其我们被要求撰写章节的论文。基本相同的内容，
+ 但更简洁，文献综述更少。
+
+ N.L. Abbott, G.M. Whitesides, L.M. Racz, J. Szekely, "Calculating the
+ Shapes of Geometrically Confined Drops of Liquid on Patterned,
+ Self-Assembled Monolayers; A New Method to Estimate Small Contact
+ Angles" submitted to Journal of American Chemical Society.
+
+  ==> Abbott和Whitesides开发了一种通过沉积和蚀刻来图案化基板的方法，
+  通过该方法，液滴（本研究中的水）可以以极大的控制被限制在所需的图案中，
+  由此，一种新的、更容易的测量接触角的方法。他们能够用接触角测角仪
+  验证他们的方法对于角度 &gt; 15度，但对于角度 &lt; 15度，
+  他们将结果与我们使用Evolver进行的计算进行了比较。
+
+  L.M. Racz, J. Szekely, "Development of Design Guidelines for Specifying
+  Solder Volumes in Surface Mount Technology", Proceedings of ASME Winder
+  Annual Meeting, Anaheim, CA (November, 1992).
+
+   ==> 内容与章节基本相同。所有作者都被邀请就他们的章节进行演讲，
+   这些演讲发表在会议录中。
+
+   L.M. Racz, J. Szekely, "An Alternative Method for Determining
+   Wettability of Components with Dissimilar Surfaces", submitted to
+   Journal of Electronic Packaging.
+
+    ==> 一个非常好的Evolver应用。电路板，由于其制造方式，
+    有两个相对的面被焊料合金润湿，而另外两个相对的面不被润湿，
+    导致看起来相当奇怪的弯月面。这些板被浸入合金中以测试
+    应该润湿的两个面的润湿性。计算单位长度的润湿力，
+    并将该数字用作"指数"来确定该特定板是否可以使用。
+    如果两个相对的非润湿面在润湿周长中所占比例不太大，
+    不会过度影响力测定，这种方法是好的。目前，使用这种方法，
+    他们扔掉了很多完全好的板。我们说这种方法仅对某些几何形状/区域有用。
+    作为这些论证的一部分显示的弯月面是用Evolver计算的。
+
+
+来自John Sullivan, sullivan@geom.umn.edu:
+
+   @Article{willmore,
+        Author = "Lucas Hsu and Rob Kusner and John M. Sullivan",
+        Title = "Minimizing the Squared Mean Curvature Integral for
+        Surfaces in Space Forms",
+        Journal = "Experimental Mathematics",
+        Year = 1992, Volume = 1, Number = 3, Pages = "191--208"}
+   我们报告了使用Evolver进行的数值实验，最小化不同亏格的
+   封闭曲面的Willmore弹性能。
+
+   @Article{besic,
+        Author = "John M. Sullivan",
+        Title = "An Explicit Bound for the Besicovitch Covering Theorem",
+        Journal = "J. Geometric Analysis",
+        Year = 1993, Volume = "???", Pages = "???", Note = "Submitted"}
+   我们表明，Besicovitch定理证明中所需的常数等于可以打包到
+   5倍半径的球体数量；使用Evolver进行的实验在三维和四维中
+   为这个包装数找到了下界（可能是最优的）。
+
+通讯2结束。
+
+</pre><hr>
+<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+</body>
+</html>

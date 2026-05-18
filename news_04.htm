@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 通讯 4</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-4"></a>
+<h1>Surface Evolver 通讯第4期</h1>
+<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
+<hr><pre>
+
+
+		      Surface Evolver 通讯第4期
+			      1993年5月28日
+
+                    编辑: Ken Brakke, brakke@geom.umn.edu
+
+目录:
+
+新功能
+参考文献
+
+版本1.91现已可用。新功能：
+
+      面的两侧可以有不同的颜色。'COLOR'适用于两侧，
+      'FRONTCOLOR'和'BACKCOLOR'适用于不同的侧面，
+      根据从数据文件继承的方向。示例：
+	"set facet backcolor red"
+
+      可以在循环内设置单个命名元素的属性，
+      即"foreach facet ff do set ff color red"
+      与"set facet color red"做同样的事情。
+
+      为了减少在长命令上显式行拼接的需要，
+      解析器现在跟踪大括号和括号嵌套的深度，
+      如果行在嵌套内结束，将要求更多输入。
+      因此，如果您想输入多行命令，请以'{'开头，
+      并在多行后以'}'结尾。如果某些标记是行中的最后一个标记
+      （如'+'），也会自动进行行拼接，但最好用大括号括起来，
+      而不是依赖于此。
+
+      查询可以遍历与顶点相邻的边和面，
+      以及主体的面，如"list vertices vv
+      where max(vv.facet,color==red) &gt; 0"。
+
+      新属性：价属性已扩展到顶点和主体。
+      顶点价是顶点上的边数。主体价是主体上的面数
+      （字符串模型中的边）。示例：
+      "list vertices where valence == 4"
+
+      根据Polthier和Pinkall的方案，可以通过最小化Dirichlet积分
+      来最小化表面积。命令'dirichlet'。不是其他演化的替代品。
+
+      现在使用历史列表中的命令会回显它。
+
+      改进的NeXT终端界面。-u选项用于无图形，
+      -t用于终端和图形。
+
+      命令赋值已修复为仅赋值一个命令。
+      因此"ggg := g; g"将与"{ggg := g}; g"相同，
+      而不是"ggg := {g;g}"。
+
+      每次命令更改变量时，都会重新计算表面。
+      这极大地减慢了脚本的速度。
+      因此现在唯一导致重新计算的变量是
+      1) 数据文件中定义的可调参数
+      2) 量模量和参数
+      您可以使用"autorecalc off"关闭甚至这些。
+
+      "view_4d"命令用于切换向geomview发送完整的4D坐标。
+      默认为OFF。
+
+
+参考文献:
+
+      Alice Underwood, "Constructing barriers to minimal surfaces from
+      polyhedral data," Ph.D. thesis, Princeton, 1993.
+
+         当Evolver达到给定三角剖分的最小面积时，
+      您能保证附近存在光滑的极小曲面吗？
+      这篇论文证明了一些充分条件。
+      您必须能够"吹"表面并且它仍然稳定。
+      三角剖分必须表现良好。不幸的是，
+      估计值远非最佳可能（我希望！），
+      并且需要大约10^7才能应用证明。
+
+      Ken Brakke, "Stability of a toroidal bubble in a rotating tank."
+
+	 这是我为Lockheed做的Evolver项目的最终报告。
+      一个液氦罐在失重状态下旋转。罐子沿旋转轴有一根杆。
+      罐子部分充满，气泡应形成轴对称环面，
+      使质心位于轴上。问题是：需要什么旋转速度才能迫使
+      球形气泡形成环面，以及环面稳定抵抗分裂成球体的
+      最小旋转速度是多少？这不是任何人的官方出版物，
+      但任何有兴趣的人都可以获得副本。
+
+      Hans Mittelmann, "Symmetric Capillary Surfaces in a Cube",
+      Math. Comp. Simul. 35 (1993), 139-152.  （参考文献更新）
+
+
+Surface Evolver 通讯4结束
+
+</pre><hr>
+<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 简报 13</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-13"></a>
+<h1>Surface Evolver 简报 第 13 期</h1>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><pre>
+
+
+
+
+                    Surface Evolver 简报 第 13 期
+                              1996年4月30日
+
+                   编辑：Ken Brakke, brakke@geom.umn.edu
+
+目录
+  版本 2.00 发布
+  新功能
+  小的向后兼容性问题
+  请求网络链接
+  参考文献
+
+版本 2.00 发布
+
+  版本 2.00 现已可通过 geom.umn.edu 的 ftp 获取，或从
+  http://www.geom.umn.edu/software/download/evolver/evolver.html 下载，或从
+  我的个人主页 http://www.susqu.edu/facstaff/b/brakke/evolver/evolver.htm 获取。
+  版本号为 2.00 主要是因为上一个版本是 1.99。
+  并非大规模重写，但有一些重要的新功能。
+
+  如果有人碰巧获得了日期在 4 月 30 日之前的预发布版本 2.00，
+  请获取正式发布版本，因为其中有一些错误修复。
+
+新功能
+
+  现在有适用于 Windows-95 和 Windows-NT 的版本。
+
+  手册的大部分内容已被翻译为 HTML 格式，可以使用标准的
+  Web 浏览器浏览。我只用 Netscape 测试过，对于其他浏览器
+  的表现不做任何保证。但大部分只是基本文本，目前还没有
+  图片或花哨的图形。
+
+  Evolver 有一个 "help"（帮助）命令，可以根据关键字打印
+  HTML 文件中的摘录。
+
+  错误和警告消息都有编号。也许有一天会有所有错误消息的
+  详细文档，但目前这些编号对我定位确切的错误很有用。
+
+  对于精度爱好者，已添加高阶拉格朗日单元（Lagrange 元素）
+  （LINEAR 是拉格朗日一阶，QUADRATIC 是拉格朗日二阶）。
+
+  同样对于精度爱好者，如果使用 -DLONGDOUBLE 编译，则所有
+  浮点计算将使用系统中的 long double 类型，可能提供多达
+  30 位有效数字。
+
+  有一个 "postscript"（PostScript 输出）命令，无需询问任何
+  问题即可打印 PostScript 文件。各种开关控制选项。
+
+  发行版中包含一批示例命令文件。其中之一是 "vrml.cmd"，
+  它可以编写适用于您的网站的 VRML 文件。
+
+  "interp_burdy_param" 开关使边界参数在细分边时使用插值
+  而非外推。
+
+  'X' 命令显示额外属性的字典，包括内部使用的属性。
+
+  有一个 "return"（返回）命令，用于退出当前命令，或使子命令
+  返回到其父命令。
+
+  使用 -q 选项时（将所有内容转换为命名量），'A' 和 'v' 命令
+  仅显示用户明确定义的量。"show_all_quantities" 开关将使这些
+  命令列出所有量。
+
+小的向后兼容性问题
+
+  在计算能量和面积时，现在包含固定的面（facet）、边（edge）
+  和顶点（vertex）。
+
+  Evolver 现在在数据文件中强制执行规则：所有变量名必须至少
+  有两个字符。
+
+  在版本 1.99 中引入的术语 "variable_parameter" 已被更具描述
+  性的术语 "optimizing_parameter" 所取代。
+
+  'g' 命令的内部工作方式有一些变化，可能会导致数值结果
+  略有不同。
+
+请求网络链接
+
+  如果您有与 Surface Evolver 相关的网页，请告知我。一个包含
+  多个涉及液态焊料的 Evolver 示例的网站是
+  http://www.ctcms.nist.gov/programs/solder/。
+
+参考文献
+
+  Xavier Michalet 和 David Bensimon，"Observation of stable
+  shapes and conformal diffusion in genus 2 vesicles"（二亏格
+  囊泡的稳定形状和保形扩散观测），
+  Science, vol. 269 (1995年8月4日), 666-668。
+  通过将 Evolver 曲面与实际囊泡进行比较，验证了某些细胞膜
+  由弹性弯曲能量（即平均曲率的平方）塑形的假设。
+
+  R. Phelan, D. Weaire, 和 K. Brakke, "Computation of equilibrium
+  foam structures using the Surface Evolver"（使用 Surface Evolver
+  计算平衡泡沫结构），Experimental Mathematics,
+  vol. 4 no. 3 (1995), 181-192。讨论了超越 Kelvin 十四面体
+  泡沫的泡沫结构，包括如今著名的 Weaire-Phelan 结构。
+  还描述了当液体加入形成 Plateau 边界时结构的稳定性。含彩色图片。
+
+</pre><hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<title>Surface Evolver 液滴示例</title>
+</head>
+<BODY>
+
+<h1 class="center">
+<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
+Surface Evolver</a> 文档</h1>
+
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a><br>
+<a href="catenoid.htm">下一个悬链面示例。</a><br>
+<a href="tutorial.htm#tutorial">返回教程顶部。</a>
+
+<a   id="mound-example"></a>
+<h1> 示例：受重力作用的液滴。 </h1>
+
+         本示例展示一个放置在桌面上的液体液滴，受到重力作用。
+         液滴表面与桌面之间的接触角是可调的，用以模拟液体
+         对桌面不同程度的润湿情况。
+         本示例演示了宏（macros）、变量、带能量的约束条件以及
+         从物体表面中省略面的方法。<P>
+
+         液滴的初始形状为一个立方体，其中一个面（立方体示例中的面 6）
+	 位于桌面上（即 z = 0 平面）。
+         指定接触角最直接的方法是
+         声明面 6 被约束在桌面上，
+         并赋予它一个不同于默认值 1 的表面张力。
+         但这会导致下文所述的问题。
+         实际处理接触角的方法是省略面 6，并给面 6 周围的边赋予
+         一个能量积分，使其产生的能量与包含面 6 时相同。
+         如果令面 6 的界面能量密度为 T，则我们需要一个向量场 <b>w</b> 使得
+<pre>
+        /             /
+        |  T <b>k . dS</b> = | <b>w . dl</b>
+        / face 6      / bdry of face 6
+
+</pre>
+         因此根据格林定理（Green's Theorem），
+         我们只需 curl <b>w</b> = T<b>k</b>，这里取
+         <b>w</b> = -Ty<b>i</b>。其中 <b> i j k</b> 是标准单位基向量。
+  在实践中，我不会特意去想格林定理；
+  我只是写下一个线积分，将表面的条带累加起来。<P>
+
+         我选择将接触角参数化为桌面与液滴内部表面之间的
+         角度（以度为单位）。该角度可以在运行时通过给变量
+         "angle" 赋新值来调整。
+         我本可以直接将 <code>WALLT</code> 作为参数，
+         但那样就没有理由展示宏的用法了。<P>
+
+<table>
+<tr><td>
+<img src="moundbare.gif"  alt="液滴骨架"></td>
+<td>  初始液滴骨架，顶点和边已编号。 </td></tr>
+</table>
+
+
+         以下是数据文件 <code>mound.fe</code>：
+<pre>
+// mound.fe
+// Evolver data for drop of prescribed volume sitting on plane with gravity.
+// Contact angle with plane can be varied.
+
+PARAMETER angle = 90    // interior angle between plane and surface, degrees
+
+gravity_constant 0  // start with gravity off
+
+#define WALLT  (-cos(angle*pi/180))  // virtual tension of facet on plane
+
+constraint 1   /* the table top */
+formula: x3 = 0
+energy:  // for contact angle
+e1: -(WALLT*y)
+e2: 0
+e3: 0
+
+vertices
+1   0.0  0.0 0.0  constraint 1  /* 4 vertices on plane */
+2   1.0  0.0 0.0  constraint 1
+3   1.0  1.0 0.0  constraint 1
+4   0.0  1.0 0.0  constraint 1
+5   0.0  0.0 1.0
+6   1.0  0.0 1.0
+7   1.0  1.0 1.0
+8   0.0  1.0 1.0
+9   2.0  2.0 0.0  fixed   /* for table top */
+10  2.0 -1.0 0.0  fixed
+11 -1.0 -1.0 0.0  fixed
+12 -1.0  2.0 0.0  fixed
+
+edges  /* given by endpoints and attribute */
+1   1 2    constraint 1 /* 4 edges on plane */
+2   2 3    constraint 1
+3   3 4    constraint 1
+4   4 1    constraint 1
+5   5 6
+6   6 7
+7   7 8
+8   8 5
+9   1 5
+10  2 6
+11  3 7
+12  4 8
+13  9 10   fixed  /* for table top */
+14 10 11   fixed
+15 11 12   fixed
+16 12  9   fixed
+
+faces  /* given by oriented edge loop */
+1   1 10 -5  -9
+2   2 11 -6 -10
+3   3 12 -7 -11
+4   4  9 -8 -12
+5   5  6  7   8
+7  13 14 15  16  density 0 fixed /* table top for display */
+
+bodies  /* one body, defined by its oriented faces */
+1   1 2 3 4 5   volume 1  density 1
+
+read
+re := refine edges where on_constraint 1
+</pre>
+
+         液滴本身基本上是从 <code>cube.fe</code> 复制而来，只是
+         删除了面 6。原因是面 6 不是必需的，实际上反而会妨碍计算。
+         由于面 6 始终位于 z = 0，因此它对体积的表面积分
+         没有贡献，在体积计算中不需要它。
+         侧面底边被约束在 z = 0 平面上，所以面 6 也不需要用来
+         防止它们灾难性地收缩。我们本可以通过包含面 6 并赋予它
+         等于液体与表面之间界面能量密度的表面张力来处理接触角，
+         但如果面 6 周围的边试图向内迁移，就会导致问题。
+         经过几次细化后，原始面 6 的内部顶点上没有力作用，
+         因此它们不会移动。所以当面 6 的外侧顶点碰到内侧顶点时，
+         面 6 就很难继续收缩。桌面面（面 7）与计算完全无关，
+         它的唯一用途是让显示效果更好。你可以删除它以及它所有的
+         顶点和边，而不会影响液滴的形状。对液滴而言，真正起作用的是
+         约束 1。要查看保留底面时的效果，请加载
+         <a href="http://www.susqu.edu/brakke/evolver/downloads/moundB.fe">moundB.fe</a>
+         然后执行 "run"。<P>
+
+         现在在 <code>mound.fe</code> 上运行 Evolver。
+         数据文件末尾定义的命令 "<code>re</code>" 适合首先使用，
+         以便对需要细化的边进行细化。先细化，再迭代一段时间。
+         你会得到一个漂亮的液滴。它不是一个半球体，因为重力
+         默认是开启的，<code>G</code> = 1。如果你使用
+         <a href="single.htm#G" class="keyword">G</a>
+         命令设置 "<code>G 0</code>" 并迭代一段时间，就会得到一个
+         半球体。试着改变接触角，例如设为 45 度（使用命令
+         "<code>angle := 45</code>"）或 135 度。
+         你也可以调整重力。设置 "<code>G 10</code>" 可以得到一个
+         扁平的液滴，或者 "<code>G -5</code>" 可以得到一个悬挂在
+         天花板上的液滴。"<code>G -10</code>" 会导致液滴试图脱落，
+         但由于它的顶点仍受约束，所以无法脱落。<P>
+
+
+<hr>
+<a href="catenoid.htm">下一个悬链面示例。</a><br>
+<a href="tutorial.htm#tutorial">返回教程顶部。</a>
+<br>
+<a href="evolver.htm#doc-top">返回 Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+
+</body>
+</html>

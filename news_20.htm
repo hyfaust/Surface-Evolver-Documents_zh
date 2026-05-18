@@ -1,0 +1,174 @@
+<!DOCTYPE HTML>
+<HEAD><TITLE>Surface Evolver 文档 - 第 20 期通讯</title>
+<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+</head>
+
+<BODY>
+<a   id="newsletter-19"></a>
+<h1>Surface Evolver 通讯 第 20 期</h1>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><pre>
+
+                         Surface Evolver 通讯 第 20 期
+                              2008 年 1 月 1 日
+                     作者：Ken Brakke, brakke@susqu.edu
+
+
+Surface Evolver 2.30 版现已可供下载，地址：
+http://www.susqu.edu/brakke/evolver。
+这是自 2005 年 8 月 2.26 版以来的首次发布。
+
+对于自行编译 Evolver 的用户，可以继续使用相同的 makefile。
+
+2.30 版新功能：
+
+裁剪视图（Clip view）：
+  图形显示现在支持用户控制的裁剪平面，因此您可以查看表面内部。
+  在 OpenGL 图形窗口中，按下 'l' 键（小写 'L'），将出现一个裁剪平面。
+  拖动鼠标可以平移裁剪平面，按下 'k' 键可以旋转裁剪平面。
+  更多信息请参阅文档中的 "clip view" 部分。
+
+切片视图（Slice view）：
+  还有一种切片视图模式，其工作方式类似于裁剪视图，但它生成的是
+  表面的二维横截面。要启动该模式，请使用 "slice_view" 切换命令；
+  之后 'l' 和 'k' 键将控制鼠标模式。
+
+动画查看器（Movie viewer）：
+  为了以完整的 3D 方式浏览演化过程的各个阶段，我编写了一个名为
+  "evmovie" 的程序，它可以读取简单的几何文件并生成类似 Evolver 的
+  显示界面，因此您可以用鼠标操控表面（包括裁剪平面！）并在各个文件
+  之间滚动浏览。它可以相当流畅地处理数百甚至数千个文件。
+  新增的 Evolver 命令 "binary_off_file" 用于为 evmovie 生成文件。
+  要下载并查看文档，请访问：
+  http://www.susqu.edu/brakke/evmovie。
+
+加载多个表面：
+  "addload"（追加加载）命令可以在不删除当前表面的情况下加载新的数据文件。
+  这对于从多个组成部分构建表面非常有用，特别是当某个组件在多处重复使用时。
+  请参阅发行包中的 addload_example.fe 数据文件作为示例。
+
+图形文本：
+  您可以在图形窗口中显示简单的文本（至少在 OpenGL 和 PostScript 图形中可以）。
+  语法如下：
+
+     text_id := display_text(x,y,string)
+
+  字符串起始位置的 x,y 坐标使用窗口单位，即窗口坐标从左下角的 (0,0)
+  到右上角的 (1,1)。返回值应保存到一个变量中，以便以后使用
+  delete_text(text_id) 删除文本；即使您不想删除它，赋值号左侧也必须有
+  一个标识符以满足语法要求。目前未实现字体大小控制、字体类型或颜色设置。
+  该功能主要用于为图像添加说明文字，例如在动画帧中显示计时器。
+
+显示弦面片（string model 中的 facet）：
+  在弦模型（string model）中，面片现在将根据 "show facet where expr" 命令
+  进行显示。面片可以着色和拾取。如果面片的边循环未闭合，则会假定一条闭合边。
+  对于非凸面片，效果可能不太理想。
+
+数组操作：
+  Evolver 命令语言中新增了几个对整个数组进行操作的基本操作，
+  使得脚本可以避免繁琐的 "for" 循环：
+
+    array := array
+    array := scalar
+    array := scalar * array
+    array := array + array
+    array := array - array
+    vector dot_product vector
+
+  这些操作适用于作为向量或数组的元素属性，以及独立数组。
+  我决定使用 "dot_product" 作为内积运算符的名称，而不是简单的 "dot"，
+  因为我的多个脚本中使用了 "dot" 作为变量名，我假设其他人也是这样，
+  我不想破坏那些脚本。此外还提供了 matrix_inverse()（矩阵求逆）和
+  matrix_determinant()（矩阵行列式）函数。
+
+  注意：matrix_inverse() 函数现在是一个返回值为 0（奇异矩阵）或
+  1（非奇异矩阵）的函数，而不是一个不返回值的过程。这意味着使用
+  matrix_inverse() 的脚本需要将返回值赋给一个变量。
+
+元素数组属性：
+  为了配合全数组命令使用，以下元素属性被定义为一维数组：
+  顶点（vertices）：__x（坐标）、__p（边界参数）、__vertex_normal（顶点法向量）
+  边（edges）：__edge_vector（边向量）
+  面片（facets）：__facet_normal（面片法向量）
+
+局部名称：
+  声明局部作用域标识符的语法已扩展，允许在同一声明中使用多个名称，例如：
+     local ax,bx,cx,ay,by,by,cx,cy,cz;
+
+更深的递归调用：
+  表达式解释器的栈机制已修改，允许更深的递归，例如在几何搜索算法中。
+
+调试脚本：
+  新增了多项功能以帮助调试脚本：
+
+  "subcommand"（子命令）命令：显示命令提示符并接受用户命令。
+   输入 "exit" 时，将恢复脚本的执行。
+
+  "abort"（中止）将终止所有脚本执行并返回主命令提示符。
+
+  "breakpoint"（断点）可用于在执行到达脚本中某一行时显示命令提示符。
+   语法为：
+       breakpoint scriptname linenumber
+   其中 scriptname 是过程或函数的名称，linenumber 是该过程定义所在的
+   文件行号。还有一个 "unset breakpoint"（取消断点）命令。
+
+  "whereami"（我在哪里）在子命令或断点提示符下将打印堆栈跟踪信息，
+   以便您了解自己在脚本中的位置。
+
+表达式性能分析：
+  在 Evolver 可以使用 cpu_counter 且编译时定义了宏常量 PROF_EVALS 的系统上，
+  Evolver 内部的表达式求值器会跟踪每次表达式求值所消耗的时钟周期。
+  这些表达式包括过程、函数、约束和边界公式、含量被积函数、能量被积函数、
+  量的被积函数等——即在 dump 文件中以代码形式输出的所有内容。
+  "print profiling" 命令将打印每种表达式类型迄今为止累积的 CPU 周期数。
+  这些时间包含了所有子函数或子过程的耗时。
+  reset_profiling 命令将把所有周期值重置为 0。
+
+
+新增命名方法：
+
+  dirichlet_elastic：通过最小化 Dirichlet 能量（Dirichlet energy）来进行
+    保角映射（conformal mapping）。
+
+  laplacian_mean_curvature：执行平均曲率的拉普拉斯（laplacian）运动。
+
+新增切换开关：
+   function_quantity_sparse：对函数类型的量使用稀疏矩阵。
+
+警告抑制：
+  如果您的数据文件或脚本产生了无害的警告，您可以按编号抑制特定警告。
+  语法：
+     suppress_warning number
+     unsuppress_warning number
+
+有效性检查：
+  为了帮助需要遍历约束或边界的脚本，新增了只读变量 high_constraint
+  和 high_boundary，分别表示最大约束编号和最大边界编号（请记住，
+  对于命名约束和边界，其名称是编号的同义词）；此外还有布尔函数
+  valid_constraint() 和 valid_boundary()，它们接受编号或名称作为参数。
+
+
+自动弹出（autopop）和自动截断（autochop）改进：
+
+  在皂膜模型（soapfilm model）中，自动弹出现在会删除小面片。
+
+  immediate_autopop（即时自动弹出）切换开关使短边或小面片的删除在
+  检测到后立即执行，然后再继续检测其他小边或小面片。
+
+  可读写的内部变量 autochop_length 可用于读取或设置自动截断的临界长度，
+  而无需更改 autochop 切换开关的状态。
+
+边删除选项：
+
+  force_deletion（强制删除）切换开关将强制执行边或面片的删除，
+  即使这会创建两条具有相同端点的边。
+
+  star_fcnagling 切换开关将细化那些由于边或面片删除而最终具有
+  相同端点的边。
+
+通讯 20 结束
+
+</pre>
+</body>
+</html>

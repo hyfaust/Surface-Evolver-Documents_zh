@@ -1,0 +1,824 @@
+<HTML><HEAD>
+<TITLE>Surface Evolver 切换命令</TITLE>
+</HEAD><BODY>
+<a href="index.htm" class=command>索引。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="evolver.htm#doc-top" class=command>目录。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="command.htm" class=command>命令文档。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="syntax.htm" class=command>语言参考。</a>
+<br>
+<a   id="doc-top"></a><h1>Surface Evolver 切换命令</h1>
+<p>
+这些是 <a href="command.htm#toggle-commands">切换命令</a>，它们改变某些标志的状态。
+其中许多标志会影响 <a href="single.htm#g">g</a> 命令在 <a href="iterate.htm#iteration-step">迭代</a> 时的行为。
+</p>
+<p>
+您也可以将它们用作编程上下文中的 <a href="booleans.htm#boolean-expressions">布尔表达式</a>。
+</p>
+<table>
+<tr><th>切换命令<th>简要描述
+<tr><td><a href="#ambient_pressure">AMBIENT_PRESSURE</a> (环境压力)<td>理想气体外部压力
+<tr><td><a href="#approx_curv">APPROX_CURVATURE</a> (近似曲率)<td>多面体曲率
+<tr><td><a href="#area_normalization">AREA_NORMALIZATION</a> (面积归一化)<td>力转换为曲率速度
+<tr><td><a href="#assume_oriented">ASSUME_ORIENTED</a> (假设定向)<td>假定表面定向
+<tr><td><a href="#augmented_hessian">AUGMENTED_HESSIAN</a> (增广 Hessian)<td>约束与 Hessian 合并
+<tr><td><a href="#autochop">AUTOCHOP</a> (自动切割)<td>自动细化长边
+<tr><td><a href="#autodisplay">AUTODISPLAY</a> (自动显示)<td>变化时重绘
+<tr><td><a href="#autopop">AUTOPOP</a> (自动弹出)<td>自动删除短边
+<tr><td><a href="#autopop_quartic">AUTOPOP_QUARTIC</a> (四阶自动弹出)<td>四阶模型的临界长度
+<tr><td><a href="#autorecalc">AUTORECALC</a> (自动重算)<td>参数改变时重算
+<tr><td><a href="#backcull">BACKCULL</a> (背面剔除)<td>不显示背离面
+<tr><td><a href="#bezier_basis">BEZIER_BASIS</a> (贝塞尔基)<td>Lagrange 模型贝塞尔基
+<tr><td><a href="#big_endian">BIG_ENDIAN</a> (大端序)<td>二进制输出大端序
+<tr><td><a href="#blas_flag">BLAS_FLAG</a> (BLAS 标志)<td>使用 BLAS 库
+<tr><td><a href="#boundary_curvature">BOUNDARY_CURVATURE</a> (边界曲率)<td>边界顶点曲率计算
+<tr><td><a href="#break_after_warning">BREAK_AFTER_WARNING</a> (警告后中断)<td>警告后停止执行
+<tr><td><a href="#break_on_warning">BREAK_ON_WARNING</a> (警告时中断)<td>警告时立即停止
+<tr><td><a href="#bunch_kaufman">BUNCH_KAUFMAN</a> (Bunch-Kaufman)<td>Hessian 分解方法
+<tr><td><a href="#calculate_in_3d">CALCULATE_IN_3D</a> (三维计算)<td>限制曲率计算在三维
+<tr><td><a href="#check_increase">CHECK_INCREASE</a> (检查增加)<td>检查能量是否增加
+<tr><td><a href="#circular_arc_draw">CIRCULAR_ARC_DRAW</a> (圆弧绘制)<td>二次字符串圆弧绘制
+<tr><td><a href="#clip_view">CLIP_VIEW</a> (裁剪视图)<td>使用裁剪平面
+<tr><td><a href="#clipped">CLIPPED</a> (裁剪模式)<td>环面裁剪到基本区域
+<tr><td><a href="#colorfile">COLORMAP</a> (颜色映射)<td>使用文件颜色映射
+<tr><td><a href="#conf_edge">CONF_EDGE</a> (共形边)<td>共形曲率计算
+<tr><td><a href="#conj_grad">CONJ_GRAD</a> (共轭梯度)<td>使用共轭梯度法
+<tr><td><a href="#connected">CONNECTED</a> (连接模式)<td>环面连接显示
+<tr><td><a href="#detorus_sticky">DETORUS_STICKY</a> (detorus 粘连)<td>detorus 识别重合元素
+<tr><td><a href="#deturck">DETURCK</a> (Deturck)<td>法向单位速度运动
+<tr><td><a href="#diffusion-toggle">DIFFUSION</a> (扩散)<td>激活扩散步骤
+<tr><td><a href="#dirichlet_mode">DIRICHLET_MODE</a> (Dirichlet 模式)<td>正定面积 Hessian
+<tr><td><a href="#effective_area">EFFECTIVE_AREA</a> (有效面积)<td>投影面积归一化
+<tr><td><a href="#estimate">ESTIMATE</a> (估计)<td>估计能量减少
+<tr><td><a href="#facet_colors">FACET_COLORS</a> (面颜色)<td>面着色
+<tr><td><a href="#force_deletion">FORCE_DELETION</a> (强制删除)<td>强制删除边/面
+<tr><td><a href="#force_edgeswap">FORCE_EDGESWAP</a> (强制边交换)<td>强制执行边交换
+<tr><td><a href="#full_bounding_box">FULL_BOUNDING_BOX</a> (完整边界框)<td>PostScript 完整边界框
+<tr><td><a href="#function_quantity_sparse">FUNCTION_QUANTITY_SPARSE</a> (函数量稀疏)<td>函数量稀疏矩阵
+<tr><td><a href="#gravity">GRAVITY</a> (重力)<td>重力能量
+<tr><td><a href="#gv_binary">GV_BINARY</a> (GV 二进制)<td>geomview 二进制数据
+<tr><td><a href="#hessian_diff">HESSIAN_DIFF</a> (Hessian 差分)<td>有限差分 Hessian
+<tr><td><a href="#hessian_double_normal">HESSIAN_DOUBLE_NORMAL</a> (Hessian 双法向)<td>四维对称法向
+<tr><td><a href="#hessian_normal">HESSIAN_NORMAL</a> (Hessian 法向)<td>顶点垂直于表面
+<tr><td><a href="#hessian_normal_one">HESSIAN_NORMAL_ONE</a> (单法向)<td>一维法向量
+<tr><td><a href="#hessian_normal_perp">HESSIAN_NORMAL_PERP</a> (法向垂直)<td>仅法向垂直分量
+<tr><td><a href="#hessian_quiet">HESSIAN_QUIET</a> (Hessian 静默)<td>抑制 Hessian 输出
+<tr><td><a href="#hessian_special_normal">HESSIAN_SPECIAL_NORMAL</a> (特殊法向)<td>特殊矢量场法向
+<tr><td><a href="#homothety">HOMOTHETY</a> (相似变换)<td>均匀缩放保持体积
+<tr><td><a href="#immediate_autopop">IMMEDIATE_AUTOPOP</a> (立即弹出)<td>检测到短边立即删除
+<tr><td><a href="#interp_bdry_param">INTERP_BDRY_PARAM</a> (插值边界参数)<td>插值参数值
+<tr><td><a href="#interp_normals">INTERP_NORMALS</a> (插值法向)<td>插值顶点法向着色
+<tr><td><a href="#itdebug">ITDEBUG</a> (迭代调试)<td>迭代调试信息
+<tr><td><a href="#jiggle">JIGGLE</a> (抖动)<td>迭代时抖动
+<tr><td><a href="#kraynikpopedge">KRAYNIKPOPEDGE</a> (Kraynik 边弹出)<td>Kraynik 边弹出模式
+<tr><td><a href="#kraynikpopvertex">KRAYNIKPOPVERTEX</a> (Kraynik 顶点弹出)<td>Kraynik 三维顶点弹出
+<tr><td><a href="#k_altitude_mode">K_ALTITUDE_MODE</a> (K 高度模式)<td>高度细分模式
+<tr><td><a href="#kusner">KUSNER</a> (Kusner)<td>边公式曲率
+<tr><td><a href="#labelflag">LABELFLAG</a> (标签标志)<td>PostScript 打印标签
+<tr><td><a href="#little_endian">LITTLE_ENDIAN</a> (小端序)<td>二进制输出小端序
+<tr><td><a href="#linear_metric">LINEAR_METRIC</a> (线性度量)<td>Hessian 线性度量
+<tr><td><a href="#memdebug">MEMDEBUG</a> (内存调试)<td>内存使用统计
+<tr><td><a href="#metis_factor">METIS_FACTOR</a> (METIS 因子)<td>METIS 排序分解
+<tr><td><a href="#metric_convert">METRIC_CONVERT</a> (度量转换)<td>黎曼度量转换
+<tr><td><a href="#no_dump">NO_DUMP</a> (不转储)<td>不转储变量
+<tr><td><a href="#normal_curvature">NORMAL_CURVATURE</a> (法向曲率)<td>面积为梯度平行分量
+<tr><td><a href="#normal_motion">NORMAL_MOTION</a> (法向运动)<td>运动投影到法向
+<tr><td><a href="#old_area">OLD_AREA</a> (旧面积)<td>字符串模型旧面积
+<tr><td><a href="#pinning">PINNING</a> (固定)<td>检查无法移动顶点
+<tr><td><a href="#pop_disjoin">POP_DISJOIN</a> (弹出分离)<td>弹出产生不相交膜
+<tr><td><a href="#pop_enjoin">POP_ENJOIN</a> (弹出连接)<td>弹出合并锥体顶点
+<tr><td><a href="#pop_to_edge">POP_TO_EDGE</a> (弹出到边)<td>弹出到边而非面
+<tr><td><a href="#pop_to_face">POP_TO_FACE</a> (弹出到面)<td>弹出到面而非边
+<tr><td><a href="#post_project">POST_PROJECT</a> (后投影)<td>额外约束投影
+<tr><td><a href="#ps_crossingflag">PS_CROSSINGFLAG</a> (PS 交叉标志)<td>PostScript 边交叉
+<tr><td><a href="#debug">DEBUG</a> (调试)<td>YACC 调试跟踪
+<tr><td><a href="#ps_gridflag">PS_GRIDFLAG</a> (PS 网格标志)<td>PostScript 所有边
+<tr><td><a href="#ps_labelflag">PS_LABELFLAG</a> (PS 标签标志)<td>PostScript 打印标签
+<tr><td><a href="#ps_cmykflag">PS_CMYKFLAG</a> (PS CMYK 标志)<td>PostScript CMYK 颜色
+<tr><td><a href="#ps_colorflag">PS_COLORFLAG</a> (PS 颜色标志)<td>PostScript 彩色输出
+<tr><td><a href="#quantities_only">QUANTITIES_ONLY</a> (仅量)<td>仅命名量能量
+<tr><td><a href="#quiet">QUIET</a> (静默)<td>抑制输出
+<tr><td><a href="#quietgo">QUIETGO</a> (迭代静默)<td>抑制迭代输出
+<tr><td><a href="#quietload">QUIETLOAD</a> (加载静默)<td>抑制加载回显
+<tr><td><a href="#raw_cells">RAW_CELLS</a> (原始单元)<td>未包裹面显示
+<tr><td><a href="#rgb_colors">RGB_COLORS</a> (RGB 颜色)<td>RGB 颜色分量
+<tr><td><a href="#ribiere">RIBIERE</a> (Ribiere)<td>Polak-Ribiere 共轭梯度
+<tr><td><a href="#rotate_lights">ROTATE_LIGHTS</a> (旋转灯光)<td>灯光随对象旋转
+<tr><td><a href="#runge_kutta">RUNGE_KUTTA</a> (Runge-Kutta)<td>Runge-Kutta 迭代
+<tr><td><a href="#self_similar">SELF_SIMILAR</a> (自相似)<td>自相似运动
+<tr><td><a href="#septum_flag">SEPTUM_FLAG</a> (分隔标志)<td>弹出时插入分隔面
+<tr><td><a href="#shading">SHADING</a> (着色)<td>面着色
+<tr><td><a href="#show_all_edges">SHOW_ALL_EDGES</a> (显示所有边)<td>显示所有边
+<tr><td><a href="#show_all_quantities">SHOW_ALL_QUANTITIES</a> (显示所有量)<td>显示所有量
+<tr><td><a href="#show_bounding_box">SHOW_BOUNDING_BOX</a> (显示边界框)<td>显示边界框
+<tr><td><a href="#show_inner">SHOW_INNER</a> (显示内部)<td>显示内部面
+<tr><td><a href="#show_outer">SHOW_OUTER</a> (显示外部)<td>显示外部面
+<tr><td><a href="#slice_view">SLICE_VIEW</a> (切片视图)<td>使用切片视图
+<tr><td><a href="#smooth_graph">SMOOTH_GRAPH</a> (平滑图形)<td>平滑边绘制
+<tr><td><a href="#sobolev_mode">SOBOLEV_MODE</a> (Sobolev 模式)<td>正定面积 Hessian
+<tr><td><a href="#sparse_constraints">SPARSE_CONSTRAINTS</a> (稀疏约束)<td>稀疏矩阵约束
+<tr><td><a href="#squared_gradient">SQUARED_GRADIENT</a> (平方梯度)<td>最小化梯度平方
+<tr><td><a href="#star_finagling">STAR_FINAGLING</a> (星形处理)<td>细化后删除
+<tr><td><a href="#thicken">THICKEN</a> (加厚)<td>厚度显示面颜色
+<tr><td><a href="#torus_filled">TORUS_FILLED</a> (环面填充)<td>避免冗余约束
+<tr><td><a href="#transforms">TRANSFORMS</a> (变换)<td>显示多个变换图像
+<tr><td><a href="#view_4d">VIEW_4D</a> (四维视图)<td>发送四维信息
+<tr><td><a href="#view_transforms_use_unique_point">VIEW_TRANSFORMS_USE_UNIQUE_POINT</a> (唯一点变换)<td>变换使用唯一点
+<tr><td><a href="#verbose">VERBOSE</a> (详细)<td>修改命令进度消息
+<tr><td><a href="#visibility_test">VISIBILITY_TEST</a> (可见性测试)<td>遮挡三角形测试
+<tr><td><a href="#volgrads_every">VOLGRADS_EVERY</a> (每次梯度)<td>每次投影重算梯度
+<tr><td><a href="#ysmp">YSMP</a> (YSMP)<td>Yale 稀疏矩阵包
+<tr><td><a href="#zener_drag">ZENER_DRAG</a> (Zener 拖曳)<td>速度减少功能
+</table>
+<hr>
+<a   id="ambient_pressure"></a><h2 class="keyword">AMBIENT_PRESSURE</h2>
+切换带有体外环境压力的 <a href="datafile.htm#ideal-gas-decl">理想气体模式</a>。
+外部压力可以在数据文件顶部使用 <a href="datafile.htm#ideal-gas-decl">pressure</a> 短语设置，或在运行时使用 <a href="single.htm#p">p</a> 命令设置，例如 <code>p 10</code>。
+<hr>
+<a   id="approx_curv"></a>
+<a   id="approx_curvature"></a>
+<a   id="approximate_curvature"></a><h2 class="keyword">APPROXIMATE_CURVATURE</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+使用 <a href="model.htm#polyhedral-curvature">多面体曲率</a>（在面上对度量进行线性插值）计算平均曲率向量。实际上建立形式或向量的内积为在面上对顶点值线性插值的欧几里得内积的积分。同义词：<code>APPROX_CURV, APPROX_CURVATURE</code>。
+
+<hr>
+<a   id="area_normalization"></a><h2 class="keyword">AREA_NORMALIZATION</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+将顶点上的力转换为平均曲率速度向量，方法是将力除以与顶点关联的面积，该面积是其相邻顶点面积的三分之一。字符串模型除以相邻边长度之和的一半。在进行晶粒生长模拟时很有用。
+
+<hr>
+<a   id="assume_oriented"></a><h2 class="keyword">ASSUME_ORIENTED</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+告诉平方平均曲率例程，它们可以假设表面是局部一致定向的。仅对极端形状有意义。
+
+<hr>
+<a   id="augmented_hessian"></a><h2 class="keyword">AUGMENTED_HESSIAN</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+通过将体和量约束梯度与 Hessian 一起放入增广矩阵中，并使用稀疏矩阵技术进行分解来求解受约束的 Hessian。当存在数千个稀疏约束时（如泡沫中），会大大加快速度。默认状态为未设置（打印值为 -1），此时对于 50 个或更多约束使用增广，但对于更少的约束则不使用。
+
+<hr>
+<a   id="autochop_length"></a>
+<a   id="autochop"></a><h2 class="keyword">AUTOCHOP</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+每次迭代时自动细化长边。使用 "autochop_length := <em>expr</em>" 设置自动切割长度。每次迭代时，任何预计投影后长度超过截止值的边都会被二等分。如果进行了任何二等分，运动计算将重新执行。自动切割长度可以通过读写内部变量 autochop_length 访问；但请注意，简单地为 autochop_length 赋值不会开启自动切割。
+
+<hr>
+<a   id="autodisplay"></a><h2 class="keyword">AUTODISPLAY</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换在表面改变时自动重新绘制图形。默认为 ON。与 '<a href="single.htm#d">D</a>' 命令功能相同。
+<hr>
+<a   id="autopop"></a><h2 class="keyword">AUTOPOP</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换每次迭代时自动删除短边和弹出不正确顶点。在每次迭代之前，任何预计缩短到临界长度以下的边都会通过识别其端点来删除。临界长度计算为 L = sqrt(2*dt)，其中 dt 是时间步长或 <a href="iterate.htm#scale-factor">比例因子</a>。因此，这仅应与固定比例一起使用，而不是优化比例因子。选择临界长度是为了在平均曲率运动中不会产生不稳定性。如果删除了任何边，则检查顶点是否存在不正确顶点，如同 '<a href="single.htm#o">o</a>' 命令。在字符串模型中很有用。
+<p>
+从 Evolver 版本 2.30 起，自动弹出也适用于小面。临界面积计算为 sqrt(2*dt)*perimeter/2，其中 perimeter 是面三条边长度之和。
+<p>
+另请参阅 <a href="#immediate_autopop">immediate_autopop</a> 和 <a href="#autopop_quartic">autopop_quartic</a> 切换。
+
+<hr>
+<a   id="autopop_quartic"></a><h2 class="keyword">AUTOPOP_QUARTIC</h2>
+
+切换。修改 <a href="toggle.htm">autopop</a> 模式。边的临界长度设置为 2*sqrt(sqrt(dt))，面的临界面积为 2*sqrt(sqrt(dt))*perimeter/2；适用于速度与表面四阶导数成正比的量，如 <a href="quants.htm#laplacian_mean_curvature">laplacian_mean_curvature</a>。
+
+<hr>
+<a   id="autorecalc"></a><h2 class="keyword">AUTORECALC</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换在可调参数或能量量模量改变时自动重新计算表面。默认为 OFF。
+
+<hr>
+<a   id="backcull"></a><h2 class="keyword">BACKCULL</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+阻止显示法向背离观察者的面。在不同的图形显示中可能有不同的效果。例如，要仅查看体的内部背面，仅 "set frontcolor clear" 在二维显示中有效，但对于直接三维显示还需要 backcull。
+
+<hr>
+<a   id="bezier_basis"></a><h2 class="keyword">BEZIER_BASIS</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+当 Evolver 使用 <a href="model.htm#Lagrange-model">Lagrange 模型</a> 表示几何元素时，此切换将 Lagrange 插值多项式（通过控制点）替换为贝塞尔基多项式（不通过内部控制点，但具有正值，这保证了边或面位于控制点的凸包内）。这目前是实验性的，并非所有功能（如图形化或细化）都已适当调整。
+
+<hr>
+<a   id="big_endian"></a><h2 class="keyword">BIG_ENDIAN</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+控制 <a href="commands.htm#binary_printf">binary_printf</a> 数值输出中字节的顺序。大端序是最高有效字节在前。要更改为小端序，请使用 <a href="#little_endian">little_endian</a>，而不是 "little_endian off"。
+
+<hr>
+<a   id="blas_flag"></a><h2 class="keyword">BLAS_FLAG</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换使用某些矩阵例程的 BLAS 版本，前提是 Evolver 程序已使用 -DBLAS 选项编译并链接了某个 BLAS 库。目前仅供开发者使用。
+
+<hr>
+<a   id="boundary_curvature"></a><h2 class="keyword">BOUNDARY_CURVATURE</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+当计算平均曲率或平方曲率的积分时，边界顶点的曲率不能由其邻接顶点定义，因此边界顶点星形的面积改为与相邻的内部顶点一起计算。
+
+<hr>
+<a   id="break_after_warning"></a><h2 class="keyword">BREAK_AFTER_WARNING</h2>
+
+导致 Evolver 在任何警告消息后停止执行命令并返回命令提示符。中断要到执行的命令或子命令完成后才会发生；使用 break_on_warning 可以立即中断。与 <a href="general.htm#break-after-warning-option">选项 -y</a> 效果相同。
+
+<hr>
+<a   id="break_on_warning"></a><h2 class="keyword">BREAK_ON_WARNING</h2>
+运行时切换命令。导致 Evolver 在任何警告消息后立即停止执行命令并返回命令提示符。不会像 break_after_warning 那样延迟到当前命令完成。
+<hr>
+
+<a   id="bunch_kaufman"></a>
+<a   id="bunch_kauffman"></a><h2 class="keyword">BUNCH_KAUFMAN</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在替代的最小度分解方法（<a href="#ysmp">ysmp</a> 关闭）中切换 <a href="eigentut.htm">Hessian</a> 的 Bunch-Kaufman 分解。这将 Hessian 分解为 LBL^T，其中 L 是对角线上为 1 的下三角矩阵，B 是块对角矩阵，具有 1x1 或 2x2 块。据说在分解不定 Hessian 时更稳定。
+
+<a   id="calculate_in_3d"></a>
+<h2 class="keyword">CALCULATE_IN_3D</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+平方平均曲率命名方法 star_sq_mean_curvature、star_eff_area_sq_mean_curvature、star_normal_mean_curvature 和 star_perp_sq_mean_curvature 可在任意维度空间中工作，但如果由于某种原因空间的环境维度大于 3，而您希望将曲率计算限制在前三个坐标中，则切换 "calculate_in_3d" 可以实现这一点。
+
+<hr>
+<a   id="check_increase"></a><h2 class="keyword">CHECK_INCREASE</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换在 <a href="iterate.htm#iteration-step">迭代步骤</a> 中检查能量是否增加。如果能量增加，则撤销该步骤并停止任何迭代循环。用于早期检测不稳定性及其他导致表面异常的问题。在使用固定比例进行多次迭代时很有用。也适用于 <a href="commands.htm#hessian-command">hessian</a> 命令。注意：在某些情况下能量增加是适当的，例如当存在体积或量约束且遵守约束意味着初始能量增加时。
+
+<hr>
+<a   id="circular_arc_draw"></a><h2 class="keyword">CIRCULAR_ARC_DRAW</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+如果开启，则在二次字符串模式中，边绘制为通过端点和中点的圆弧（实际上是 16 个子段），而不是二次样条。
+
+<hr>
+<a   id="clip_view"></a>
+<h2 class="keyword">CLIP_VIEW</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换在图形显示中使用 <a href="graphics.htm#clip-view">裁剪平面</a>。
+
+<hr>
+<a   id="clipped_cells"></a>
+<a   id="clipped"></a><h2 class="keyword">CLIPPED</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+将 <a href="model.htm#torus-display">环面模型显示</a> 设置为裁剪到基本区域。不是开/关切换。是与 <a href="#raw_cells">raw_cells</a> 和 <a href="#connected">connected</a> 的三向切换。同义词：clipped_cells。裁剪平行四边形的原点（左下后角）可以通过设置 <a href="model.htm#display_origin">display_origin</a> 向量中的条目来设置。默认为未设置，因此在首次显示图形时会提示用户。加载新表面时设置会保留。但加载环面模型时，如果当前显示的是非环面模型，则不会提示。
+
+<hr>
+<a   id="colorfile"></a>
+<a   id="colormap"></a><h2 class="keyword">COLORMAP</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在某些图形输出中使用来自文件的颜色映射。参见 <a href="single.htm#P">P</a> 命令。使用 <code>COLORFILE := "filename"</code> 设置文件。
+
+<hr>
+<a   id="conf_edge"></a><h2 class="keyword">CONF_EDGE</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+通过将球面拟合到边和相邻顶点（共形曲率）来计算平方曲率。
+
+<hr>
+<a   id="conj_grad"></a><h2 class="keyword">CONJ_GRAD</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在 <a href="single.htm#g">g</a> 命令中使用 <a href="iterate.htm#conjugate-gradient">共轭梯度法</a>。另请参阅 <a href="single.htm#U">U</a> 命令和 <a href="#ribiere">RIBIERE</a>。
+
+<hr>
+<a   id="connected_cells"></a>
+<a   id="connected"></a><h2 class="keyword">CONNECTED</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+将 <a href="model.htm#torus-display">环面模型</a> 显示设置为每个体作为一个连接的、包裹的表面。不是开/关切换。是与 <a href="#clipped">clipped</a> 和 <a href="#raw_cells">raw_cells</a> 的三向切换。同义词：connected_cells。由于演化过程中的轻微运动可能会导致包裹突然改变，因此存在一个体布尔属性 "centerofmass"，它会记住体的质心，下次绘制体时，包裹会被调整以使质心接近先前的质心。默认为 ON。
+
+<hr>
+<a   id="detorus_sticky"></a><h2 class="keyword">DETORUS_STICKY</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+控制 detorus 命令是否识别重合的顶点、边和面。用于识别顶点的容差由变量 detorus_epsilon 给出。
+
+<hr>
+<a   id="deturck"></a><h2 class="keyword">DETURCK</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+沿法向以单位速度运动，而不是曲率向量运动。
+
+<hr>
+<a   id="diffusion-toggle"></a><h2 class="keyword">DIFFUSION</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在每次 <a href="single.htm#g">g</a> 命令中激活 <a href="iterate.htm#diffusion">扩散</a> 步骤。
+
+<hr>
+<a   id="dirichlet_mode"></a><h2 class="keyword">DIRICHLET_MODE</h2>
+
+当 facet_area 方法用于在 hessian 命令中计算面积时，此切换使用一个近似的、正定的 facet_area hessian。这允许 hessian 迭代在远离最小表面的地方进行大步长迭代，而无需担心爆炸。然而，由于它只是近似的 hessian，最终收敛到最小值可能很慢。仅适用于 <a href="model.htm#linear-model">线性模型</a>。隐式执行 <a href="commands.htm#convert_to_quantities">convert_to_quantities</a>。此功能的另一个变体由 <a href="#sobolev_mode">sobolev_mode</a> 触发。
+
+<hr>
+<a   id="effective_area"></a><h2 class="keyword">EFFECTIVE_AREA</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在 <a href="model.htm#area-normalization">面积归一化</a> 中，运动的阻力因子取为仅垂直于运动的顶点星形面积的投影。如果正在计算平方平均曲率，则在计算曲率时使用此投影面积。
+
+<hr>
+<a   id="estimate"></a><h2 class="keyword">ESTIMATE</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+激活在每次梯度下降步骤（<a href="single.htm#g">g</a> 命令）中估计能量减少。对于每次 "g" 迭代，它打印估计的和实际的能量变化。估计值通过能量梯度与实际运动的内积计算。仅在固定比例因子远小于优化值时有用，因此线性近似是好的。内部变量 estimated_change 记录估计值。
+
+<hr>
+<a   id="facet_colors"></a><h2 class="keyword">FACET_COLORS</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在某些图形接口（如 xgraph）中启用面着色。如果关闭，面颜色为白色。默认为 ON。
+
+<hr>
+<a   id="force_deletion"></a><h2 class="keyword">FORCE_DELETION</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在肥皂膜模型中，覆盖 <a href="commands.htm#delete">delete</a> 命令拒绝删除边或面的情况，如果删除将创建两条具有相同端点的边。有时需要这样的边，例如在掐断颈部时。但通常这是一个坏主意。另请参阅 <a href="#star_finagling">star_finagling</a>。默认为 OFF。
+
+<hr>
+<a   id="force_edgeswap"></a><h2 class="keyword">FORCE_EDGESWAP</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换。使 "u" 或 "equiangulate" 或 "edgeswap" 命令跳过某些测试并无论如何执行交换。跳过的测试是：(1) 翻转边的两个顶点是不同的，(2) 创建具有相同顶点的两个面。仅在您真正知道自己在做什么的少数情况下使用。您不应将此切换保持在 ON 状态；在完成顽固边交换后将其关闭。
+
+<hr>
+<a   id="full_bounding_box"></a><h2 class="keyword">FULL_BOUNDING_BOX</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+导致 PostScript 输出中的边界框是完整窗口，而不是窗口内表面的实际范围。默认为 OFF。
+
+<hr>
+<a   id="function_quantity_sparse"></a><h2 class="keyword">FUNCTION_QUANTITY_SPARSE</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+对于定义为命名方法函数的命名量，此切换在计算 hessian 时使用稀疏矩阵。
+
+<hr>
+<a   id="gravity"></a><h2 class="keyword">GRAVITY</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+将具有密度的体的 <a href="energies.htm#gravity-energy">重力能量</a> 包含在总能量中。重力常数可以在数据文件顶部使用 "gravity_constant = value" 设置，或使用运行时命令 "G value" 设置。
+<hr>
+<a   id="gv_binary"></a><h2 class="keyword">GV_BINARY</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换以二进制格式向 geomview 发送数据，这比 ascii 更快。默认在 SGI 上为二进制，在其他系统上为 ascii，因为在某些系统上二进制格式存在问题。Ascii 也用于调试。
+
+<hr>
+<a   id="hessian_diff"></a><h2 class="keyword">HESSIAN_DIFF</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换通过有限差分计算 hessian 矩阵。仅用于调试，因为速度非常慢。
+<hr>
+<a   id="hessian_double_normal"></a><h2 class="keyword">HESSIAN_DOUBLE_NORMAL</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+当 <a href="#hessian_normal">hessian_normal</a> 也开启且空间维度为偶数时，后半部分维度的法向量分量是前半部分分量的副本。听起来很奇怪，是吧？但在四维中使用字符串模型计算圆柱对称表面的稳定性时很有用。
+
+<hr>
+<a   id="hessian_normal"></a><h2 class="keyword">HESSIAN_NORMAL</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+约束 <a href="eigentut.htm#hessian-tutorial">Hessian</a> 使每个顶点垂直于表面移动。这消除了所有使收敛困难的顶点的棘手横向运动。垂直通常定义为体积梯度，但在三重（及更高）连接线上，它是垂直于线的子空间，几条三重线相交的奇异点具有完全的自由度。
+参见 <a href="#hessian_normal_one">hessian_normal_one</a> 以更改此行为。
+
+<hr>
+<a   id="hessian_normal_one"></a><h2 class="keyword">HESSIAN_NORMAL_ONE</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+如果此开关和 <a href="#hessian_normal">hessian_normal</a> 都开启，则任何点的法向量都是一维的。这是为具有 Plateau 边界的肥皂膜设计的，其中存在与切向膜的三重连接。普通的 <code>hessian_normal</code> 允许此类三重连接的横向运动，但 <code>hessian_normal_one</code> 不允许。仅对二维中的 <a href="model.htm#string-model">字符串模型</a> 和三维中的 <a href="model.htm#soapfilm-model">肥皂膜模型</a> 有效。
+法向量计算为与顶点相邻的所有边或面的法向投影矩阵之和的最大特征值的特征向量。
+
+<hr>
+<a   id="hessian_normal_perp"></a><h2 class="keyword">HESSIAN_NORMAL_PERP</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+如果开启，则 Hessian <a href="#linear_metric">linear_metric</a> 仅使用垂直于面或边的法向分量。这会略微提高特征值。
+
+<hr>
+<a   id="hessian_quiet"></a><h2 class="keyword">HESSIAN_QUIET</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换在 Hessian 计算期间抑制打印信息。默认为开启。
+
+<hr>
+<a   id="hessian_special_normal"></a><h2 class="keyword">HESSIAN_SPECIAL_NORMAL</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+当 <a href="#hessian_normal">hessian_normal</a> 开启时，此切换使用特殊的矢量场作为扰动方向，而不是通常的表面法向。矢量场在数据文件头的 <a href="datafile.htm#hessian_special_normal_vector">hessian_special_normal_vector</a> 部分中指定。请注意，hessian_special_normal 也适用于由 <a href="elements.htm#vertex_normal">vertex_normal</a> 属性计算的法向量和常规 <a href="commands.htm#vertex_average">顶点平均</a> 使用的法向量。
+
+<hr>
+<a   id="homothety"></a><h2 class="keyword">HOMOTHETY</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+通过均匀缩放整个表面，在每次 <a href="single.htm#g">迭代</a> 后将所有体的总体积调整为固定值。
+
+<hr>
+<a   id="immediate_autopop"></a><h2 class="keyword">IMMEDIATE_AUTOPOP</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+修改自动弹出模式。在检测到短边或小面后立即删除，然后再继续检测其他小边或小面。原始行为是在任何消除之前进行所有检测，如果许多边同时变短，可能会导致不良结果。默认关闭以保持向后兼容性，但您可能应该将其打开。
+
+<hr>
+<a   id="interp_bdry_param"></a><h2 class="keyword">INTERP_BDRY_PARAM</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+对于 <a href="constrnt.htm#parametric-boundaries">参数边界</a> 上的边，通过插值参数值而不是从一端点外推来计算新顶点（由细化引入）的参数值。仅在参数非周期性时有用。
+
+<hr>
+<a   id="interp_normals"></a><h2 class="keyword">INTERP_NORMALS</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+对于支持它的图形接口，使用插值顶点法向进行着色显示。
+
+<hr>
+<a   id="itdebug"></a><h2 class="keyword">ITDEBUG</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+在 'g' 步骤期间打印一些调试信息。仅限专家使用。
+
+<hr>
+<a   id="jiggle"></a><h2 class="keyword">JIGGLE</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换每次迭代时的 <a href="single.htm#j">抖动</a>。
+
+<hr>
+<a   id="edge_pop_attribute"></a>
+<a   id="kraynikpopedge"></a><h2 class="keyword">KRAYNIKPOPEDGE</h2>
+
+切换边弹出模式（<a href="single.htm#O">O</a> 或 <a href="commands.htm#pop">pop</a> 命令），其中可弹出的边寻找具有不同 edge_pop_attribute 值的相邻面以从原始边分离；如果失败，则恢复为常规的边弹出模式。这是为了让用户更好地控制边弹出的方式。由用户声明 edge_pop_attribute 整数面属性并赋值。
+
+<hr>
+<a   id="kraynikpopvertex"></a><h2 class="keyword">KRAYNIKPOPVERTEX</h2>
+
+切换三维顶点弹出模式，其中检查可弹出顶点是否为六条边和九个面的特殊配置。如果是，则执行比默认弹出好得多的特殊弹出。
+
+<hr>
+<a   id="k_altitude_mode"></a><h2 class="keyword">K_ALTITUDE_MODE</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+当开启时，'K' 命令使用从顶点的高度而不是中线来细分细长三角形。
+
+<hr>
+<a   id="kusner"></a><h2 class="keyword">KUSNER</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+通过边公式而不是顶点公式计算平方曲率。
+
+<hr>
+<a   id="labelflag"></a><h2 class="keyword">LABELFLAG</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+当开启时，<a href="commands.htm#postscript-command">postscript</a> 命令将在 <a href="graphics.htm#postscript">postscript</a> 文件中打印元素标签。是 ps_labelflag 的同义词。
+
+<hr>
+<a   id="little_endian"></a><h2 class="keyword">LITTLE_ENDIAN</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+控制 <a href="commands.htm#binary_printf">binary_printf</a> 数值输出中字节的顺序。小端序是最低有效字节在前。要更改为大端序，请使用 <a href="#big_endian">big_endian</a>，而不是 "little_endian off"。
+
+<hr>
+<a   id="linear_metric"></a><h2 class="keyword">LINEAR_METRIC</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+<a href="eigentut.htm">Hessian</a> 的特征值和特征向量是相对于 <a href="eigentut.htm#hessian-metric">度量</a> 定义的。此命令切换一个模仿光滑表面自然度量（表面上的 L_2 积分）的度量。与 <a href="#hessian_normal">hessian_normal</a> 一起使用可获得与光滑表面上相似的特征值和特征向量。
+
+<hr>
+<a   id="memdebug"></a><h2 class="keyword">MEMDEBUG</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+当开启时，'<a href="single.htm#c">c</a>' 命令在某些系统上打印完整的内存使用统计信息。还会打印每次内存分配或释放。在某些系统上会导致在每次内存操作时进行堆检查。
+
+<hr>
+<a   id="metis_factor"></a><h2 class="keyword">METIS_FACTOR</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+如果此库已编译到 Evolver 中，则使用 Karypis 和 Kumar 的 <a href="http://www.cs.umn.edu/~karypis/metis/metis/index.html">METIS</a> 库计算并使用 Hessian 分解的排序。
+
+<hr>
+<a   id="metric_convert"></a>
+<a   id="metric_conversion"></a>
+<h2 class="keyword">METRIC_CONVERT</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+如果定义了 <a href="model.htm#metric">黎曼度量</a>，是否使用该度量进行梯度形式到向量的转换。同义词：metric_conversion。
+
+<hr>
+<a   id="no_dump"></a>
+<h2 class="keyword">NO_DUMP</h2>
+这是一个每边或每面的切换，或布尔属性。当设置时，它防止变量的值被 "dump" 或 "d" 命令写出。在使用 "replace_load" 和 "add_load" 命令重新加载当前文件的转储时很有用，您希望保留变量值，否则这些值会被加载转储文件覆盖，因为转储文件默认在数据文件顶部声明变量。"no_dump" 变量会写在转储文件的 "read" 部分，因此转储文件将作为独立文件加载。适用于全局变量和数组。语法（运行时命令；不在数据文件顶部）：
+<pre>   variable.no_dump on
+   variable.no_dump off
+</pre>
+no_dump 声明必须在变量存在之后。示例：
+<pre>
+   frame := 1;
+   frame.no_dump;
+   dump "temp.dmp";
+   frame := 2;
+</pre>
+   replace_load "temp.dmp"
+
+<hr>
+<a   id="normal_curvature"></a><h2 class="keyword">NORMAL_CURVATURE</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+通过取顶点的面积为体积梯度平行于平均曲率向量的分量来计算平方曲率。这适用于 <a href="elements.htm#sqcurve,-vertex" class="keyword">sqcurve</a> 顶点属性和数据文件顶部使用关键字 <code>squared_curvature</code> 的旧式平方平均曲率规范。
+
+<hr>
+<a   id="normal_motion"></a><h2 class="keyword">NORMAL_MOTION</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+将运动投影到表面法向，定义为体积梯度。如果顶点倾向于横向滑入丑陋的图案，在平方曲率情况下可能有用。
+
+<hr>
+<a   id="old_area"></a><h2 class="keyword">OLD_AREA</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在具有面积归一化的字符串模型中，在三重顶点处，Evolver 通常尝试计算运动以遵守冯·诺依曼定律，即面积变化率与单元的边数成正比。如果 old_area 开启，则运动通过将力除以星形面积简单计算。
+
+<hr>
+<a   id="pinning"></a><h2 class="keyword">PINNING</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+检查由于相邻顶点未在同一约束上而无法移动的顶点，即使它们可以。晦涩。
+
+<hr>
+<a   id="pop_disjoin"></a><h2 class="keyword">POP_DISJOIN</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+更改 <a href="commands.htm#pop">弹出</a> 边和顶点的行为，使其表现得像合并 Plateau 边界，即产生不相交的膜而不是通过交叉面连接的膜。在边情况下，如果四个面沿一条边相遇且两个相对的体是同一个体，则在 pop_disjoin 生效时弹出该边将合并这些体。在顶点情况下，如果顶点有一个体作为其周围的环面，则该顶点将被分成两个顶点，使环面变成连续的圆盘。所有这些都无视面相遇的角度。适用于 <a href="commands.htm#pop">pop</a>、<a href="single.htm#o">o</a> 和 <a href="single.htm#O">O</a> 命令。
+
+<hr>
+<a   id="pop_enjoin"></a><h2 class="keyword">POP_ENJOIN</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+更改肥皂膜模型中弹出顶点的行为，使得当检测到两个不同的锥体在公共顶点相遇时，弹出结果是将锥体顶点扩大为颈部而不是分离锥体。适用于 <a href="commands.htm#pop">pop</a> 和 <a href="single.htm#o">o</a> 命令。
+
+<hr>
+<a   id="pop_to_edge"></a><h2 class="keyword">POP_TO_EDGE</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+三角棱柱框架上的非最小锥体可以两种方式弹出。如果此切换开启，则将弹出到边而不是面。默认关闭。
+
+<hr>
+<a   id="pop_to_face"></a><h2 class="keyword">POP_TO_FACE</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+三角棱柱框架上的非最小锥体可以两种方式弹出。如果此切换开启，则将弹出到面而不是边。默认关闭。
+
+<hr>
+<a   id="ps_crossingflag"></a><a   id="crossingflag"></a>
+<h2 class="keyword">PS_CROSSINGFLAG</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+当开启且 <a href="model.htm#string-model">字符串模型</a> 有效时，<a href="commands.htm#postscript-command">postscript</a> 命令将在前景边经过的地方显示背景边的中断。"crossingflag" 是 "ps_crossingflag" 的旧名称。
+
+<hr>
+<a   id="debug"></a><h2 class="keyword">DEBUG</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+打印命令解析的 YACC 调试跟踪。您真的不想这样做；这是我在开发中私人使用的。
+
+<hr>
+<a   id="ps_gridflag"></a>
+<a   id="gridflag"></a><h2 class="keyword">PS_GRIDFLAG</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+如果切换开启，<a href="commands.htm#postscript-command">postscript</a> 命令将显示所显示面的所有边，而不仅仅是满足当前 <a href="commands.htm#show">边显示条件</a> 的边。"gridflag" 是 "ps_gridflag" 的旧名称。
+
+<hr>
+<a   id="ps_labelflag"></a><h2 class="keyword">PS_LABELFLAG</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+当开启时，<a href="commands.htm#postscript-command">postscript</a> 命令将在 <a href="graphics.htm#postscript">postscript</a> 文件中打印元素标签。是 labelflag 的同义词。
+
+<hr>
+<a   id="ps_cmykflag"></a><h2 class="keyword">PS_CMYKFLAG</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+当开启时，<a href="commands.htm#postscript-command">postscript</a> 命令将在其创建的文件中使用 CMYK 颜色而不是 RGB。默认为 OFF。
+
+<hr>
+<a   id="ps_colorflag"></a><h2 class="keyword">PS_COLORFLAG</h2>
+<a   id="pscolorflag"></a>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+当开启时，<a href="commands.htm#postscript-command">postscript</a> 命令将进行彩色输出。
+
+<hr>
+<a   id="quantities_only"></a><h2 class="keyword">QUANTITIES_ONLY</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+停用除命名量之外的所有能量。仅供程序员调试使用。
+
+<hr>
+<a   id="quiet"></a><h2 class="keyword">QUIET</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+抑制命令自动生成的所有正常输出消息。在运行脚本或加载具有长 <code>read</code> 部分的数据文件时很有用。来自 print、printf 和 list 命令的显式输出仍将显示，用户输入的提示也是如此。适用于重定向输出和控制台输出。错误或用户中断命令（即 CTRL-C）将关闭 QUIET，以保持清醒。
+
+<hr>
+<a   id="quietgo"></a><h2 class="keyword">QUIETGO</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+仅抑制 <a href="single.htm#g">g</a> 迭代步骤输出。
+
+<hr>
+<a   id="quietload"></a><h2 class="keyword">QUIETLOAD</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+抑制正在读取的文件的回显。这适用于数据文件末尾的 <code>read</code> 部分以及使用 <a href="commands.htm">read</a> 命令读取的任何文件。此切换在新数据文件开始时不会重置。此切换可以使用 <a href="toggle.htm">-Q</a> 命令行选项设置，以在加载的第一个数据文件中抑制回显。默认为 OFF。
+
+<hr>
+<a   id="post_project"></a><h2 class="keyword">POST_PROJECT</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在每次 <a href="single.htm#g">g</a> 迭代中引入对体积和固定量约束的额外投影。如果在 10 次迭代后收敛失败，您将收到警告消息，重复迭代将停止，内部变量 <a href="syntax.htm#iteration_counter">iteration_counter</a> 将为负。
+
+<hr>
+<a   id="raw_cells"></a><h2 class="keyword">RAW_CELLS</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+设置 <a href="model.htm#torus-display">环面模型</a> 显示普通、未包裹的面。不是开/关切换；是与 <a href="#clipped" class="keyword">clipped</a> 和 <a href="#connected" class="keyword">connected</a> 的三向切换。
+
+<hr>
+<a   id="rgb_colors"></a>
+<a   id="frgb"></a><a   id="fbrgb"></a><a   id="ergb"></a>
+<h2 class="keyword">RGB_COLORS</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换图形使用用户指定的红-绿-蓝颜色分量，而不是使用 <a href="misc.htm#color">color</a> 属性索引预定义的 16 色调色板。各个元素的 RGB 值存储在元素额外属性中：ergb 用于边，frgb 用于面，fbrgb 用于面背面颜色。由用户定义这些属性；如果未定义，则不使用且不占用空间。如果定义了 frgb 但未定义 fbrgb，则 frgb 用于正面和背面颜色。属性是 3 维或 4 维的实数；如果是 4 维，第四分量作为 alpha 值传递给图形系统，但可能不会有任何效果。值范围为 0 到 1。
+请确保初始化 RGB 属性，否则您将得到全黑的表面。要使用的属性定义为：
+<pre>
+   define edge attribute ergb real[3]
+   define facet attribute frgb real[3]
+   define facet attribute fbrgb real[3]
+</pre>
+
+<hr>
+<a   id="ribiere"></a><h2 class="keyword">RIBIERE</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+使 <a href="iterate.htm#conjugate-gradient">共轭梯度法</a> 使用 Polak-Ribiere 版本而不是 Fletcher-Reeves。（此切换不开启共轭梯度。）Polak-Ribiere 似乎能更好地从停滞中恢复。Ribiere 是默认模式。
+
+<hr>
+<a   id="rotate_lights"></a><h2 class="keyword">ROTATE_LIGHTS</h2>
+
+Evolver 切换命令。当开启时，这使得灯光在图形显示中随对象旋转。默认为 OFF。
+
+<hr>
+<a   id="runge_kutta"></a><h2 class="keyword">RUNGE_KUTTA</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在 <a href="single.htm#g">g</a> 迭代步骤中使用 Runge-Kutta 方法（仅限固定 <a href="iterate.htm#scale-factor">比例因子</a>）。
+
+<hr>
+<a   id="self_similar"></a><h2 class="keyword">SELF_SIMILAR</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+如果正在使用平方平均曲率能量，这会将速度缩放为自相似运动。仅适用于使用旧的数据文件顶部 "squared_curvature" 声明或 sqcurve 命名方法时。全局读写变量 self_sim_coeff 用作乘数。
+
+<hr>
+<a   id="septum_flag"></a><h2 class="keyword">SEPTUM_FLAG</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+对于 "pop" 命令，此切换会在弹出会在两侧之间留下开放通道时强制插入分隔面。
+
+<hr>
+<a   id="shading"></a><h2 class="keyword">SHADING</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在某些图形接口（xgraph、psgraph）中切换面着色。面的暗度取决于法向与垂直方向的角度，模拟表面上方的光源。默认为 ON。
+
+<hr>
+<a   id="show_all_edges"></a><h2 class="keyword">SHOW_ALL_EDGES</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+控制在图形窗口中显示所有边，无论当前 "show edges ..." 条件如何。与图形窗口中的 'e' 键相同。
+
+<hr>
+<a   id="show_all_quantities"></a><h2 class="keyword">SHOW_ALL_QUANTITIES</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+默认情况下，<a href="single.htm#Q">Q</a> 或 <a href="single.htm#v">v</a> 命令仅显示用户明确定义的 <a href="quants.htm#named-quantities">命名量</a>。如果 show_all_quantities 开启，则还会显示由选项 <a href="general.htm#options">-q</a> 或执行 <a href="commands.htm#convert_to_quantities">convert_to_quantities</a> 创建的所有内部量。
+
+<hr>
+<a   id="show_bounding_box"></a><h2 class="keyword">SHOW_BOUNDING_BOX</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+控制在图形中显示边界框。对应于图形窗口中的 "o" 键和图形提示符处的 "b" 命令。其优势在于它允许脚本将边界框状态设置为确定值。
+
+<hr>
+<a   id="show_inner"></a><h2 class="keyword">SHOW_INNER</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+显示内部面，即位于两个体上的面。
+
+<hr>
+<a   id="show_outer"></a><h2 class="keyword">SHOW_OUTER</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+显示外部面，即位于零个或一个体上的面。
+
+<hr>
+<a   id="slice_view"></a>
+<h2 class="keyword">SLICE_VIEW</h2>
+切换在图形显示中使用 <a href="graphics.htm#slice-view">切片视图</a>。
+
+<hr>
+<a   id="smooth_graph"></a><h2 class="keyword">SMOOTH_GRAPH</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在字符串二次和 Lagrange 模型中，使边绘制时具有许多细分以获得平滑外观。在肥皂膜 Lagrange 模型中，使边和面以 8 倍细分而不是 Lagrange 阶细分进行绘制。在二次肥皂膜模型中未实现。默认关闭。
+
+<hr>
+<a   id="sobolev_mode"></a><h2 class="keyword">SOBOLEV_MODE</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+当 facet_area 方法用于在 hessian 命令中计算面积时，此切换使用一个近似的、正定的 facet_area hessian。这允许 hessian 迭代在远离最小表面的地方进行大步长迭代，而无需担心爆炸。然而，由于它只是近似的 hessian，最终收敛到最小值可能很慢。仅适用于 <a href="model.htm#linear-model">线性模型</a>。隐式执行 <a href="commands.htm#convert_to_quantities">convert_to_quantities</a>。此功能的另一个变体由 <a href="#dirichlet_mode">dirichlet_mode</a> 触发。
+
+<hr>
+<a   id="sparse_constraints"></a><h2 class="keyword">SPARSE_CONSTRAINTS</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换在迭代和 hessian 命令中使用稀疏矩阵技术来累积和处理体和量梯度。现在是默认设置。
+
+<hr>
+<a   id="squared_gradient"></a><h2 class="keyword">SQUARED_GRADIENT</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在 <a href="commands.htm#hessian_seek">hessian_seek</a> 中，使用最小化能量梯度的平方作为目标，而不是最小化能量。
+
+<hr>
+<a   id="star_finagling"></a><h2 class="keyword">STAR_FINAGLING</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在肥皂膜模型中，<a href="commands.htm">delete</a> 命令通常不会删除边或面，如果这将导致创建两条具有相同端点的边。一些导致这种情况的简单配置会被自动检测和处理，即 "星形" 配置，其中有三个面形成一个三角形邻接被删除的边。这样的星形会通过在删除原始边之前删除其一条内部边来自动移除。但有时存在更复杂的配置，这种去星形无法处理，除非 <a href="#force_deletion">force_deletion</a> 切换开启，否则 Evolver 不会删除该边。另一种方法是首先细化将具有公共端点的边，这正是 star_finagling 切换启用的功能。默认关闭。
+
+<hr>
+<a   id="thicken"></a><h2 class="keyword">THICKEN</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+是否通过 <a href="syntax.htm#thickness">厚度</a> 显示面的不同颜色侧面。默认开启。这有助于防止由于深度缓冲区有限分辨率而导致的奇怪条纹。
+
+<hr>
+<a   id="torus_filled"></a><h2 class="keyword">TORUS_FILLED</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+Evolver 是否应将一个固定体积视为不固定，以避免在环面空间完全被固定体积的体填充（例如周期性泡沫）的情况下出现冗余约束。
+
+<hr>
+<a   id="transforms"></a><h2 class="keyword">TRANSFORMS</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+根据数据文件中定义的 <a href="datafile.htm#view-transforms">视图变换</a> 或根据当前 <a href="commands.htm#transform_expr">变换表达式</a> 应用于数据文件中定义的 <a href="datafile.htm#view-generators">视图变换生成器</a>，切换绘制表面的多个图像。
+
+<hr>
+<a   id="view_4d"></a><h2 class="keyword">VIEW_4D</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换向 <a href="graphics.htm#geomview">geomview</a> 发送四维信息。
+
+<hr>
+<a   id="view_transforms_use_unique_point"></a><h2 class="keyword">VIEW_TRANSFORMS_USE_UNIQUE_POINT</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+当使用 transform_expr 生成视图变换时，Evolver 会剔除重复的变换。默认情况下，"重复" 意味着相同的变换矩阵，但在某些情况下，不同的变换矩阵会将表面带到相同的位置。此切换启用一种模式，如果两个变换矩阵将向量 view_transforms_unique_point[] 给出的点变换到相同的图像点，则认为它们是相同的。标准用法是使 view_transforms_unique_point[] 成为正在变换的表面上的顶点，例如
+<pre>
+   view_transforms_unique_point := vertex[5].__x;
+   view_transforms_use_unique_point on;
+   transform_expr "abababa";
+</pre>
+向量 view_transforms_unique_point[] 是预定义的，因此用户无需定义它。
+
+<hr>
+<a   id="verbose"></a><h2 class="keyword">VERBOSE</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换在表面修改命令（如 refine、delete、notch、edgeswap、o、O）期间打印进度消息。
+
+<hr>
+<a   id="visibility_test"></a><h2 class="keyword">VISIBILITY_TEST</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+为使用画家算法产生二维输出（PostScript、Xwindows）的图形输出切换遮挡三角形测试。这可以大大减小 PostScript 文件的大小，但请检查输出，因为算法的实现可能存在缺陷。
+
+<hr>
+<a   id="volgrads_every"></a><h2 class="keyword">VOLGRADS_EVERY</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换在约束执行期间每个投影步骤重新计算体积约束梯度。适用于刚性问题。
+
+<hr>
+<a   id="ysmp"></a><h2 class="keyword">YSMP</h2>
+
+Evolver <a href="#toggle-commands">切换命令</a>。
+在用于分解 hessian 的 Yale 稀疏矩阵包例程和我自己的最小度分解之间切换。默认为 YSMP 关闭。
+
+<hr>
+<a   id="zener_drag"></a>
+<a   id="zener_coeff"></a>
+<h2 class="keyword">ZENER_DRAG</h2>
+Evolver <a href="#toggle-commands">切换命令</a>。
+切换 Zener 拖曳功能，其中表面的速度由变量 zener_coeff 给出的大小减少，如果速度小于 zener_coeff，则速度设置为零。
+<hr>
+<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="index.htm">索引。</a>
+</body>
+</html>
