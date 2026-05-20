@@ -1,8 +1,9 @@
 <html>
 <head>
+<meta charset="utf-8">
 <title>命令语言</title>
 </head>
-<body bgcolor="#FFFFFF">
+<body>
 
 <a name="doc_top"><h1>命令语言</h1></a>
 
@@ -432,13 +433,13 @@ Enter command:
 
 <hr>
 <a name="addload"></a><h2 class="kw">ADDLOAD</h2>
-<a href="#command-language">主提示命令</a>。用于将另一个曲面添加到当前曲面。终止当前曲面并加载新数据文件。
+<a href="#command-language">主提示命令</a>。用于将另一个表面添加到当前表面。终止当前表面并加载新数据文件。
 <pre>
   ADDLOAD <i>filenamestring</i>
 </pre>
-<code>filenamestring</code> 是数据文件的名称，可以是带引号的字符串或字符串变量。这不会重新初始化任何内容，而是将新文件中的元素添加到当前曲面中。适用于脚本中需要组合多个曲面的场景。
-有关加载新曲面并重新初始化的信息，请参阅 <a href="#load">load</a>。
-有关在不完全重新初始化的情况下替换曲面的信息，请参阅 <a href="#replace_load">replace_load</a>。
+<code>filenamestring</code> 是数据文件的名称，可以是带引号的字符串或字符串变量。这不会重新初始化任何内容，而是将新文件中的元素添加到当前表面中。适用于脚本中需要组合多个表面的场景。
+有关加载新表面并重新初始化的信息，请参阅 <a href="#load">load</a>。
+有关在不完全重新初始化的情况下替换表面的信息，请参阅 <a href="#replace_load">replace_load</a>。
 通配符匹配在某些系统上有效（Windows、Linux，可能还有其他系统），但使用通配符时要非常小心，因为可能会出现意外的匹配。
 
 <hr>
@@ -498,7 +499,7 @@ Enter command:
 
 <hr>
 <a name="convert_to_quantities"></a><h2 class="kw">CONVERT_TO_QUANTITIES</h2>
-<a href="#command-language">主提示命令</a>。将曲面从旧式的固定约束转换为使用命名量和方法实例。
+<a href="#command-language">主提示命令</a>。将表面从旧式的固定约束转换为使用命名量和方法实例。
 <pre>
   CONVERT_TO_QUANTITIES
 </pre>
@@ -540,11 +541,11 @@ Enter command:
 
 <hr>
 <a name="detorus"></a><h2 class="kw">DETORUS</h2>
-<a href="#command-language">主提示命令</a>。将环面模型中的曲面转换为普通曲面。
+<a href="#command-language">主提示命令</a>。将环面模型中的表面转换为普通表面。
 <pre>
   DETORUS
 </pre>
-将环面模型中的曲面"展开"为普通欧几里得空间中的曲面。这对于可视化环面中的曲面很有用。
+将环面模型中的表面"展开"为普通欧几里得空间中的表面。这对于可视化环面中的表面很有用。
 
 <hr>
 <a name="dirichlet"></a><h2 class="kw">DIRICHLET</h2>
@@ -586,11 +587,11 @@ Enter command:
 
 <hr>
 <a name="dump"></a><h2 class="kw">DUMP</h2>
-<a href="#command-language">主提示命令</a>。将当前曲面保存到数据文件。
+<a href="#command-language">主提示命令</a>。将当前表面保存到数据文件。
 <pre>
   DUMP <i>stringexpr</i>
 </pre>
-将当前曲面保存到由 <i>stringexpr</i> 指定的文件。文件格式为 Evolver 数据文件格式。这可用于保存中间结果或创建检查点。
+将当前表面保存到由 <i>stringexpr</i> 指定的文件。文件格式为 Evolver 数据文件格式。这可用于保存中间结果或创建检查点。
 示例：
 <pre>
   dump "checkpoint.dmp"
@@ -610,7 +611,7 @@ Enter command:
 <pre>
   EDGE_MERGE <i>expr</i>
 </pre>
-合并两个共享顶点的边，如果它们之间的角度小于 <i>expr</i>（以度为单位）。这对于简化曲面很有用。
+合并两个共享顶点的边，如果它们之间的角度小于 <i>expr</i>（以度为单位）。这对于简化表面很有用。
 
 <hr>
 <a name="edgeswap"></a><h2 class="kw">EDGESWAP</h2>
@@ -868,7 +869,7 @@ Enter command:
 <pre>
   LINEAR
 </pre>
-将边元素设置为线性模式。这意味着边在顶点之间是直线，曲面由三角形组成。这是默认模式。
+将边元素设置为线性模式。这意味着边在顶点之间是直线，表面由三角形组成。这是默认模式。
 另请参阅 <a href="#quadratic">quadratic</a>、<a href="#lagrange">lagrange</a>。
 
 <hr>
@@ -920,7 +921,7 @@ Enter command:
 <pre>
   LOAD <i>filenamestring</i>
 </pre>
-加载由 <i>filenamestring</i> 指定的 Evolver 数据文件。这会重新初始化所有内容，包括删除当前曲面。如果想要在不重新初始化的情况下添加曲面，请使用 <a href="#addload">addload</a>。
+加载由 <i>filenamestring</i> 指定的 Evolver 数据文件。这会重新初始化所有内容，包括删除当前表面。如果想要在不重新初始化的情况下添加表面，请使用 <a href="#addload">addload</a>。
 通配符匹配在某些系统上有效（Windows、Linux，可能还有其他系统），但使用通配符时要非常小心，因为可能会出现意外的匹配。
 
 <hr>
@@ -1063,7 +1064,7 @@ Enter command:
 <pre>
   NOTCH <i>expr</i>
 </pre>
-在曲面的凹口处执行操作。此命令主要用于调试和研究。
+在表面的凹口处执行操作。此命令主要用于调试和研究。
 
 <hr>
 <a name="ometis"></a><h2 class="kw">OMETIS</h2>
@@ -1153,7 +1154,7 @@ Enter command:
 <pre>
   POSTSCRIPT <i>filenamestring</i>
 </pre>
-将当前曲面的 PostScript 图像保存到文件。这对于创建曲面的打印版本很有用。
+将当前表面的 PostScript 图像保存到文件。这对于创建表面的打印版本很有用。
 示例：
 <pre>
   postscript "surface.ps"
@@ -1203,7 +1204,7 @@ Enter command:
 <pre>
   QUADRATIC
 </pre>
-将边元素设置为二次模式。在二次模式下，每条边有一个中间顶点，允许更精确地表示曲面。这对于 Hessian 能量最小化和优化很有用。
+将边元素设置为二次模式。在二次模式下，每条边有一个中间顶点，允许更精确地表示表面。这对于 Hessian 能量最小化和优化很有用。
 另请参阅 <a href="#linear">linear</a>、<a href="#lagrange">lagrange</a>。
 
 <hr>
@@ -1273,7 +1274,7 @@ Enter command:
 <pre>
   RECALC
 </pre>
-重新计算所有几何量（面积、体积、能量等）。通常在修改曲面后自动调用，但也可以手动调用以确保所有量都是最新的。
+重新计算所有几何量（面积、体积、能量等）。通常在修改表面后自动调用，但也可以手动调用以确保所有量都是最新的。
 
 <hr>
 <a name="refine"></a><h2 class="kw">REFINE</h2>
@@ -1292,11 +1293,11 @@ Enter command:
 
 <hr>
 <a name="replace_load"></a><h2 class="kw">REPLACE_LOAD</h2>
-<a href="#command-language">主提示命令</a>。替换当前曲面。
+<a href="#command-language">主提示命令</a>。替换当前表面。
 <pre>
   REPLACE_LOAD <i>filenamestring</i>
 </pre>
-用另一个数据文件替换当前曲面，但不完全重新初始化。这与 <a href="#addload">addload</a> 不同，后者会添加到当前曲面。与 <a href="#load">load</a> 不同，<code>replace_load</a> 不会重置用户定义的变量和约束。
+用另一个数据文件替换当前表面，但不完全重新初始化。这与 <a href="#addload">addload</a> 不同，后者会添加到当前表面。与 <a href="#load">load</a> 不同，<code>replace_load</a> 不会重置用户定义的变量和约束。
 
 <hr>
 <a name="renumber_all"></a><h2 class="kw">RENUMBER_ALL</h2>
@@ -1312,7 +1313,7 @@ Enter command:
 <pre>
   REORDER_STORAGE
 </pre>
-重新排列元素的存储顺序，以提高内存访问效率。这对于大型曲面可以提高性能。
+重新排列元素的存储顺序，以提高内存访问效率。这对于大型表面可以提高性能。
 
 <hr>
 <a name="reset_counts"></a><h2 class="kw">RESET_COUNTS</h2>
@@ -1419,7 +1420,7 @@ Enter command:
 <pre>
   SHOW_TRANS
 </pre>
-显示当前对称变换的信息。这对于具有对称性的曲面很有用。
+显示当前对称变换的信息。这对于具有对称性的表面很有用。
 
 <hr>
 <a name="showq"></a><h2 class="kw">SHOWQ</h2>
@@ -1486,7 +1487,7 @@ Enter command:
 <pre>
   TRANSFORM_DEPTH <i>expr</i>
 </pre>
-设置图形显示中的对称变换深度。这控制显示多少个变换后的曲面副本。
+设置图形显示中的对称变换深度。这控制显示多少个变换后的表面副本。
 示例：
 <pre>
   transform_depth 3
@@ -1499,7 +1500,7 @@ Enter command:
 <pre>
   TRANSFORM_EXPR <i>stringexpr</i>
 </pre>
-设置用于生成对称变换的表达式。这对于具有特殊对称性的曲面很有用。
+设置用于生成对称变换的表达式。这对于具有特殊对称性的表面很有用。
 另请参阅 <a href="#transform_depth">transform_depth</a>。
 
 <hr>
@@ -1550,7 +1551,7 @@ Enter command:
 <pre>
   VERTEX_AVERAGE
 </pre>
-执行顶点平均。这将每个顶点移动到其相邻顶点的加权质心。权重基于相邻边和面片的几何属性。这有助于平滑曲面。
+执行顶点平均。这将每个顶点移动到其相邻顶点的加权质心。权重基于相邻边和面片的几何属性。这有助于平滑表面。
 另请参阅 <a href="#rawv">rawv</a>、<a href="#rawestv">rawestv</a>。
 
 <hr>
@@ -1579,7 +1580,7 @@ Enter command:
 <pre>
   WRAP_VERTEX <i>v_id,transform</i>
 </pre>
-将顶点 <code>v_id</code> 应用指定的对称变换。这对于在具有对称性的曲面上移动顶点很有用。
+将顶点 <code>v_id</code> 应用指定的对称变换。这对于在具有对称性的表面上移动顶点很有用。
 示例：
 <pre>
   wrap_vertex 1, 3
@@ -1587,12 +1588,12 @@ Enter command:
 
 <hr>
 <a name="zoom"></a><h2 class="kw">ZOOM</h2>
-<a href="#command-language">主提示命令</a>。放大曲面的一部分。
+<a href="#command-language">主提示命令</a>。放大表面的一部分。
 <pre>
   ZOOM <i>facet_id</i>
   ZOOM <i>x,y,z,radius</i>
 </pre>
-放大曲面的一部分。如果提供了一个面片 id，则放大该面片。如果提供了坐标和半径，则放大指定的球形区域。
+放大表面的一部分。如果提供了一个面片 id，则放大该面片。如果提供了坐标和半径，则放大指定的球形区域。
 示例：
 <pre>
   zoom 5
@@ -1639,5 +1640,7 @@ Enter command:
 <p>
 <a href="index.htm">返回 Surface Evolver 主页</a></p>
 
+  <script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>
 </body>
 </html>

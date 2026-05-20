@@ -1,22 +1,8 @@
-<!DOCTYPE HTML>
-<html><head><TITLE>Surface Evolver 文档 - 数据文件格式</title>
-<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-</head>
-
-<BODY>
 <!--NewPage-->
-<h1 class="center">
-<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
-Surface Evolver</a> 文档</h1>
-
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
 
 <h1> Evolver 数据文件格式 </h1>
 
-             曲面的初始构型从一个 ASCII 数据文件中读取。
+             表面的初始构型从一个 ASCII 数据文件中读取。
          参见 <a href="cube.htm">cube</a>
          或 <a href="mound.htm">mound</a> 示例获取样例。
          数据文件分为六个部分：
@@ -39,7 +25,6 @@ Surface Evolver</a> 文档</h1>
          <i>expr</i> 表示任意表达式。<i>n</i> 或 <i>k</i> 表示整数，
          如果用作有向元素标签，则可以带符号。
          方括号表示可选项。'|' 表示"或"。
-
 
 <p>
 <b>注意：</b>通常公式可以出现在数字合法的任何位置（元素编号、约束编号等除外）。某些公式以公式形式存储，在每次使用时重新求值；例如约束、边界和量的公式。其他公式，如顶点坐标，在读取数据文件时求值，只存储数值。因此，如果用户将顶点坐标定义为 <code>3*width</code>，那么在运行时改变变量 <code>width</code> 的值不会影响该顶点。如果你不清楚某个位置适用哪种解释，请 <a href="commands.htm#dump">dump</a> 数据文件并查看该位置是转储了公式还是数字。
@@ -68,7 +53,6 @@ Surface Evolver</a> 文档</h1>
         数据文件中的关键字 <code>keep_macros</code> 将使宏定义在运行时保持有效，
          直到加载下一个数据文件。
 
-
 <hr>
 <hr>
 
@@ -91,7 +75,7 @@ Surface Evolver</a> 文档</h1>
 <li><a href="#boundary-decl">参数化边界</a>
 <li><a href="#named-quantity-decl">命名量</a>
 <li><a href="#method-instance-decl">命名方法实例</a>
-<li><a href="#surface-dimension-decl">曲面维度</a>
+<li><a href="#surface-dimension-decl">表面维度</a>
 <li><a href="#space-dimension-decl">空间维度</a>
 <li><a href="#extra-decl">额外属性</a>
 <li><a href="#quadratic-decl">二次模型</a>
@@ -156,7 +140,7 @@ Surface Evolver</a> 文档</h1>
               可以在任何后续表达式或常量表达式中使用。
 	     更改此处定义的变量会在
 <a href="toggle.htm#autorecalc">autorecalc</a> 开启时
-	     导致曲面自动重新计算。
+	     导致表面自动重新计算。
 	     因此，只有在其他顶部区域声明中需要的变量才应在此处定义。
 
 <p>
@@ -215,7 +199,7 @@ FORMULA FUNCTION  <em>expr</em>
              （在细化或以其他方式创建顶点后确保修复 zfix）。
     不要使用 '&gt;' 或 '&lt;' 表示不等式；使用
    <code>NONNEGATIVE</code> 或 <code>NONPOSITIVE</code>。
-   C 语言中的条件表达式对于定义由多个曲面平滑连接的约束非常有用，
+   C 语言中的条件表达式对于定义由多个表面平滑连接的约束非常有用，
    例如带有半球形端盖的圆柱体。可以在表达式开头对变量赋值，
    主要目的是在被积函数中仅对公共子表达式求值一次。
    此类复合表达式的语法为
@@ -277,7 +261,6 @@ X3: <em>expr</em>
 		语法与 <a href="#constraint-decl">
 		水平集约束</a>相同。
 
-
 <hr><h2><a   id="named-quantity-decl">命名量</a></h2>
 <a   id="lagrange_multiplier"></a>
 在数据文件中定义 <a   id="info_only"></a>
@@ -289,7 +272,7 @@ X3: <em>expr</em>
 这里 <i>name</i> 是用户分配的标识符，用于引用该量。
 任何量必须声明为三种类型之一：
 <ul>
-<li><code>ENERGY</code> 量被添加到曲面的总能量中；
+<li><code>ENERGY</code> 量被添加到表面的总能量中；
 <li><code>FIXED</code> 量被约束到固定的目标<i>值</i>；
 <li><code>CONSERVED</code> 量类似于 FIXED，运动被投影以保持该量守恒，但实际值不会被投影到给定值。
 <li><code>INFO_ONLY</code> 量的值仅报告给用户。
@@ -298,7 +281,7 @@ X3: <em>expr</em>
 这是为转储文件设计的，因此在重新加载时无需进行迭代即可拥有有效的拉格朗日乘数。
 <p>
 对于固定量，容差属性用于判断收敛性。
-当所有量偏差与容差的比率之和小于 1 时，曲面被视为已收敛。
+当所有量偏差与容差的比率之和小于 1 时，表面被视为已收敛。
 此求和还包括固定体积的体。如果容差未设置或为负，
 则使用变量 target_tolerance 的值，其默认值为 0.0001。
 <p>
@@ -380,41 +363,41 @@ X3: <em>expr</em>
  每个方法可以有各种参数来针对实例进行特化。
  当前指定的唯一参数是：
 <dl><dt> <code>SCALAR_INTEGRAND: <i>expr</i> </code></dt>
-<dd> 其中 <i>expr</i> 是坐标的标量函数
+<p>其中 <i>expr</i> 是坐标的标量函数
 （在 <a href="quants.htm#edge_general_integral">edge_general_integral</a>
 或 <a href="quants.htm#facet_general_integral">facet_general_integral</a> 中也可以是切向量或法向量分量的函数）。
-适当类型元素的元素属性也可以使用。<p></dd>
+适当类型元素的元素属性也可以使用。<p></p>
 <dt><code>
 VECTOR_INTEGRAND:  <br>
 Q1: <i>expr</i> <br>
 Q2: <i>expr</i> <br>
 Q3: <i>expr</i> <br> </code></dt>
-<dd> 其中表达式是坐标的函数。
-适当类型元素的元素属性也可以使用。<p></dd>
+<p>其中表达式是坐标的函数。
+适当类型元素的元素属性也可以使用。<p></p>
 <dt><code>
 FORM_INTEGRAND: <br>
 Q1: <i>expr</i> <br>
 Q2: <i>expr</i> <br>
 Q3: <i>expr</i> <br>
 ...<br></code></dt>
-<dd> 其中表达式是坐标的函数。
+<p>其中表达式是坐标的函数。
 适当类型元素的元素属性也可以使用。当在
 <a href="quants.htm#facet_2form_integral">facet_2form_integral</a> 方法中使用时，
 形式分量按字典序排列，
-即在 4D 中六个分量 12,13,14,23,24,34 将被列为 <code>Q1</code> 到 <code>Q6</code>。<p></dd>
+即在 4D 中六个分量 12,13,14,23,24,34 将被列为 <code>Q1</code> 到 <code>Q6</code>。<p></p>
 <dt><code>PARAMETER_1 <i>constexpr</i></code></dt>
-<dd> 用于向某些方法指定杂项数值参数。<p></dd>
+<p>用于向某些方法指定杂项数值参数。<p></p>
 <dt><code>K_FORM_ORDER <i>constexpr</i></code></dt>
-<dd>对于使用微分 k-形式的方法，这指定 k 的值。
-当需要时，应出现在 <code>FORM_INTEGRAND</code> 之前。</dd>
+<p>对于使用微分 k-形式的方法，这指定 k 的值。
+当需要时，应出现在 <code>FORM_INTEGRAND</code> 之前。</p>
 </dl>
 <hr>
 
 <a   id="string"></a>
 <a   id="soapfilm"></a>
-<a   id="surface-dimension-decl"></a><h2>曲面维度</h2>
-曲面的默认维度为 2。如果不是，必须在数据文件的顶部区域声明。
-对于一维曲面（<a href="model.htm#string-model">string 模型</a>），只需包含一行
+<a   id="surface-dimension-decl"></a><h2>表面维度</h2>
+表面的默认维度为 2。如果不是，必须在数据文件的顶部区域声明。
+对于一维表面（<a href="model.htm#string-model">string 模型</a>），只需包含一行
 <pre> STRING
 </pre>
 默认维度 2 的 <a href="model.htm#soapfilm-model">soapfilm 模型</a>
@@ -424,9 +407,9 @@ Q3: <i>expr</i> <br>
 一般地，行
 <pre> SURFACE_DIMENSION <i>n</i>
 </pre>
-定义曲面具有维度 <i>n</i>。
+定义表面具有维度 <i>n</i>。
 超过 2 的维度仅在 <a href="model.htm#simplex-model">simplex 模型</a>中有效。
-曲面维度可以在运行时通过只读变量
+表面维度可以在运行时通过只读变量
 <a href="syntax.htm#surface_dimension">surface_dimension</a> 访问。
 
 <hr>
@@ -477,7 +460,7 @@ Q3: <i>expr</i> <br>
 
 <hr>
 <a   id="quadratic-decl"></a><h2>二次模型声明</h2>
-要声明数据文件以 <a href="model.htm#quadratic-model">二次模型</a>列出曲面，
+要声明数据文件以 <a href="model.htm#quadratic-model">二次模型</a>列出表面，
 数据文件的顶部区域应包含行
 <pre>
 QUADRATIC
@@ -528,7 +511,6 @@ TORUS_FILLED
 		 以便重新计算周期矩阵。
 <hr>
 
-
 <a   id="view_matrix"></a>
 <a   id="viewing-matrix"></a><h2>视图矩阵</h2>
 数据文件的顶部区域可以包含初始的
@@ -555,7 +537,7 @@ VIEW_MATRIX
 <a   id="swap_colors"></a>
 <a   id="view_transforms"></a>
 <a   id="view-transforms"></a> <h2>视图变换</h2>
-  为了同时显示曲面的多个变换，
+  为了同时显示表面的多个变换，
    可以在数据文件的顶部区域给出若干视图变换矩阵：
 <pre>
 VIEW_TRANSFORMS <em>n</em>
@@ -657,7 +639,7 @@ SWAP_COLORS
 而不是解析计算的。因此它可以在允许使用变量的任何地方使用。
 带优化参数的 Hessian 矩阵已实现。
 可选的 pdelta 值是有限差分中使用的参数差异；默认值为 0.0001。
-可选的 pscale 值是参数运动的乘数，用于对参数与曲面能量进行"阻抗匹配"。
+可选的 pscale 值是参数运动的乘数，用于对参数与表面能量进行"阻抗匹配"。
 这些属性可以设置在任何参数上，以备作为优化参数使用。
 在运行时，可以使用 FIX 和 UNFIX 命令切换参数是否优化。
 即 <code>fix radius</code>
@@ -688,9 +670,9 @@ height.pscale := 2*height.pscale
 <hr>
 <a   id="symmetric_content"></a><h2>对称内容</h2>
 数据文件关键字 <code>SYMMETRIC_CONTENT</code> 触发使用
-替代的曲面积分来计算体体积，即向量场 (x,y,z)/3。
+替代的表面积分来计算体体积，即向量场 (x,y,z)/3。
 如果体的未建模侧面是从原点径向的，或者约束内容积分（通过近似求值）
-在应为对称的曲面上导致不对称结果，则此功能非常有用。
+在应为对称的表面上导致不对称结果，则此功能非常有用。
 
 <hr>
 <a   id="keep_originals"></a><h2>保留原始 ID</h2>
@@ -713,7 +695,6 @@ keep_originals
 
 <hr>
 
-
 <a   id="constraint_tolerance-decl"></a><h2>约束容差</h2>
 这是数据文件中关于顶点被视为满足
 <a href="constrnt.htm#level-set-constraints">水平集约束</a>的容差声明。
@@ -730,7 +711,6 @@ keep_originals
 SYMMETRY_GROUP "<em>name</em>"
 </pre>  "<em>name</em>" 是一个双引号括起来的名称，
 与 <a href="model.htm#implemented-symmetries">已定义的对称群</a>列表匹配。
-
 
 <hr>
 <a   id="length_method_name"></a><h2>长度方法</h2>
@@ -804,7 +784,7 @@ volume_method_name "circular_arc_area"
 
 当 <a href="toggle.htm#hessian_special_normal">hessian_special_normal</a>
 开启时，hessian 命令使用特殊的向量场作为扰动方向，
-而不是通常的曲面法向量。向量场以以下格式指定
+而不是通常的表面法向量。向量场以以下格式指定
 <pre>
 HESSIAN_SPECIAL_NORMAL_VECTOR
 c1: <em>expr</em>
@@ -817,7 +797,7 @@ hessian_special_normal 也适用于
 和常规 <a href="commands.htm#vertex_average">顶点平均</a>使用的法向量。
 <hr>
 <a   id="simplex-decl"></a><h2>单纯形模型声明</h2>
-要声明数据文件以 <a href="model.htm#simplex-model">单纯形模型</a>列出曲面，
+要声明数据文件以 <a href="model.htm#simplex-model">单纯形模型</a>列出表面，
 数据文件的顶部区域应包含行
 <pre>
 SIMPLEX_REPRESENTATION
@@ -829,7 +809,7 @@ SIMPLEX_REPRESENTATION
 <a   id="diffusion-decl"></a><h2>扩散</h2>
 
 Evolver 可以模拟现实生活中相邻气泡之间的气体扩散现象。
-这种扩散由穿过曲面的压差驱动。
+这种扩散由穿过表面的压差驱动。
 这通过数据文件第一部分中的关键字 DIFFUSION 调用，
 后跟扩散常数的值，即内部变量 diffusion_coeff。
 <pre>
@@ -840,7 +820,7 @@ scale*diffusion_coeff*facet_area*pressure_difference。
 缩放因子作为迭代的时间步长包含在内。
 该量被添加到或从面两侧的规定体积的体中减去。
 <p>
-如果你想对穿过各种曲面的扩散速率进行更精细的控制，
+如果你想对穿过各种表面的扩散速率进行更精细的控制，
 可以在 string 模型中定义 edge_diffusion 边属性
 或在 soapfilm 模型中定义 facet_diffusion 面属性，
 并根据需要为边或面给出单独的值。
@@ -979,7 +959,6 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 这是早期试图超越 Kelvin 空间分割时的遗留功能。
 <hr>
 
-
 <a   id="square_curvature"></a> <a   id="curvature_power"></a>
 <a   id="square_gauss_modulus"></a>
 <a   id="squared_curvature"></a><h2>平方平均曲率</h2>
@@ -1012,7 +991,6 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 数据文件关键字，设置当前 <a href="commands.htm#zoom">zoom</a> 半径。
 在给出 zoom 命令后用于转储文件中。
 
-
 <hr>
 <a   id="unsuppress_warning"></a>
 <a   id="suppress_warning"></a><h2>抑制警告</h2>
@@ -1029,7 +1007,7 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 <hr>
 <a   id="vertices_predicted"></a><h2>Vertices_predicted</h2>
 数据文件顶部区域的关键字，指定顶点结构的初始分配。可选。
-目的是防止随着顶点列表增长或曲面演化而反复重新分配内存。
+目的是防止随着顶点列表增长或表面演化而反复重新分配内存。
 应该更快，并防止内存碎片化。
 由 <a href="single.htm">d</a> 或 <a href="commands.htm">dump</a> 命令
 根据当前顶点数量自动放入转储文件。
@@ -1042,11 +1020,10 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
     facetedges_predicted  18432
 </pre>
 
-
 <hr>
 <a   id="edges_predicted"></a><h2>Edges_predicted</h2>
 数据文件顶部区域的关键字，指定边结构的初始分配。可选。
-目的是防止随着边列表增长或曲面演化而反复重新分配内存。
+目的是防止随着边列表增长或表面演化而反复重新分配内存。
 应该更快，并防止内存碎片化。
 由 <a href="single.htm">d</a> 或 <a href="commands.htm">dump</a> 命令
 根据当前边数量自动放入转储文件。
@@ -1062,7 +1039,7 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 <hr>
 <a   id="facets_predicted"></a><h2>Facets_predicted</h2>
 数据文件顶部区域的关键字，指定面结构的初始分配。可选。
-目的是防止随着面列表增长或曲面演化而反复重新分配内存。
+目的是防止随着面列表增长或表面演化而反复重新分配内存。
 应该更快，并防止内存碎片化。
 由 <a href="single.htm">d</a> 或 <a href="commands.htm">dump</a> 命令
 根据当前面数量自动放入转储文件。
@@ -1078,7 +1055,7 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 <hr>
 <a   id="bodies_predicted"></a><h2>Bodies_predicted</h2>
 数据文件顶部区域的关键字，指定体结构的初始分配。可选。
-目的是防止随着面列表增长或曲面演化而反复重新分配内存。
+目的是防止随着面列表增长或表面演化而反复重新分配内存。
 应该更快，并防止内存碎片化。
 由 <a href="single.htm">d</a> 或 <a href="commands.htm">dump</a> 命令
 根据当前体数量自动放入转储文件。
@@ -1091,11 +1068,10 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
     facetedges_predicted  18432
 </pre>
 
-
 <hr>
 <a   id="facetedges_predicted"></a><h2>Facetedges_predicted</h2>
 数据文件顶部区域的关键字，指定面边结构的初始分配。可选。
-目的是防止随着面边列表增长或曲面演化而反复重新分配内存。
+目的是防止随着面边列表增长或表面演化而反复重新分配内存。
 应该更快，并防止内存碎片化。
 由 <a href="single.htm">d</a> 或 <a href="commands.htm">dump</a> 命令
 根据当前面边数量自动放入转储文件。
@@ -1146,7 +1122,6 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
     method_instances_predicted   4098
     quantities_predicted   2050
 </pre>
-
 
 <hr>
 <hr>
@@ -1330,7 +1305,6 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 以数据文件格式打印面列表。
 <hr>
 
-
 <a   id="bodies-section"></a><h2> 体列表</h2>
 
               数据文件体列表跟在面列表后面，
@@ -1385,7 +1359,7 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
        Evolver 从数据文件模式切换到命令模式，
        并将数据文件的其余部分作为命令输入读取。
        此功能对于通过细化、迭代、定义自己的命令等
-       自动初始化曲面非常有用。
+       自动初始化表面非常有用。
         <code>READ</code> 部分是可选的。
 示例：
 <pre>  bodies
@@ -1403,8 +1377,6 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 <a href="commands.htm#bottominfo">list bottominfo</a> 命令
 打印转储文件中将打印的 <code>READ</code> 部分。
 <hr>
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-</body>
-</html>
+<script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>
+

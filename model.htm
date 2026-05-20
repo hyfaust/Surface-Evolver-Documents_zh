@@ -1,35 +1,20 @@
-<!DOCTYPE HTML>
-<html><head><TITLE>Surface Evolver 文档 - 数学模型</title>
-<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-</head>
-
-<BODY>
 <!--NewPage-->
 
-<h1 class="center">
-  <a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
-Surface Evolver</a> 文档</h1>
-
-<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-
 <a   id="models"></a>
-<h1> 曲面模型 </h1>
+<h1> 表面模型 </h1>
 
-Surface Evolver 可以处理多种不同的曲面模型。
+Surface Evolver 可以处理多种不同的表面模型。
 实际上，有几种不同类别的模型涉及不同特征，
 因此每个类别的一种变体处于活动状态。然而，某些组合是<a href="#incompatible-models">不兼容的</a>。
 <h3>模型类别：</h3>
 <ul>
-<li><a href="#combinatorics">曲面表示</a>
+<li><a href="#combinatorics">表面表示</a>
 <ul>
 <li><a href="#string-model">弦模型</a>
 <li><a href="#soapfilm-model">皂膜模型</a>（默认）
 <li><a href="#simplex-model">单纯形模型</a>
 </ul>
-<li><a href="#element-representation">曲面元素的表示</a>
+<li><a href="#element-representation">表面元素的表示</a>
 <ul>
 <li><a href="#linear-model">线性模型</a>（默认）
 <li><a href="#quadratic-model">二次模型</a>
@@ -58,7 +43,7 @@ Surface Evolver 可以处理多种不同的曲面模型。
 </ul>
 <hr>
 <a   id="incompatible-models"></a><h2>不兼容的模型</h2>
-以下<a href="#models">曲面模型</a>的组合是不兼容的：
+以下<a href="#models">表面模型</a>的组合是不兼容的：
 <ul>
 <li> <a href="#simplex-model">单纯形模型</a>与
 <a href="#torus-model">环面模型</a>或其他<a href="#symmetry-groups">
@@ -66,21 +51,21 @@ Surface Evolver 可以处理多种不同的曲面模型。
 </ul>
 <hr>
 <hr>
-<a   id="combinatorics"></a><h2>曲面表示与组合数学</h2>
-所有曲面都是由基本元素组成的单纯复形：
+<a   id="combinatorics"></a><h2>表面表示与组合数学</h2>
+所有表面都是由基本元素组成的单纯复形：
 顶点、边和面。
-Evolver有三种不同的方式表示曲面的组合数学，
-取决于曲面的维度。任何这些方法都可以在
-至少与曲面维度一样大的任何环境空间维度中使用。
+Evolver有三种不同的方式表示表面的组合数学，
+取决于表面的维度。任何这些方法都可以在
+至少与表面维度一样大的任何环境空间维度中使用。
 <ul>
-<li><a href="#string-model">弦模型</a>，用于1维曲面。
-<li><a href="#soapfilm-model">皂膜模型</a>（默认），用于2维曲面。
-<li><a href="#simplex-model">单纯形模型</a>，用于3维或更高维曲面。
+<li><a href="#string-model">弦模型</a>，用于1维表面。
+<li><a href="#soapfilm-model">皂膜模型</a>（默认），用于2维表面。
+<li><a href="#simplex-model">单纯形模型</a>，用于3维或更高维表面。
 </ul>
 
 <hr>
 <a   id="string-model"></a><h2>弦模型</h2>
-术语"弦模型"意味着曲面是一维的。
+术语"弦模型"意味着表面是一维的。
 数据文件必须在其顶部包含关键字"STRING"或"SURFACE_DIMENSION 1"。
 边由其顶点定义，面由边界边的列表定义。
 面不被分成三角形，可以有任意数量的边。
@@ -90,18 +75,18 @@ Evolver有三种不同的方式表示曲面的组合数学，
 体的体积是面的面积。
 默认能量是边长度。
 <hr><a   id="soapfilm-model"></a><h2>皂膜模型</h2>
-术语"皂膜模型"意味着曲面的维度为2。
-这是默认模型。曲面被细分为三角形面，
+术语"皂膜模型"意味着表面的维度为2。
+这是默认模型。表面被细分为三角形面，
 默认能量是表面积。边由其顶点定义。
 面由三个边的定向列表定义，这些边必须形成一个闭合循环。
 然而，数据文件中的面可以有超过三个边，
 因为它们在加载时会自动细化为面。
 在官方Evolver术语中，"face"出现在数据文件中，
-而"facet"是Evolver内部曲面表示中的三角形。
+而"facet"是Evolver内部表面表示中的三角形。
 体由一组定向面定义，这些面不必形成体的完整边界，
 例如，如果部分边界在约束上。
 <p>
-在内部，曲面通过一组称为"面边"的结构连接在一起。
+在内部，表面通过一组称为"面边"的结构连接在一起。
 边在面上的每次关联都有一个这样的结构。
 围绕每个面有一个面边的双向链表，
 因此可以按顺序遍历边，并且围绕每条边有一个
@@ -112,10 +97,10 @@ Evolver从数据文件中的几何数据计算出几何顺序。
 <hr>
 <a   id="simplex-model"></a><h2>单纯形模型</h2>
 
-单纯形模型使得表示任意维度的曲面成为可能，
+单纯形模型使得表示任意维度的表面成为可能，
 但许多Evolver功能在其中不可用。
 这里每个面被表示为k+1个顶点的定向列表，其中k是
-曲面的维度。边可以指定为k-1维单纯形，
+表面的维度。边可以指定为k-1维单纯形，
 但它们仅用于计算约束和命名量积分；
 不需要完整的边列表。
 体被指定为定向面的列表。
@@ -137,7 +122,7 @@ k = 1和k = 2是允许的，但与<a href="#string-model">弦</a>或
 几种基本命名量方法有效。
 没有<a href="#torus-model">环面模型</a>或
 <a href="#symmetry-groups">对称群</a>。
-不允许改变曲面拓扑或组合数学，
+不允许改变表面拓扑或组合数学，
 除了使用<a href="single.htm#r">r</a>命令进行全局细化。
 细化将每个单纯形1-边细分，
 边中点继承边端点的共同属性。
@@ -145,11 +130,11 @@ k = 1和k = 2是允许的，但与<a href="#string-model">弦</a>或
 <hr>
 <hr>
 
-<a   id="element-representation"></a><h2>曲面元素的表示</h2>
-曲面通过有限元方法表示，其中每个元素
+<a   id="element-representation"></a><h2>表面元素的表示</h2>
+表面通过有限元方法表示，其中每个元素
 是一个单纯形。最简单的元素类型只是直线段
-和平面三角形。这些组合表示分段线性曲面，
-对于该曲面，计算量通常比理想光滑曲面具有h^2阶的误差，
+和平面三角形。这些组合表示分段线性表面，
+对于该表面，计算量通常比理想光滑表面具有h^2阶的误差，
 其中h是元素的线性尺寸。
 存在各种表示更精确的弯曲元素的方法，
 Evolver实现了几种称为"拉格朗日元素"的版本。
@@ -178,7 +163,7 @@ Evolver实现了几种称为"拉格朗日元素"的版本。
 
 默认情况下，边和面是线性的。
 但可以通过使用二次模型将边表示为二次曲线，面表示为
-二次曲面。每条边被赋予一个中点顶点。
+二次表面。每条边被赋予一个中点顶点。
 大多数功能已为二次表示实现，
 但一些命名量方法不可用，例如
 涉及曲率的方法。
@@ -224,7 +209,7 @@ Evolver对高阶元素有非常有限的实现。
 <li> <a href="quants.htm#facet_scalar_integral">facet_scalar_integral</a>
 <li> <a href="quants.htm#facet_general_integral">facet_general_integral</a>
 </ul>
-曲面可以使用命令"lagrange n"转换为n阶
+表面可以使用命令"lagrange n"转换为n阶
 拉格朗日模型。这将转换
 <a href="model.htm#linear-model">线性</a>或
 <a href="model.htm#quadratic-model">二次模型</a>为拉格朗日，
@@ -263,7 +248,7 @@ toggle命令<a href="toggle.htm#bezier_basis">bezier_basis</a>
 <a   id="space-dimension"></a><h2>空间维度</h2>
 <a   id="MAXCOORD"></a>
 
-默认情况下，曲面存在于3维空间中。
+默认情况下，表面存在于3维空间中。
 然而，数据文件头中的短语"SPACE_DIMENSION n"将维度设置为n。
 这意味着所有坐标和向量具有n个分量。
 唯一的限制是Evolver必须使用在Makefile或model.h中
@@ -334,8 +319,8 @@ Evolver提供了几种选择，但请记住
 <hr>
 <hr>
 <a   id="symmetries"></a><h2>对称性</h2>
-有许多有趣的对称曲面问题。
-处理对称曲面的一种自然方式是
+有许多有趣的对称表面问题。
+处理对称表面的一种自然方式是
 仅计算对称的一个基本域，并使用特殊的边界条件。
 一些对称性，如镜像对称性，
 可以使用普通的Evolver功能来处理。
@@ -351,8 +336,8 @@ Evolver提供了几种选择，但请记住
 <hr>
 <a   id="default-symmetry"></a><h2>无对称性</h2>
 
-默认情况下，曲面的域是欧几里得空间。
-如果其基本域由镜像平面限定，则可以以这种方式完成对称曲面。
+默认情况下，表面的域是欧几里得空间。
+如果其基本域由镜像平面限定，则可以以这种方式完成对称表面。
 每个镜像平面应实现为线性水平集约束。
 <hr>
 <a   id="torus-model"></a> <h2>环面模型</h2>
@@ -371,7 +356,7 @@ Evolver可以取一个具有任意平行六面体作为其单位格的
 坐标不必位于平行六面体内，
 因为单位格的精确形状有些任意。
 <p>
-曲面在环面中环绕的方式通过说明边如何穿越单位格的面来给出。
+表面在环面中环绕的方式通过说明边如何穿越单位格的面来给出。
 在数据文件的<a href="datafile.htm#edges-section">边部分</a>中，
 每条边每个维度有一个符号，指示边向量如何穿越每对已识别的面，
 以及端点之间的向量需要如何调整以获得真实的边向量：
@@ -384,7 +369,7 @@ Evolver可以取一个具有任意平行六面体作为其单位格的
 环绕由各种三角剖分操作自动维护。
 <p>
 <a   id="torus-display"></a>
-有几种显示环面曲面的命令：<br>
+有几种显示环面表面的命令：<br>
 <a href="toggle.htm#raw_cells">raw_cells</a>
  - 原样绘制面，不进行裁剪。面的第一个顶点用作
 任何其他顶点展开所需的基础点。
@@ -414,7 +399,7 @@ Evolver在更改后调整体积，使其尽可能与先前的
 <a href="constrnt.htm#level-set-constraints">水平集约束</a>
 可以在环面模型中使用，
 但使用它们作为镜像对称平面与体积时要小心。
-环面体积算法不能很好地应对此类部分曲面。
+环面体积算法不能很好地应对此类部分表面。
 如果必须这样做，请使用y=const对称平面而不是x=const，
 并使用<a href="general.htm#options">-q选项</a>或执行
 <a href="commands.htm#convert_to_quantities">
@@ -444,7 +429,7 @@ display_periods对于弦模型比皂膜模型效果更好。
 <code>unshear</code>命令重置基本域为较少剪切。
 <p>
 <b><a   id="display_origin"> display_origin： </a></b>
-对于环面模式曲面，如果裁剪模式生效，
+对于环面模式表面，如果裁剪模式生效，
 裁剪框的中心使用<code>display_origin[]</code>数组设置，
 其维度是环境空间的维度。
 此数组默认不存在，必须由用户在数据文件的顶部使用以下语法创建
@@ -466,7 +451,7 @@ display_periods对于弦模型比皂膜模型效果更好。
 您定义群元素的整数表示。
 参见文件quotient.c作为示例。
 参见khyp.c和khyp.fe作为更复杂的示例，
-在克莱因双曲空间中建模八边形识别为亏格2曲面。
+在克莱因双曲空间中建模八边形识别为亏格2表面。
 <p>
 数据文件需要关键字
 <a href="datafile.htm#symmetry-decl">SYMMETRY_GROUP</a>
@@ -575,7 +560,6 @@ convert_to_quantities</a>"命令），
 <p>
 <b>群元素编码：</b>元素编码为群生成器的幂。
 
-
 <hr>
 <a   id="cubelat"></a>
  <a   id="cubelat-symmetry-group"></a><h3><code>CUBELAT</code>对称群</h3>
@@ -672,7 +656,7 @@ z是具有四分之一转的垂直平移：(x,y,z)->(-y,x,z)。
 用于x,y,z的幂，生成器按该顺序应用。<hr> <a   id="mobility"></a><h2>移动性</h2>
 
 移动性意味着顶点被移动多少。
-例如，考虑一个部分是管状、部分是板状的曲面。
+例如，考虑一个部分是管状、部分是板状的表面。
 由于管状部分具有更高的曲率，它比板状部分
 贡献更多的能量变化。然而，管状部分的面积较小，
 因此对坐标中固定步长移动的面积变化贡献较小。
@@ -718,13 +702,13 @@ z是具有四分之一转的垂直平移：(x,y,z)->(-y,x,z)。
 如果<a href="commands.htm#optimize">optimize</a>
 命令生效，或如果一个体的
 <a href="elements.htm#b_volfixed">volfixed</a>为真，
-则移动性通过整个曲面的面积归一化。
+则移动性通过整个表面的面积归一化。
 这使得移动性在目标面积/体积不变的变形下
 保持不变。因此，能量最小化者从a=0到
 a=无穷大。
 <p>
 面积归一化调整梯度，使得对于尖锐角落移动，
-角落相对于整个曲面移动。
+角落相对于整个表面移动。
 
 <a   id="effective_area"></a><a   id="non-wall-adjustment"></a>
 <hr> <a   id="effective-area"></a><h3>有效面积</h3>
@@ -774,7 +758,7 @@ effective_area标志不适用于无V约束的优化。
 但在命名中替换"vertex"或"facet"。
 这是为了与拉格朗日插值方案兼容。
 <hr>
-<b><a href="index.htm#toc">返回目录</a></b>
+<b></b>
 <hr>
-<b><a href="index.htm#bigpicture">返回概览</a></b></body>
-</html>
+<b></b>  <script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>

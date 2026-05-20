@@ -1,21 +1,3 @@
-<!DOCTYPE HTML>
-<HEAD><TITLE>Surface Evolver 文档：调试
-</title>
-<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-</head>
-
-<BODY>
-
-<h1 class="center">
-<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
-Surface Evolver</a> 文档</h1>
-
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-
-
 <hr><a   id="debugging"> </a>
 <h1>Surface Evolver 调试</h1>
 
@@ -63,7 +45,6 @@ Evolver 内置了多种调试功能。脚本调试面向普通用户；其他调
 <a   id="stack-trace"></a> <a   id="whereami"></a>
 <b>堆栈跟踪：</b>在调试提示符下，<code>whereami</code> 命令将打印堆栈跟踪，显示到达当前位置的函数或过程调用序列。
 
-
 <hr>
 <a   id="syntax-debugging"><h2>语法调试</h2></a>
 Evolver 命令解析器生成的错误消息试图提供帮助，但有时相当晦涩。常见错误包括关键字拼写错误、变量拼写与关键字相同、使用未初始化的变量以及缺少分号。在尝试这里描述的花式语法调试之前，请先检查这些。可以打印出解析步骤，但这不适合胆小者，因为输出采用非常不友好的 YACC 格式。您必须了解移位-归约解析的工作原理才能理解输出。<code>debug</code> 开关控制 YACC 跟踪功能。示例：
@@ -103,7 +84,6 @@ print asdf
 
 </pre>
 
-
 <hr>
 <a   id="memory-debugging"><h2>内存调试</h2></a>
 <code><a href="single.htm#c">c</a></code> 命令提供简要的内存使用情况输出，包括根据现有元素数量计算的元素内存，以及总分配的数据内存。例如，在 Windows 上：
@@ -142,7 +122,6 @@ Total data memory: 81 blocks, 302122 bytes.
 </pre>
 
 <p>
-
 
 <b>仅限专家。</b><a href="toggle.htm#memdebug" class="keyword">memdebug</a> 命令会在每次内存分配、重新分配或释放时打印详细信息。用于调试 Evolver 本身。如果 Evolver 编译时定义了 <code>MEMSTRINGS</code>，则还会打印每次内存操作的文件和行位置。在某些系统上，它还会在每次内存操作时进行堆检查。
 
@@ -218,7 +197,6 @@ Enter command:
 <p>
 请注意，非平滑演化（例如单侧约束）可能会使 <code>estimate</code> 背后的假设无效。
 
-
 <hr>
 <a   id="hessian-debugging"><h2>Hessian 调试</h2></a>
 
@@ -249,13 +227,10 @@ Evolver 有一个功能，允许对命名量的 Hessian 计算例程的正确性
 <a   id="mindeg_margin"></a>
 用于调试和调整我的最小度算法的一些内部变量：
 <dl>
-<dt><code>mindeg_debug_level</code></dt><dd> 控制调试消息的详细程度。</dd>
-<dt><code>mindeg_min_region_size</code></dt><dd> 期望的最小区域大小；较小的区域将与父节点合并。默认值 0。</dd>
-<dt><code>mindeg_margin</code></dt><dd> 在寻找好的消去时，高于最小度的范围。默认值 5。</dd>
+<dt><code>mindeg_debug_level</code></dt><p>控制调试消息的详细程度。</p>
+<dt><code>mindeg_min_region_size</code></dt><p>期望的最小区域大小；较小的区域将与父节点合并。默认值 0。</p>
+<dt><code>mindeg_margin</code></dt><p>在寻找好的消去时，高于最小度的范围。默认值 5。</p>
 </dl>
-
-
-
 
 <hr>
 <a   id="iteration-debugging"><h2>迭代调试</h2></a>
@@ -317,8 +292,5 @@ Enter command:
 </pre>
 
 <hr>
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-</body>
-</html>
+<script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>

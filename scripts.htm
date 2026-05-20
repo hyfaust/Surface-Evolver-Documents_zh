@@ -1,19 +1,4 @@
-<!DOCTYPE HTML>
-<HEAD><TITLE>Surface Evolver 文档 - 脚本示例</title>
-<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-</head>
-
-<BODY>
 <!--NewPage-->
-
-<h1 class="center">
-<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
-Surface Evolver</a> 文档</h1>
-
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
 
 <h1>Surface Evolver 脚本示例</h1>
 
@@ -168,7 +153,6 @@ Surface Evolver</a> 文档</h1>
 </tr>
 </table>
 
-
   <hr> <h3>    <a   id="3ds.cmd" class="name">3ds.cmd</a></h3>
 
 生成 Autodesk 3DS 格式文件的脚本。
@@ -186,7 +170,7 @@ Surface Evolver</a> 文档</h1>
 
   <hr> <h3>    <a   id="adjoint.cmd" class="name">adjoint.cmd</a></h3>
 
-   使用 Konrad Polthier 的离散共轭方法进行 Bonnet 旋转来计算伴随最小曲面（adjoint minimal surface）的脚本。参见
+   使用 Konrad Polthier 的离散共轭方法进行 Bonnet 旋转来计算伴随最小表面（adjoint minimal surface）的脚本。参见
 <p class="indent">
       Ulrich Pinkall and Konrad Polthier,
    <a href="http://page.mi.fu-berlin.de/polthier/articles/diri/diri_jem.pdf">
@@ -199,14 +183,14 @@ Konrad Polthier,
 <a href="http://page.mi.fu-berlin.de/polthier/articles/harmonic/Harmonic_preprint.pdf">
 Conjugate Harmonic Maps and Minimal Surfaces</a>.
 </p>
-   光滑最小曲面的"伴随"（adjoint）是另一个与之等距的最小曲面，
+   光滑最小表面的"伴随"（adjoint）是另一个与之等距的最小表面，
    在每个点处法线方向相同，但无穷小面元绕法线旋转了 90 度。
-   Schwartz 的 P 曲面和 D 曲面互为伴随。
+   Schwartz 的 P 表面和 D 表面互为伴随。
 <p>
-   "离散最小曲面"由平面三角形组成。如果相邻三角形的顶点重合，
+   "离散最小表面"由平面三角形组成。如果相邻三角形的顶点重合，
    则称为"协调的"（conforming）；如果相邻三角形仅在其中点处相交，
    则称为"非协调的"（nonconforming）。Polthier 证明了如果一个协调的
-   离散最小曲面最小化面积，那么它有一个精确的非协调伴随。
+   离散最小表面最小化面积，那么它有一个精确的非协调伴随。
 <p>
   本文件中的 <code>adjoint</code> 命令接收一个协调表面，计算非协调伴随，
   然后调整顶点使其协调，从而成为一个合法的 Surface Evolver 表面。
@@ -248,14 +232,14 @@ Conjugate Harmonic Maps and Minimal Surfaces</a>.
    因此可以同时加载。
 <p>
    参见我关于<a href="http://www.susqu.edu/brakke/evolver/examples/periodic/periodic.html">
-三周期最小曲面</a>的页面，了解使用 <code>adjoint</code> 创建的示例。
+三周期最小表面</a>的页面，了解使用 <code>adjoint</code> 创建的示例。
 
 <!--========================== adjointc.cmd ==============================-->
 
   <hr> <h3>    <a   id="adjointc.cmd" class="name">adjointc.cmd</a></h3>
 
    另一个使用 Konrad Polthier 的离散共轭方法进行 Bonnet 旋转来计算
-   伴随最小曲面的脚本。参见
+   伴随最小表面的脚本。参见
 <p class="indent">
       Ulrich Pinkall and Konrad Polthier,
    <a href="http://page.mi.fu-berlin.de/polthier/articles/diri/diri_jem.pdf">
@@ -268,13 +252,13 @@ Konrad Polthier,
 <a href="http://page.mi.fu-berlin.de/polthier/articles/harmonic/Harmonic_preprint.pdf">
 Conjugate Harmonic Maps and Minimal Surfaces</a>.
 </p>
-   光滑最小曲面的"伴随"是另一个与之等距的最小曲面，
+   光滑最小表面的"伴随"是另一个与之等距的最小表面，
    在每个点处法线方向相同，但无穷小面元绕法线旋转了 90 度。
-   Schwartz 的 P 曲面和 D 曲面互为伴随。
+   Schwartz 的 P 表面和 D 表面互为伴随。
 <p>
-   "离散最小曲面"由平面三角形组成。如果相邻三角形的顶点重合，
+   "离散最小表面"由平面三角形组成。如果相邻三角形的顶点重合，
    则称为"协调的"；如果相邻三角形仅在其中点处相交，
-   则称为"非协调的"。Polthier 证明了如果一个协调的离散最小曲面
+   则称为"非协调的"。Polthier 证明了如果一个协调的离散最小表面
    最小化面积，那么它有一个精确的非协调伴随。
 <p>
   本文件中的 <code>adjointc</code> 过程接收一个协调表面，计算非协调伴随，
@@ -320,7 +304,7 @@ Conjugate Harmonic Maps and Minimal Surfaces</a>.
 
 <p>
    参见我关于<a href="http://www.susqu.edu/brakke/evolver/examples/periodic/periodic.html">
-三周期最小曲面</a>的页面，了解可以使用 <code>adjointc</code> 的文件示例。<!--========================== ansys.cmd  =============================-->
+三周期最小表面</a>的页面，了解可以使用 <code>adjointc</code> 的文件示例。<!--========================== ansys.cmd  =============================-->
 
   <hr> <h3>    <a   id="ansys.cmd" class="name">ansys.cmd</a></h3>
 
@@ -380,18 +364,16 @@ Conjugate Harmonic Maps and Minimal Surfaces</a>.
 在为后续运行设置 <code>inband</code> 时，请确保将前一次运行的边的
 <code>inband</code> 清零。注意示例中的条件是布尔值，应用于所有边。
 
-
 <!--========================== bonnet_movie.cmd  =============================-->
 
   <hr> <h3>    <a   id="bonnet_movie.cmd" class="name">bonnet_movie.cmd</a></h3>
 
-
-在内存中创建最小曲面 Bonnet 旋转的电影，每度一帧，共 360 度。
+在内存中创建最小表面 Bonnet 旋转的电影，每度一帧，共 360 度。
 使用 <a href="#adjoint.cmd">adjoint.cmd</a>，因此具有相同的假设条件。
 <p>
 用法：
 <ol>
-<li>演化初始最小曲面，移除所有水平集约束和边界，在图形窗口中获得良好的视图。
+<li>演化初始最小表面，移除所有水平集约束和边界，在图形窗口中获得良好的视图。
 <li>   运行 <code>make_movie</code> 计算旋转。
 <li>   运行 <code>show_movie</code> 查看 Bonnet 旋转的屏幕显示。
 <li>   运行 <code>movie</code> 查看无限循环的 Bonnet 旋转显示。
@@ -404,7 +386,7 @@ Conjugate Harmonic Maps and Minimal Surfaces</a>.
   <hr> <h3>    <a   id="cmccousin.cmd" class="name">cmccousin.cmd</a></h3>
 
 R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有一个"表亲"
-（cousin）最小曲面，它与之等距且切平面旋转了 90 度。
+（cousin）最小表面，它与之等距且切平面旋转了 90 度。
 在 S^3 中，平移通过四元数群完成。
 <p>
 此表示使用第 4 个坐标作为四元数标量分量，以获得 R^3 和 S^3 之间在四元数单位处的更好映射。
@@ -417,13 +399,13 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
 <dl>
 <dt>
 <code>s3_to_r3</code>:
-          <dd> 将 S^3 中的最小曲面转换为 R^3 中的 CMC 1 表面。
-          调用前请移除所有约束和边界。</dd>
+          <p>将 S^3 中的最小表面转换为 R^3 中的 CMC 1 表面。
+          调用前请移除所有约束和边界。</p>
 <dt>
-<code>r3_to_s3</code>: <dd> 将 R^3 中的 CMC 1 表面转换为 S^3 中的最小曲面。
-          调用前请移除所有约束和边界。 </dd>
+<code>r3_to_s3</code>: <p>将 R^3 中的 CMC 1 表面转换为 S^3 中的最小表面。
+          调用前请移除所有约束和边界。 </p>
 <dt>
-<code>centralize(integer v_id)</code>: <dd> 将 S^3 平移使给定顶点位于 (0,0,0,1) 的过程。 </dd>
+<code>centralize(integer v_id)</code>: <p>将 S^3 平移使给定顶点位于 (0,0,0,1) 的过程。 </p>
 </dl>
 
 <!--========================== coff.cmd  =============================-->
@@ -494,7 +476,7 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
 
   <hr> <h3>    <a   id="complex.cmd" class="name">complex.cmd</a></h3>
 
-一些复数参数的复函数，主要用于最小曲面的 Weierstrass 表示。
+一些复数参数的复函数，主要用于最小表面的 Weierstrass 表示。
 每个函数有两个版本，分别返回实部和虚部。
 <p>
    内容：
@@ -516,7 +498,6 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
 如果为 0，则选择主分支。分支值相差 2*ellipticK(m)。
 <code>nbr_test</code> 是一个布尔标志，表示是否应用上述连续性测试。<br>
 参考：Abramowitz and Stegun 17.4.11
-
 
 <!--========================== dirichlet_to_disk.cmd========================-->
 
@@ -556,7 +537,6 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
 
   <hr> <h3>    <a   id="dxf_thick.cmd" class="name">dxf_thick.cmd</a></h3>
 
-
 生成具有分离面片 frontcolor 和 backcolor 的 AutoCad DXF 文件的命令脚本。
 <p>
 假设条件和功能：
@@ -574,7 +554,6 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
 <!--==========================   =============================-->
 
   <hr> <h3>    <a   id="embox.cmd" class="name">embox.cmd</a></h3>
-
 
  创建包围泡沫截面外部的体包围面片的命令脚本，
 通过使用 <a href="commands.htm#detorus">detorus</a> 命令
@@ -610,7 +589,6 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
 
   <hr> <h3>    <a   id="foamface.cmd" class="name">foamface.cmd</a></h3>
 
-
  本文件包含几个命令脚本，用于以完整泡沫面（而非 Evolver 面片）的形式分析 3D 泡沫。
 <p>
 假设条件：
@@ -645,7 +623,6 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
 <!--========================== foamface_jvx.cmd  =============================-->
 
   <hr> <h3>    <a   id="foamface_jvx.cmd" class="name">foamface_jvx.cmd</a></h3>
-
 
  生成 JavaView jvx 文件，泡沫单元面作为单个 jvx 面。
 <p>
@@ -739,12 +716,11 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
 用法：<code>gaussequi(real maxarc)</code>
 <br> 其中 <code>maxarc</code> 是细化的截断弧长（弧度）。
 
-
 <!--========================== iges.cmd  =============================-->
 
   <hr> <h3>    <a   id="iges.cmd" class="name">iges.cmd</a></h3>
 
-使用 IGES 参数化曲面片实体（类型 114）为表面写入 IGES 文件的命令脚本。
+使用 IGES 参数化表面片实体（类型 114）为表面写入 IGES 文件的命令脚本。
 <p>
 假设条件和功能：
 <ul>
@@ -762,7 +738,7 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
 
   <hr> <h3>    <a   id="iges114.cmd" class="name">iges114.cmd</a></h3>
 
-使用 IGES 参数化曲面片实体（类型 114）为表面写入 IGES 文件的命令脚本。
+使用 IGES 参数化表面片实体（类型 114）为表面写入 IGES 文件的命令脚本。
 与 <a href="#iges.cmd">iges.cmd</a> 的不同之处在于它遵循
 <a href="commands.htm#show">show facets</a> 准则，
 并且还处理二次和三次模型。
@@ -803,7 +779,7 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
 
   <hr> <h3>    <a   id="iges144.cmd" class="name">iges144.cmd</a></h3>
 
-使用 IGES 修剪参数化曲面实体（类型 144）为表面写入 IGES 文件的命令脚本。
+使用 IGES 修剪参数化表面实体（类型 144）为表面写入 IGES 文件的命令脚本。
 <p>
 假设条件和功能：
 <ul>
@@ -817,7 +793,6 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
 </ul>
 <p>
 用法：<code>iges144 >>> "filename.igs"</code>
-
 
 <!--========================== intersect.cmd  =============================-->
 
@@ -858,11 +833,9 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
 <p>
 用法：<code>jvx >>> "filename.jvx"</code>
 
-
 <!--========================== maya.cmd  =============================-->
 
   <hr> <h3>    <a   id="maya.cmd" class="name">maya.cmd</a></h3>
-
 
 使用整个表面的一个网格创建 Maya ASCII 文件的命令脚本。
 参考：http://caad.arch.ethz.ch/info/maya/manual/FileFormats/index.html
@@ -1056,7 +1029,6 @@ neville2 的用法：
 </ul>
 <p>
 用法：<code> offn >>> "filename.off"</code>
-
 
 <!--========================== off_show.cmd  =============================-->
 
@@ -1294,7 +1266,7 @@ Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier
 将三次约束转换为贝塞尔形式。
 如果您的约束已经是三次的，您可以使用<code>cubic_to_bezier</code> 命令进行转换，
 它会同时更改约束的内部形式并将曲线型边（curved edges）转换为二次边（quadratic edges）。
-此命令仅适用于将曲面型边（curved edges）转换为贝塞尔形式（Bezier form）；不能处理样条形式（spline form）。
+此命令仅适用于将表面型边（curved edges）转换为贝塞尔形式（Bezier form）；不能处理样条形式（spline form）。
 
 <p>
 用法：<code>quad_to_bezier</code>
@@ -1316,7 +1288,6 @@ Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier
 
 <p>
 用法：<code>loop_quad</code>
-
 
 <!--========================== quad_s.cmd  =============================-->
 
@@ -1451,7 +1422,6 @@ Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier
 <p>
 用法：<code>rmshort(real length)</code>
 
-
 <!--========================== rmxfe.cmd  =============================-->
 
   <hr> <h3>    <a   id="rmxfe.cmd" class="name">rmxfe.cmd</a></h3>
@@ -1467,7 +1437,6 @@ Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier
 </ul>
 <p>
 用法：<code> rmxfe</code>
-
 
 <!--========================== sbcc.cmd  =============================-->
 
@@ -1493,7 +1462,6 @@ Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier
 <p>
 用法：<code>skew(real amt)</code>
 
-
 <!--========================== skew.cmd  =============================-->
 
   <hr> <h3>    <a   id="skew.cmd" class="name">skew.cmd</a></h3>
@@ -1507,7 +1475,6 @@ Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier
 </ul>
 <p>
 用法：<code>skew(real tilt)</code>
-
 
 <!--========================== skewflip.cmd  =============================-->
 
@@ -1533,7 +1500,6 @@ Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier
 假设条件：无。
 <p>
 用法：<code>sphi(integer N)</code>
-
 
 <!--========================== spoly.cmd  =============================-->
 
@@ -1714,7 +1680,6 @@ Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier
 <p>
 用法：<code>tangutangen(integer n, real delta)</code>
 
-
 <!--========================== teapot.cmd  =============================-->
 
   <hr> <h3>    <a   id="teapot.cmd" class="name">teapot.cmd</a></h3>
@@ -1809,7 +1774,6 @@ Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier
 </ul>
 <p>
 用法：<code> vtk >>> "filename.vtk"</code>
-
 
 <!--========================== translat.cmd  =============================-->
 
@@ -1970,7 +1934,6 @@ Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier
 <p>
 用法：<code> wrl >>> "filename.wrl"</code>
 
-
 <!--========================== wuwe.cmd  =============================-->
 
   <hr> <h3>    <a   id="wuwe.cmd" class="name">wuwe.cmd</a></h3>
@@ -2046,30 +2009,30 @@ Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier
 <p>
 用法：<code> zebra()</code>
 
-
 <!--========================== 底部导航  =============================-->
 
   <p> <a href="example.htm">
-    <font size="-1">示例</font>
+    <small>示例</small>
     </a> 
   <a href="commands.htm">
-   <font size="-1">命令</font>
+   <small>命令</small>
   </a>  
   <a href="index.htm">
-    <font size="-1">索引</font>
+    <small>索引</small>
   </a>
   <a href="w3c.htm">
-    <font size="-1">HTML</font>
+    <small>HTML</small>
   </a>
   <a href="volrev.htm">
-    <font size="-1">Volume Rev</font>
+    <small>Volume Rev</small>
   </a>
   <a href="datafile.htm">
-    <font size="-1">datafile</font>
+    <small>datafile</small>
   </a>
   <a href="variables.htm">
-    <font size="-1">variables</font>
+    <small>variables</small>
   </a>
 
-</body>
-</html>
+  <script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>
+

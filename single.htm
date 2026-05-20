@@ -1,20 +1,3 @@
-<!DOCTYPE HTML>
-<HEAD><TITLE>Surface Evolver 文档：单字母主命令
-</title>
-<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-</head>
-
-<BODY>
-
-<h1 class="center">
-<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
-Surface Evolver</a> 文档</h1>
-
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-
 <hr><a   id="single-letter"> </a>
 <h2>单字母主命令</h2>
 
@@ -321,51 +304,49 @@ show_all_quantities</a>被切换为开，否则仅显示用户明确定义的命
  可能会询问您一些其他可能的选项：
 <dl>
 <dt><code>Display raw cells, connected bodies or clipped cells? (0,1,2)</code></dt>
-<dd>  如果您正在进行<a href="model.htm#torus-model">环面模型</a>，除非您已经设置了一个显示选项，否则将要求您选择<a href="model.htm#torus-display">显示选项</a>。 </dd>
+<p>如果您正在进行<a href="model.htm#torus-model">环面模型</a>，除非您已经设置了一个显示选项，否则将要求您选择<a href="model.htm#torus-display">显示选项</a>。 </p>
 <dt><code>Do normal interpolation?</code></dt>
-<dd>
-  某些格式能够在顶点法线之间进行插值以实现更平滑的着色，将询问您是否要执行此操作。</dd>
+<p>某些格式能够在顶点法线之间进行插值以实现更平滑的着色，将询问您是否要执行此操作。</p>
 <dt><code>Do inner, outer, or all surfaces? (i,o,a)</code></dt>
-<dd> 当存在物体时，可以选择绘制内表面（与两个物体相邻）、外表面（与 0 或 1 个物体相邻）或所有表面。</dd>
+<p>当存在物体时，可以选择绘制内表面（与两个物体相邻）、外表面（与 0 或 1 个物体相邻）或所有表面。</p>
 <dt><code>Do body colors?</code> </dt>
-<dd> 这给您机会为不同物体着色。如果选择是，将使用当前颜色映射文件根据 ID 号为物体着色。
+<p>这给您机会为不同物体着色。如果选择是，将使用当前颜色映射文件根据 ID 号为物体着色。
   此方案是 Evolver 早期的遗留物，建议您改用
 <a href="elements.htm#color,-facet">color</a>、
 <a href="elements.htm#frontcolor">frontcolor</a>
- 和 <a href="elements.htm#backcolor">backcolor</a> 面片属性。 </dd>
+ 和 <a href="elements.htm#backcolor">backcolor</a> 面片属性。 </p>
 <dt><code>Enter name of colormap file: </code></dt>
-<dd>  如果没有当前颜色映射文件，将提示您输入。
- 颜色映射文件的格式为每行一组 RGB 值，值在 0 和 1 之间。（此映射可能并非在所有设备上都有效。）</dd>
+<p>如果没有当前颜色映射文件，将提示您输入。
+ 颜色映射文件的格式为每行一组 RGB 值，值在 0 和 1 之间。（此映射可能并非在所有设备上都有效。）</p>
 <dt><code> Thicken? (n | y [thickness(0.001)])</code></dt>
-<dd>
- 可能还会询问您是否要加厚。如果选择是，每个面片将被记录两次，方向相反，顶点从原始位置沿法线方向移动加厚距离（该选项允许您输入）。每个顶点使用的法线与法线插值使用的法线相同，因此平面顶点周围的所有面片将使该顶点移动相同的量。三重结将被分离。加厚适用于坚持表面方向一致的渲染程序，或存在表面背面透视问题的程序。
-选择 'y' 或 'n' 将重置加厚切换。如果回答 'y'，可以可选地指定厚度，默认值为 <a href="syntax.htm#thickness">thickness</a> 内部变量的值。</dd>
+<p>可能还会询问您是否要加厚。如果选择是，每个面片将被记录两次，方向相反，顶点从原始位置沿法线方向移动加厚距离（该选项允许您输入）。每个顶点使用的法线与法线插值使用的法线相同，因此平面顶点周围的所有面片将使该顶点移动相同的量。三重结将被分离。加厚适用于坚持表面方向一致的渲染程序，或存在表面背面透视问题的程序。
+选择 'y' 或 'n' 将重置加厚切换。如果回答 'y'，可以可选地指定厚度，默认值为 <a href="syntax.htm#thickness">thickness</a> 内部变量的值。</p>
 
 </dl>
 输出类型的菜单选项为：
 <dl>
 <dt><code>1. Pixar file</code></dt>
-<dd>  Pixar 格式。实际上与选项 2 格式相同。</dd>
+<p>Pixar 格式。实际上与选项 2 格式相同。</p>
 <dt><code>2. OOGL file</code></dt>
-<dd>这是 <a href="graphics.htm#geomview">geomview</a> 使用的文件格式，即面向对象图形语言。适合直接输入到 geomview。</dd>
+<p>这是 <a href="graphics.htm#geomview">geomview</a> 使用的文件格式，即面向对象图形语言。适合直接输入到 geomview。</p>
 <dt><code>3. PostScript file</code></dt>
-<dd> 生成 <a href="graphics.htm#postscript">PostScript 文件</a>。</dd>
+<p>生成 <a href="graphics.htm#postscript">PostScript 文件</a>。</p>
 <dt><code>4. Triangle file</code></dt>
-<dd>私有格式文件，仅列出数据。现在不太有用了。</dd>
+<p>私有格式文件，仅列出数据。现在不太有用了。</p>
 <dt><code>5. Softimage file</code></dt>
-<dd>以 Softimage 格式输出文件。</dd>
+<p>以 Softimage 格式输出文件。</p>
 <dt><code>8. Start simultaneous geomview</code></dt>
-<dd>如果安装了 <a href="graphics.htm#geomview">geomview</a> 软件包，此命令将启动 geomview 并显示当前表面。
-除非 <a href="toggle.htm#autodisplay">autodisplay</a> 被切换为关闭，否则对表面的更改会自动显示。</dd>
+<p>如果安装了 <a href="graphics.htm#geomview">geomview</a> 软件包，此命令将启动 geomview 并显示当前表面。
+除非 <a href="toggle.htm#autodisplay">autodisplay</a> 被切换为关闭，否则对表面的更改会自动显示。</p>
 <dt><code>9. End simultaneous geomview</code></dt>
-<dd>终止任何 <a href="graphics.htm#geomview">geomview</a> 程序或管道。</dd>
+<p>终止任何 <a href="graphics.htm#geomview">geomview</a> 程序或管道。</p>
 <dt><code>A. Start OOGL pipe.</code></dt>
-<dd> Geomview 当前使用管道接口。
+<p>Geomview 当前使用管道接口。
  这将启动一个具有 geomview 输出的命名管道，但不调用 geomview。将告知您管道的名称，由您启动管道读取器。Evolver 阻塞直到启动管道读取器。这对于让第二个 Evolver 实例通过让 geomview 加载管道来向 geomview 提供第二个表面很有用。也适用于检查 Evolver 正在向 geomview 发送什么。<a href="commands.htm#geompipe">geompipe</a> 命令执行相同的操作。
 使用 "P 9" 终止管道。
-注意一次只能有一个 geomview 输出，因此不能同时拥有 geomview 显示和单独的管道。</dd>
+注意一次只能有一个 geomview 输出，因此不能同时拥有 geomview 显示和单独的管道。</p>
 <dt><code>B. End OOGL pipe.</code></dt>
-<dd>与选项 9 相同。</dd>
+<p>与选项 9 相同。</p>
 </dl>
 <hr><a   id="p"> </a>
 <h2>p</h2>
@@ -480,8 +461,5 @@ show_all_quantities</a>被切换为开，否则仅显示用户明确定义的命
  对二次模型执行曲率测试。如果您正在寻找具有单调平均曲率的表面，应该很有用。目前检查沿边的折痕角度并在面片内部采样曲率。方向相对于面片最初定义的方式。已弃用。<P>
 
 <hr>
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-</body>
-</html>
+<script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>

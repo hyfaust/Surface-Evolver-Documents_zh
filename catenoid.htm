@@ -1,24 +1,11 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-<title>Surface Evolver 悬链面示例</title>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
-</head>
-<BODY>
-<h1 class="center"><a href="http://www.susqu.edu/facstaff/b/brakke/evolver/evolver.htm" class="comic">
-Surface Evolver</a> 文档</h1>
-
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a><br>
+<br>
 <a href="twointor.htm">下一篇：Kelvin 泡沫示例。</a> <br>
 <a href="tutorial.htm#tutorial">返回教程顶部。</a>
 
 <a id="catenoid_example"></a>
 <h1> 示例：悬链面（Catenoid）。</h1>
 
-悬链面是两个相距不太远的圆环之间形成的极小曲面。
+悬链面是两个相距不太远的圆环之间形成的极小表面。
 在柱坐标系中，其方程为 <code>r = (1/a)cosh(az)</code>。
 在 cat.fe 文件中，上下两个圆环都定义为单参数
 边界线。分离距离和半径都是参数，因此
@@ -28,7 +15,7 @@ Surface Evolver</a> 文档</h1>
 最小值。要获得稳定的悬链面，您
 需要增大这个值。然而，如果您使用
 原始值运行，您可以看到颈部逐渐收缩。
-初始曲面
+初始表面
 由六个矩形组成，形成两个圆环之间的圆柱体。
 边界上的顶点是固定的，否则它们会沿着边界滑动
 以减小曲率；两个直径比一个周长更短。边界边也是固定的，这样
@@ -124,7 +111,7 @@ Evolver 可以处理周期性参数化，
 使用优化比例因子进行五十次迭代后，面积为 6.458483。
  此时，每次迭代仅减少面积 0.0000001，
 三角形都接近等边，一切
-看起来良好，天真的用户可能会认为曲面已经非常接近其最小值。但这实际上是能量的鞍点。
+看起来良好，天真的用户可能会认为表面已经非常接近其最小值。但这实际上是能量的鞍点。
 进一步迭代表明，每次迭代的面积变化在大约第 70 次迭代时达到最低点，
 到第 300 次迭代时面积降至 6.4336。
 三角剖分实际上希望扭曲，使得有边
@@ -167,8 +154,5 @@ Evolver 可以处理周期性参数化，
 <a href="twointor.htm">下一篇：Kelvin 泡沫示例。</a> <br>
 <a href="tutorial.htm#tutorial">返回教程顶部。</a>
 <br>
-<a href="evolver.htm#doc-top">返回 Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-</body>
-</html>
+<script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>

@@ -1,18 +1,3 @@
-<!DOCTYPE HTML>
-<head>
-   <title>Surface Evolver 文档 - 约束</title>
-   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
-</head>
-<body>
-<h1 class="center"><a href="http://www.susqu.edu/brakke/evolver/evolver.htm"
-   class="comic">
-Surface Evolver</a> 文档</h1>
-
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-
 <a   id="general-constraints"></a>
 <h1>约束和边界</h1>
 
@@ -31,7 +16,7 @@ Surface Evolver</a> 文档</h1>
 
 <li><a HREF="#one-sided-constraints">单侧约束</a> </li>
 
-<li><a HREF="#parametric-boundaries">参数化"边界"曲线和曲面</a>
+<li><a HREF="#parametric-boundaries">参数化"边界"曲线和表面</a>
 </li>
 </ul>
 </li>
@@ -83,8 +68,8 @@ Surface Evolver</a> 文档</h1>
 <li>
 有一个约束属性 <code>content_rank</code>，如果顶点（弦模型）或边（肥皂膜模型）位于多个具有内容积分的边界上（例如墙壁相交处），则如果存在内容等级，等级最低的内容积分将贡献给负侧体的内容，最高等级的内容将贡献给正侧体的内容。
 <li><a   id="convex-constraint"></a>约束可以声明为 <a href="datafile.htm#constraint-decl">CONVEX</a>，
-此时约束中的边具有与其相关的能量，该能量与直边和曲面壁之间的面积成正比。
-这个能量（称为"<a href="energies.htm#gap-energy">间隙能量</a>"）旨在补偿平面面片遇到曲面壁时通过延长壁上的一些边并缩短其他边来最小化其面积的趋势，其净效果是增加边与壁之间的净间隙。参见 tankex.fe 示例。
+此时约束中的边具有与其相关的能量，该能量与直边和表面壁之间的面积成正比。
+这个能量（称为"<a href="energies.htm#gap-energy">间隙能量</a>"）旨在补偿平面面片遇到表面壁时通过延长壁上的一些边并缩短其他边来最小化其面积的趋势，其净效果是增加边与壁之间的净间隙。参见 tankex.fe 示例。
 </li>
 
 </ul>
@@ -178,9 +163,9 @@ one_sided_lagrange 可以定义为数组。如果顶点遇到的约束多于 one
 <hr><a   id="boundary"></a>
 <a   id="boundaries"></a>
 <a   id="parametric-boundaries"></a>
-<h2>参数化"边界"曲线和曲面</h2>
-顶点位置可以用参数化曲线或曲面上的参数给出。
-在 Evolver 术语中，这样的曲线或曲面称为"边界"，因为它们通常用作曲面的边界曲线，
+<h2>参数化"边界"曲线和表面</h2>
+顶点位置可以用参数化曲线或表面上的参数给出。
+在 Evolver 术语中，这样的曲线或表面称为"边界"，因为它们通常用作表面的边界曲线，
 例如，金属丝环上的肥皂膜可以将金属丝实现为边界。
 顶点、边和面片可以被视为位于边界中。对于顶点，这意味着顶点的基本参数是边界的参数，
 其坐标根据这些参数计算。边界上的顶点在迭代期间可以移动，除非声明为固定。
@@ -227,10 +212,9 @@ vertices
 </pre>
 如果在需要时顶点上未设置 extra_boundary 属性，Evolver 将悄悄地回退到插值。
 
-
 <p> 将面放在边界上意味着从细化该面创建的所有边和顶点都将位于边界上。
-在这种情况下，边界应该有两个参数（或曲面的任何维度）。
-这对于使曲面符合已知参数形状很有用。
+在这种情况下，边界应该有两个参数（或表面的任何维度）。
+这对于使表面符合已知参数形状很有用。
 <p>
 边界上的边具有类似水平集约束边的能量和内容积分，但它们在内部实现为 <a href="quants.htm#named-quantities">命名量</a>。
 </p>
@@ -239,7 +223,7 @@ vertices
 元素是否位于特定边界上可以通过 <a href="elements.htm#on_boundary">on_boundary</a> 布尔属性查询。
 元素可以通过 <a href="commands.htm#unset">unset</a> 命令从边界中移除，
 也可以通过 <a href="commands.htm#set">set</a> 命令设置到边界上。
-<code>unset</code> 的典型用途是使用 2 参数边界定义初始曲面，细化几次，然后取消设置。示例：
+<code>unset</code> 的典型用途是使用 2 参数边界定义初始表面，细化几次，然后取消设置。示例：
 <pre>  list vertex where on_boundary 2
   unset vertex boundary 1 where on_boundary 1
   unset edge boundary 1
@@ -273,11 +257,7 @@ vertices
 <h2>命名量约束</h2>
 参见 <a href="quants.htm#named-quantities">固定命名量</a>。
 
-<hr><a HREF="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
+<hr><p>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-<p>
-
-</body>
-</html>
+  <script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>

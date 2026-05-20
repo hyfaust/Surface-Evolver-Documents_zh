@@ -1,25 +1,9 @@
-<!DOCTYPE HTML>
-<HEAD><TITLE>Surface Evolver 文档：迭代 </title>
-<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-</head>
-
-<BODY>
 <!--NewPage-->
-
-<h1 class="center">
-<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
-Surface Evolver</a> 文档</h1>
-
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-
 
 <hr><a   id="gradient-descent-iteration"> </a>
 <h2>梯度下降迭代</h2>
 
-基本的曲面演化通过梯度下降迭代来完成。
+基本的表面演化通过梯度下降迭代来完成。
 相关主题如下：
 <ul>
 <li><a href="#iteration-step">迭代步</a>
@@ -42,7 +26,7 @@ Surface Evolver</a> 文档</h1>
 <li> 如果启用了任何 <a href="model.htm#mobility">迁移率</a>选项，
 则进行相应的力到速度的转换。
 <li> 如果 <a href="toggle.htm#normal_motion">normal_motion</a> 开关处于开启状态，
-则将速度投影到曲面法线方向。
+则将速度投影到表面法线方向。
 <li> 如果共轭梯度处于启用状态，则进行
 <a href="#conjugate-gradient">共轭梯度</a>投影。
 <li> 保存当前顶点位置。
@@ -62,13 +46,13 @@ Surface Evolver</a> 文档</h1>
 	 或者通过设置
 <a href="syntax.htm#constraint_tolerance">constraint_tolerance</a> 变量来修改。
 <li> 如果 <a href="toggle.htm#jiggle">jiggling</a>（抖动）处于开启状态，
-则对曲面施加随机扰动。
+则对表面施加随机扰动。
 <li> 如果 <a href="toggle.htm#autopop">autopop</a>（自动弹出）或
 <a href="toggle.htm#autochop">autochop</a>（自动切割）处于开启状态，
 则执行相应的边删除或分割操作。
 <li> 计算新的能量、体积和量。
 <li> 如果 <a href="toggle.htm#check_increase">check_increase</a> 处于开启状态
-且曲面能量增加，则将顶点恢复到旧值。
+且表面能量增加，则将顶点恢复到旧值。
 <li> 如果 <a href="toggle.htm#estimate">estimating</a>（估计）处于开启状态，
 则打印能量变化的线性估计值。该值由速度、梯度和比例因子计算得出。
 <li> 打印剩余迭代次数、新的面积、能量和比例因子。
@@ -137,7 +121,7 @@ Evolver 在优化比例模式下会执行此操作。
 共轭梯度就能很好地工作。
 否则，它可能表现异常，要么步长过大，要么停滞不前。
 这两种情况都是由于历史向量产生误导所致。
-为防止步长过大，在对曲面进行重大更改（细化、更改约束等）后，
+为防止步长过大，在对表面进行重大更改（细化、更改约束等）后，
 应先不使用共轭梯度进行几次迭代。
 另一方面，如果看起来共轭梯度正在收敛，
 它可能只是被自己的历史弄混淆了。
@@ -146,15 +130,13 @@ Evolver 在优化比例模式下会执行此操作。
 如果您有所怀疑，请关闭并重新开启共轭梯度
 （"<code>U 2</code>"即可）以清除历史向量并重新开始。
 
-
-
 <hr>
 <a   id="diffusion"></a><h2>扩散</h2>
 <a   id="diffusion_coeff"></a>
 <a   id="edge_diffusion"></a>
 <a   id="facet_diffusion"></a>
          Evolver 可以模拟气泡之间气体扩散的现实物理现象。
-         这种扩散由穿过曲面的压力差驱动。
+         这种扩散由穿过表面的压力差驱动。
          通过在数据文件的第一部分使用关键字 DIFFUSION
          后跟扩散常数的值来启用此功能。
          在一次迭代中穿过一个面片的扩散量计算公式为：
@@ -164,7 +146,7 @@ Evolver 在优化比例模式下会执行此操作。
          或从其中减去。
          扩散常数在运行时可通过可读写的内部变量
          <code>diffusion_coeff</code> 来访问。
-<p>  如果您想要更精细地控制穿过各种曲面的扩散速率，
+<p>  如果您想要更精细地控制穿过各种表面的扩散速率，
 您可以在弦模型中定义 edge_diffusion 边属性，
 或在肥皂膜模型中定义 facet_diffusion 面片属性，
 并根据需要为各个边或面片设置单独的值。
@@ -173,12 +155,12 @@ Evolver 在优化比例模式下会执行此操作。
 <hr>
 <a   id="stability"></a><h2>稳定性</h2>
 
-迭代的时间步长不应大到足以放大曲面的扰动。
+迭代的时间步长不应大到足以放大表面的扰动。
 短波长扰动最容易被放大。
 本节概述了各种迁移率模式的稳定性特征，
 足以让用户将最大时间步长与最小面片或边的尺寸联系起来。
-讨论了两个示例：锯齿形弦线和具有等边三角剖分的近平坦曲面。
-有效面积未包含在内，因为它对近平坦曲面来说是一个不显著的修正。
+讨论了两个示例：锯齿形弦线和具有等边三角剖分的近平坦表面。
+有效面积未包含在内，因为它对近平坦表面来说是一个不显著的修正。
 本节的总体结论是：迭代中的最大时间步长受限于最短边的长度或最小面片的面积，
 但有一种情况例外。
 
@@ -216,13 +198,13 @@ V\Delta t = -2Y 给出，即 \Delta t = -2Y/V。
 这与使用优化比例因子进行演化的经验一致，
 其中最优时间步长在 0.2 - 0.3 的范围内，与三角形大小无关。
 这是此版本迁移率的一个明显优势，
-因为曲面的不同部分可以具有不同大小的三角剖分，
+因为表面的不同部分可以具有不同大小的三角剖分，
 而同一大小的时间步长可以适用于所有部分。
 <p>
 面积归一化。每个顶点的星面积为 6A，
 因此速度变为 -sqrt(3)Y/2A 和 sqrt(3)Y/4A，
 临界时间步长 \Delta t = 4/6*sqrt(3)A。
-因此在具有不同大小三角形的曲面上，时间步长受限于最小三角形的面积。
+因此在具有不同大小三角形的表面上，时间步长受限于最小三角形的面积。
 <p>
 近似面积。此力是迁移率矩阵的特征向量，
 对应特征值为 2/A。因此速度是面积归一化的四倍，
@@ -230,8 +212,6 @@ V\Delta t = -2Y 给出，即 \Delta t = -2Y/V。
 
 <hr>
 
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-</body>
-</html>
+<script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>
+

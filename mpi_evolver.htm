@@ -1,21 +1,3 @@
-<!DOCTYPE HTML>
-<HEAD><TITLE>Surface Evolver 文档：MPI Evolver
-</title>
-<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-</head>
-
-<BODY>
-
-<h1 class="center">
-<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
-Surface Evolver</a> 文档</h1>
-
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引</a>
-
-
 <hr><a   id="MPI-Evolver"> </a>
 <h1>MPI Surface Evolver — 实验性功能</h1>
 
@@ -30,14 +12,14 @@ Surface Evolver</a> 文档</h1>
 <a   id="MPI-overview"></a>
 <h2>概述</h2>
 
-MPI（Message Passing Interface，消息传递接口）是一种用于在多个进程之间传递消息的协议，这些进程通常运行在不同的机器上。MPI 版本的 Surface Evolver 可以在多台机器的多个处理器上执行 Evolver，所有处理器处理同一个曲面，由一台机器控制其他机器。假设用户已熟悉 MPI，并且已安装 MPI。
+MPI（Message Passing Interface，消息传递接口）是一种用于在多个进程之间传递消息的协议，这些进程通常运行在不同的机器上。MPI 版本的 Surface Evolver 可以在多台机器的多个处理器上执行 Evolver，所有处理器处理同一个表面，由一台机器控制其他机器。假设用户已熟悉 MPI，并且已安装 MPI。
 <p>
 MPI Evolver 仍处于早期开发阶段，尚不具备生产使用所需的功能。特别是，它不能安全地进行拓扑变化（topology changes）。目前使用 MPI Evolver 的人都只是因为喜欢尝试新工具。
 <p>
-MPI Evolver 的运行架构是将任务 0（task 0）作为主任务（master task），通过命令行界面与用户交互，同时管理一组从任务（slave tasks）。每个从任务都是 Evolver 的完整版本，只是它从主任务接收命令，并在关键点与其它任务同步数据。每个从任务拥有整个曲面的一部分，但主任务不拥有曲面数据。顶点（vertices）、边（edges）和面片（facets）分配在各从任务之间，但所有任务（包括主任务）都知道所有的体（bodies）（至少目前如此）。
+MPI Evolver 的运行架构是将任务 0（task 0）作为主任务（master task），通过命令行界面与用户交互，同时管理一组从任务（slave tasks）。每个从任务都是 Evolver 的完整版本，只是它从主任务接收命令，并在关键点与其它任务同步数据。每个从任务拥有整个表面的一部分，但主任务不拥有表面数据。顶点（vertices）、边（edges）和面片（facets）分配在各从任务之间，但所有任务（包括主任务）都知道所有的体（bodies）（至少目前如此）。
 <p>
 
-每个任务上的曲面被分为属于该任务的"本地"（native）元素和从其他任务复制而来的"边缘"（corona）元素。目前实现了三个级别的边缘状态：
+每个任务上的表面被分为属于该任务的"本地"（native）元素和从其他任务复制而来的"边缘"（corona）元素。目前实现了三个级别的边缘状态：
 <ul>
 <li>
 <b>级别 0：</b>没有边缘元素。这是数据文件读入后的初始状态，但通常用户不会看到此状态。
@@ -61,7 +43,7 @@ MPI Evolver 的运行架构是将任务 0（task 0）作为主任务（master ta
 <p>
 生成的目标文件应与相应的 MPI 库链接。主任务和从任务使用相同的可执行文件。注意：在 variable.c 中可能出现的变量 nproc 和 procs_requested 与 MPI 毫无关系；请勿修改它们。
 <p>
-如果需要在任务之间方便地重新分区曲面，建议链接 PARMETIS 和 METIS 库，可在<a href="http://glaros.dtc.umn.edu/gkhome/metis/metis/overview">此处</a>获取。此时，编译时还应定义以下宏常量：
+如果需要在任务之间方便地重新分区表面，建议链接 PARMETIS 和 METIS 库，可在<a href="http://glaros.dtc.umn.edu/gkhome/metis/metis/overview">此处</a>获取。此时，编译时还应定义以下宏常量：
 <pre>
    METIS
    PARMETIS
@@ -73,9 +55,9 @@ MPI Evolver 的运行架构是将任务 0（task 0）作为主任务（master ta
 
 有几种方式设置数据文件：
 <ol>
-<li> 为每个任务使用相同的常规 Evolver 数据文件。此时整个曲面将分配给任务 1（第一个从任务），但所有任务读取相同的头部信息。可以使用下文描述的 "repartition" 命令在从任务之间重新分配曲面。
+<li> 为每个任务使用相同的常规 Evolver 数据文件。此时整个表面将分配给任务 1（第一个从任务），但所有任务读取相同的头部信息。可以使用下文描述的 "repartition" 命令在从任务之间重新分配表面。
 
-<li> 将所有曲面放在一个数据文件中，但为各元素标记其分配到的任务编号。标记方法是在每个元素编号后附加 "@n"，其中 n 是任务编号。这种数据文件的一个优点是它可以被常规 Surface Evolver 读取，后者会忽略 "@n" 标记。例如：
+<li> 将所有表面放在一个数据文件中，但为各元素标记其分配到的任务编号。标记方法是在每个元素编号后附加 "@n"，其中 n 是任务编号。这种数据文件的一个优点是它可以被常规 Surface Evolver 读取，后者会忽略 "@n" 标记。例如：
 <pre>
 Vertices
 1@4    0.0000000000    0.0000000000    1.0000000000  fixed
@@ -110,7 +92,6 @@ Bodies
 
 无论以何种方式调用 MPI 任务，每个任务（主任务和从任务）都应在命令行上指定一个数据文件名。数据文件可以各任务不同，也可以相同，如前所述。如果数据文件名包含 "%d"，则该占位符将自动被任务编号替换以形成实际的文件名（实际上可以使用 C printf %d 格式的任何变体，例如 %03d 以确保任务编号为 3 位数字）。这使得单条 mpi 命令行可以在不同任务上加载不同的数据文件。每个任务的数据文件必须可从其运行所在的机器上访问。主任务（任务 0）应在作为控制台使用的机器上运行。
 
-
 <hr>
 <a   id="MPI-commands"></a>
 <h2>命令执行</h2>
@@ -122,16 +103,14 @@ Bodies
 MPI 版本的特殊命令：
 <dl>
 <dt> <a   id="task_exec"></a> <code>task_exec</code> <em>n,string</em></dt>
-<dd>     让任务 n 将字符串作为命令执行。任何聚合命令（aggregate commands）将在所有本地元素和导入元素上执行。
-</dd>
+<p>让任务 n 将字符串作为命令执行。任何聚合命令（aggregate commands）将在所有本地元素和导入元素上执行。
+</p>
 <dt>
- <a   id="parallel_exec"></a> <code>parallel_exec</code> <em>string</em></dt> <dd>
-     让每个从任务执行该字符串。任何聚合命令将在所有本地元素和导入元素上执行。
-</dd>
+ <a   id="parallel_exec"></a> <code>parallel_exec</code> <em>string</em></dt> <p>让每个从任务执行该字符串。任何聚合命令将在所有本地元素和导入元素上执行。
+</p>
 <dt>
  <a   id="repartition"></a>
-  <code>repartition</code> </dt><dd>
-     根据各元素属性中设置的任务编号重新分配曲面的元素。这些属性声明如下：
+  <code>repartition</code> </dt><p>根据各元素属性中设置的任务编号重新分配表面的元素。这些属性声明如下：
 <pre>
            define vertex attribute v_newpart integer[2]
            define edge   attribute e_newpart integer[2]
@@ -140,70 +119,70 @@ MPI 版本的特殊命令：
            define body  attribute b_newpart integer[2]
 </pre>
      建议将上述声明行包含在任何 MPI Evolver 数据文件中。用户设置每个属性的第一个分量；第二个分量供内部使用。示例见下文。
-</dd>
+</p>
 
 <dt> <a   id="metis_readjust"></a>
      <code>metis_readjust</code> <em>n</em> </dt>
-     <dd> 执行重新分区，但使用 METIS 分区算法，旨在基于当前分区而非从头重新分区。<em>n</em> 为期望的分区数；通常为 mpi_maxtask。 </dd>
+     <p>执行重新分区，但使用 METIS 分区算法，旨在基于当前分区而非从头重新分区。<em>n</em> 为期望的分区数；通常为 mpi_maxtask。 </p>
 
 <dt> <a   id="mpi_debug"></a>
      <code>mpi_debug</code> </dt>
-     <dd> 切换 MPI 调用跟踪的打印。请勿使用。 </dd>
+     <p>切换 MPI 调用跟踪的打印。请勿使用。 </p>
 </dl>
 
 修改过的常规命令： <p>
   这些命令照常在主任务上输入，并作用于所有从任务。聚合命令（如 histogram）仅包含每个任务上的本地元素，不包括导入元素。
 <dl>
 <dt>
-  <code>foreach</code> </dt><dd> 当从主任务作为最外层循环命令运行时，循环体将在每个任务上运行。但需注意：循环体以编译形式传递给从任务，如果内部数据结构（如符号表）与主任务上不完全一致，命令将产生不可预测的结果。这就是为什么在每个任务读取的数据文件中保持完全相同的顶部部分是一个好主意。如果对 "foreach" 是否能在任务间正常工作有疑虑，请使用下文描述的 "parallel_exec"。
+  <code>foreach</code> </dt><p>当从主任务作为最外层循环命令运行时，循环体将在每个任务上运行。但需注意：循环体以编译形式传递给从任务，如果内部数据结构（如符号表）与主任务上不完全一致，命令将产生不可预测的结果。这就是为什么在每个任务读取的数据文件中保持完全相同的顶部部分是一个好主意。如果对 "foreach" 是否能在任务间正常工作有疑虑，请使用下文描述的 "parallel_exec"。
 <p>
     从主任务运行的 "foreach" 将在每个任务的本地元素上执行其循环体，但在单个任务上运行的 "foreach"（例如通过 task_exec 或 parallel_exec）将在本地元素和导入元素上执行。
-</dd><dt>
-  <code>load</code> </dt><dd> 加载新的数据文件。数据文件名将分发给各任务；如果包含 "%d"，将被任务编号替换，以便不同任务可以加载不同的数据文件。
-</dd><dt>
-  <code>r</code> </dt><dd> 正常工作。仅在主节点上执行 "r"；它将负责在所有节点间同步数据。请勿在单个任务上执行 "r"。
-</dd><dt>
-  <code>g</code> </dt><dd> 正常工作。在所有任务间同步力和移动。共轭梯度法（conjugate gradient）也能正常工作。
+</p><dt>
+  <code>load</code> </dt><p>加载新的数据文件。数据文件名将分发给各任务；如果包含 "%d"，将被任务编号替换，以便不同任务可以加载不同的数据文件。
+</p><dt>
+  <code>r</code> </dt><p>正常工作。仅在主节点上执行 "r"；它将负责在所有节点间同步数据。请勿在单个任务上执行 "r"。
+</p><dt>
+  <code>g</code> </dt><p>正常工作。在所有任务间同步力和移动。共轭梯度法（conjugate gradient）也能正常工作。
 
-</dd><dt>
-  <code>hessian,hessian_seek,eigenprobe,ritz</code> </dt><dd> Hessian 命令正常工作。
+</p><dt>
+  <code>hessian,hessian_seek,eigenprobe,ritz</code> </dt><p>Hessian 命令正常工作。
    默认情况下，hessian 会收集到主任务。如需分布式计算（实验性），请使用 hessian_menu 命令 'A'。
 
-</dd><dt>
-  <code>c</code> </dt><dd> 从主任务执行时，打印各元素的累积计数；各任务的本地计数会被求和。在单个任务上执行时，c 报告本地元素和导入元素的总和。
+</p><dt>
+  <code>c</code> </dt><p>从主任务执行时，打印各元素的累积计数；各任务的本地计数会被求和。在单个任务上执行时，c 报告本地元素和导入元素的总和。
 
-</dd><dt>
-  <code>V</code> </dt><dd> 正常工作。在各任务间同步，因此其效果如同整个曲面在一个任务上一样。
+</p><dt>
+  <code>V</code> </dt><p>正常工作。在各任务间同步，因此其效果如同整个表面在一个任务上一样。
 
-</dd><dt>
-  <code>define attribute</code> </dt><dd> 元素属性定义将传播到所有任务，以保持各任务同步。在各任务上分别定义属性是非常糟糕的做法。
+</p><dt>
+  <code>define attribute</code> </dt><p>元素属性定义将传播到所有任务，以保持各任务同步。在各任务上分别定义属性是非常糟糕的做法。
 
-</dd><dt>
-  <code>t,l,w,refine,delete,u</code> </dt><dd> 请勿尝试这些或其他本地拓扑变化命令（除非您确信其效果完全在一个任务范围内）。这些命令尚未被修改以正确工作。
-</dd>
+</p><dt>
+  <code>t,l,w,refine,delete,u</code> </dt><p>请勿尝试这些或其他本地拓扑变化命令（除非您确信其效果完全在一个任务范围内）。这些命令尚未被修改以正确工作。
+</p>
 </dl>
 MPI 版本的内部变量：
 <dl>
 <dt> <a   id="this_task"></a>
-<code> this_task</code> </dt><dd> 当前任务的任务编号 </dd>
+<code> this_task</code> </dt><p>当前任务的任务编号 </p>
 <dt> <a   id="mpi_maxtask"></a>
-<code> mpi_maxtask</code> </dt><dd> 最高任务编号
-</dd>
+<code> mpi_maxtask</code> </dt><p>最高任务编号
+</p>
 <dt> <a   id="corona_state"></a>
-<code> corona_state</code> </dt><dd> 当前边缘级别，取值 0、1 或 2。
+<code> corona_state</code> </dt><p>当前边缘级别，取值 0、1 或 2。
 设置此变量可改变边缘状态。将其设置为 0 是非常糟糕的做法。
-</dd>
+</p>
 
 </dl>
 
 MPI 版本的元素属性：
 <dl><dt>
   <a   id="mpi_task"></a>
-<code> mpi_task</code> </dt><dd> 此元素所属的任务编号。例如，如果想查看任务 5 从任务 2 导入了哪些顶点，可以使用：
+<code> mpi_task</code> </dt><p>此元素所属的任务编号。例如，如果想查看任务 5 从任务 2 导入了哪些顶点，可以使用：
 <pre>
                  task_exec 5,"list vertex where mpi_task == 2"
 </pre>
-</dd>
+</p>
 </dl>
 
 <hr>
@@ -218,7 +197,7 @@ MPI 版本的元素属性：
     查看所有部分。
 
 <li>  在主任务上使用屏幕图形，并让其从其他任务导入数据。目前仅在 OpenGL 图形中测试过此方式。
-    首先，在主任务中用 's' 启动图形显示。默认将显示任务 1 的曲面部分。
+    首先，在主任务中用 's' 启动图形显示。默认将显示任务 1 的表面部分。
     要显示的任务可在图形显示中选择：按 'M' 进入菜单模式，然后用鼠标右键显示主菜单，接着进入底部附近的 MPI 任务子菜单，选择所需的任务。
 </ol>    
 
@@ -229,7 +208,7 @@ MPI 版本的元素属性：
 <a   id="MPI-examples"></a>
 <h2>示例</h2>
 
-假设您有一个标准的 Evolver 数据文件，需要加载并在各任务之间分区。当将其加载到 MPI Evolver 时，曲面将完全加载到任务 1 中。然后可以重新分配。如果已链接 PARMETIS 库，可以使用以下脚本：
+假设您有一个标准的 Evolver 数据文件，需要加载并在各任务之间分区。当将其加载到 MPI Evolver 时，表面将完全加载到任务 1 中。然后可以重新分配。如果已链接 PARMETIS 库，可以使用以下脚本：
 <pre>
 
 // mpi_equalize.cmd
@@ -254,7 +233,7 @@ parallel_exec "set facetedge fe fe_newpart[1] fe.facet[1].fpart";
 repartition;
 }
 </pre>
-如果没有 PARMETIS，则需要自行设计分区方式，例如基于几何形状。以下脚本将曲面分为四个部分：
+如果没有 PARMETIS，则需要自行设计分区方式，例如基于几何形状。以下脚本将表面分为四个部分：
 <pre>
 define vertex attribute v_newpart integer[2]
 define edge   attribute e_newpart integer[2]
@@ -280,8 +259,5 @@ repartition;
 </pre>
 <hr>
 
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引</a>
-</body>
-</html>
+<script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>

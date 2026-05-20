@@ -1,25 +1,9 @@
-<!DOCTYPE HTML>
-<HEAD><TITLE>Surface Evolver 文档 - 安装</title>
-<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-</head>
-
-<BODY>
 <!--NewPage-->
-
-<h1 class="center">
-<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
-Surface Evolver</a> 文档</h1>
-
-<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引</a>
 
 <h1>Surface Evolver 获取与安装</h1>
 
 本章介绍如何获取和安装Evolver。
 Evolver被设计为可在不同系统间移植。有Windows和Macintosh的预编译版本；对于unix/Linux系统，提供了源文件和Makefile。
-
 
 各种系统的发行包可从 <a href="http://www.susqu.edu/brakke/evolver/evolver.htm">Evolver主页</a> 获取。
 每个包还包含文档、示例数据文件和脚本。文档子目录名为<code>doc</code>，
@@ -125,3 +109,7 @@ Evolver可在64位系统和32位系统上编译。
 <a   id="metis-install"></a>
 13. 如果您希望使用基于METIS分区软件的命令（<a href="commands.htm#metis" class="keyword">metis</a>、<a href="commands.htm#metis" class="keyword">kmetis</a>、<a href="commands.htm#metis" class="keyword">body_metis</a>和<a href="toggle.htm#metis_factor" class="keyword">metis_factor</a>），那么您应该从<code><a href="http://www-users.cs.umn.edu/~karypis/metis/">
       http://www-users.cs.umn.edu/~karypis/metis/</a></code>下载METIS包并"make"库<code>libmetis.a</code>（在某些系统上，make会抱怨找不到ranlib，但生成的<code>libmetis.a</code>仍然有效）。在Evolver的<code>Makefile</code>中，将<code class="shortcode">-DMETIS</code>添加到<code>CFLAGS</code>，并将<code class="shortcode">-lmetis</code>添加到<code>GRAPHLIB</code>。您可能还需要将<code class="shortcode">-L metispath</code>添加到<code>GRAPHLIB</code>以告诉链接器在哪里找到libmetis.a。请注意，METIS已包含在Windows可执行文件中。如果您在非常大的表面上使用<a href="commands.htm#hessian-command" class="keyword">hessian</a>
+
+  <script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>
+

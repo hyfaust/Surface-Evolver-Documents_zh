@@ -1,19 +1,10 @@
-<!DOCTYPE HTML>
-<HEAD><TITLE>Surface Evolver 文档 - 简报 18</title>
-<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-</head>
-
-<BODY>
 <a   id="newsletter-18"></a>
 <h1>Surface Evolver 简报 第 18 期</h1>
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
 <hr><pre>
 
                          Surface Evolver 简报 第 18 期
                               2004年10月13日
                      作者：Ken Brakke, brakke@susqu.edu
-
 
 Surface Evolver 版本 2.24 现已可在以下地址下载：
 http://www.susqu.edu/brakke/evolver。
@@ -51,7 +42,7 @@ http://www.susqu.edu/brakke/evolver。
   pop_to_edge —— 强制六重三边交点顶点弹出为边
 
  新增了 vertex_merge(v1,v2)、edge_merge(e1,e2) 和 facet_merge(f1,f2)
- 用于将曲面碎片粘合在一起。配对中保留第一个。张力不会叠加；
+ 用于将表面碎片粘合在一起。配对中保留第一个。张力不会叠加；
   如有需要应自行设置。
 
  新增了 matrix_multiply（矩阵乘法）和 matrix_inverse（矩阵求逆）
@@ -70,7 +61,7 @@ http://www.susqu.edu/brakke/evolver。
  平均曲率平方方法。
 
  所有 "star_..." 类型的平均曲率平方现在支持部分星形，
- 即可以用镜像对称平面约束曲面，曲率将在侧面和角落处
+ 即可以用镜像对称平面约束表面，曲率将在侧面和角落处
  正确计算。
 
  hessian_menu 现在有一个子 shell 命令 "="，使在查看特征模态等
@@ -81,7 +72,7 @@ http://www.susqu.edu/brakke/evolver。
  标签的相对大小。默认值为 3。
 
  full_bounding_box（完整边界框）开关在 PostScript 文件中
- 将边界框写为图形窗口边界，而非曲面的实际边界框。适用于
+ 将边界框写为图形窗口边界，而非表面的实际边界框。适用于
  创建具有相同边界框的一系列图像。
 
  新增了 list quantity、list constraint、list boundary、
@@ -113,15 +104,15 @@ http://www.susqu.edu/brakke/evolver。
  新增了 stokes2d_laplacian 仅信息方法，用于方便地提取
  流函数的拉普拉斯算子。
 
- 新增了 general_linear_elastic 方法，用于处理非各向同性弹性曲面。
+ 新增了 general_linear_elastic 方法，用于处理非各向同性弹性表面。
 
  新的示例命令文件（有关更多信息，请参见每个文件的顶部）：
     wetfoam2.cmd - 在干泡沫上创建 Plateau 边界；wetfoam.cmd 的更新版
     rewrap.cmd - 将三维环面模型中的顶点调整回单元格
     rewrap2.cmd - 将二维环面模型中的顶点调整回单元格
-    gaussmap.cmd - 将曲面转换为其高斯映射
+    gaussmap.cmd - 将表面转换为其高斯映射
     gaussref.cmd - 根据高斯映射上的面积进行细分
-    multiplicate.cmd - 打印由视图变换显示的完整曲面的数据文件
+    multiplicate.cmd - 打印由视图变换显示的完整表面的数据文件
     band.cmd - 沿指定边绘制彩色带
     unshear.cmd - 将二维剪切环面单元格调整回接近方形
     xray.cmd - 制作湿泡沫 Plateau 边界的 X 射线图像
@@ -207,5 +198,6 @@ http://www.susqu.edu/brakke/evolver。
 简报 18 期结束
 
 </pre>
-</body>
-</html>
+  <script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>
+

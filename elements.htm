@@ -1,27 +1,9 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-<title>Surface Evolver 几何元素</title>
-<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-</head>
-
-<BODY>
 <!--NewPage-->
-
-<h1 class="center">
-<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
-Surface Evolver</a> 文档</h1>
-
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-
 
 <a   id="attributes"></a>
 <a   id="geometric-elements"></a><h1>几何元素</h1>
 
-      曲面由各个维度的几何元素定义。每个元素都有自己的属性集。有些属性可以由用户设置；其他属性在内部设置，但可以由用户查询。还可以为任何类型的元素动态定义<a href="#extra-attributes">额外属性</a>，这些属性可以是单个值或值向量。属性值可以在<a href="datafile.htm">数据文件</a>中指定，并通过<a href="syntax.htm#attr-values">命令</a>查询。
+      表面由各个维度的几何元素定义。每个元素都有自己的属性集。有些属性可以由用户设置；其他属性在内部设置，但可以由用户查询。还可以为任何类型的元素动态定义<a href="#extra-attributes">额外属性</a>，这些属性可以是单个值或值向量。属性值可以在<a href="datafile.htm">数据文件</a>中指定，并通过<a href="syntax.htm#attr-values">命令</a>查询。
 <p>元素：
 <ul>
 <li><a href="#vertices">顶点</a>
@@ -34,15 +16,15 @@ Surface Evolver</a> 文档</h1>
 <a   id="vertices"></a><h2>顶点</h2>
 
             顶点是空间中的一个点。
-            顶点的坐标是确定曲面位置的参数。
-            当曲面演化时，改变的是坐标。
+            顶点的坐标是确定表面位置的参数。
+            当表面演化时，改变的是坐标。
             顶点本身不携带默认能量，但可能通过位于
             <a href="constrnt.htm#level-set-constraints">
             水平集约束</a>上（在
             <a href="model.htm#string-model">弦模型</a>中），
             或者通过应用<a href="quants.htm">命名量</a>
             能量而具有能量。
-            原始曲面的顶点在数据文件的
+            原始表面的顶点在数据文件的
             <a href="datafile.htm#vertices-section">
             顶点部分</a>中定义。<p>
 
@@ -104,7 +86,7 @@ Surface Evolver</a> 文档</h1>
 <a href="model.htm#soapfilm-model">皂膜模型</a>中），
 或者通过应用<a href="quants.htm">
 命名量</a>能量而具有能量。
-原始曲面的边在数据文件的
+原始表面的边在数据文件的
 <a href="datafile.htm#edges-section">边部分</a>中定义。
 <p>
             边属性（按相关性分组）：
@@ -155,7 +137,7 @@ Surface Evolver</a> 文档</h1>
   在<a href="model.htm#linear-model">线性模型</a>中，
   面是一个平面三角形。
   在<a href="model.htm#quadratic-model">二次
-  模型</a>中，面是由三个面角顶点和三个边中点的二次插值定义的曲面。在<a href="model.htm#Lagrange-model">
+  模型</a>中，面是由三个面角顶点和三个边中点的二次插值定义的表面。在<a href="model.htm#Lagrange-model">
   拉格朗日模型</a>中，
   <a href="syntax.htm#lagrange_order" class="keyword">lagrange_order</a>
    插值在
@@ -181,7 +163,7 @@ Surface Evolver</a> 文档</h1>
   <a href="quants.htm">命名量</a>能量
   携带额外能量。
   <p>
-  原始曲面的面在数据文件的
+  原始表面的面在数据文件的
   <a href="datafile.htm#faces-section">面部分</a>中定义。
   <p>
             面属性（按相关性分组）：
@@ -238,7 +220,7 @@ Surface Evolver</a> 文档</h1>
                  和重力能量。只需要给出正确计算所需的那些面。在
                  <a href="model.htm#string-model">弦
 		 模型</a>中，通常一个体对应一个面。
-		 原始曲面的体在数据文件的
+		 原始表面的体在数据文件的
 		 <a href="datafile.htm#bodies-section">体部分</a>
 		 中定义。
 <p>
@@ -266,7 +248,7 @@ Surface Evolver</a> 文档</h1>
 <a   id="facetedges"></a><h2>面边</h2>
 面边是面及其一条边的配对，其方向使得边的方向与面的方向一致。面边在Evolver内部使用，很少对用户感兴趣。它们不携带能量。
 '<a href="single.htm#C" class="keyword">C</a>'
-完整性检查命令有时会引用面边，如果曲面不一致。<code>Facetedge</code> 可以用作元素生成器。
+完整性检查命令有时会引用面边，如果表面不一致。<code>Facetedge</code> 可以用作元素生成器。
 <p>
             面边属性：
 <ul>
@@ -287,12 +269,10 @@ Surface Evolver</a> 文档</h1>
 几何元素</a>以获取每种类型元素的属性列表。
 <hr>
 
-
 <!--========================== 通用属性 ===========================-->
 
 <h1>所有类型元素的属性</h1>
 <hr>
-
 
 <!--============================== id ============================-->
 
@@ -344,8 +324,6 @@ fix</a>和<a href="commands.htm#unfix" class="keyword">unfix</a>命令更改。
    print body[1] fixed
 </pre>
 
-
-
 <hr>
 
 <!--============================== on_constraint ============================-->
@@ -385,7 +363,6 @@ fix</a>和<a href="commands.htm#unfix" class="keyword">unfix</a>命令更改。
   list edge where on_boundary topbdry
 </pre>
 
-
 <hr>
 
 <!--============================== on_quantity ============================-->
@@ -406,7 +383,6 @@ fix</a>和<a href="commands.htm#unfix" class="keyword">unfix</a>命令更改。
    print vertex[3].on_quantity blue_area
 </pre>
 
-
 <hr>
 
 <!--============================== on_method_instance ============================-->
@@ -425,8 +401,6 @@ fix</a>和<a href="commands.htm#unfix" class="keyword">unfix</a>命令更改。
    list facet where on_method_instance  center_of_mass_x_edges
    print vertex[3].on_method_instance blue_area_1
 </pre>
-
-
 
 <hr>
 
@@ -511,7 +485,6 @@ fix</a>和<a href="commands.htm#unfix" class="keyword">unfix</a>命令更改。
 <hr>
 <H2>边original</h2> 参见<a href="#original" class="keyword">original</a>
 通用元素。
-
 
 <hr>
 <!--============================== Edge length ============================-->
@@ -943,9 +916,9 @@ e_method_list[1]是列表中方法实例的数量，后跟
 <a href="datafile.htm#facet-attributes">面属性</a>中修改。
 可以使用<a href="commands.htm#set">set</a>命令修改。
           张力可以是负的（对面积惩罚），这意味着面积应该最小化。
-但是，如果在任何边或角上负张力面与零张力面相邻，则曲面可能会爆炸，因为
+但是，如果在任何边或角上负张力面与零张力面相邻，则表面可能会爆炸，因为
 负张力面为了最大化面积而趋于无穷。
-          在最小曲面问题中，不需要负张力面；
+          在最小表面问题中，不需要负张力面；
 只需将其他面的张力设置为0，它们就不会有
 面积能量。
           在<a href="model.htm#string-model">弦模型</a>中，
@@ -1579,9 +1552,7 @@ f_next_vfacet是顶点的面列表中下一个面的id。
 </pre>
 <hr>
 
-
 <!--============================== Facetedge nextedge ============================-->
-
 
 <a   id="nextedge"></a><h2>面边nextedge</h2>
 <a href="#facetedges">面边</a>内部属性。
@@ -1615,12 +1586,7 @@ f_next_vfacet是顶点的面列表中下一个面的id。
 除非在"list facetedges ... "命令的输出中。
 <hr>
 
-
 <hr>
 
-
-<a href="evolver.htm#doc-top">返回Surface Evolver文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-</body>
-</html>
+<script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>

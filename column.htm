@@ -1,27 +1,13 @@
-<!DOCTYPE HTML>
-<HTML>
-<HEAD><title>Surface Evolver 文档 - 柱体示例</title>
-<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-</head>
-<body style="font-size:medium">
-
-<h1 class="center"><a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
-Surface Evolver</a> 文档</h1>
-
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a><br>
+<br>
 <a href="tutorial.htm#tutorial">返回教程顶部。</a><br>
 <a id="column_example"></a> <h1>示例：液态焊料柱体</h1>
-
 
 这里我们有一个微小的液态焊料液滴，它在 z = 0 和 z = <code>ZH</code> 两个平行的水平平面之间形成桥接。
 在每个平面上都有一个圆形焊盘，
 焊料完全润湿这些焊盘，并且在焊盘区域外完全不润湿。
 这本来只是一个具有固定体积的悬链面（catenoid）问题，
 但焊盘是偏移的，并且需要确定焊料施加的对齐力。
-该曲面的定义方式与悬链面示例相同，
+该表面的定义方式与悬链面示例相同，
 只是下边界环中有一个偏移变量 <code>SHIFT</code>，用于提供 y 方向的偏移。
 这使得偏移量可以在运行时调整。
 由于体（body）的顶面和底面不被包含，它们所占的常数体积通过上边界周围的内容积分（content integrals）来提供，
@@ -36,7 +22,7 @@ Surface Evolver</a> 文档</h1>
 或者，可以设置积分来直接计算力。
 但最简单的方法是使用虚功原理（Principle of Virtual Work）：
 移动焊盘，无需重新演化（re-evolve）就重新计算能量，并对体积变化进行修正。
-重新演化不是必需的，因为当曲面处于平衡状态时，
+重新演化不是必需的，因为当表面处于平衡状态时，
 根据定义，任何尊重约束的扰动都不会在一阶上改变能量。
 为了调整约束（如体积）的变化，拉格朗日乘子（Lagrange multipliers）（体积约束的压力）
 会告诉我们在给定约束变化下能量的变化量：
@@ -49,7 +35,7 @@ Surface Evolver</a> 文档</h1>
 </pre>
 其中 <code>E_raw</code> 是实际能量，<code>DC</code> 是约束值与目标值之差的向量。
 数据文件中的命令 <code>do_yforce</code> 和 <code>do_zforce</code>
-对上焊盘的力进行中心差分计算，并将曲面恢复到原始位置。
+对上焊盘的力进行中心差分计算，并将表面恢复到原始位置。
 注意，扰动是平滑进行的，即剪切从底部到顶部线性变化。
 这不是绝对必要的，但它能提供更平滑的扰动，从而获得更高的精度。
 
@@ -58,7 +44,6 @@ Surface Evolver</a> 文档</h1>
 <img src="columnbare.gif" alt="柱体"></td>
 <td>  初始柱体骨架，顶点和边已编号。</td></tr>
 </table>
-
 
 <pre>
 // column.fe
@@ -179,8 +164,5 @@ do_zforce := { oldzh := zh; zh := zh + dz;
 </pre>
 <hr>
 <a href="tutorial.htm#tutorial">返回教程顶部。</a><br>
-<a href="evolver.htm#doc-top">返回 Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-</body>
-</html>
+<script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>

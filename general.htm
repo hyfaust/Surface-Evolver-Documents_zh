@@ -1,19 +1,4 @@
-<!DOCTYPE HTML>
-<head>
-   <title>Surface Evolver 文档</title>
-<link rel="stylesheet" type="text/css" href="evdoc-style.css" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-</head>
-<body>
-<a   id="miscellaneous-top"></a>
-
-<h1 class="center"> 
-<a href="http://www.susqu.edu/brakke/evolver/evolver.htm" class="comic">
-Surface Evolver</a> 文档</h1> 
-
-<a href="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
+ 
 
 <h2> 一些杂项主题： </h2>
 <ul>
@@ -21,7 +6,7 @@ Surface Evolver</a> 文档</h1>
 <li><a href="#bugs">错误报告。</a>
 <li><a href="#newsletters">通讯简报。</a>
 <li><a href="#error-handling">错误处理。</a>
-<li><a href="#initialization">曲面初始化。</a>
+<li><a href="#initialization">表面初始化。</a>
 <li><a href="#interrupts">中断执行。</a>
 <li><a href="#parallel">并行计算。</a>
 </ul>
@@ -48,86 +33,83 @@ Surface Evolver</a> 文档</h1>
 <a   id="no-autoconvert-option"></a>
 <code> -a-</code>
 </dt>
-<dd>
-当出现需要转换的情况时，不启用自动转换到
+<p>当出现需要转换的情况时，不启用自动转换到
 <a href="quants.htm#named-methods">命名方法</a>和
 <a href="quants.htm#named-quantities">物理量</a>模式（用于调试）。
-<p></dd>
+<p></p>
 <dt>
 <a   id="debug-option"></a>
 <code>-d</code> </dt>
 
-<dd>在解析数据文件时打印 YACC 调试跟踪信息。如果您无法确定数据文件读取不正确的原因，并且您熟悉 YACC，这可能会有所帮助。
-<p></dd>
+<p>在解析数据文件时打印 YACC 调试跟踪信息。如果您无法确定数据文件读取不正确的原因，并且您熟悉 YACC，这可能会有所帮助。
+<p></p>
 
 <dt><a   id="echo-option"></a>
 <code>-e</code></dt>
-<dd>
- 回显输入。用于将管道输入的命令回显到屏幕，以便在 Evolver 由另一个进程控制时，用户可以跟踪程序的运行状态。
-<p></dd>
+<p>回显输入。用于将管道输入的命令回显到屏幕，以便在 Evolver 由另一个进程控制时，用户可以跟踪程序的运行状态。
+<p></p>
 
 <dt><a   id="file-option"></a>
 <code>-f</code><i>filename</i> </dt>
 
-<dd>指定在读取数据文件后用作命令输入的文件名。在此文件结束后，输入将恢复为标准输入。其效果与从文件重定向输入相同，但 <code>-f</code> 会将命令回显到屏幕，并在文件结束后恢复为标准输入。另请注意，错误会导致输入恢复为标准输入。
-<p></dd>
+<p>指定在读取数据文件后用作命令输入的文件名。在此文件结束后，输入将恢复为标准输入。其效果与从文件重定向输入相同，但 <code>-f</code> 会将命令回显到屏幕，并在文件结束后恢复为标准输入。另请注意，错误会导致输入恢复为标准输入。
+<p></p>
 
 <dt><a   id="no-renumbering-option"></a>
 <code>-i</code></dt>
 
-<dd>  保持数据文件中列出的元素编号，而不是按顺序重新编号。可以通过在数据文件顶部放置关键字
+<p>保持数据文件中列出的元素编号，而不是按顺序重新编号。可以通过在数据文件顶部放置关键字
    <a href="datafile.htm" class="keyword">keep_originals</a>
 来达到相同效果。
-<p></dd>
+<p></p>
 
 <dt><a   id="memory-debug-option"></a>
 <code>-m</code> </dt>
 
-<dd>在程序启动时开启内存调试。效果与 Evolver 的
+<p>在程序启动时开启内存调试。效果与 Evolver 的
 <a HREF="toggle.htm#memdebug" class="keyword">memdebug</a> 切换命令相同。
-<p></dd>
+<p></p>
 
 <dt><a   id="multiprocessor-option"></a>
 <code>-p</code><i>n</i> </dt>
 
-<dd>强制使用 n 个进程运行以多处理器模式编译的 Evolver。<i>n</i> 可以大于或小于物理可用的处理器数量。默认值为 1。此选项应视为实验性的；目前开销仍然过大，通常不太实用。
-<p></dd>
+<p>强制使用 n 个进程运行以多处理器模式编译的 Evolver。<i>n</i> 可以大于或小于物理可用的处理器数量。默认值为 1。此选项应视为实验性的；目前开销仍然过大，通常不太实用。
+<p></p>
 
 <dt><a   id="named-quantities-option"></a>
 <code>-q</code> </dt>
 
-<dd>在内部将所有内容转换为 <a HREF="quants.htm">命名物理量</a>。目前仍有少数功能尚未实现相应的物理量；这些功能将产生错误信息。
-<p></dd>
+<p>在内部将所有内容转换为 <a HREF="quants.htm">命名物理量</a>。目前仍有少数功能尚未实现相应的物理量；这些功能将产生错误信息。
+<p></p>
 
 <dt><a   id="quietload-option"></a>
 <code>-Q</code> </dt>
 
-<dd>禁止回显数据文件的 <a href="datafile.htm#read-section" class="keyword">
+<p>禁止回显数据文件的 <a href="datafile.htm#read-section" class="keyword">
 read</a> 部分，以及使用 <a href="commands.htm" class="keyword">read</a> 命令输入的文件内容；效果与
 <a href="toggle.htm#quietload" class="keyword">quietload</a> 切换相同。
-<p></dd>
+<p></p>
 
 <dt>
 <a   id="exit-warning-option"></a>
 <code>-w</code> </dt>
 
-<dd>使 Evolver 在出现任何警告时退出。适用于在 shell 脚本中运行 Evolver。
-<p></dd>
+<p>使 Evolver 在出现任何警告时退出。适用于在 shell 脚本中运行 Evolver。
+<p></p>
 
 <dt><a   id="exit-error-option"></a>
 <code>-x</code> </dt>
 
-<dd>使 Evolver 在出现任何错误时退出。适用于在 shell 脚本中运行 Evolver，以避免 Evolver 因等待错误响应输入而挂起。
-<p></dd>
+<p>使 Evolver 在出现任何错误时退出。适用于在 shell 脚本中运行 Evolver，以避免 Evolver 因等待错误响应输入而挂起。
+<p></p>
 
 <dt><a   id="break-after-warning-option"></a>
 <code>-y</code> </dt>
 
-<dd>使 Evolver 在收到任何警告消息后停止执行命令并返回命令提示符。效果与
+<p>使 Evolver 在收到任何警告消息后停止执行命令并返回命令提示符。效果与
 <a href="toggle.htm#break_after_warning" class="keyword">break_after_warning</a>
 运行时切换相同。
-<p></dd>
-
+<p></p>
 
 </dl>
 
@@ -178,7 +160,7 @@ class="keyword">-x</a> 命令行选项，则 Evolver 会立即以非零错误代
 
 <li><code>SYNTAX ERROR</code> - 解析器检测到错误。会打印出错误检测点之前的最近输入，但实际问题可能出现在更早的位置。</li>
 
-<li><code>DATAFILE ERROR</code> - 正在读取的数据文件中存在错误。Evolver 会尝试通过跳转到数据文件的下一个可识别部分来恢复，但在出现 5 次此类错误后将放弃该数据文件。已读取的曲面数据可供检查，但它可能构成不一致的曲面，不应尝试对其进行演化。</li>
+<li><code>DATAFILE ERROR</code> - 正在读取的数据文件中存在错误。Evolver 会尝试通过跳转到数据文件的下一个可识别部分来恢复，但在出现 5 次此类错误后将放弃该数据文件。已读取的表面数据可供检查，但它可能构成不一致的表面，不应尝试对其进行演化。</li>
 
 <li><code>ERROR</code> - 这是在命令执行过程中遇到的错误。命令被放弃，Evolver 返回主提示符。命令的操作不会被撤销。<code>-x</code> 命令行选项使 Evolver 在出现任何错误后立即退出；适用于批量运行。</li>
 
@@ -188,13 +170,13 @@ class="keyword">-x</a> 命令行选项，则 Evolver 会立即以非零错误代
 <p>
 <hr><a   id="initialization"></a>
 <h2>
-曲面初始化</h2>
-每当 Surface Evolver 加载新曲面时，无论是启动时还是响应 <a HREF="single.htm#q" class="keyword">q</a>
+表面初始化</h2>
+每当 Surface Evolver 加载新表面时，无论是启动时还是响应 <a HREF="single.htm#q" class="keyword">q</a>
 或 <a HREF="commands.htm#load" class="keyword">load</a>
 命令时，都会执行以下操作：<p>
 
 <ul>
-<li>任何先前的曲面都会释放所有内存。所有用户定义的变量和命令都会被删除，包括当前正在执行的任何命令。</li>
+<li>任何先前的表面都会释放所有内存。所有用户定义的变量和命令都会被删除，包括当前正在执行的任何命令。</li>
 
 <li>内部变量初始化为默认值。</li>
 
@@ -212,15 +194,15 @@ class="keyword">-x</a> 命令行选项，则 Evolver 会立即以非零错误代
 
 <li><a HREF="graphics.htm#view-matrix">视图矩阵</a> 被重置，以使对象在图形窗口中居中。</li>
 
-<li>如果任何图形处于活动状态，则绘制新曲面。</li>
+<li>如果任何图形处于活动状态，则绘制新表面。</li>
 
 <li>启动主命令提示符。</li>
 </ul>
 
 <p>
 <hr><a   id="interrupts"></a><h2>中断执行</h2>
-可以通过标准键盘中断（通常是 CTRL-C，Unix 专家们称之为 SIGINT）来中断 Evolver 的操作。在重复操作期间，这会设置一个标志，该标志在每个循环结束时进行检查。重复操作将在当前步骤后停止，控制将返回主提示符。如果在循环结束前再次中断，Evolver 将中止命令并返回主提示符。请注意，如果正在进行改变曲面拓扑的操作，这可能会使曲面处于不一致状态。如果在循环外部收到中断，也会立即中止。如果 Evolver 收到 SIGTERM（例如来自 Unix 的 kill 命令），它将转储到默认的
-<a href="commands.htm#dump">dump</a> 文件并退出。这对于停止正在运行脚本的后台 Evolver 很有用。SIGHUP 也会发生同样的情况，因此丢失调制解调器连接将保存当前曲面。
+可以通过标准键盘中断（通常是 CTRL-C，Unix 专家们称之为 SIGINT）来中断 Evolver 的操作。在重复操作期间，这会设置一个标志，该标志在每个循环结束时进行检查。重复操作将在当前步骤后停止，控制将返回主提示符。如果在循环结束前再次中断，Evolver 将中止命令并返回主提示符。请注意，如果正在进行改变表面拓扑的操作，这可能会使表面处于不一致状态。如果在循环外部收到中断，也会立即中止。如果 Evolver 收到 SIGTERM（例如来自 Unix 的 kill 命令），它将转储到默认的
+<a href="commands.htm#dump">dump</a> 文件并退出。这对于停止正在运行脚本的后台 Evolver 很有用。SIGHUP 也会发生同样的情况，因此丢失调制解调器连接将保存当前表面。
 <p>
 注意：在 Microsoft Windows 中，第二次中断不会产生太大效果，因为 Windows 会创建一个单独的线程来处理中断，而我找不到任何方法来强制停止有问题的线程并 longjmp 回它应该在的位置。因此，如果 Evolver 确实卡住了，您可能只需要终止整个程序。
 
@@ -237,12 +219,9 @@ Evolver 似乎受到内存带宽的限制，因此您可能无法获得预期的
 对于分布式计算，有一个 <a HREF="MPI_evolver.htm">MPI 
 版本的 Evolver</a>，但这仍然是实验性的，仅在非常特殊的情况下才有用。
 <hr>
-<hr><a HREF="evolver.htm#doc-top">返回 Surface Evolver 文档顶部。</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="index.htm">索引。</a>
-<hr>
+<hr><hr>
 <a href="http://www.susqu.edu/facstaff/b/brakke/">
 作者主页。</a>
 
-</body>
-</html>
+  <script src="nav-panel.js"></script>
+  <script src="theme-toggle.js"></script>
