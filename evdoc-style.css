@@ -64,6 +64,28 @@ html[data-theme="light"] {
   color-scheme: light;
 }
 
+/* System dark mode fallback (before JS applies data-theme) */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) {
+    --bg:          #1a1a2e;
+    --bg-alt:      #16213e;
+    --bg-code:     #0f3460;
+    --text:        #e0e0e0;
+    --text-muted:  #a0a0a0;
+    --accent:      #4fc3f7;
+    --accent-hover:#81d4fa;
+    --border:      #2a2a4a;
+    --border-light:#2a2a4a;
+    --shadow:      0 1px 3px rgba(0,0,0,.3);
+    --sidebar-bg:  #0f0f23;
+    --sidebar-text:#c0c0c0;
+    --sidebar-active:#4fc3f7;
+    --code-bg:     #0f3460;
+    --code-border: #2a2a4a;
+    color-scheme: dark;
+  }
+}
+
 html {
   font-size: 16px;
   scroll-behavior: smooth;
