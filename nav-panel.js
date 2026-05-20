@@ -246,4 +246,34 @@
     });
   }
 
+  /* === KaTeX math rendering === */
+  function loadKaTeX() {
+    var css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';
+    document.head.appendChild(css);
+
+    var script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';
+    script.onload = function() {
+      var autoRender = document.createElement('script');
+      autoRender.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js';
+      autoRender.onload = function() {
+        /* Delay to ensure nav-panel DOM restructuring is fully settled */
+        setTimeout(function() {
+          renderMathInElement(document.body, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false }
+            ],
+            throwOnError: false
+          });
+        }, 100);
+      };
+      document.head.appendChild(autoRender);
+    };
+    document.head.appendChild(script);
+  }
+  loadKaTeX();
+
 })();
