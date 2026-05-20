@@ -30,6 +30,9 @@
   --content-max: 800px;
   --gutter:      2rem;
 
+  /* Line spacing: 行距 = (line-height - 1) × font-size */
+  --line-spacing: 1.25;
+
   /* Code */
   --code-bg:     #f0f0f0;
   --code-border: #e1e4e5;
@@ -70,7 +73,7 @@ body {
   font-family: "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
   color: var(--text);
   background: var(--bg);
-  line-height: 1.25;
+  line-height: calc(1 + var(--line-spacing));
   -webkit-font-smoothing: antialiased;
 }
 
@@ -174,7 +177,7 @@ body {
   color: var(--sidebar-text);
   text-decoration: none;
   font-size: 0.9rem;
-  line-height: 1.25;
+  line-height: calc(1 + var(--line-spacing));
   border-left: 3px solid transparent;
   transition: all 0.15s ease;
 }
@@ -249,7 +252,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: "Roboto Slab", "ff-tisa-web-pro", Georgia, Arial, sans-serif;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: calc(1 + var(--line-spacing));
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
   color: var(--text);
@@ -310,7 +313,7 @@ pre {
   padding: 1rem 1.25rem;
   overflow-x: auto;
   margin: 1rem 0 1.5rem;
-  line-height: 1.25;
+  line-height: calc(1 + var(--line-spacing));
   font-size: 0.875rem;
   white-space: pre;
 }
@@ -556,7 +559,7 @@ a.command {
   color: rgba(255,255,255,.6);
   font-size: 0.8rem;
   margin-top: 3px;
-  line-height: 1.25;
+  line-height: calc(1 + var(--line-spacing));
 }
 .search-result-item mark {
   background: var(--sidebar-active);
