@@ -307,6 +307,17 @@ table {
   margin: 1rem 0 1.5rem;
   font-size: 0.9rem;
 }
+caption {
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: left;
+  padding: 0.4rem 0;
+  color: var(--accent);
+}
+/* Index page two-column tables */
+table:has(caption) {
+  table-layout: fixed;
+}
 thead th, th {
   background: var(--bg-alt);
   font-weight: 700;
