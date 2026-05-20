@@ -4,7 +4,13 @@
 
 ---
 
-> 本仓库为 [The Surface Evolver](http://www.susqu.edu/brakke/evolver/evolver.htm) 的中文翻译文档集——一款由 Kenneth A. Brakke 开发的交互式程序，用于研究由表面张力和其他能量塑造的曲面。使用MiMo-V2.5-Pro进行翻译
+> 本仓库为 [The Surface Evolver](https://kenbrakke.com/evolver/evolver.html) 的中文翻译文档集——一款由 Kenneth A. Brakke 开发的交互式程序，用于研究由表面张力和其他能量塑造的曲面。由MiMo-V2.5-Pro协助进行翻译、优化。
+
+## 说明
+
+当前分支对原来的文本结构进行了较大幅度改动，并且使用了更为现代化的css和js特性优化页面的显示效果。原main分支为原文档的纯翻译版本，仅将文本内容翻译为了中文，样式和结构沿用英文原版，现仅用于备份。
+
+[在线演示](https://hyfaust.github.io/Surface-Evolver-Documents_zh/evolver.htm)
 
 ## 目录
 
@@ -16,7 +22,7 @@
 
 ## 简介
 
-Surface Evolver 是一款交互式程序，用于研究由[表面张力](http://www.susqu.edu/brakke/evolver/energies.htm)和其他能量塑造、并受各种[约束](http://www.susqu.edu/brakke/evolver/constrnt.htm)影响的曲面。曲面被实现为单纯复形（三角形的集合）。用户在数据文件中定义初始曲面，Evolver 通过梯度下降法将曲面演化至最小能量状态。
+Surface Evolver 是一款交互式程序，用于研究由[表面张力](https://kenbrakke.com/evolver/energies.htm)和其他能量塑造、并受各种[约束](https://kenbrakke.com/evolver/constrnt.htm)影响的曲面。曲面被实现为单纯复形（三角形的集合）。用户在数据文件中定义初始曲面，Evolver 通过梯度下降法将曲面演化至最小能量状态。
 
 主要功能：
 
@@ -25,7 +31,7 @@ Surface Evolver 是一款交互式程序，用于研究由[表面张力](http://
 - 曲面可存在于任意维度的环境空间中，支持黎曼度量和群作用下的商空间
 - 图形输出支持屏幕显示和多种文件格式，包括 PostScript
 
-本仓库包含 Surface Evolver 2.70 版的**中文翻译文档**，包括基于 HTML 的参考文档和 Markdown 格式的完整手册翻译。
+本仓库包含 Surface Evolver 2.70 版的**中文翻译文档集**，包括基于 HTML 的参考文档和由原 pdf 格式手册翻译得到的纯文本markdown文件。
 
 ## 项目结构
 
@@ -83,7 +89,7 @@ The Surface Evolver/
 | 历史版本 | `news_01.htm` – `news_22.htm` | 版本历史与更新日志 |
 | 参考文献 | `biblio.htm` | 学术参考文献 |
 
-### Markdown 手册（`Surface Evolver manual`）
+### Markdown 手册（`Surface Evolver manual/`）
 
 以 Markdown 格式翻译的完整手册，按章节组织：
 
@@ -109,4 +115,19 @@ The Surface Evolver/
 - **Surface Evolver 官方主页**：[Surface Evolver](https://kenbrakke.com/evolver/evolver.html)
 - **原版PDF 手册**：[manual270](https://kenbrakke.com/evolver/downloads/manual270.pdf)
 - **作者**：[Kenneth A. Brakke](https://kenbrakke.com/default.htm)，萨斯奎哈纳大学数学系
+
+
+
+## 下一步
+
+- [x] CSS优化全局内容显示
+- [x] 增加左侧边栏和全文搜索栏
+- [x] 引入KaTeX，渲染数学公式
+- [ ] 改写所有数学公式为LaTex形式
+- [ ] 修改图注显示问题，由左右排布变为上下排布
+- [ ] 修复、添加各页面中的超链接
+- [ ] 人工检查文档各章节翻译准确性
+- [ ] 校验手册内容准确性
+- [ ] 选择合适方案合成手册为单文件
+- [ ] ……
 

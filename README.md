@@ -6,6 +6,12 @@
 
 > A Chinese-translated documentation collection for [The Surface Evolver](https://kenbrakke.com/evolver/evolver.html) — an interactive program for studying surfaces shaped by surface tension and other energies, developed by Kenneth A. Brakke. Translated using MiMo-V2.5-Pro.
 
+## Notes
+
+This branch has undergone significant structural changes to the original text and incorporates modern CSS and JavaScript features to enhance page rendering. The original `main` branch is a pure translation of the documentation — only the text content was translated into Chinese while the styling and structure remained identical to the English original. It is now retained solely as a backup.
+
+[Online Demo](https://hyfaust.github.io/Surface-Evolver-Documents_zh/evolver.htm)
+
 ## Table of Contents
 
 - [Introduction](#introduction)
@@ -109,3 +115,18 @@ The repository includes example Surface Evolver data files (`.fe` extension, sta
 - **Official Surface Evolver Homepage**: [Surface Evolver](https://kenbrakke.com/evolver/evolver.html)
 - **Original PDF Manual**: [manual270](https://kenbrakke.com/evolver/downloads/manual270.pdf)
 - **Author**: [Kenneth A. Brakke](https://kenbrakke.com/default.htm), Department of Mathematics, Susquehanna University
+
+
+
+## Next Steps
+
+- [x] CSS optimization for global content display
+- [x] Add left sidebar and full-text search bar
+- [x] Introduce KaTeX for math formula rendering
+- [ ] Rewrite all math formulas in LaTeX format
+- [ ] Fix caption display layout from side-by-side to stacked
+- [ ] Fix and add hyperlinks across all pages
+- [ ] Manual review of translation accuracy for each chapter
+- [ ] Verify manual content accuracy
+- [ ] Choose a suitable approach to combine the manual into a single file
+- [ ] …
