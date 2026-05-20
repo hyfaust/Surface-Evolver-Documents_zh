@@ -9,7 +9,7 @@
 <p>
 您可以使用 <a href="commands.htm#read" class="code">read</a> 命令将脚本文件读入 Evolver，例如：
 <pre>
-   Enter command: read "3ds.cmd"
+Enter command: read "3ds.cmd"
 </pre>
 一般来说，每个脚本包含一个主命令，其名称与文件名相同，
 例如 <code>adjoint.cmd</code> 包含 <code>adjoint</code> 命令，
@@ -108,8 +108,8 @@
 其中，许多人对能够导出其他软件可读文件的脚本特别感兴趣，
 因此以下是文件导出脚本的列表。这些脚本通常通过将输出重定向到文件来运行，例如：
 <pre>
-   Enter command: read "collada.cmd"
-   Enter command: collada >>> "filename.cda"
+Enter command: read "collada.cmd"
+Enter command: collada >>> "filename.cda"
 </pre>
 注意 <code>>>></code> 会覆盖同名的现有文件。
 <br>导出脚本文件：
@@ -349,15 +349,15 @@ Conjugate Harmonic Maps and Minimal Surfaces</a>.
 </ol>
 示例：
 <pre>
-   read "band.cmd";
-   bandwidth := 0.003;
-   bandcolor := black;
-   set edge inband on_constraint topcon;
-   makeband
-   set edge inband on_constraint leftcon;
-   makeband
-   set edge inband original==1;
-   makeband
+read "band.cmd";
+bandwidth := 0.003;
+bandcolor := black;
+set edge inband on_constraint topcon;
+makeband
+set edge inband on_constraint leftcon;
+makeband
+set edge inband original==1;
+makeband
 </pre>
 注意：如果 <code>makeband</code> 在角落和其他棘手位置出现问题，
 请对不同的边集多次运行 <code>makeband</code>。
@@ -436,9 +436,9 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
 </ol>
 示例：
 <pre>
-  Enter command: read "coff.cmd"
-  Enter command: show facet where not fixed
-  Enter command: coff >>> "filename.coff"
+Enter command: read "coff.cmd"
+Enter command: show facet where not fixed
+Enter command: coff >>> "filename.coff"
 </pre>
 
 <!--========================== collada.cmd  =============================-->
@@ -469,9 +469,9 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
 </ol>
 示例：
 <pre>
-  Enter command: read "collada.cmd"
-  Enter command: show facet where not fixed
-  Enter command: collada >>> "filename.col"
+Enter command: read "collada.cmd"
+Enter command: show facet where not fixed
+Enter command: collada >>> "filename.col"
 </pre><!--==========================   =============================-->
 
   <hr> <h3>    <a   id="complex.cmd" class="name">complex.cmd</a></h3>
@@ -577,12 +577,12 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
  警告：embox 不能很好地处理恰好位于边界框壁上的面片，
 因此如果存在此类面片，建议在执行 detorus 之前移动表面，即：
 <pre>
-     clipped;
-     set vertex x x+0.1;
-     set vertex y y+0.1;
-     set vertex z z+0.1;
-     detorus;
-     embox;
+clipped;
+set vertex x x+0.1;
+set vertex y y+0.1;
+set vertex z z+0.1;
+detorus;
+embox;
 </pre>
 
 <!--========================== foamface.cmd  =============================-->
@@ -611,12 +611,12 @@ R^3 中的常平均曲率（CMC，Constant Mean Curvature）表面在 S^3 中有
     完成后，数组 <code>body_poly_counts</code> 保存每个体的给定边数的面数。
     foam_signature 之后，您可以执行
 <pre>
-       print body_poly_counts
+print body_poly_counts
 </pre>
     来查看结果。例如，对于有两个体的 twointor.fe，结果为：
 <pre>
-       {{0,0,0,6,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,6,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}
+{{0,0,0,6,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+ {0,0,0,6,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}
 </pre>
 </ul>
 
@@ -861,8 +861,8 @@ Maya ASCII f format > Organizationof Maya Ascii files
 请在加载 maya.cmd 之后、运行 <code>maya</code> 命令之前将 <code>maya_length_unit</code>
 变量设置为相应的字符串，例如：
 <pre>
-   maya_length_unit := "in"
-   maya >>> "filename.ma"
+maya_length_unit := "in"
+maya >>> "filename.ma"
 </pre>
 有效的长度单位字符串为：
  "mm"、"millimeter"、"cm"、"centimeter"、"m"、"meter"、"km"、"kilometer"、
@@ -902,8 +902,8 @@ Maya ASCII f format > Organizationof Maya Ascii files
 请在加载 maya.cmd 之后、运行 <code>maya</code> 命令之前将 <code>maya_length_unit</code>
 变量设置为相应的字符串，例如：
 <pre>
-   maya_length_unit := "in"
-   maya >>> "filename.ma"
+maya_length_unit := "in"
+maya >>> "filename.ma"
 </pre>
 有效的长度单位字符串为：
  "mm"、"millimeter"、"cm"、"centimeter"、"m"、"meter"、"km"、"kilometer"、
@@ -930,10 +930,10 @@ Maya ASCII f format > Organizationof Maya Ascii files
 neville1 的用法：
 全局数组 <code>neville1_data</code> 应由调用者设置，必要时重新调整维度。
 <pre>
-  define neville1_data real[order+1][dim];
-  // 在 neville1_data 中填充节点数据
-  ...
-  neville1(order,dim,u);
+define neville1_data real[order+1][dim];
+// 在 neville1_data 中填充节点数据
+...
+neville1(order,dim,u);
 </pre>
 其中 <code>u</code> 是需要插值的 0 到 1 之间的值。
 输入数组 neville1_data 不会被修改。插值值和
@@ -943,13 +943,13 @@ neville1 的用法：
 neville2 的用法：
 全局数组 <code>neville2_data</code> 应由调用者设置，必要时重新调整维度。
 <pre>
-  define neville2_data real[order+1][order+1][dim];
-  // 在 neville2_data 中填充节点数据
-  ...
-  // 用插值点的坐标填充数组 nevill2_u[2]
-  neville2_u[1] := 0.3;
-  neville2_u[2] := 0.56;
-  neville2(order,dim);
+define neville2_data real[order+1][order+1][dim];
+// 在 neville2_data 中填充节点数据
+...
+// 用插值点的坐标填充数组 nevill2_u[2]
+neville2_u[1] := 0.3;
+neville2_u[2] := 0.56;
+neville2(order,dim);
 </pre>
 输入数组 neville2_data 不会被修改。插值值和关于 <code>u</code> 的偏导数
 返回在一维数组 <code>neville1_value[dim]</code> 和二维数组
@@ -1070,25 +1070,24 @@ neville2 的用法：
 以及 <a href="commands.htm#renumber_all">renumber_all</a> 使 <code>id</code>
 编号围绕环连续的示例：
 <pre>
+define vertex attribute vertex_order_key real;
+define edge attribute edge_order_key real;
+define facet attribute facet_order_key real;
+define body attribute body_order_key real;
+define facetedge attribute facetedge_order_key real;
 
-   define vertex attribute vertex_order_key real;
-   define edge attribute edge_order_key real;
-   define facet attribute facet_order_key real;
-   define body attribute body_order_key real;
-   define facetedge attribute facetedge_order_key real;
+read "order.cmd";
 
-   read "order.cmd";
-
-   renumber := {
-     order;
-     set vertex vertex_order_key order_number;
-     set edge ee edge_order_key ee.vertex[1].vertex_order_key;
-     set facetedge fe facetedge_order_key fe.edge[1].edge_order_key;
-     set facet ff facet_order_key min(ff.vertex,vertex_order_key);
-     set body bb body_order_key min(bb.facet,facet_order_key);
-     reorder_storage;
-     renumber_all;
-     }
+renumber := {
+  order;
+  set vertex vertex_order_key order_number;
+  set edge ee edge_order_key ee.vertex[1].vertex_order_key;
+  set facetedge fe facetedge_order_key fe.edge[1].edge_order_key;
+  set facet ff facet_order_key min(ff.vertex,vertex_order_key);
+  set body bb body_order_key min(bb.facet,facet_order_key);
+  reorder_storage;
+  renumber_all;
+  }
 </pre><!--========================== ovito.cmd  =============================-->
 
   <hr> <h3>    <a   id="ovito.cmd" class="name">ovito.cmd</a></h3>
@@ -1157,7 +1156,7 @@ neville2 的用法：
 的命令脚本。特别地，适用于使用电阻阵列和储液器的 Appollonius 问题。
 特定约束由字符串变量 <code>poisson_constraint</code> 给出，例如
 <pre>
-   poisson_constraint := "copper"
+poisson_constraint := "copper"
 </pre>
 <p>
 假设条件：
@@ -1737,8 +1736,8 @@ Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier
 <p>
 例如：
 <pre>
- read "tordup.cmd"
- tordup(3)
+read "tordup.cmd"
+tordup(3)
 </pre>
 将产生 3 个环面副本的版本。
 
@@ -1948,16 +1947,16 @@ Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier
 <p>
 用法：在 Surface Evolver 数据文件或命令行中，
 <pre>
-       read "wuwe.cmd"
-       wuwe
+read "wuwe.cmd"
+wuwe
 </pre>
 <p>
 （可选）在读取 wuwe.cmd 之前，
 您可以定义以下变量来自定义算法：
 <pre>
-   wuwe_eps :  the (small) epsilon for the numerical gradient.  Default: 1e-6.
-   wuwe_max :  the maximum number of energy evaluations.  Default: 1000.
-   wuwe_tol :  the tolerance for the stopping criterion.  Default: 1e-4.
+wuwe_eps :  the (small) epsilon for the numerical gradient.  Default: 1e-6.
+wuwe_max :  the maximum number of energy evaluations.  Default: 1000.
+wuwe_tol :  the tolerance for the stopping criterion.  Default: 1e-4.
 </pre>
 
 <p>
@@ -1969,8 +1968,8 @@ Bezier 三角形面片的二次模型。原始线性面片成为二次或 Bezier
 <p>
 要使用 <code>wuwe</code>，在 Surface Evolver 数据文件或命令行中，键入
 <pre>
-       read "wuwe.cmd"
-       wuwe
+read "wuwe.cmd"
+wuwe
 </pre>
 （您需要在 Surface Evolver 可执行文件所在目录中运行 Evolver，
 或者修改 wuwe.cmd 中的 <code>read "wuwe.txt"</code> 行。）

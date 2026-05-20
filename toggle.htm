@@ -504,15 +504,15 @@ Evolver <a href="#toggle-commands">切换命令</a>。
 <a   id="no_dump"></a>
 <h2 class="keyword">NO_DUMP</h2>
 这是一个每边或每面的切换，或布尔属性。当设置时，它防止变量的值被 "dump" 或 "d" 命令写出。在使用 "replace_load" 和 "add_load" 命令重新加载当前文件的转储时很有用，您希望保留变量值，否则这些值会被加载转储文件覆盖，因为转储文件默认在数据文件顶部声明变量。"no_dump" 变量会写在转储文件的 "read" 部分，因此转储文件将作为独立文件加载。适用于全局变量和数组。语法（运行时命令；不在数据文件顶部）：
-<pre>   variable.no_dump on
-   variable.no_dump off
+<pre>variable.no_dump on
+variable.no_dump off
 </pre>
 no_dump 声明必须在变量存在之后。示例：
 <pre>
-   frame := 1;
-   frame.no_dump;
-   dump "temp.dmp";
-   frame := 2;
+frame := 1;
+frame.no_dump;
+dump "temp.dmp";
+frame := 2;
 </pre>
    replace_load "temp.dmp"
 
@@ -647,9 +647,9 @@ Evolver <a href="#toggle-commands">切换命令</a>。
 切换图形使用用户指定的红-绿-蓝颜色分量，而不是使用 <a href="misc.htm#color">color</a> 属性索引预定义的 16 色调色板。各个元素的 RGB 值存储在元素额外属性中：ergb 用于边，frgb 用于面，fbrgb 用于面背面颜色。由用户定义这些属性；如果未定义，则不使用且不占用空间。如果定义了 frgb 但未定义 fbrgb，则 frgb 用于正面和背面颜色。属性是 3 维或 4 维的实数；如果是 4 维，第四分量作为 alpha 值传递给图形系统，但可能不会有任何效果。值范围为 0 到 1。
 请确保初始化 RGB 属性，否则您将得到全黑的表面。要使用的属性定义为：
 <pre>
-   define edge attribute ergb real[3]
-   define facet attribute frgb real[3]
-   define facet attribute fbrgb real[3]
+define edge attribute ergb real[3]
+define facet attribute frgb real[3]
+define facet attribute fbrgb real[3]
 </pre>
 
 <hr>
@@ -778,9 +778,9 @@ Evolver <a href="#toggle-commands">切换命令</a>。
 Evolver <a href="#toggle-commands">切换命令</a>。
 当使用 transform_expr 生成视图变换时，Evolver 会剔除重复的变换。默认情况下，"重复" 意味着相同的变换矩阵，但在某些情况下，不同的变换矩阵会将表面带到相同的位置。此切换启用一种模式，如果两个变换矩阵将向量 view_transforms_unique_point[] 给出的点变换到相同的图像点，则认为它们是相同的。标准用法是使 view_transforms_unique_point[] 成为正在变换的表面上的顶点，例如
 <pre>
-   view_transforms_unique_point := vertex[5].__x;
-   view_transforms_use_unique_point on;
-   transform_expr "abababa";
+view_transforms_unique_point := vertex[5].__x;
+view_transforms_use_unique_point on;
+transform_expr "abababa";
 </pre>
 向量 view_transforms_unique_point[] 是预定义的，因此用户无需定义它。
 

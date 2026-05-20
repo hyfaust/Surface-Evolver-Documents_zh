@@ -80,61 +80,61 @@ OpenGL 图形还可以通过图形窗口中的鼠标和键盘<a href="#graphics-
 
 <h4>   可重复命令：</h4>
 
-<table style="border-spacing:20px">
- <tr>  <td style="vertical-align:text-top"><code>u </code></td> <td>
+<table>
+ <tr>  <td><code>u </code></td> <td>
   <a href="#graphics-commands">图形模式</a>命令。
  向上倾斜。绕水平轴旋转图像，默认 6 度。
 示例：`<code>15u</code>' 旋转 90 度，
 `<code>15.0u</code>' 旋转 15 度。  </td>
 </tr>
 
- <tr>  <td style="vertical-align:text-top"><code>d </code></td> <td>
+ <tr>  <td><code>d </code></td> <td>
  <a href="#graphics-commands">图形模式</a>命令。
  向下倾斜。向相反方向旋转图像，默认 6 度。
 示例：`<code>15d</code>' 旋转 90 度，
 `<code>15.0d</code>' 旋转 15 度。 </td>
 </tr>
 
- <tr>  <td style="vertical-align:text-top"><code>r </code></td> <td>
+ <tr>  <td><code>r </code></td> <td>
  <a href="#graphics-commands">图形模式</a>命令。
  向右旋转。绕垂直轴旋转，默认 6 度。
 示例：`<code>15r</code>' 旋转 90 度，
 `<code>15.0r</code>' 旋转 15 度。 </td>
 </tr>
 
- <tr>  <td style="vertical-align:text-top"><code>l </code></td> <td>
+ <tr>  <td><code>l </code></td> <td>
  <a href="#graphics-commands">图形模式</a>命令。
  向左旋转。绕垂直轴旋转，默认 6 度。
 示例：`<code>15l</code>' 旋转 90 度，
 `<code>15.0l</code>' 旋转 15 度。 </td>
 </tr>
 
- <tr>  <td style="vertical-align:text-top"><code>c </code></td> <td>
+ <tr>  <td><code>c </code></td> <td>
  <a href="#graphics-commands">图形模式</a>命令。
  绕屏幕中心顺时针旋转，默认 6 度。
 示例：`<code>15c</code>' 旋转 90 度，
 `<code>15.0c</code>' 旋转 15 度。 </td>
 </tr>
 
- <tr>  <td style="vertical-align:text-top"><code>C </code></td> <td>
+ <tr>  <td><code>C </code></td> <td>
  <a href="#graphics-commands">图形模式</a>命令。
  绕屏幕中心逆时针旋转，默认 6 度。
 示例：`<code>15C</code>' 旋转 90 度，
 `<code>15.0C</code>' 旋转 15 度。 </td>
 </tr>
 
- <tr>  <td style="vertical-align:text-top"><code>z </code></td> <td>
+ <tr>  <td><code>z </code></td> <td>
  <a href="#graphics-commands">图形模式</a>命令。
  缩放。按因子放大图像，默认 1.2。示例：
 `<code>z</code>' 放大 1.2 倍，`<code>2z</code>' 放大 1.44 倍，'<code>2.0z</code>' 放大 2 倍。 </td>
 </tr>
 
- <tr>  <td style="vertical-align:text-top"><code>s</code> </td> <td>
+ <tr>  <td><code>s</code> </td> <td>
  <a href="#graphics-commands">图形模式</a>命令。
  缩小。按因子缩小图像，默认 1.2。 </td>
 </tr>
 
- <tr>  <td style="vertical-align:text-top">方向键 </td> <td>
+ <tr>  <td>方向键 </td> <td>
 <a href="#graphics-commands">图形模式</a>命令。
 向相应方向移动图像。可以加一个实数前缀，表示移动屏幕宽度的三分之一的倍数。默认移动为屏幕宽度的 1/12。
              可能不适用于所有终端。 </td>
@@ -156,64 +156,64 @@ OpenGL 图形还可以通过图形窗口中的鼠标和键盘<a href="#graphics-
 <a   id="q-(graphics)"></a>
 <a   id="x-(graphics)"></a>
 
-<table style="border-spacing:20px">
+<table>
 
- <tr>  <td style="vertical-align:text-top"><code>R</code> </td> <td>
+ <tr>  <td><code>R</code> </td> <td>
  <a href="#graphics-commands">图形模式</a>命令。
  将视角重置为原始默认值，并重新缩放图像以适应查看窗口。 </td>
 
- <tr>  <td style="vertical-align:text-top"><code>m</code> </td> <td>
+ <tr>  <td><code>m</code> </td> <td>
  <a href="#graphics-commands">图形模式</a>命令。
  将图像居中于查看窗口。 </td>
 
- <tr>  <td style="vertical-align:text-top"><code>e</code> </td> <td>
+ <tr>  <td><code>e</code> </td> <td>
  <a href="#graphics-commands">图形模式</a>命令。
  切换显示所有面片边。 </td>
 
- <tr>  <td style="vertical-align:text-top"><code>h</code> </td> <td>
+ <tr>  <td><code>h</code> </td> <td>
  <a href="#graphics-commands">图形模式</a>命令。
  切换隐藏面隐藏。开启时，显示图像所需时间更长，但效果更好。 </td>
 
- <tr>  <td style="vertical-align:text-top"><code>b</code> </td> <td>
+ <tr>  <td><code>b</code> </td> <td>
 <a   id="bounding-box"></a><a   id="bounding_box_color"></a>
  <a href="#graphics-commands">图形模式</a>命令。
  切换边界框的显示。对于可视化方向很有用。在原生图形窗口中，'o' 键执行相同操作。边界框的颜色可以通过设置 bounding_box_color 变量来更改。
 </td>
 
- <tr>  <td style="vertical-align:text-top"><code>t</code> </td> <td>
+ <tr>  <td><code>t</code> </td> <td>
  <a href="#graphics-commands">图形模式</a>命令。
  重置<a href="model.htm#torus-model">环面模型</a>的显示模式。可选择
    <a href="toggle.htm#raw_cells">原始单元格</a>、
    <a href="toggle.htm#clipped">裁剪单元格</a>或
    <a href="toggle.htm#connected">连接体</a>。 </td>
 
- <tr>  <td style="vertical-align:text-top"><code>w</code> </td> <td>
+ <tr>  <td><code>w</code> </td> <td>
  <a href="#graphics-commands">图形模式</a>命令。
  切换完全位于<a href="constrnt.htm#level-set-constraints">约束</a>上的面片的显示。
 对于<a href="constrnt.htm#one-sided-constraints">单侧约束</a>，适用于顶点全部接触该约束的面片。
              "w" 代表"wall"（壁面）。   </td>
 
- <tr>  <td style="vertical-align:text-top"><code>B</code> </td> <td>
+ <tr>  <td><code>B</code> </td> <td>
 <a href="#graphics-commands">图形模式</a>命令。
   切换位于<a href="constrnt.htm#parametric-boundaries">边界</a>或<a href="constrnt.htm#level-set-constraints">等式约束</a>上的面片的显示。 </td>
 
- <tr>  <td style="vertical-align:text-top"><code>v</code> </td> <td>
+ <tr>  <td><code>v</code> </td> <td>
  <a href="#graphics-commands">图形模式</a>命令。
  切换以不同颜色显示凸边和凹边。"v" 代表"valleys"（谷线）。  </td>
 
- <tr>  <td style="vertical-align:text-top"><code>+</code> </td> <td>
+ <tr>  <td><code>+</code> </td> <td>
 <a href="#graphics-commands">图形模式</a>命令。
   增加面片边使用的颜色编号。  </td>
 
- <tr>  <td style="vertical-align:text-top"><code>-</code> </td> <td>
+ <tr>  <td><code>-</code> </td> <td>
 <a href="#graphics-commands">图形模式</a>命令。
   减少面片边使用的颜色编号。  </td>
 
- <tr>  <td style="vertical-align:text-top"><code>?</code> </td> <td>
+ <tr>  <td><code>?</code> </td> <td>
 <a href="#graphics-commands">图形模式</a>命令。
   打印图形命令的帮助屏幕。   </td>
 
- <tr>  <td style="vertical-align:text-top"><code>q,x</code> </td> <td>
+ <tr>  <td><code>q,x</code> </td> <td>
 <a href="#graphics-commands">图形模式</a>命令。
  退出图形模式，返回主命令模式。 </td>
 
@@ -376,10 +376,10 @@ autodisplay</a> 用于切换表面变化时的自动重绘。启动 geomview 时
 <a   id="saveview"></a>
 Evolver 发行包的 <code>fe</code> 子目录中的文件 <code>saveview.cmd</code> 有一个脚本 <code>saveview</code>，它以可以读回以恢复视图的格式写出视图矩阵的当前值。示例：
 <pre>
-   Enter command: read "saveview.cmd"
-   Enter command: saveview >>> "thisview.cmd"
-   ...
-   Enter command: read "thisview.cmd"
+Enter command: read "saveview.cmd"
+Enter command: saveview >>> "thisview.cmd"
+...
+Enter command: read "thisview.cmd"
 </pre>
 <hr>
 <h2><a   id="view-transforms"></a>多重视图变换。</h2>
@@ -427,11 +427,11 @@ Evolver 可以同时显示表面的多个变换，适用于所有可能的图形
   要使用裁剪视图，首先设置所需裁剪平面的系数，然后使用 <code>clip_view</code> 切换。
 例如，要获得一个平行于 y 和 z 轴且位于其前方的垂直裁剪平面：
 <pre>
-   clip_coeff[1][1] := 1;
-   clip_coeff[1][2] := 0;
-   clip_coeff[1][3] := 0;
-   clip_coeff[1][4] := .2;
-   clip_view;
+clip_coeff[1][1] := 1;
+clip_coeff[1][2] := 0;
+clip_coeff[1][3] := 0;
+clip_coeff[1][4] := .2;
+clip_view;
 </pre>
 使用 OpenGL 图形时，第一个裁剪平面可以通过在图形窗口中按下 '<code>l</code>' 键（小写 L）并水平拖动鼠标来交互式更改。
 '<code>k</code>' 键将使鼠标拖动改变裁剪平面的方向。
@@ -452,11 +452,11 @@ Evolver 可以同时显示表面的多个变换，适用于所有可能的图形
 首先设置系数，然后使用 slice_view 切换。
 例如，要获得一个平行于 x 和 y 轴且位于其前方的垂直切片：
 <pre>
-   slice_coeff[1] := 1;
-   slice_coeff[2] := 0;
-   slice_coeff[3] := 0;
-   slice_coeff[4] ;= .2;
-   slice_view;
+slice_coeff[1] := 1;
+slice_coeff[2] := 0;
+slice_coeff[3] := 0;
+slice_coeff[4] ;= .2;
+slice_view;
 </pre>
 横截面将以与其所在面片颜色相同的线段形式显示。使用 OpenGL 图形时，切片平面可以通过在图形窗口中按下 '<code>l</code>' 键（小写 'L'）并水平拖动鼠标来交互式更改。
 '<code>k</code>' 键将使鼠标拖动改变裁剪平面的方向。

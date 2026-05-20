@@ -23,17 +23,17 @@ Evolver 内置了多种调试功能。脚本调试面向普通用户；其他调
 <h3> <a   id="breakpoints">断点</a></h3>
 用户可以在已加载的脚本中使用 "set breakpoint" 命令设置断点。语法为：
 <pre>
-  BREAKPOINT <em>scriptname</em> <em>linenumber</em>
+BREAKPOINT <em>scriptname</em> <em>linenumber</em>
 </pre>
 其中 <em>scriptname</em> 是函数或过程的名称，<em>linenumber</em> 是文件中要设置断点的行号。该行必须有可执行代码，否则会出错。<em>linenumber</em> 可以是表达式。
 <p>
 断点可以单独取消：
 <pre>
-  UNSET BREAKPOINT <em>scriptname</em> <em>linenumber</em>
+UNSET BREAKPOINT <em>scriptname</em> <em>linenumber</em>
 </pre>
 或批量取消：
 <pre>
-  UNSET BREAKPOINTS
+UNSET BREAKPOINTS
 </pre>
 <p>
 当遇到断点时，Evolver 将进入子命令提示符，用户可以在其中输入任何 Evolver 命令（尽管某些命令如 <code>load</code> 非常不明智）。要退出子命令提示符，使用 <code>q</code> 或 <code>exit</code> 或 <code>quit</code>。
@@ -49,7 +49,6 @@ Evolver 内置了多种调试功能。脚本调试面向普通用户；其他调
 <a   id="syntax-debugging"><h2>语法调试</h2></a>
 Evolver 命令解析器生成的错误消息试图提供帮助，但有时相当晦涩。常见错误包括关键字拼写错误、变量拼写与关键字相同、使用未初始化的变量以及缺少分号。在尝试这里描述的花式语法调试之前，请先检查这些。可以打印出解析步骤，但这不适合胆小者，因为输出采用非常不友好的 YACC 格式。您必须了解移位-归约解析的工作原理才能理解输出。<code>debug</code> 开关控制 YACC 跟踪功能。示例：
 <pre>
-
 Enter command: debug
 YACC debugging was OFF.
 Now ON.
@@ -88,7 +87,6 @@ print asdf
 <a   id="memory-debugging"><h2>内存调试</h2></a>
 <code><a href="single.htm#c">c</a></code> 命令提供简要的内存使用情况输出，包括根据现有元素数量计算的元素内存，以及总分配的数据内存。例如，在 Windows 上：
 <pre>
-
 Enter command:  c
 Vertices: 50  Edges: 144  Facets: 96  Bodies: 1  Facetedges: 288
 Element memory: 40280
@@ -96,7 +94,6 @@ Total data memory: 302122 bytes.
 </pre>
 如果 <code>verbose</code> 开关打开，则会打印更详细的信息（可能因系统而异）：
 <pre>
-
 Enter command: verbose
 Verbose ON. (was off)
 Enter command: c
@@ -146,7 +143,6 @@ Actual energy change   : -9.16970669440076e-006
 
 但是，如果不满足体积约束或量约束，则可能需要几次迭代才能达成一致：
 <pre>
-
 Enter command: body[1].target := 2
 Enter command: estimate
 Estimation ON. (was off)
@@ -202,7 +198,6 @@ Enter command:
 
 <a href="toggle.htm#hessian_quiet" class="keyword">hessian_quiet</a> 开关可以关闭，以打印 Hessian 分解期间（<a href="commands.htm#hessian">hessian</a>、<a href="commands.htm#hessian_seek">hessian_seek</a>、<a href="commands.htm#ritz">ritz</a>、<a href="commands.htm#eigenprobe">eigenprobe</a> 命令）的内存使用和工作量信息。例如：
 <pre>
-
 Enter command: hessian_quiet off
 Enter command: eigenprobe 0
 Sparse init alloc: 36897
@@ -236,7 +231,6 @@ Evolver 有一个功能，允许对命名量的 Hessian 计算例程的正确性
 <a   id="iteration-debugging"><h2>迭代调试</h2></a>
 <a href="toggle.htm#itdebug" class="keyword">itdebug</a> 命令切换 '<a href="single.htm#g" class="keyword">g</a>' 命令期间的信息打印。它打印移动的尺度因子、体积或固定量约束的收敛进度（以总误差与容差的倍数表示），然后是移动产生的能量和体积。使用 cube.fe 优化尺度的示例：
 <pre>
-
 Enter command: g
 Calculating volgrads.
 First move, scale 0.1

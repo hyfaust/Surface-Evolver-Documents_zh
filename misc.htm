@@ -221,7 +221,6 @@ PARAMETER name PARAMETER_FILE string
 
 要为数据文件创建库，请编写一个包含所需函数的 C 源代码源文件，编译并将其链接为共享库。该函数应能够计算函数的值和偏导数，如果要使用任何 <a href="eigentut.htm">Hessian</a> 功能，还应计算二阶偏导数。一个二维数据文件的示例源文件：
 <pre>
-
 #define FUNC_VALUE  1
 #define FUNC_DERIV  2
 #define FUNC_SECOND 3

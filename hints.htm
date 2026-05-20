@@ -17,13 +17,13 @@
 <li> 如果你的所有元素没有连续编号（这通常是由于你使用的编号方案，或者添加或删除了元素），请使用 -i 命令行选项运行 Evolver，这样鼠标拾取（mouse-picking）报告的元素编号与数据文件中的一致。你也可以在数据文件顶部添加 "keep_originals" 来达到相同效果。
 <p>
 <li> 确保你的所有体（body）的面片方向正确。如果普通边上的面片方向不匹配，Evolver 会报错，但固定边（fixed edges）、约束边（constrained edges）等不受此检查限制。一个很好的检查方法是使用着色，例如：
-<pre>   set body[1].facet color green </pre>
+<pre>set body[1].facet color green </pre>
 <p>
 <li> 确保顶点、边和面片位于其正确的约束上。你可以通过着色进行视觉检查，例如：
-<pre>  set edge color red where on_constraint 1
-  set facet color green where on_constraint 1 </pre>
+<pre>set edge color red where on_constraint 1
+set facet color green where on_constraint 1 </pre>
 你无法直接给顶点着色，但可以通过细化（refine）几次并给与顶点相邻的边着色来达到近似效果：
-<pre>  foreach vertex vv where on_constraint 1 do set vv.edge color blue </pre>
+<pre>foreach vertex vv where on_constraint 1 do set vv.edge color blue </pre>
 <p>
 <li> 检查你初始数据文件中的所有能量（energies）、体积（volumes）、量（quantities）等是否正确。有关如何进行详细检查的更多信息，请参见<a href="#checking">下面</a>的章节。
 <p>
@@ -33,14 +33,14 @@
 如果你在弯曲约束（curved constraint）上的边试图抄近路（shortcut the curve），有几种方法可以阻止这种情况：
   <ul>
    <li> 创建第二条引导约束（guide constraint），使两条约束的交集为顶点定义运行轨道。通过使用顶点属性来自定义引导约束，你只需一条引导约束即可。例如：
-<pre>    define vertex attribute guides real[2]
-    constraint 1
-    formula:  x^2 + y^2 = rad^2   // curved constraint
-    constraint 2
-    formula:  guides[1]*x + guides[2]*y = 0  // radial guide planes  </pre>
+<pre>define vertex attribute guides real[2]
+constraint 1
+formula:  x^2 + y^2 = rad^2   // curved constraint
+constraint 2
+formula:  guides[1]*x + guides[2]*y = 0  // radial guide planes  </pre>
 然后你可以在运行时使用以下命令设置引导系数：
-<pre>   set vertex.guides[1] -y where on_constraint 1
-   set vertex.guides[1] x where on_constraint 1  </pre>
+<pre>set vertex.guides[1] -y where on_constraint 1
+set vertex.guides[1] x where on_constraint 1  </pre>
    <li> 如果你确切了解是哪种能量或体积条件导致了抄近路行为，可以调整弯曲约束上的能量或含量被积函数来进行补偿，以消除这种倾向。这基本上意味着需要计算边与弯曲约束之间间隙的表面积，或间隙所围成的体积。
    <li> 将弯曲约束声明为
     <a href="constrnt.htm#convex-constraint" class="keyword">CONVEX</a>（凸约束）。这会添加一个大致与间隙面积成比例的能量。这很简单，只要将 gap_constant 设置得足够高就能生效（但应将 gap constant 尽量保持在能工作的最低值），不过使用凸约束后你将无法使用任何 Hessian 命令。
@@ -142,38 +142,38 @@ Enter command: foreach edge where constraint_1_energy != 0 do print constraint_1
 <h3> 合理的缩放因子。 </h3>
 演化中的困难通常由较小的缩放因子发出信号，这意味着演化遇到了某种障碍。当然，这意味着你需要知道什么是合理的缩放因子，这取决于你使用的能量类型以及表面的细化程度。在正常演化中，缩放因子的大小由表面小尺度粗糙度的发展决定。结合一点量纲分析（dimensional analysis），可以得出结论：缩放因子应与 L<sup>2-q</sup> 成正比，其中 L 是典型的边长度，能量的单位是 length<sup>q</sup>。量纲分析如下：设 D 为一个顶点偏离平衡表面的扰动。一般而言，能量在平衡点附近是二次的，因此：
 <pre>
-   E = D<sup>2</sup>L<sup>q-2</sup>
+E = D<sup>2</sup>L<sup>q-2</sup>
 </pre>
 
 因此该顶点处的能量梯度为：
 <pre>
-    grad E = 2<sup>D </sup>L<sup>q-2</sup>
+grad E = 2<sup>D </sup>L<sup>q-2</sup>
 </pre>
 
 运动是缩放因子乘以梯度，我们希望它与 D 成正比，所以：
 <pre>
-    scale * grad E = scale * 2 D L<sup>q-2</sup> = D
+scale * grad E = scale * 2 D L<sup>q-2</sup> = D
 </pre>
 因此缩放因子的量级为 L <sup>2-q</sup>。以下是一些示例：
-<table border="1" style="margin-left:auto;margin-right:auto">
+<table border="1">
 <caption ><b>缩放因子的量纲依赖关系</b></caption>
 <tr><td><b>能量类型</b></td><td><b>能量量纲</b></td>
 <td><b>缩放因子</b> </td><td><b>示例文件</b></td></tr>
 <tr>
-<td>肥皂膜面积 </td><td style="text-align:center">L<sup>2</sup> </td>
-<td style="text-align:center"> L<sup>0</sup> </td><td>quad.fe</td></tr>
+<td>肥皂膜面积 </td><td>L<sup>2</sup> </td>
+<td> L<sup>0</sup> </td><td>quad.fe</td></tr>
 <tr>
-<td>弦长度 </td><td style="text-align:center">L<sup>1</sup>
- </td><td style="text-align:center"> L<sup>1</sup> </td><td>flower.fe</td></tr>
+<td>弦长度 </td><td>L<sup>1</sup>
+ </td><td> L<sup>1</sup> </td><td>flower.fe</td></tr>
 <tr>
-<td>弦曲率的平方 </td><td style="text-align:center">
+<td>弦曲率的平方 </td><td>
 L<sup>-1</sup> </td>
- <td style="text-align:center"> L<sup>3</sup></td>
+ <td> L<sup>3</sup></td>
    <td>elastic8.fe</td></tr>
 <tr>
 <td>肥皂膜平均曲率的平方 </td>
-<td style="text-align:center">L<sup>0</sup> </td>
-<td style="text-align:center"> L<sup>2</sup></td>
+<td>L<sup>0</sup> </td>
+<td> L<sup>2</sup></td>
  <td>sqcube.fe</td></tr>
 </table>
 特别是，面积演化的缩放因子与细化无关，但对于大多数其他能量，缩放因子会随细化而减小。

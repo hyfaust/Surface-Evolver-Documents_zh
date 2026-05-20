@@ -411,14 +411,14 @@ Evolver在更改后调整体积，使其尽可能与先前的
 实际单位格不同，如果您在数据文件的顶部
 创建一个名为<code>display_periods</code>的数组（除了常规周期之外）。
 对于弦模型示例，
-<pre>   parameter shear = 1
-   torus_filled
-   periods
-   4  0
-   shear  4
-   display_periods
-   4 0
-   0 4 </pre>
+<pre>parameter shear = 1
+torus_filled
+periods
+4  0
+shear  4
+display_periods
+4 0
+0 4 </pre>
 无论实际单位格被剪切多少，这将始终显示正方形。
 此功能对于剪切效果良好；对于其他类型的变形，
 它可能不太好用。
@@ -434,10 +434,10 @@ display_periods对于弦模型比皂膜模型效果更好。
 其维度是环境空间的维度。
 此数组默认不存在，必须由用户在数据文件的顶部使用以下语法创建
 <pre>
-  display_origin <em>x y z</em>
+display_origin <em>x y z</em>
 </pre>其中<em>x y z</em>是所需裁剪框中心的坐标。
 在运行时，可以正常更改数组元素：
-<pre>  display_origin[2] := 0.5
+<pre>display_origin[2] := 0.5
 </pre>
 更改display_origin将自动导致图形重新显示。
 
@@ -537,8 +537,8 @@ convert_to_quantities</a>"命令），
 并且必须具有零环绕。
 包括轴点的面必须将轴点放在面中第一条边的尾部。
 <p>
-<b>数据文件声明：</b><pre>  symmetry_group "rotate"
-  parameter rotation_order = 6 </pre>
+<b>数据文件声明：</b><pre>symmetry_group "rotate"
+parameter rotation_order = 6 </pre>
 <p>
 <b>群元素编码：</b>元素编码为群生成器的幂。
 
@@ -555,8 +555,8 @@ convert_to_quantities</a>"命令），
 并且必须具有零环绕。
 包括轴点的面必须将轴点放在面中第一条边的尾部。
 <p>
-<b>数据文件声明：</b><pre>  symmetry_group "flip_rotate"
-  parameter rotation_order = 6 </pre>
+<b>数据文件声明：</b><pre>symmetry_group "flip_rotate"
+parameter rotation_order = 6 </pre>
 <p>
 <b>群元素编码：</b>元素编码为群生成器的幂。
 
@@ -597,8 +597,8 @@ wrap &amp; {1,2,4}分别给出x,y,z的符号变化；
 双曲空间上的对称群，其商群是亏格2双曲流形。
 基本域是八边形。
 <p><b>数据文件声明：</b><pre>
-   Klein_metric
-   symmetry_group "genus2" </pre>
+Klein_metric
+symmetry_group "genus2" </pre>
 
 <b>群元素编码：</b>
 有8个平移元素将基本域平移到其一个相邻域。
@@ -616,15 +616,15 @@ wrap &amp; {1,2,4}分别给出x,y,z的符号变化；
 如果您想使用此群，您必须检查dodecgroup.c中的源代码，
 因为其他人编写了此群，我现在不想全部弄清楚。
 <p><b>数据文件声明：</b><pre>
-   Klein_metric
-   symmetry_group "dodecahedron" </pre>
+Klein_metric
+symmetry_group "dodecahedron" </pre>
 
 <hr> <a   id="central_symmetry"></a><h3><code>CENTRAL_SYMMETRY</code>对称群</h3>
 这是通过原点反演的2阶
 <a href="#symmetry-groups">对称群</a>，
 X映射到-X。
 <p><b>数据文件声明：</b><pre>
-   symmetry_group "central_symmetry" </pre>
+symmetry_group "central_symmetry" </pre>
 <b>群元素编码：</b>0为单位元素，1为反演。
 
 <a   id="screw_height"></a><a   id="screw_angle"></a>
@@ -634,9 +634,9 @@ X映射到-X。
 全局参数<code>screw_height</code>是平移距离（默认为1），
 全局参数<code>screw_angle</code>是旋转角度（度）（默认为0）。
 <p><b>数据文件声明：</b><pre>
-  parameter screw_height = 4.0
-  parameter screw_angle  = 180.0
-  symmetry_group "screw_symmetry"
+parameter screw_height = 4.0
+parameter screw_angle  = 180.0
+symmetry_group "screw_symmetry"
 </pre>
 <b>群元素编码：</b>整数值是群生成器的幂。
 

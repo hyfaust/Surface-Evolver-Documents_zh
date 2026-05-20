@@ -57,12 +57,12 @@
 
 <hr><a   id="redefinition"></a><h2>单字母重新定义</h2>
 可以通过以下语法将单字母重新分配为您自己的命令
-<pre> <i>letter</i> :::= <i>command</i>
+<pre><i>letter</i> :::= <i>command</i>
 </pre>
 但仅应在特殊情况下使用，例如
 将 'r' 重新定义为在细化的同时执行额外操作。
 可以通过空赋值恢复标准含义：
-<pre> <i>letter</i> :::=
+<pre><i>letter</i> :::=
 </pre>
 使用单引号包围字母可获取标准含义，即当 r 已被重新定义时，'r'
 将执行标准细化。
@@ -70,9 +70,9 @@
 重新定义在执行重新定义命令时生效，而不是在解析时生效。重新定义不会追溯到先前定义的命令中的使用，但恢复标准含义是追溯性的。
 示例：
 <pre>
-   V :::= { fix vertex[5]; 'V'; unfix vertex[5] }
-   r :::= { divisions := divisions * 2;
-            hooke_length := hooke_length/2; 'r' }
+V :::= { fix vertex[5]; 'V'; unfix vertex[5] }
+r :::= { divisions := divisions * 2;
+         hooke_length := hooke_length/2; 'r' }
 </pre>
 <hr><a   id="A"> </a>
 <h2>A</h2>
@@ -364,8 +364,8 @@ show_all_quantities</a>被切换为开，否则仅显示用户明确定义的命
 <hr><a   id="q"> </a>
 <h2>q</h2>
 <a href="#single-letter">单字母</a>主命令。语法：
-<pre>    q
-    q <em>expr</em>
+<pre>q
+q <em>expr</em>
 </pre>
 单独使用时，"q" 会弹出提示让您输入新的数据文件名。在此提示下，按 Enter 键将返回当前表面，再按一个 "q" 将退出 Evolver，其他任何内容将被视为新数据文件的名称。
 当 "quit" 后跟一个值时，Evolver 立即退出，并使用该值作为退出代码，这在脚本中或从其他程序运行 Evolver 时很有用。退出 Evolver 会自动关闭任何图形窗口，且不保存任何内容。与 "quit" 命令相同。

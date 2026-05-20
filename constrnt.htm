@@ -86,8 +86,8 @@
 <a href="datafile.htm#edges-section">边</a> 和
 <a href="datafile.htm#faces-section">面片</a> 部分中应用，
 但也可以通过 <a href="commands.htm#set">set</a> 或 <a href="commands.htm#unset">unset</a> 命令设置或移除。示例：
-<pre>   set vertex[4] constraint 4
-   unset edge constraint 1 where id &lt; 10
+<pre>set vertex[4] constraint 4
+unset edge constraint 1 where id &lt; 10
 </pre>
 取消设置不在约束上的元素没有问题。
 当顶点设置到约束上时，顶点坐标会立即投影到约束上。
@@ -117,12 +117,12 @@
 </pre>
 "number" 可以是表达式；"name" 是约束的不带引号的名称（如果有的话）。
 如果约束是等式约束，则值为 1，否则值为 0。列出顶点所在的所有等式约束的示例：
-<pre>   foreach vertex vv do
-   { for ( inx := 1 ; inx &lt; vv.v_constraint_list[1] ; inx++ )
-       if is_constraint[vv.v_constraint_list[i+1]].fixed then
-         printf "Vertex %d on equality constraint %d\n",
-           vv.id,vv.v_constraint_list[i+1];
-   };
+<pre>foreach vertex vv do
+{ for ( inx := 1 ; inx &lt; vv.v_constraint_list[1] ; inx++ )
+    if is_constraint[vv.v_constraint_list[i+1]].fixed then
+      printf "Vertex %d on equality constraint %d\n",
+        vv.id,vv.v_constraint_list[i+1];
+};
 </pre>
 
 <a   id="one_sided_lagrange"></a> <a   id="nonnegative"> </a>
@@ -147,17 +147,17 @@ one_sided_lagrange 可以定义为数组。如果顶点遇到的约束多于 one
 <p>
 
 约束的类型可以在运行时作为表达式查询：<pre>
-     is_constraint[number].nonnegative
-     is_constraint[name].nonnegative
-     is_constraint[number].nonpositive
-     is_constraint[name].nonpositive
-     is_constraint[number].fixed
-     is_constraint[name].fixed </pre>
+is_constraint[number].nonnegative
+is_constraint[name].nonnegative
+is_constraint[number].nonpositive
+is_constraint[name].nonpositive
+is_constraint[number].fixed
+is_constraint[name].fixed </pre>
 如果约束是指定类型，则值为 1，否则值为 0。
 "number" 可以是表达式；"name" 是约束的不带引号的名称（如果有的话）。
 示例：
 <pre>
-     print is_constraint[floorcon].nonnegative
+print is_constraint[floorcon].nonnegative
 </pre>
 
 <hr><a   id="boundary"></a>
@@ -224,11 +224,11 @@ vertices
 元素可以通过 <a href="commands.htm#unset">unset</a> 命令从边界中移除，
 也可以通过 <a href="commands.htm#set">set</a> 命令设置到边界上。
 <code>unset</code> 的典型用途是使用 2 参数边界定义初始表面，细化几次，然后取消设置。示例：
-<pre>  list vertex where on_boundary 2
-  unset vertex boundary 1 where on_boundary 1
-  unset edge boundary 1
-  unset facet boundary 1
-  set vertex[10] boundary 1
+<pre>list vertex where on_boundary 2
+unset vertex boundary 1 where on_boundary 1
+unset edge boundary 1
+unset facet boundary 1
+set vertex[10] boundary 1
 </pre>
 取消设置不在边界上的元素没有问题。
 <p>
@@ -240,9 +240,9 @@ vertices
 <p>
 顶点参数可以在表达式中作为属性 p1（以及 p2,... 用于更多参数）访问。
 顶点参数可以通过 <a href="commands.htm#set">set</a> 命令更改。示例：
-<pre>  print vertex[5].p1
-  set vertex p1 p1+.1 where id &lt; 4
-  vertex[2].p1 := 3
+<pre>print vertex[5].p1
+set vertex p1 p1+.1 where id &lt; 4
+vertex[2].p1 := 3
 </pre>
 只要某个顶点在边界上（以便在顶点结构中为参数分配空间），访问不在边界上的顶点的参数不是错误。
 

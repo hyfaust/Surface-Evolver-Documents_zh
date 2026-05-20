@@ -2,7 +2,7 @@
 
 <h1>Surface Evolver 语法</h1>
 数据文件和用户命令都遵循本文件描述的通用语法，但有一些差异如所述。
-<table><tr><td style="vertical-align:text-top"><ul>
+<table><tr><td><ul>
 <li><a href="#lexical-format">词法格式</a>
 <li><a href="#comments">注释</a>
 <li><a href="#line-splicing">行拼接</a>
@@ -14,7 +14,7 @@
 <li><a href="#atomic-values">原子值</a>
 <li><a href="#internal-variables">内部变量</a>
 <li><a href="#variables">用户定义变量</a>
-</ul></td><td  style="vertical-align:text-top"><ul>
+</ul></td><td><ul>
 <li><a href="#attr-values">元素属性</a>
 <li><a href="#arrays">数组</a>
 <li><a href="#expressions">算术表达式</a>
@@ -77,7 +77,7 @@
          要交互式地查找某个名称是否已作为关键字或用户定义名称使用，
          请使用 <a href="commands.htm#help">help</a> 命令。在脚本中，
          可以使用 is_defined 函数，其语法为
-<pre> is_defined(<em>stringexpr</em>)
+<pre>is_defined(<em>stringexpr</em>)
 </pre>
 <em>stringexpr</em> 必须是带引号的字符串或其他字符串表达式。
 如果名称未定义则返回值为 0，已定义则为 1。
@@ -93,7 +93,7 @@
 <h2>数字</h2>
 
          常量值可以是任何常用形式。这包括整数、定点数和科学计数法，例如
-<pre>      2    -3    .5    23.    5e-10    +0.7D2
+<pre>2    -3    .5    23.    5e-10    +0.7D2
 </pre>
 以 0x 开头的十六进制整数也被接受，如 0x12Af，
 以及二进制数如 11001b，由尾部的 'b' 表示。
@@ -129,21 +129,21 @@
  以整数形式记录在 -1 到 15 的范围内。
  这些整数如何转换为屏幕上的颜色取决于 Evolver 的图形驱动程序的编写方式。
  提供了以下同义词，并希望图形驱动程序能正确显示它们：<br>
-<table><tr><td style="vertical-align:text-top">
+<table><tr><td>
 -1  CLEAR（清除/透明）<br>
 0  BLACK（黑色）<br>
 1 BLUE（蓝色）<br>
 2 GREEN（绿色）<br>
 3 CYAN（青色）<br>
 4 RED（红色）<br></td>
-<td style="vertical-align:text-top">
+<td>
 5 MAGENTA（品红色）<br>
 6 BROWN（棕色）<br>
 7 LIGHTGRAY（浅灰色）<br>
 8 DARKGRAY（深灰色）<br>
 9 LIGHTBLUE（浅蓝色）<br>
 10 LIGHTGREEN（浅绿色）<br></td>
-<td style="vertical-align:text-top">
+<td>
 11 LIGHTCYAN（浅青色）<br>
 12 LIGHTRED（浅红色）<br>
 13 LIGHTMAGENTA（浅品红色）<br>
@@ -273,7 +273,7 @@ x imod y = floor(x) - floor(floor(x)/floor(y))*floor(y)。<p></p>
 <dt> ++,--  </dt><p>C 风格的前缀和后缀递增和递减命令。这些仅适用于
        单个变量，并且只能作为独立命令使用，例如在 "for" 循环中：
 <pre>
-           for ( inx := 1 ; inx &lt;= 10 ; inx++ )
+for ( inx := 1 ; inx &lt;= 10 ; inx++ )
 </pre>
 </p>
 </dl>
@@ -402,10 +402,10 @@ C 必须与 A 和 B 不同。不返回值。
 <p>
 语法：det := matrix_determinant(A)
 <pre>
-  Enter command: define aaa real[2][2]
-  Enter command: aaa[1][1] := 2; aaa[1][2] := 3; aaa[2][1] := 4; aaa[2][2] := 5
-  Enter command: print matrix_determinant(aaa)
-                  -2
+Enter command: define aaa real[2][2]
+Enter command: aaa[1][1] := 2; aaa[1][2] := 3; aaa[2][1] := 4; aaa[2][2] := 5
+Enter command: print matrix_determinant(aaa)
+                -2
 </pre>
 也适用于元素的方阵 2D 数组属性。不修改数组。
 <p></p>
@@ -437,7 +437,7 @@ C 必须与 A 和 B 不同。不返回值。
 <p> <a   id="is_defined"></a> <h3>IS_DEFINED</h3>
          要查明某个名称是否已作为关键字或用户定义名称使用，
          请使用 is_defined 函数，其语法为
-<pre> IS_DEFINED(<em>stringexpr</em>)
+<pre>IS_DEFINED(<em>stringexpr</em>)
 </pre>
 <em>stringexpr</em> 必须是带引号的字符串或其他字符串表达式。
 如果名称未定义则返回值为 0，已定义则为 1。
@@ -455,8 +455,8 @@ C 必须与 A 和 B 不同。不返回值。
 也可以应用于字符串或字符串变量以获取字符串中的字符数。
  语法：
 <pre>
-  SIZEOF(name)
-  SIZEOF(string)
+SIZEOF(name)
+SIZEOF(string)
 </pre>
 第一种形式中，name 是数组或额外属性的名称，不带引号。
 
@@ -465,40 +465,40 @@ C 必须与 A 和 B 不同。不返回值。
 
 布尔函数。根据具有给定编号的参数化边界是否存在返回 1 或 0
 （注意，命名边界的名称在内部被解释为数字）。语法：
-<pre> VALID_BOUNDARY(expression)
+<pre>VALID_BOUNDARY(expression)
 </pre>
 一个用途是与 high_boundary 内部变量结合使用来遍历所有参数化边界。例如，
 <pre>
-  for ( bnum := 1 ; bnum &lt;= high_boundary ; bnum += 1 )
-    if valid_boundary(bnum) then
-       printf "Boundary %d has %d vertices on it\n",bnum,
-          sum(vertex,on_boundary bnum);
+for ( bnum := 1 ; bnum &lt;= high_boundary ; bnum += 1 )
+  if valid_boundary(bnum) then
+     printf "Boundary %d has %d vertices on it\n",bnum,
+        sum(vertex,on_boundary bnum);
 </pre>
 
 <hr>
 <a   id="valid_constraint"></a><h3>VALID_CONSTRAINT</h3>
 布尔函数。根据具有给定编号的水平集约束是否存在返回 1 或 0
 （注意，命名约束的名称在内部被解释为数字）。语法：
-<pre> VALID_CONSTRAINT(expression)
+<pre>VALID_CONSTRAINT(expression)
 </pre>
 一个用途是与 high_constraint 内部变量结合使用来遍历所有水平集约束。例如，
 <pre>
-  for ( cnum := 1 ; cnum &lt;= high_constraint ; cnum += 1 )
-    if valid_constraint(cnum) then
-       printf "Constraint %d has %d vertices on it\n",cnum,
-          sum(vertex,on_constraint cnum);
+for ( cnum := 1 ; cnum &lt;= high_constraint ; cnum += 1 )
+  if valid_constraint(cnum) then
+     printf "Constraint %d has %d vertices on it\n",cnum,
+        sum(vertex,on_constraint cnum);
 </pre>
 
 <hr>
 <a   id="valid_element"></a><h3>VALID_ELEMENT</h3>
 布尔函数。
 根据具有给定索引的元素是否存在返回 1 或 0。语法：
-<pre> VALID_ELEMENT(indexed_element)
+<pre>VALID_ELEMENT(indexed_element)
 </pre>
 示例：
 <pre>
-   if valid_element(edge[12]) then refine edge[12]
-   if valid_element(body[2]) then set body[2].facet color red
+if valid_element(edge[12]) then refine edge[12]
+if valid_element(body[2]) then set body[2].facet color red
 </pre>
 
 <hr>
@@ -518,12 +518,12 @@ C 必须与 A 和 B 不同。不返回值。
 <a   id="aggregate-functions"></a><h2>聚合函数</h2>
 可以使用聚合函数对一组元素执行表达式的最大值、最小值、总和或平均值。语法为
 <pre>
-   <i>aggregate(generator,expr)</i>
+<i>aggregate(generator,expr)</i>
 </pre>
 其中 <i>aggregate</i> 是 <code>max, min, sum, </code> 或 <code>avg</code>，
 <i>generator</i> 是<a href="commands.htm#generators">元素生成器</a>。
 示例：打印所有绿色面的总面积：<pre>
-   print sum(facet where color == green, area)
+print sum(facet where color == green, area)
 </pre>
 "Count" 是一个聚合函数，它给出生成的元素数量，与表达式无关。
 <hr>
@@ -531,15 +531,15 @@ C 必须与 A 和 B 不同。不返回值。
 <a   id="attr-values"></a><h2>表达式中的元素属性值</h2>
 任何<a href="elements.htm#geometric-elements">元素属性</a>的值都可以在表达式中使用。
 如果存在默认活动元素，可以单独使用属性名。示例：<pre>
-   foreach facet do print area
+foreach facet do print area
 </pre>
 否则，属性被称为元素的字段：
 <pre>
-   foreach facet ff do print ff.area
+foreach facet ff do print ff.area
 </pre>
 索引<a href="elements.htm#extra-attributes">额外属性</a>需要方括号中的索引：
 <pre>
-   foreach facet ff do print ff.something[3]
+foreach facet ff do print ff.something[3]
 </pre>
 索引值向下取整为整数值。索引从 1 开始。
 <p>
@@ -604,7 +604,7 @@ Evolver 命令语言有自己版本的用户定义变量，
 <h2>数组</h2>
 可以使用以下语法定义整数或实数的多维数组：
 <pre>
-   DEFINE <em>variablename</em>  REAL|INTEGER|STRING <em>expr</em>]...
+DEFINE <em>variablename</em>  REAL|INTEGER|STRING <em>expr</em>]...
 </pre>
 此语法在数据文件头部和命令提示符下都有效。
 如果数组已经存在，它将被调整大小，旧元素会尽可能保留。
@@ -612,9 +612,9 @@ Evolver 命令语言有自己版本的用户定义变量，
 大小为 0 是合法的，当你暂时不使用数组并想要释放存储空间时很有用。
 有运行时数组边界检查。示例：
 <pre>
-   define fvalues integer[10][4]
-   define basecoord real[10][space_dimension]
-   define primcol string[3]
+define fvalues integer[10][4]
+define basecoord real[10][space_dimension]
+define primcol string[3]
 </pre>
 声明为 <a href="commands.htm#local">local</a> 的标识符名称可以在过程和函数的数组声明中使用；
 可以使用动态大小，但静态大小可能稍快一些，因为不需要动态分配内存。
@@ -622,16 +622,16 @@ Evolver 命令语言有自己版本的用户定义变量，
 
 在数据文件顶部，可以在定义后使用嵌套括号初始化器来初始化数组。例如：
 <pre>
-   define qwerty integer[4] = { 23, 45, 12, 2 }
-   define vmat real[3][2] = {{1,2},{3,4},{5,6}}
-   define primcol string[3] = {"red","green","blue"}
+define qwerty integer[4] = { 23, 45, 12, 2 }
+define vmat real[3][2] = {{1,2},{3,4},{5,6}}
+define primcol string[3] = {"red","green","blue"}
 </pre>
 初始化器不需要完整；缺失的值将为零。
 <p>
 数组元素可以像编程语言中通常的那样进行赋值和引用：
 <pre>
-   fvalues[3][4] := 234;
-   if basecoord[3][1] &gt; 2 then print "hello world!\n";
+fvalues[3][4] := 234;
+if basecoord[3][1] &gt; 2 then print "hello world!\n";
 </pre>
 
 <p>
@@ -640,9 +640,9 @@ Evolver 命令语言有自己版本的用户定义变量，
 赋值左右两侧的维度数必须一致，但每个维度的大小不需要一致。
 右侧缺失的元素被视为零。示例：
 <pre>
-   vertex[1].__x := { 1.2, 3.1, 4.7 }
-   define mat real[2][2];
-   mat := {{1,2},{3,4}}
+vertex[1].__x := { 1.2, 3.1, 4.7 }
+define mat real[2][2];
+mat := {{1,2},{3,4}}
 </pre>
 右侧在每次执行赋值时求值，因此右侧的条目可以是任何求数字的表达式。
 += 和 -= 的赋值也有效，*= 和 /= 也有效，但请注意所有这些都按元素操作
@@ -651,19 +651,19 @@ Evolver 命令语言有自己版本的用户定义变量，
 
 <a href="commands.htm#print">print</a> 命令可用于以括号形式打印整个数组或数组切片。示例：
 <pre>
-   print fvalues
-   print fvalues[4]
+print fvalues
+print fvalues[4]
 </pre>
 
 有一些基本的全数组操作允许数组出现在赋值语句的左侧：
 <pre>
-   array := scalar
-   array := array
-   array := scalar * array
-   array := array + array
-   array := array - array
-   array := array * array
-   scalar := array * array  // 如果两个右侧数组都是一维的，则为点积
+array := scalar
+array := array
+array := scalar * array
+array := array + array
+array := array - array
+array := array * array
+scalar := array * array  // 如果两个右侧数组都是一维的，则为点积
 </pre>
 这里赋值两侧的 "array" 表示单个完整的数组；
 不是产生数组的表达式或数组切片。
@@ -678,7 +678,7 @@ Evolver 命令语言有自己版本的用户定义变量，
 <a   id="dot_product"></a>
 对于一维数组，* 运算符给出对应条目乘积的总和。示例：
 <pre>
-   print vertex[1].__velocity * facet[3].__facet_normal
+print vertex[1].__velocity * facet[3].__facet_normal
 </pre>
 
 <hr>
@@ -686,7 +686,7 @@ Evolver 命令语言有自己版本的用户定义变量，
 以下是内置的内部变量列表，按字母顺序排列。
 有关每个变量的更多详细信息，请参阅下面的单个条目。
 某些变量是只读的。某些在启动时根据初始化设置或默认值分配初始值。
-<table><tr><td style="vertical-align:text-top"><ul>
+<table><tr><td><ul>
 <li><a href="#ambient_pressure_value"> ambient_pressure_value</a>
 <li><a href="#background"> background</a>
 <li><a href="#body_count"> body_count</a>
@@ -714,7 +714,7 @@ Evolver 命令语言有自己版本的用户定义变量，
 <li><a href="#eigenpos">eigenpos</a>
 <li><a href="#eigenvalues">eigenvalues</a>
 <li><a href="#eigenzero">eigenzero</a>
-</ul></td><td  style="vertical-align:text-top"><ul>
+</ul></td><td><ul>
 <li><a href="#equi_count"> equi_count</a>
 <li><a href="#estimated_change"> estimated_change</a>
 <li><a href="#facet_count"> facet_count</a>
@@ -740,7 +740,7 @@ Evolver 命令语言有自己版本的用户定义变量，
 <li><a href="#last_eigenvalue"> last_eigenvalue</a>
 <li><a href="#last_error">last_error</a>
 <li><a href="#last_hessian_scale"> last_hessian_scale</a>
-</ul></td><td style="vertical-align:text-top"><ul>
+</ul></td><td><ul>
 <li><a href="#linear_metric_mix">  linear_metric_mix </a>
 <li><a href="#memory_arena"> memory_arena</a>
 <li><a href="#memory_used"> memory_used</a>
@@ -765,7 +765,7 @@ Evolver 命令语言有自己版本的用户定义变量，
 <li><a href="#scale_scale"> scale_scale</a>
 <li><a href="#scrollbuffersize"> scrollbuffersize</a>
 <li><a href="#scrollbuffersize"> scrollbuffersize</a>
-</ul></td><td style="vertical-align:text-top" ><ul>
+</ul></td><td ><ul>
 <li><a href="#self_sim_coeff"> self_sim_coeff</a>
 <li><a href="#simplex_representation"> simplex_representation</a>
 <li><a href="#space_dimension"> space_dimension</a>
@@ -1023,20 +1023,20 @@ Hessian 命令将法向量几乎垂直于约束的顶点视为固定顶点。hes
 <dt><a   id="high_boundary"> high_boundary </a></dt>
 <p>内部只读变量，给出已定义的最高参数边界的编号。记住，命名边界的名称在内部被解释为数字，该边界可以通过该数字来引用。在遍历所有边界时很有用，例如
 <pre>
-  for ( bnum := 1 ; bnum &lt;= high_boundary ; bnum += 1 )
-    if valid_boundary(bnum) then
-       printf "Boundary %d has %d vertices on it\n",bnum,
-          sum(vertex,on_boundary bnum);
+for ( bnum := 1 ; bnum &lt;= high_boundary ; bnum += 1 )
+  if valid_boundary(bnum) then
+     printf "Boundary %d has %d vertices on it\n",bnum,
+        sum(vertex,on_boundary bnum);
 </pre>
 </p>
 
 <dt><a   id="high_constraint"> high_constraint </a></dt>
 <p>内部只读变量，给出最高水平集约束的编号。记住，命名约束的名称在内部被解释为数字，该约束可以通过该数字来引用。在遍历所有约束时很有用，例如
 <pre>
-  for ( cnum := 1 ; cnum &lt;= high_constraint ; cnum += 1 )
-    if valid_constraint(cnum) then
-       printf "Constraint %d has %d vertices on it\n",cnum,
-          sum(vertex,on_constraint cnum);
+for ( cnum := 1 ; cnum &lt;= high_constraint ; cnum += 1 )
+  if valid_constraint(cnum) then
+     printf "Constraint %d has %d vertices on it\n",cnum,
+        sum(vertex,on_constraint cnum);
 </pre>
 
 <dt><a   id="instance_name-modulus"><em>instance_name</em>.modulus </a></dt>
@@ -1051,8 +1051,8 @@ Hessian 命令将法向量几乎垂直于约束的顶点视为固定顶点。hes
 <dt><a   id="inverse_periods"> inverse_periods[<i>expr</i>][<i>expr</i>] </a></dt> <p>内部只读变量。<a href="#torus_periods">torus_periods</a> 矩阵的逆矩阵。使用基于 1 的索引。
 对于将顶点坐标归一化到周期基很有用。计算周期基坐标的语法如下：
 <pre>
-   define perx real[space_dimension];
-   perx := vertex[1].__x * inverse_periods
+define perx real[space_dimension];
+perx := vertex[1].__x * inverse_periods
 </pre>
 </p>
 

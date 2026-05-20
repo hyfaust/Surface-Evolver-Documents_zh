@@ -38,11 +38,11 @@
 重力加速度 <a href="syntax.htm#G-value">G</a> 可以通过 <a href="single.htm#G">G</a> 命令由用户控制。
 设 \rho 为体密度，则能量定义为：
 <pre>
-  E = \int\int\int_{body} G \rho  z  dV 
+E = \int\int\int_{body} G \rho  z  dV 
 </pre>
          但使用散度定理计算为：
 <pre>
-  E =  \int\int_{body surface} G\rho {z^2\over 2} \vec k \cdot \vec{dS}.  
+E =  \int\int_{body surface} G\rho {z^2\over 2} \vec k \cdot \vec{dS}.  
 </pre> 
          该积分在包围体的每个面片上进行。
 如果面片包围两个不同密度的体，则使用适当的密度差。
@@ -54,7 +54,7 @@
 <a   id="constraint-energy-integrals"></a><h2>约束能量积分</h2>
          位于 <a href="constrnt.htm#level-set-constraints">水平集约束</a> 上的边可以通过在定向边上积分向量场 <b>F</b> 来获得能量：
 <pre>
-           E = \int_{edge} <b>F . dl</b>. 
+E = \int_{edge} <b>F . dl</b>. 
 </pre>
 被积函数在数据文件的 <a href="datafile.htm#constraint-decl">约束声明</a> 中定义。
 该积分使用边的固有方向，但如果边的方向属性为负，则值取反。
@@ -77,7 +77,7 @@ Evolver 自然会通过移动外顶点来最小化面积，从而增加间隙，
 <a href="constrnt.htm#level-set-constraints">水平集约束</a> 可以在数据文件中声明为 CONVEX。
 对于此类约束上的边，能量计算为：
 <pre>
-  E = <i>k</i>\left\Vert \vec S \times \vec Q \right\Vert / 6
+E = <i>k</i>\left\Vert \vec S \times \vec Q \right\Vert / 6
 </pre> 
          其中 \vec S 是边向量，\vec Q 是边在约束在边尾顶点处的切平面上的投影。
 常数 <i>k</i> 是称为"间隙常数"的全局常数。
@@ -103,12 +103,12 @@ Evolver 自然会通过移动外顶点来最小化面积，从而增加间隙，
 如果理想气体模式有效（通过数据文件中的 <a href="toggle.htm#ambient_pressure">PRESSURE</a> 关键字设置），
 则每个体贡献能量：
 <pre>
-         E = P*V_0*ln(V/V_0)  
+E = P*V_0*ln(V/V_0)  
 </pre>
 其中 P 是环境压力，V_0 是体的目标体积，V 是实际体积。
 为了考虑对抗环境压力所做的功，每个体还贡献负值：
-<pre> 
-	 E = -P*V. </pre>
+<pre>
+E = -P*V. </pre>
 环境压力可以在数据文件中或通过 <a href="single.htm#p">p</a> 命令设置。
 此能量仅针对给定目标体积的体进行计算。
 

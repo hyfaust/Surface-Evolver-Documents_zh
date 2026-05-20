@@ -35,13 +35,13 @@
 将搜索 <a href="install.htm#EVOLVERPATH">EVOLVERPATH</a>。
 	包含可以嵌套到 10 层。
 	示例：<pre>
-	#include  "common.stuff"
+#include  "common.stuff"
 </pre>
 <hr>
 <a   id="macros"></a><h2>宏</h2>
 宏是在解析之前将标识符替换为字符串的文本替换。宏仅在数据文件中定义，在命令提示符下不起作用。
          简单宏（无参数）可以像 C 语言中那样定义：
-<pre>         #DEFINE  <em>identifier  string</em>
+<pre>#DEFINE  <em>identifier  string</em>
 </pre>
        <em>identifier</em> 必须是对解析器没有其他特殊含义的标识符。
          <em>string</em> 是逻辑行的其余部分，不包括注释。
@@ -68,7 +68,7 @@
          这里按使用频率大致排序列出；第一列中的你应该知道，
          第二列中的你可能一辈子都不会用到。
 <table>
-<tr ><td style="vertical-align:text-top">
+<tr ><td>
 <ul>
 <li><a href="#datafile-variables">变量</a>
 <li><a href="#constraint-decl">水平集约束</a>
@@ -131,7 +131,7 @@
 <a   id="on_assign_call"> </a>
 可以在数据文件顶部区域使用以下语法定义变量：
 <pre>
-      PARAMETER <em>identifier</em> = <em>constexpr</em>
+PARAMETER <em>identifier</em> = <em>constexpr</em>
 </pre>
              这将声明 <em>identifier</em> 为具有给定初始值的变量。
               该值可以在运行时使用
@@ -146,14 +146,14 @@
 <p>
 可以指定一个过程，在变量值每次更改时调用。数据文件顶部的语法为
 <pre>
-      PARAMETER <em>identifier</em> = <em>constexpr</em> ON_ASSIGN_CALL <em>procedure_name</em>
+PARAMETER <em>identifier</em> = <em>constexpr</em> ON_ASSIGN_CALL <em>procedure_name</em>
 </pre>
 此功能的目的是允许改变变量值时产生副作用。该值是一个无参数的过程，只能在数据文件的顶部区域赋值。但是，过程本身可以随时重新定义。示例（在数据文件顶部区域）：
 <pre>
-  procedure tester();
-  parameter aaa = 4
-  parameter bbb = 5 on_assign_call tester
-  procedure tester() { aaa := bbb; }
+procedure tester();
+parameter aaa = 4
+parameter bbb = 5 on_assign_call tester
+procedure tester() { aaa := bbb; }
 </pre>
 注意，首先声明了 "tester"，这样 Evolver 在声明 "bbb" 时能将 "tester" 识别为过程名。但 "tester" 的完整声明可以位于数据文件的顶部区域或数据文件的 "read" 部分。
 
@@ -204,7 +204,7 @@ FORMULA FUNCTION  <em>expr</em>
    主要目的是在被积函数中仅对公共子表达式求值一次。
    此类复合表达式的语法为
 <pre>
-    variable :=  expr, expr
+variable :=  expr, expr
 </pre>
    表达式的值是第二个表达式的值。
 
@@ -297,19 +297,19 @@ X3: <em>expr</em>
 要在量定义中实例化方法，你基本上是包含
 <a href="#method-instance-decl">实例定义</a>，但没有实例名称。
 一个量包含一个预定义方法实例和一个隐式定义实例的示例：
-<pre>   method_instance qwerty method facet_scalar_integral
-     scalar_integrand: x^2
-   quantity foobar energy method qwerty method edge_scalar_integral
-     scalar_integrand: y^3
+<pre>method_instance qwerty method facet_scalar_integral
+  scalar_integrand: x^2
+quantity foobar energy method qwerty method edge_scalar_integral
+  scalar_integrand: y^3
 </pre>
 <p>
 通常第二种隐式定义更方便。
 可以在一个 <i>methodlist</i> 中包含多个方法实例
 （当前上限为 50），它们的值相加后乘以量的模量得到量的值。
 <code>FUNCTION</code> <i>methodexpr</i> 变体将量定义为先前定义的方法实例的函数。示例：
-<pre>   method_instance qwerty method facet_scalar_integral
-     scalar_integrand: x^2
-   quantity foobar energy function qwerty^3
+<pre>method_instance qwerty method facet_scalar_integral
+  scalar_integrand: x^2
+quantity foobar energy function qwerty^3
 </pre>
 <p>
 非全局量可以通过在定义元素的数据文件行中添加量名称来逐个应用于元素。
@@ -341,8 +341,8 @@ X3: <em>expr</em>
 但在某些情况下，量由多个方法实例组成，需要单独引用这些方法实例；
 也许用户想知道各个实例的值。
 在数据文件中定义命名方法实例的通用语法为：
-<pre>  METHOD_INSTANCE <i>name</i> METHOD <i>methodname</i> [MODULUS <i>constexpr</i>]
-   [ELEMENT_MODULUS <i>attrname</i>]  [GLOBAL] [<i>parameters</i>]
+<pre>METHOD_INSTANCE <i>name</i> METHOD <i>methodname</i> [MODULUS <i>constexpr</i>]
+ [ELEMENT_MODULUS <i>attrname</i>]  [GLOBAL] [<i>parameters</i>]
 </pre>
 这里，<i>name</i> 是用户分配的名称，用于引用此特定实例。
 <i>methodname</i> 是 Evolver 中的
@@ -357,7 +357,7 @@ X3: <em>expr</em>
 <a href="commands.htm#unset">unset</a> 命令应用或取消应用。
 可定向方法可以通过在名称后加破折号在数据文件中以负方向应用。
 各个元素的方向可以在运行时使用 "set" 命令设置，例如
-<pre> set facet[123] orientation -1 </pre>
+<pre>set facet[123] orientation -1 </pre>
 
 <p>
  每个方法可以有各种参数来针对实例进行特化。
@@ -398,14 +398,14 @@ Q3: <i>expr</i> <br>
 <a   id="surface-dimension-decl"></a><h2>表面维度</h2>
 表面的默认维度为 2。如果不是，必须在数据文件的顶部区域声明。
 对于一维表面（<a href="model.htm#string-model">string 模型</a>），只需包含一行
-<pre> STRING
+<pre>STRING
 </pre>
 默认维度 2 的 <a href="model.htm#soapfilm-model">soapfilm 模型</a>
 等同于使用
-<pre> SOAPFILM
+<pre>SOAPFILM
 </pre>
 一般地，行
-<pre> SURFACE_DIMENSION <i>n</i>
+<pre>SURFACE_DIMENSION <i>n</i>
 </pre>
 定义表面具有维度 <i>n</i>。
 超过 2 的维度仅在 <a href="model.htm#simplex-model">simplex 模型</a>中有效。
@@ -434,7 +434,7 @@ Q3: <i>expr</i> <br>
   如果这些属性要包含在数据文件中，
 则数据文件的顶部区域必须包含适当的定义。
 定义语法与 <a href="commands.htm#define">define</a> 运行时命令使用的相同：
-<pre> DEFINE <em>elementtype</em> ATTRIBUTE <em>name</em> <em>type</em> [<em>dim</em>]...
+<pre>DEFINE <em>elementtype</em> ATTRIBUTE <em>name</em> <em>type</em> [<em>dim</em>]...
 </pre>
 其中 <em>elementtype</em> 是 <code>vertex</code>、<code>edge</code>、<code>facet</code>
 或 <code>body</code>，<em>name</em>
@@ -450,10 +450,10 @@ Q3: <i>expr</i> <br>
 特别是在某个点为属性赋值。
 <a href="commands.htm#print">print</a> 命令可用于以括号形式打印属性数组或数组切片。
  示例：
-<pre>  define edge attribute charlie real
-  define vertex attribute newx real[3]
-  define facet attribute knots real[5][5][5]
-  define edge attribute bbb real function { self.bbb := self.x+self.y }
+<pre>define edge attribute charlie real
+define vertex attribute newx real[3]
+define facet attribute knots real[5][5][5]
+define edge attribute bbb real function { self.bbb := self.x+self.y }
 </pre>
 警告：如果你打算在数据文件的顶部区域定义独立函数并将其放在属性声明之后，存在语法歧义。
 你应该在属性之前定义独立函数，或者用其他类型的声明将它们分开。
@@ -472,7 +472,7 @@ QUADRATIC
 <a   id="gravity_constant-decl"></a><h2>重力常数声明</h2>
 <a href="energies.htm#gravity-energy">重力常数</a>
 的初始值可以在数据文件中使用以下语法设置
-<pre>  GRAVITY_CONSTANT <i>value</i> </pre>
+<pre>GRAVITY_CONSTANT <i>value</i> </pre>
 默认值为 1。
 
 <hr>
@@ -600,7 +600,7 @@ SWAP_COLORS
 <a href="iterate.htm#scale-factor">缩放因子</a>的上界 <i>value</i>，
 在数据文件的顶部区域包含行
 <pre>
-   SCALE_LIMIT <i>value</i>
+SCALE_LIMIT <i>value</i>
 </pre>
 上界可以在运行时使用 <a href="single.htm#m">m</a> 命令
 或设置 <code>scale_limit</code> 变量来更改。
@@ -632,7 +632,7 @@ SWAP_COLORS
 <a href="iterate.htm#iteration-step">迭代</a>
 或 <a href="commands.htm#hessian-command">hessian</a> 命令期间接受优化：
 <pre>
-      OPTIMIZING_PARAMETER <em>identifier</em> = <em>constexpr</em> PDELTA = <em>constexpr</em> PSCALE = <em>constexpr</em>
+OPTIMIZING_PARAMETER <em>identifier</em> = <em>constexpr</em> PDELTA = <em>constexpr</em> PSCALE = <em>constexpr</em>
 </pre>
 此类变量作为独立变量在优化过程中加入顶点坐标。
 然而，它与坐标的不同之处在于关于它的梯度是数值计算的，
@@ -652,8 +652,8 @@ height.pscale := 2*height.pscale
 使用 p_velocity 属性来查找变量关于 'g' 命令缩放因子的变化率。
 示例：
 <pre>
-    g
-    print height.p_velocity
+g
+print height.p_velocity
 </pre>
 <p>
  "Optimising_parameter" 是同义词。
@@ -664,7 +664,7 @@ height.pscale := 2*height.pscale
 <a   id="gap-constant-decl"></a><h2>间隙常数声明</h2>
 <a href="energies.htm#gap-energy">间隙能量</a>的间隙常数初始值
 可以在数据文件中使用以下语法设置
-<pre>  GAP_CONSTANT <i>value</i> </pre>
+<pre>GAP_CONSTANT <i>value</i> </pre>
 默认值为 1。同义词：spring_constant。
 
 <hr>
@@ -699,7 +699,7 @@ keep_originals
 这是数据文件中关于顶点被视为满足
 <a href="constrnt.htm#level-set-constraints">水平集约束</a>的容差声明。
  默认值为 1e-12。语法：
-<pre>  CONSTRAINT_TOLERANCE <i>const_expr</i> </pre>
+<pre>CONSTRAINT_TOLERANCE <i>const_expr</i> </pre>
 设置内部变量
 <a href="syntax.htm#constraint_tolerance">constraint_tolerance</a> 的值。
 
@@ -813,7 +813,7 @@ Evolver 可以模拟现实生活中相邻气泡之间的气体扩散现象。
 这通过数据文件第一部分中的关键字 DIFFUSION 调用，
 后跟扩散常数的值，即内部变量 diffusion_coeff。
 <pre>
-    DIFFUSION 0.1
+DIFFUSION 0.1
 </pre>
 迭代期间穿过面的扩散量计算为
 scale*diffusion_coeff*facet_area*pressure_difference。
@@ -834,7 +834,7 @@ scale*diffusion_coeff*facet_area*pressure_difference。
 要加载编译函数的 <a href="misc.htm#dynamic-load-library">动态库</a>，
 语法为
 <pre>
- LOAD_LIBRARY "<em>filename</em>"
+LOAD_LIBRARY "<em>filename</em>"
 </pre>
 其中双引号括起来的文件名是库。将在当前目录和
 <a href="install.htm#EVOLVERPATH">EVOLVERPATH</a> 中搜索该库。
@@ -845,7 +845,7 @@ scale*diffusion_coeff*facet_area*pressure_difference。
 要声明表面积能应使用结晶被积函数计算，
 数据文件的顶部区域应包含以下形式的行
 <pre>
- WULFF "<em>filename</em>"
+WULFF "<em>filename</em>"
 </pre>
 
 双引号括起来的文件名（带路径）指向一个文件，
@@ -869,7 +869,7 @@ scale*diffusion_coeff*facet_area*pressure_difference。
 <a href="elements.htm#phase,-body">体</a>的相，
 数据文件的顶部区域应包含以下形式的行
 <pre>
- PHASEFILE "<em>filename</em>"
+PHASEFILE "<em>filename</em>"
 </pre>
 信息从 ASCII 文件中读取，文件名在双引号字符串中给出。
                      文件的第一行是不同相的数量。
@@ -892,7 +892,7 @@ PRESSURE <em>constexpr</em>
 要在细化期间计算边中点的
 <a href="constrnt.htm#parametric-boundaries">参数</a>
 时使用插值而不是外推，使用关键字
-<pre>   INTERP_BDRY_PARAM
+<pre>INTERP_BDRY_PARAM
 </pre>
 仅在没有周期参数时才应这样做。
 
@@ -964,7 +964,7 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 <a   id="squared_curvature"></a><h2>平方平均曲率</h2>
 
 要添加平方平均曲率能量，在数据文件顶部包含一行
-<pre>  SQUARED_CURVATURE modulus
+<pre>SQUARED_CURVATURE modulus
 </pre>
 模量是能量的乘数，在运行时可通过读写变量 sq_curvature_modulus 访问。
 这是原始的平方平均曲率能量；后续版本在平方曲率命名方法中。
@@ -976,7 +976,7 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 <a   id="squared_gaussian_curvature"></a><h2>平方高斯曲率</h2>
 
 要添加平方高斯曲率能量，在数据文件顶部包含一行
-<pre>  SQUARED_GAUSSIAN_CURVATURE modulus
+<pre>SQUARED_GAUSSIAN_CURVATURE modulus
 </pre>
 模量是能量的乘数，在运行时可通过读写变量 square_gauss_modulus 访问。
 同义词：<code>square_gaussian_curvature</code>、<code>sqgauss</code>
@@ -996,12 +996,12 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 <a   id="suppress_warning"></a><h2>抑制警告</h2>
 数据文件关键字，指示 Evolver 不打印某个警告。语法：
 <pre>
-  SUPPRESS_WARNING <em>number</em>
+SUPPRESS_WARNING <em>number</em>
 </pre>
 其中 <em>number</em> 是警告的编号。用于抑制你知道无关紧要的恼人警告消息。
 可以使用以下语法恢复警告
 <pre>
-  UNSUPPRESS_WARNING <em>number</em>
+UNSUPPRESS_WARNING <em>number</em>
 </pre>
 
 <hr>
@@ -1013,11 +1013,11 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 根据当前顶点数量自动放入转储文件。
 示例：
 <pre>
-    vertices_predicted 3074
-    edges_predicted    9216
-    facets_predicted   6144
-    bodies_predicted      1
-    facetedges_predicted  18432
+vertices_predicted 3074
+edges_predicted    9216
+facets_predicted   6144
+bodies_predicted      1
+facetedges_predicted  18432
 </pre>
 
 <hr>
@@ -1029,11 +1029,11 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 根据当前边数量自动放入转储文件。
 示例：
 <pre>
-    vertices_predicted 3074
-    edges_predicted    9216
-    facets_predicted   6144
-    bodies_predicted      1
-    facetedges_predicted  18432
+vertices_predicted 3074
+edges_predicted    9216
+facets_predicted   6144
+bodies_predicted      1
+facetedges_predicted  18432
 </pre>
 
 <hr>
@@ -1045,11 +1045,11 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 根据当前面数量自动放入转储文件。
 示例：
 <pre>
-    vertices_predicted 3074
-    edges_predicted    9216
-    facets_predicted   6144
-    bodies_predicted      1
-    facetedges_predicted  18432
+vertices_predicted 3074
+edges_predicted    9216
+facets_predicted   6144
+bodies_predicted      1
+facetedges_predicted  18432
 </pre>
 
 <hr>
@@ -1061,11 +1061,11 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 根据当前体数量自动放入转储文件。
 示例：
 <pre>
-    vertices_predicted 3074
-    edges_predicted    9216
-    facets_predicted   6144
-    bodies_predicted      1
-    facetedges_predicted  18432
+vertices_predicted 3074
+edges_predicted    9216
+facets_predicted   6144
+bodies_predicted      1
+facetedges_predicted  18432
 </pre>
 
 <hr>
@@ -1077,11 +1077,11 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 根据当前面边数量自动放入转储文件。
 示例：
 <pre>
-    vertices_predicted 3074
-    edges_predicted    9216
-    facets_predicted   6144
-    bodies_predicted      1
-    facetedges_predicted  18432
+vertices_predicted 3074
+edges_predicted    9216
+facets_predicted   6144
+bodies_predicted      1
+facetedges_predicted  18432
 </pre>
 
 <hr>
@@ -1094,13 +1094,13 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 此声明显然应在定义任何量之前。
 示例：
 <pre>
-    vertices_predicted 30748
-    edges_predicted    92166
-    facets_predicted   61446
-    bodies_predicted    2048
-    facetedges_predicted  184320
-    method_instances_predicted   4098
-    quantities_predicted   2050
+vertices_predicted 30748
+edges_predicted    92166
+facets_predicted   61446
+bodies_predicted    2048
+facetedges_predicted  184320
+method_instances_predicted   4098
+quantities_predicted   2050
 </pre>
 
 <hr>
@@ -1114,13 +1114,13 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
 此声明显然应在定义任何量之前。
 示例：
 <pre>
-    vertices_predicted 30748
-    edges_predicted    92166
-    facets_predicted   61446
-    bodies_predicted    2048
-    facetedges_predicted  184320
-    method_instances_predicted   4098
-    quantities_predicted   2050
+vertices_predicted 30748
+edges_predicted    92166
+facets_predicted   61446
+bodies_predicted    2048
+facetedges_predicted  184320
+method_instances_predicted   4098
+quantities_predicted   2050
 </pre>
 
 <hr>
@@ -1254,10 +1254,10 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
        由行首关键字 <code>FACES</code> 开始。
        后面是每行一个面规范的行，格式如下：
 <pre>
-  <em>k   e1 e2 ...</em>  [FIXED] [TENSION <em>constexpr</em>] [BOUNDARY <em>b</em>] \
-  [CONSTRAINTS <em>c1 [c2 ...]</em>]     [NODISPLAY]   \
-   [COLOR <em>n</em>]} [FRONTCOLOR <em>n</em>] [BACKCOLOR <em>n</em>] \
-   [PHASE <em>n</em>] [<em>quantityname</em> ...] [<em>methodname</em> ...]
+<em>k   e1 e2 ...</em>  [FIXED] [TENSION <em>constexpr</em>] [BOUNDARY <em>b</em>] \
+[CONSTRAINTS <em>c1 [c2 ...]</em>]     [NODISPLAY]   \
+ [COLOR <em>n</em>]} [FRONTCOLOR <em>n</em>] [BACKCOLOR <em>n</em>] \
+ [PHASE <em>n</em>] [<em>quantityname</em> ...] [<em>methodname</em> ...]
 </pre>
               这里 <em>k</em> 是面编号，编号规则与
 <a href="#vertices-section">顶点</a>相同。后面是有向边编号的列表，
@@ -1362,16 +1362,16 @@ total_area^3/total_volume^2，该比率衡量面积包围体积的效率。
        自动初始化表面非常有用。
         <code>READ</code> 部分是可选的。
 示例：
-<pre>  bodies
-  1   1 2 3 4 5 6 volume 1
+<pre>bodies
+1   1 2 3 4 5 6 volume 1
 
-  read
+read
 
-  // automatically do this when datafile is loaded
-  refine edge where on_constraint 1
+// automatically do this when datafile is loaded
+refine edge where on_constraint 1
 
-  // typical evolution
-  gogo := { g 5; r; g 10; r; g 20 }
+// typical evolution
+gogo := { g 5; r; g 10; r; g 20 }
 
 </pre>
 <a href="commands.htm#bottominfo">list bottominfo</a> 命令

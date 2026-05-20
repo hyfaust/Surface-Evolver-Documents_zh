@@ -35,9 +35,9 @@ MPI Evolver 的运行架构是将任务 0（task 0）作为主任务（master ta
 
 除 metis.c 外的所有常规 Evolver 文件，以及 mpi*.c 文件（目前不包括 mpi_sparse.c），应在编译器命令中定义以下宏常量：
 <pre>
-   MPI_EVOLVER
-   TASK_ID_BITS=22
-   LONG_ID
+MPI_EVOLVER
+TASK_ID_BITS=22
+LONG_ID
 </pre>
 
 <p>
@@ -45,8 +45,8 @@ MPI Evolver 的运行架构是将任务 0（task 0）作为主任务（master ta
 <p>
 如果需要在任务之间方便地重新分区表面，建议链接 PARMETIS 和 METIS 库，可在<a href="http://glaros.dtc.umn.edu/gkhome/metis/metis/overview">此处</a>获取。此时，编译时还应定义以下宏常量：
 <pre>
-   METIS
-   PARMETIS
+METIS
+PARMETIS
 </pre>
 
 <hr>
@@ -112,11 +112,11 @@ MPI 版本的特殊命令：
  <a   id="repartition"></a>
   <code>repartition</code> </dt><p>根据各元素属性中设置的任务编号重新分配表面的元素。这些属性声明如下：
 <pre>
-           define vertex attribute v_newpart integer[2]
-           define edge   attribute e_newpart integer[2]
-           define facet  attribute f_newpart integer[2]
-           define facetedge attribute fe_newpart integer[2]
-           define body  attribute b_newpart integer[2]
+define vertex attribute v_newpart integer[2]
+define edge   attribute e_newpart integer[2]
+define facet  attribute f_newpart integer[2]
+define facetedge attribute fe_newpart integer[2]
+define body  attribute b_newpart integer[2]
 </pre>
      建议将上述声明行包含在任何 MPI Evolver 数据文件中。用户设置每个属性的第一个分量；第二个分量供内部使用。示例见下文。
 </p>
@@ -180,7 +180,7 @@ MPI 版本的元素属性：
   <a   id="mpi_task"></a>
 <code> mpi_task</code> </dt><p>此元素所属的任务编号。例如，如果想查看任务 5 从任务 2 导入了哪些顶点，可以使用：
 <pre>
-                 task_exec 5,"list vertex where mpi_task == 2"
+task_exec 5,"list vertex where mpi_task == 2"
 </pre>
 </p>
 </dl>
@@ -210,7 +210,6 @@ MPI 版本的元素属性：
 
 假设您有一个标准的 Evolver 数据文件，需要加载并在各任务之间分区。当将其加载到 MPI Evolver 时，表面将完全加载到任务 1 中。然后可以重新分配。如果已链接 PARMETIS 库，可以使用以下脚本：
 <pre>
-
 // mpi_equalize.cmd
 // Spread surface out over all tasks.
 

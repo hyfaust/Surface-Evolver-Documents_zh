@@ -9,13 +9,13 @@
 <p>
 旋转的影响通过散度定理（Divergence Theorem）的积分形式纳入能量计算中：
 <pre>
-        ///
-  E = - ||| (1/2) p r^2 w^2 dV
-	///B
+       ///
+ E = - ||| (1/2) p r^2 w^2 dV
+///B
 
-        //
-    = - ||       (1/2) p w^2 (x^2+y^2) z <b>k&middot;dA</b>
-        //bdry B
+       //
+   = - ||       (1/2) p w^2 (x^2+y^2) z <b>k&middot;dA</b>
+       //bdry B
 
 </pre>
 其中 B 是液体区域，r 是到旋转轴的径向距离，p 是流体密度，w 是角速度。
@@ -32,17 +32,17 @@
 杆表面定义为约束 1，方程为 x^2 + y^2 = R^2，其中 R 是杆的半径。
 液体与杆之间的接触能通过液体表面与杆相交的边上的边积分来处理：
 <pre>
-      //                          /                  /
-  E = || -T cos(a) dA = -T cos(a) |  z ds = T cos(a) | (z/R)(y<b>i</b> - x<b>j</b>)<b>&middot;ds</b>
-      //S                         /bdry S            / bdry S
+    //                          /                  /
+E = || -T cos(a) dA = -T cos(a) |  z ds = T cos(a) | (z/R)(y<b>i</b> - x<b>j</b>)<b>&middot;ds</b>
+    //S                         /bdry S            / bdry S
 </pre>
 这里 S 是杆表面（未作为 bdry B 中的面包含在内），T 是自由表面的表面张力，a 是内接触角。
 推导此积分的一个更直观的方法是使用柱坐标系，将杆上接触线与 z = 0 之间的替换表面想象为被分割成许多高为 z、宽为 R dtheta 的竖直薄条带。
 每个条带的能量为 <code>-T cos(a) z R dtheta</code>。转换回笛卡尔坐标系，dtheta = (x dy - y dx)/(x^2 + y^2)，因此
 <pre>
-                 //                                   //
-  E =  -T cos(a) || z R (x dy - y dx)/R^2 = -T cos(a) || (z/R)(x dy - y dx)
-                 //                                   //
+               //                                   //
+E =  -T cos(a) || z R (x dy - y dx)/R^2 = -T cos(a) || (z/R)(x dy - y dx)
+               //                                   //
 </pre>
 <p>
 约束 2 是一个水平对称面。
@@ -69,7 +69,7 @@ pi/6 的选择经过巧妙设计，使得所有细分也能避开不连续点。
 检测稳定性的一种方法是对环面施加扰动，观察其是否能演化回平衡状态。
 数据文件定义了一个命令：
 <pre>
-    perturb := set vertex y y+.01 where not on_constraint 1
+perturb := set vertex y y+.01 where not on_constraint 1
 </pre>
 这将每个顶点的 y 坐标设置为 y+.01。
 此命令在数据文件末尾的 "<code>read</code>" 部分定义，

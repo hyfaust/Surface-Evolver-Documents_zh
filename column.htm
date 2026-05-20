@@ -26,12 +26,12 @@
 根据定义，任何尊重约束的扰动都不会在一阶上改变能量。
 为了调整约束（如体积）的变化，拉格朗日乘子（Lagrange multipliers）（体积约束的压力）
 会告诉我们在给定约束变化下能量的变化量：
-<pre>          DE = L*DC
+<pre>DE = L*DC
 </pre>
 其中 <code>DE</code> 是能量变化，
 <code>L</code> 是拉格朗日乘子的行向量，<code>DC</code> 是约束值变化的列向量。
 因此，参数变化后的调整能量为：
-<pre>          E_adj = E_raw - L*DC
+<pre>E_adj = E_raw - L*DC
 </pre>
 其中 <code>E_raw</code> 是实际能量，<code>DC</code> 是约束值与目标值之差的向量。
 数据文件中的命令 <code>do_yforce</code> 和 <code>do_zforce</code>
