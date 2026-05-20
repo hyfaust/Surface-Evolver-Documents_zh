@@ -133,9 +133,7 @@
       bodyHTML +
       contentEnd +
     '</div>' +
-    overlay +
-    '<button class="theme-toggle" aria-label="Toggle theme"></button>' +
-    '<script src="theme-toggle.js"><\/script>';
+    overlay;
 
   /* === Mobile toggle === */
   var navSide = document.querySelector('.wy-nav-side');
@@ -248,8 +246,4 @@
     });
   }
 
-  /* Re-init theme toggle */
-  if (typeof initThemeToggle === 'function') {
-    initThemeToggle();
-  }
 })();

@@ -112,5 +112,4 @@ export EVOLVERPATH
       http://www-users.cs.umn.edu/~karypis/metis/</a></code>下载METIS包并"make"库<code>libmetis.a</code>（在某些系统上，make会抱怨找不到ranlib，但生成的<code>libmetis.a</code>仍然有效）。在Evolver的<code>Makefile</code>中，将<code class="shortcode">-DMETIS</code>添加到<code>CFLAGS</code>，并将<code class="shortcode">-lmetis</code>添加到<code>GRAPHLIB</code>。您可能还需要将<code class="shortcode">-L metispath</code>添加到<code>GRAPHLIB</code>以告诉链接器在哪里找到libmetis.a。请注意，METIS已包含在Windows可执行文件中。如果您在非常大的表面上使用<a href="commands.htm#hessian-command" class="keyword">hessian</a>
 
   <script src="nav-panel.js"></script>
-  <script src="theme-toggle.js"></script>
 
