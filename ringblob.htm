@@ -10,16 +10,12 @@
 本示例由一个液体环组成，该液体环在无重力环境中围绕一根沿其长轴（z 轴）旋转的杆形成环面（torus）。液体与杆之间具有可控的接触角。有趣的问题是，随着旋转速度增大，环的稳定性如何变化。
 <p>
 旋转的影响通过散度定理（Divergence Theorem）的积分形式纳入能量计算中：
-<pre>
-       ///
- E = - ||| (1/2) p r^2 w^2 dV
-///B
-
-       //
-   = - ||       (1/2) p w^2 (x^2+y^2) z <b>k&middot;dA</b>
-       //bdry B
-
-</pre>
+$$
+\begin{aligned}
+E &= -\iiint_B \frac{1}{2} p r^2 w^2 \, dV \\
+  &= -\iint_{\partial B} \frac{1}{2} p w^2 (x^2+y^2) z \,\mathbf{k}\cdot d\mathbf{A}
+\end{aligned}
+$$
 其中 B 是液体区域，r 是到旋转轴的径向距离，p 是流体密度，w 是角速度。
 注意能量为负值，因为旋转使液体倾向于向外移动。
 这需要由将液体保持在杆上的表面张力来平衡。
@@ -33,19 +29,22 @@
 <p>
 杆表面定义为约束 1，方程为 x^2 + y^2 = R^2，其中 R 是杆的半径。
 液体与杆之间的接触能通过液体表面与杆相交的边上的边积分来处理：
-<pre>
-    //                          /                  /
-E = || -T cos(a) dA = -T cos(a) |  z ds = T cos(a) | (z/R)(y<b>i</b> - x<b>j</b>)<b>&middot;ds</b>
-    //S                         /bdry S            / bdry S
-</pre>
+$$
+\begin{aligned}
+E &= \int_S -T\cos(a)\, dA \\
+  &= -T\cos(a)\int_{\partial S} z\, ds \\
+  &= T\cos(a)\int_{\partial S} \frac{z}{R}(y\,\mathbf{i} - x\,\mathbf{j})\cdot d\mathbf{s}
+\end{aligned}
+$$
 这里 S 是杆表面（未作为 bdry B 中的面包含在内），T 是自由表面的表面张力，a 是内接触角。
 推导此积分的一个更直观的方法是使用柱坐标系，将杆上接触线与 z = 0 之间的替换表面想象为被分割成许多高为 z、宽为 R dtheta 的竖直薄条带。
 每个条带的能量为 <code>-T cos(a) z R dtheta</code>。转换回笛卡尔坐标系，dtheta = (x dy - y dx)/(x^2 + y^2)，因此
-<pre>
-               //                                   //
-E =  -T cos(a) || z R (x dy - y dx)/R^2 = -T cos(a) || (z/R)(x dy - y dx)
-               //                                   //
-</pre>
+$$
+\begin{aligned}
+E &= -T\cos(a)\iint zR \frac{x\,dy-y\,dx}{R^2} \\
+  &= -T\cos(a)\iint \frac{z}{R}(x\,dy-y\,dx)
+\end{aligned}
+$$
 <p>
 约束 2 是一个水平对称面。
 通过对称性假设，我们只需完成一半的工作量。
@@ -90,10 +89,10 @@ perturb := set vertex y y+.01 where not on_constraint 1
 请注意，数据文件中开启了 <a href="toggle.htm#hessian_normal">hessian_normal</a>，
 这样海森矩阵只考虑法向于表面的扰动。
 
-<table>
-<tr><td>
-<img src="ringblobbare.gif"  alt="ringblob"></td>
-<td>  初始环形液滴骨架，顶点和边已编号。
+<table align="center">
+<tr>        <td style="text-align: center;">
+<img src="ringblobbare.gif"  alt="ringblob"></td><tr/><tr>
+<td style="text-align: center; padding-top: 10px;">  初始环形液滴骨架，顶点和边已编号。
 利用对称性，仅表示上半部分。</td></tr>
 </table>
 

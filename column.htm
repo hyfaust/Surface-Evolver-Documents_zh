@@ -28,23 +28,22 @@
 根据定义，任何尊重约束的扰动都不会在一阶上改变能量。
 为了调整约束（如体积）的变化，拉格朗日乘子（Lagrange multipliers）（体积约束的压力）
 会告诉我们在给定约束变化下能量的变化量：
-<pre>DE = L*DC
-</pre>
+$$DE = L*DC$$
 其中 <code>DE</code> 是能量变化，
 <code>L</code> 是拉格朗日乘子的行向量，<code>DC</code> 是约束值变化的列向量。
 因此，参数变化后的调整能量为：
-<pre>E_adj = E_raw - L*DC
-</pre>
+$$E_{\text{adj}} = E_{\text{raw}} - L*DC$$
 其中 <code>E_raw</code> 是实际能量，<code>DC</code> 是约束值与目标值之差的向量。
 数据文件中的命令 <code>do_yforce</code> 和 <code>do_zforce</code>
 对上焊盘的力进行中心差分计算，并将表面恢复到原始位置。
 注意，扰动是平滑进行的，即剪切从底部到顶部线性变化。
 这不是绝对必要的，但它能提供更平滑的扰动，从而获得更高的精度。
 
-<table>
-<tr><td>
-<img src="columnbare.gif" alt="柱体"></td>
-<td>  初始柱体骨架，顶点和边已编号。</td></tr>
+<table align="center">
+<tr>        
+<td style="text-align: center;">
+<img src="columnbare.gif" alt="柱体"></td></tr><tr>
+<td style="text-align: center; padding-top: 10px;">  初始柱体骨架，顶点和边已编号。</td></tr>
 </table>
 
 <pre>

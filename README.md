@@ -123,8 +123,8 @@ The repository includes example Surface Evolver data files (`.fe` extension, sta
 - [x] CSS optimization for global content display
 - [x] Add left sidebar and full-text search bar
 - [x] Introduce KaTeX for math formula rendering
-- [ ] Rewrite all math formulas in LaTeX format
-- [ ] Fix caption display layout from side-by-side to stacked
+- [x] ~~Rewrite all math formulas in LaTeX format~~
+- [x] Fix caption display layout from side-by-side to stacked
 - [ ] Fix and add hyperlinks across all pages
 - [ ] Manual review of translation accuracy for each chapter
 - [ ] Verify manual content accuracy
